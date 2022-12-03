@@ -17,7 +17,7 @@
     <h1 class=""><center>เข้าสู่ระบบ</center></h1>
     <div class="form-floating mb-1">
       <input type="text" class="form-control" name="username" placeholder="Username" required>
-      <label>User</label>
+      <label>Username</label>
     </div>
     <div class="form-floating mb-3">
       <input type="password" class="form-control" name="password" id="password" placeholder="Password" required >

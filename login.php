@@ -12,12 +12,11 @@
 </head>
 <body>
 <div class="form-signin w-100 m-auto">
-<form  method="GET" action="chklogin.php" >
+<form  method="POST" action="chklogin.php" >
   <img src="./pic/LOGORMUTK.png">
-    <h1 class=""><center></center></h1>
     <div class="form-floating mb-1">
-      <input type="text" class="form-control" name="username" placeholder="Username" required>
-      <label>Username</label>
+      <input type="text" class="form-control" name="email" placeholder="email" required>
+      <label>email</label>
     </div>
     <div class="form-floating mb-3">
       <input type="password" class="form-control" name="password" id="password" placeholder="Password" required >

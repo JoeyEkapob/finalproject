@@ -1,9 +1,12 @@
 <?php
-    $host = "localhost";
-    $user = "root";
+    $dsn = "mysql:host=localhost;dbname=finalproject";
+    $username = "root";
     $password = "";
-    $database = "finalproject";
 
-    $conn = mysqli_connect($host,$user,$password,$database) or die (mysqli_error($connect));
-    //mysqli_set_charset($connect,"utf8");
+    try{
+        $obj = new PDO($dsn,$username,$password);
+        //echo "เชื่อมต่อสมบูรณ์";
+    }catch(PDOException $e){
+        echo $e->getMessage();
+    }
 ?>

@@ -1,3 +1,7 @@
+<?php
+session_start();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,6 +18,22 @@
 <div class="form-signin w-100 m-auto">
 <form  method="POST" action="chklogin.php" >
   <img src="./pic/LOGORMUTK.png">
+    <?php if(isset($_SESSION['error'])) { ?>
+                <div class="alert alert-danger" role="alert">
+                    <?php 
+                        echo $_SESSION['error'];
+                        unset($_SESSION['error']);
+                    ?>
+                </div>
+            <?php } ?>
+            <?php if(isset($_SESSION['success'])) { ?>
+                <div class="alert alert-success" role="alert">
+                    <?php 
+                        echo $_SESSION['success'];
+                        unset($_SESSION['success']);
+                    ?>
+                </div>
+            <?php } ?>
     <div class="form-floating mb-1">
       <input type="text" class="form-control" name="email" placeholder="email" required>
       <label>email</label>

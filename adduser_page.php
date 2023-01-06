@@ -20,6 +20,31 @@
         <h3 class="mt-4">สมัครสมาชิก</h3>
         <hr>
         <form action="adduser.php" method="post">
+        <?php if(isset($_SESSION['error'])) { ?>
+                <div class="alert alert-danger" role="alert">
+                    <?php 
+                        echo $_SESSION['error'];
+                        unset($_SESSION['error']);
+                    ?>
+                </div>
+            <?php } ?>
+            <?php if(isset($_SESSION['success'])) { ?>
+                <div class="alert alert-success" role="alert">
+                    <?php 
+                        echo $_SESSION['success'];
+                        unset($_SESSION['success']);
+                    ?>
+                </div>
+            <?php } ?>
+            <?php if(isset($_SESSION['warning'])) { ?>
+                <div class="alert alert-warning" role="alert">
+                    <?php 
+                        echo $_SESSION['warning'];
+                        unset($_SESSION['warning']);
+                    ?>
+                </div>
+            <?php } ?>
+
             <div class="mb-3">
                 <label for="firstname" class="form-label">First name</label>
                 <input type="text" class="form-control" name="firstname" aria-describedby="firstname">
@@ -32,18 +57,19 @@
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control" name="email" aria-describedby="email">
             </div>
-            <div class="mb-3">
+           
+             <div class="mb-3">
 				<label for="" class="control-label">User Role</label>
                 <select name="type" id="type" class="form-control">
                     <option value="5" <?php echo isset($status) && $status == 5 ? 'selected' : '' ?>>เจ้าหน้าที่</option>
                     <option value="4" <?php echo isset($status) && $status == 4 ? 'selected' : '' ?>>หัวสาขา</option>
-                    <option value="4" <?php echo isset($status) && $status == 4 ? 'selected' : '' ?>>หัวข้อหน้าหน่วย</option>
+                    <option value="4" <?php echo isset($status) && $status == 4 ? 'selected' : '' ?>>หัวหน้าหน่วย</option>
                     <option value="4" <?php echo isset($status) && $status == 4 ? 'selected' : '' ?>>ผู้ชวยรองรองคณบดีฝ่ายวิชาการ</option>
                     <option value="3" <?php echo isset($status) && $status == 3 ? 'selected' : '' ?>>รองคณบดีฝ่ายวิชาการ</option>
                     <option value="2" <?php echo isset($status) && $status == 2 ? 'selected' : '' ?>>คณบดี</option>
                     <option value="1" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Admin</option>
                 </select>
-			</div>
+			</div> 
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" name="password">

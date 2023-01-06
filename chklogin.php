@@ -6,18 +6,16 @@ require_once 'connect.php';
 if (isset($_POST['btnlogin'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
-
-/* print_r ($password);
+/* print_r ($passwordHash);
 exit; */
-   
         if (empty($email)) {
-            $_SESSION['error'] = 'กรุณากรอกอีเมล';
+            $_SESSION['error'] = '<center>กรุณากรอกอีเมล</center>';
             header("location: login.php");
         } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $_SESSION['error'] = 'รูปแบบอีเมลไม่ถูกต้อง';
+            $_SESSION['error'] = '<center>แบบอีเมลไม่ถูกต้อง</center>';
             header("location: login.php");
         } else if (empty($password)) {
-            $_SESSION['error'] = 'กรุณากรอกรหัสผ่าน';
+            $_SESSION['error'] = '<center>กรุณากรอกรหัสผ่าน</center>';
             header("location: login.php");
         } else {
             try {
@@ -33,22 +31,22 @@ exit; */
                          if ($row['status'] == '1') {
                         $_SESSION['admin_login'] = $row['user_id'];
                         header("location: admin_page.php");
-                    }/* else{
+                    } else{
                     $_SESSION['user_page'] = $row['user_id'];
                     header("location: user_page.php");
-                   }  */
-                }/*  else {
-                    $_SESSION['error'] = 'รหัสผ่านผิด';
+                   }  
+                }  else {
+                    $_SESSION['error'] = '<center>รหัสผ่านผิด</center>';
                     header("location: login.php");
-                }   */
-            }/* else{
-                $_SESSION['error'] = 'อีเมลผิด';
+                }   
+            } else{
+                $_SESSION['error'] = '<center>อีเมลผิด</center>';
                 header("location: login.php");
-            }  */
-        } /* else{
-            $_SESSION['error'] = "ไม่มีข้อมูลในระบบ";
+            }  
+        }  else{
+            $_SESSION['error'] = "<center>ไม่มีข้อมูลในระบบ</center>";
             header("location: login.php");
-        }  */
+        }  
             }catch(PDOException $e) {
                 echo $e->getMessage();
             }

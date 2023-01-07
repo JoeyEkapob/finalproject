@@ -32,7 +32,7 @@ exit; */
                         $_SESSION['admin_login'] = $row['user_id'];
                         header("location: admin_page.php");
                     } else{
-                    $_SESSION['user_page'] = $row['user_id'];
+                    $_SESSION['user_login'] = $row['user_id'];
                     header("location: user_page.php");
                    }  
                 }  else {

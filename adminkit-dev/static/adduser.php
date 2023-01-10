@@ -10,7 +10,6 @@
         $password = $_POST['password'];
         $c_password = $_POST['c_password'];
         $status = $_POST['type'];
-        $file = $_POST['file'];
 
         if (empty($firstname)) {
             $_SESSION['error'] = 'กรุณากรอกชื่อ';

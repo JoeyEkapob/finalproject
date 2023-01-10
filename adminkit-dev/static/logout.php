@@ -2,6 +2,6 @@
 
     session_start();
     unset($_SESSION['user_login']);
-    header('location:pages-sign-in.php');
+    header('location:sign-in.php');
 
 ?>

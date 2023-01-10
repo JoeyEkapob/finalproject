@@ -1,7 +1,6 @@
-
 <?php include "head.php"?>
 <?php
-		session_start();
+	
             if (isset($_SESSION['user_login'])) {
                 $admin_id = $_SESSION['user_login'];
              //echo $admin_id ;
@@ -115,7 +114,7 @@
 					</li>
 					<?php endif; ?>
 					<?php if($row['status'] == 1 && 2): ?>
-					<li class="sidebar-item active">
+					<li class="sidebar-item ">
 						<a class="sidebar-link" href="">
               <i class="align-middle" data-feather="users"></i> <span class="align-middle">สมาชิก</span>
             </a>

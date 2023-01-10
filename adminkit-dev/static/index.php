@@ -1,11 +1,17 @@
+<?php
+    session_start();
+    require_once 'connect.php';
+    if(!isset($_SESSION['user_login'])){
+         $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
+        header('location:sign-in.php');
+    }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
-
 <?php include "head.php"?>
-
 <body>
 <?php include "sidebar.php"?>
-
 			<main class="content">
 				<div class="container-fluid p-0">
 

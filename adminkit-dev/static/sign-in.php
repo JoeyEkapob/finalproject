@@ -57,7 +57,6 @@
 										<div class="text-center mt-3">
 											 <button type="submit" name ="btnlogin" class="btn btn-lg btn-primary">Sign in</button> 
 										</div>
-									</form>
 								</div>
 							</div>
 						</div>
@@ -67,6 +66,7 @@
 			</div>
 		</div>
 	</main>
+</form>
 
 	<script src="js/app.js"></script>
 

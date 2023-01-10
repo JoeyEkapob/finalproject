@@ -28,12 +28,8 @@ exit; */
                 if ($check_data->rowCount() > 0) {
                 if ($email == $row['email'] ){
                    if(password_verify($password ,$row['password'])) {
-                         if ($row['status'] == '1') {
-                        $_SESSION['admin_login'] = $row['user_id'];
-                        header("location: admin_page.php");
-                    } else{
-                    $_SESSION['user_login'] = $row['user_id'];
-                    header("location: user_page.php");
+                        $_SESSION['user_login'] = $row['user_id'];
+                        header("location: index.php");
                    }  
                 }  else {
                     $_SESSION['error'] = '<center>รหัสผ่านผิด</center>';

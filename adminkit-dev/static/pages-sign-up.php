@@ -15,7 +15,7 @@
 <?php include 'head.php'?> 
 <body>
 <?php include "sidebar.php"?>
-<form action="adduser.php" method="post">
+<form action="adduser.php" method="post" enctype="multipart/form-data">
 <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
                     <?php 
@@ -40,7 +40,8 @@
                     ?>
                 </div>
             <?php } ?>
-<main class="content">
+			
+		<main class="content">
 				<div class="container-fluid p-0">
 					<h1 class="h3 mb-3">Add user</h1>
 				</div>
@@ -51,11 +52,11 @@
 									<div class="col-md-6">
 										<div class="mb-3">
 											<label for="" class="control-label">First Name</label>
-											<input type="text" name="firstname" class="form-control form-control" required value="">
+											<input type="text" name="firstname" class="form-control form-control" >
 										</div>
 										<div class="mb-3">
 											<label for="" class="control-label">Last Name</label>
-											<input type="text" name="lastname" class="form-control form-control" required value="">
+											<input type="text" name="lastname" class="form-control form-control" >
 										</div>
 										
 										<div class="mb-3">
@@ -74,7 +75,7 @@
 									<div class="col-md-6">
 											<div class="mb-3">
 												<label class="control-label">Email</label>
-												<input type="email" class="form-control form-control" name="email" required value="">
+												<input type="email" class="form-control form-control" name="email" >
 												<small id="#msg"></small>
 											</div>
 											<div class="mb-3">
@@ -89,7 +90,7 @@
 										<div class="mb-3">
 											<div class="form-group">
 												<label for="" class="control-label">Avatar</label>	
-												<input  type="file"  name="file" class="form-control border border-primary"  accept="image/jpeg, image/png, image/jpg">
+												<input type="file" name="file" class="form-control streched-link" accept="image/gif, image/jpeg, image/png">
 												<p class="small mb-0 mt-2"><b>Note:</b> Only JPG, JPEG, PNG & GIF files are allowed to upload</p> 
 											</div>
 										</div>
@@ -104,7 +105,7 @@
 											<button class="btn btn-secondary" type="button" >Cancel</button>
 										</div>
 									</div>
-		
+								</div>
 							</div>
 						</div>
 					</div>			

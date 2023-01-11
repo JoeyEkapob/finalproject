@@ -2,11 +2,12 @@
 <?php
 	
             if (isset($_SESSION['user_login'])) {
-                $admin_id = $_SESSION['user_login'];
+                $user_id = $_SESSION['user_login'];
              //echo $admin_id ;
-                $stmt = $db->query("SELECT * FROM user WHERE user_id = $admin_id");
+                $stmt = $db->query("SELECT * FROM user WHERE user_id = $user_id");
                 $stmt->execute();
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
+				$imageURL = 'img/avatars/'.$row['avatar'];
             }
       
 ?>
@@ -282,7 +283,7 @@
               </a>
 
 							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                <img src="" class="avatar img-fluid rounded me-1" alt="Charles Hall" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
+                	<img src="<?php echo $imageURL ?>" class="avatar img-fluid rounded me-1" alt="" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
               </a>
 							<div class="dropdown-menu dropdown-menu-end">
 								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>

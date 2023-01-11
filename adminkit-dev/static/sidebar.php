@@ -1,6 +1,5 @@
 <?php include "head.php"?>
 <?php
-	
             if (isset($_SESSION['user_login'])) {
                 $user_id = $_SESSION['user_login'];
              //echo $admin_id ;
@@ -9,7 +8,7 @@
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 				$imageURL = 'img/avatars/'.$row['avatar'];
             }
-      
+			
 ?>
 <div class="wrapper">
 		<nav id="sidebar" class="sidebar js-sidebar">

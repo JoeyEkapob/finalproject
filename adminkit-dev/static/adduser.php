@@ -21,31 +21,31 @@
 exit; */
          if (empty($firstname)) {
             $_SESSION['error'] = 'กรุณากรอกชื่อ';
-            header("location: pages-sign-up.php");
+            header("location: sign-up.php");
           } else if (empty($lastname)) {
             $_SESSION['error'] = 'กรุณากรอกนามสกุล';
-            header("location: pages-sign-up.php");
+            header("location:sign-up.php");
         } else if (empty($email)) {
             $_SESSION['error'] = 'กรุณากรอกอีเมล';
-            header("location: pages-sign-up.php");
+            header("location: -sign-up.php");
         } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $_SESSION['error'] = 'รูปแบบอีเมลไม่ถูกต้อง';
-            header("location: pages-sign-up.php");
+            header("location: sign-up.php");
         } else if (empty($password)) {
             $_SESSION['error'] = 'กรุณากรอกรหัสผ่าน';
-            header("location: pages-sign-up.php");
+            header("location: sign-up.php");
         } else if (strlen($_POST['password']) > 20 || strlen($_POST['password']) < 5) {
             $_SESSION['error'] = 'รหัสผ่านต้องมีความยาวระหว่าง 5 ถึง 20 ตัวอักษร';
-            header("location: pages-sign-up.php");
+            header("location: sign-up.php");
         } else if (empty($c_password)) {
             $_SESSION['error'] = 'กรุณายืนยันรหัสผ่าน';
-            header("location: pages-sign-up.php");
+            header("location: sign-up.php");
         } else if ($password != $c_password) {
             $_SESSION['error'] = 'รหัสผ่านไม่ตรงกัน';
-            header("location: pages-sign-up.php");  
+            header("location: sign-up.php");  
         }else if(empty($fileName)){
             $_SESSION['error'] = "กรุณาเเนบไฟล์รูปภาพ";
-            header("location: pages-sign-up.php"); 
+            header("location: sign-up.php"); 
          } else {
             try {
                 $check_email = $db->prepare("SELECT email FROM user WHERE email = :email");
@@ -70,10 +70,10 @@ exit; */
                     $stmt->bindParam(":avatar", $fileName);
                     $stmt->execute();
                     $_SESSION['success'] = "สมัครสมาชิกเรียบร้อยแล้ว! <a href='login.php' class='alert-link'>คลิ๊กที่นี่</a> เพื่อเข้าสู่ระบบ";
-                    header("location: pages-sign-up.php");
+                    header("location: sign-up.php");
                 } else {
                     $_SESSION['error'] = "มีบางอย่างผิดพลาด";
-                    header("location: pages-sign-up.php");
+                    header("location: sign-up.php");
                 } 
             }
         }

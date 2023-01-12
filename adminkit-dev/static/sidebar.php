@@ -77,7 +77,7 @@
 					<?php endif; ?>
 					<?php if($row['status'] == 1 && 2): ?>
 					<li class="sidebar-item ">
-						<a class="sidebar-link" href="">
+						<a class="sidebar-link" href="user_list.php">
               <i class="align-middle" data-feather="users"></i> <span class="align-middle">สมาชิก</span>
             </a>
 					</li>
@@ -176,7 +176,7 @@
 								<a class="dropdown-item" href="index.html"><i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy</a>
 								<a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="help-circle"></i> Help Center</a> -->
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="logout.php">Log out</a>
+								<a class="dropdown-item" onclick="alert('คุณต้องการออกจากระบบใช่ไหม')" href="logout.php">Log out</a>
 							</div>
 						</li>
 					</ul>

@@ -4,7 +4,7 @@
     require_once 'connect.php';
     if(!isset($_SESSION['user_login'])){
          $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
-        header('location:pages-sign-in.php');
+        header('location:sign-in.php');
     }
 
 ?>

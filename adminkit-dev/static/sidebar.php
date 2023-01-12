@@ -3,10 +3,12 @@
             if (isset($_SESSION['user_login'])) {
                 $user_id = $_SESSION['user_login'];
              //echo $admin_id ;
-                $stmt = $db->query("SELECT * FROM user WHERE user_id = $user_id");
+			 	$sql = "SELECT * FROM user AS u  LEFT JOIN position AS p ON  u.role_id = p.role_id WHERE u.user_id = $user_id ";
+				$stmt = $db->prepare($sql);
                 $stmt->execute();
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 				$imageURL = 'img/avatars/'.$row['avatar'];
+				//print_r ($row);
             }
 			
 ?>
@@ -14,10 +16,10 @@
 		<nav id="sidebar" class="sidebar js-sidebar">
 			<div class="sidebar-content js-simplebar">
 				<a class="sidebar-brand" href="index.php">
-				<?php if($_SESSION['user_login'] == 1): ?>
+				<?php if($row['level'] ==  1): ?>
 				<span class="align-middle">Admin <?php echo $row['firstname'] ?></span>
 				<?php else: ?>
-					<span class="align-middle">user</span>
+					<span class="align-middle">user <?php echo $row['firstname'] ?></span>
 					<?php endif; ?>
 				</a>
 
@@ -33,7 +35,7 @@
             </a>
 					</li>
 
-					<?php if($row['status'] != 5 ): ?>
+					<?php if($row['level'] != 5 ): ?>
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="">
               <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">+เพิ่มโปรเจค</span>
@@ -63,19 +65,19 @@
             </a>
 					</li>
 
-					<?php if($row['status'] == 1 && 2): ?>
+					<?php if($row['level'] == 1 && 2): ?>
 					<li class="sidebar-header">
 						USER
 					</li>
 					<?php endif; ?>
-					<?php if($row['status'] == 1 ): ?>
+					<?php if($row['level'] == 1 ): ?>
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="sign-up.php">
               <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">+เพิ่มสมาชิก</span>
             </a>
 					</li>
 					<?php endif; ?>
-					<?php if($row['status'] == 1 && 2): ?>
+					<?php if($row['level'] == 1 && 2): ?>
 					<li class="sidebar-item ">
 						<a class="sidebar-link" href="user_list.php">
               <i class="align-middle" data-feather="users"></i> <span class="align-middle">สมาชิก</span>

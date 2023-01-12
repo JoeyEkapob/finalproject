@@ -57,19 +57,19 @@ exit; */
                 if(move_uploaded_file($_FILES['file']['tmp_name'], $targetFilePath)) {
                 if ($row['email'] == $email) {
                     $_SESSION['warning'] = "มีอีเมลนี้อยู่ในระบบแล้ว <a href='sign-in.php'>คลิ๊กที่นี่</a> เพื่อเข้าสู่ระบบ";
-                    header("location: pages-sign-up.php");
+                    header("location: sign-up.php");
                 } else if (!isset($_SESSION['error'])) {
                     $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-                    $stmt = $db->prepare("INSERT INTO user(firstname, lastname, email, password, status,avatar) 
-                                            VALUES(:firstname, :lastname, :email, :password, :status,:avatar)");
+                    $stmt = $db->prepare("INSERT INTO user(firstname, lastname, email, password, role_id,avatar) 
+                                            VALUES(:firstname, :lastname, :email, :password, :role_id,:avatar)");
                     $stmt->bindParam(":firstname", $firstname);
                     $stmt->bindParam(":lastname", $lastname);
                     $stmt->bindParam(":email", $email);
                     $stmt->bindParam(":password", $passwordHash);
-                    $stmt->bindParam(":status", $status);
+                    $stmt->bindParam(":role_id", $status);
                     $stmt->bindParam(":avatar", $fileName);
                     $stmt->execute();
-                    $_SESSION['success'] = "สมัครสมาชิกเรียบร้อยแล้ว! <a href='login.php' class='alert-link'>คลิ๊กที่นี่</a> เพื่อเข้าสู่ระบบ";
+                    $_SESSION['success'] = "สมัครสมาชิกเรียบร้อยแล้ว! ";
                     header("location: sign-up.php");
                 } else {
                     $_SESSION['error'] = "มีบางอย่างผิดพลาด";

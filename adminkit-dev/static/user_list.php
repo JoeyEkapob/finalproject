@@ -44,7 +44,7 @@
                 <div class="container-fluid p-0">
                     <div class="card-header">
                         <div class="d-flex flex-row-reverse bd-highligh">
-                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary" href=""><i class="fa fa-plus"></i>  + Add New User</a>
+                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="sign-up.php"><i class="fa fa-plus"></i>  + Add New User</a>
                         </div>
                     </div>
                 </div>
@@ -86,8 +86,8 @@
                                             <td class=""><?php echo $row['position_name']?></td>
                                             <td class="text-center">                               
                                                 <a class="btn btn-primary btn-sm"  href="" >1</a>                          
-                                                <a href="edituser.php?update_id=<?php echo $row['user_id']?>" class="btn btn-warning btn-sm">2</a>   
-                                                <a class="btn btn-danger btn-sm" href="?delete_id=<?php echo $row['user_id']?>">trash</a>
+                                                <a href="edituser_page.php?update_id=<?php echo $row['user_id']?>" class="btn btn-warning btn-sm">2</a>   
+                                                <a href="deleteuser.php?delete_id=<?php echo $row['user_id']?>" class="btn btn-danger btn-sm" >trash</a>
                                             </td>
                                         </tr>
                                             <?php } ?>

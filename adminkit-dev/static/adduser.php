@@ -16,7 +16,7 @@
         $fileName = basename($_FILES["file"]["name"]);
         $targetFilePath = $targetDir . $fileName;
         $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-        $allowTypes = array('jpg', 'png', 'jpeg', 'gif', 'pdf');
+        $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
 /* echo $fileName;
 exit; */
          if (empty($firstname)) {

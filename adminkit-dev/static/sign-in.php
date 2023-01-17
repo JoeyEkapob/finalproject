@@ -68,8 +68,8 @@
 	</main>
 </form>
 
-	<script src="js/app.js"></script>
-
+	
 </body>
 
 </html>
+<?php include "footer.php"?>

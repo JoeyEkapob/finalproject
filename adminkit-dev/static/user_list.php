@@ -77,7 +77,7 @@
                                             $qry = $db->query($sql);
                                             $qry->execute();
                                             while ($row = $qry->fetch(PDO::FETCH_ASSOC)){
-                                                //print_r ($row);
+                                                //extract($row);
                                         ?>
                                         <tr>
                                             <td class="text-center"><?php echo $i++ ?></td>
@@ -86,19 +86,23 @@
                                             <td class=""><?php echo $row['position_name']?></td>
                                             <td class="text-center">                               
                                                 <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>                          
-                                                <a href="edituser_page.php?update_id=<?php echo $row['user_id']?>" class="btn btn-warning btn-sm">2</a>   
+                                                <!-- <a href="edituser_page.php?update_id=<?php echo $row['user_id']?>" class="btn btn-warning btn-sm">2</a>   --> 
+                                                <a href="edituser_page.php?update_id=<?php echo $row['user_id']?>" class="btn btn-warning btn-sm">2</a>
                                                 <a href="deleteuser.php?delete_id=<?php echo $row['user_id']?>" class="btn btn-danger btn-sm" >trash</a>
                                             </td>
                                         </tr>
+                                        <?php include "viewuser_modal.php"?>
+                                        
                                             <?php } ?>
                                         </tbody>
+                                        
                                     </table>
                                 </div>
                             </div>
                         </div>
         </main>
+        <?php include "footer.php"?>
 </form>
-<?php include "viewuser_modal.php"?>
+
     </body>
 </html>
-<?php include "footer.php"?>

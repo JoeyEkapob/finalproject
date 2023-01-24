@@ -8,7 +8,8 @@
                 $stmt->execute();
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 				$imageURL = 'img/avatars/'.$row['avatar'];
-				//print_r ($row);
+				/* print_r ($row);
+				exit; */
             }
 			
 ?>
@@ -36,14 +37,37 @@
 					</li>
 
 					<?php if($row['level'] != 5 ): ?>
-					<li class="sidebar-item">
+					<!-- <li class="sidebar-item">
 						<a class="sidebar-link" href="">
-              <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">+เพิ่มโปรเจค</span>
-            </a>
+              				<i class="align-middle" data-feather="check-square"></i> 
+			  			<span class="align-middle">+เพิ่มโปรเจค</span>
+            			</a>
+						
+					</li> -->
+					<li class="sidebar-item">
+						<a data-bs-target="#maps" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
+							<i class="align-middle" data-feather="layers"></i> 
+							 <span class="align-middle">
+								ประเภทงาน
+							</span>
+						</a>
+						<ul id="maps" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
+							<li class="sidebar-item">
+								<a class="sidebar-link" href="addproject_page.php">
+								&nbsp;&nbsp;&nbsp;--> โปรเจค 
+								</a>
+							</li>
+						</ul>
+						<ul id="maps" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
+							<li class="sidebar-item">
+								<a class="sidebar-link" href="addtask_page.php">
+								&nbsp;&nbsp;&nbsp;--> งาน 
+								</a>
+							</li>
+						
+						</ul>
 					</li>
 					<?php endif; ?>
-					
-
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="">
               <i class="align-middle" data-feather="list"></i> <span class="align-middle">รายการโปรเจค</span>

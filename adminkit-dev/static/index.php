@@ -6,6 +6,13 @@
         header('location:sign-in.php');
     }
 
+	$sql = "SELECT COUNT(user_id) as num FROM user ";
+	$stmt = $db->prepare($sql);
+	$stmt ->execute();
+	$num_rows = $stmt->fetchColumn();
+	
+	//extract($row);
+	//print_r ($num_rows); 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,9 +21,9 @@
 <?php include "sidebar.php"?>
 			<main class="content">
 				<div class="container-fluid p-0">
-
+				
 					<h1 class="h3 mb-3"><strong>Analytics</strong> Dashboard</h1>
-
+					
 					<div class="row">
 						<div class="col-xxl-12 col-xxl- d-flex">
 							<div class="w-100">
@@ -87,28 +94,29 @@
 												</div>
 											</div>
 										</div>
+										
 										<div class="col-sm-3">
 											<div class="card">
 												<div class="card-body">
 													<div class="row">
 														<div class="col mt-0">
-															<h5 class="card-title">Orders</h5>
+															<h5 class="card-title">สมาชิก</h5>
 														</div>
-
+	
 														<div class="col-auto">
 															<div class="stat text-primary">
-																<i class="align-middle" data-feather="shopping-cart"></i>
+																<i class="align-middle" data-feather="users"></i>
 															</div>
 														</div>
 													</div>
-												<h1 class="mt-1 mb-3">64</h1>
+												<h1 class="mt-1 mb-3"><?php echo $num_rows ?></h1>
 												<div class="mb-0">
-													<span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -2.25% </span>
-													<span class="text-muted">Since last week</span>
+													<span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i></span>
+													<span class="text-muted">สมาชิกทั้งหมด</span>
 												</div>
 											</div>
 										</div>
-
+										
 									</div>
 								</div>
 							</div>

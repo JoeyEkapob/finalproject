@@ -49,7 +49,7 @@
                     </div>
                 </div>
             </div>
-        <div class="row">
+                    <div class="row">
                             <div class="col-12 col-lg-8 col-xxl-12 d-flex">
                                 <div class="card flex-fill">
                                     <div class="card-header">
@@ -101,8 +101,9 @@
                             </div>
                         </div>
         </main>
-        <?php include "footer.php"?>
+        
 </form>
 
     </body>
 </html>
+<?php include "footer.php"?>

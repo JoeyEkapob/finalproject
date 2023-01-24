@@ -17,7 +17,7 @@
                 
                 <main class="content"> 
                 <div class="container-fluid p-0">
-					<h1 class="h3 mb-3">เพิ่มโปรเจค</h1>
+					<h1 class="h3 mb-3">เพิ่มงาน</h1>
 				</div>
                     <div class="row">
 						<div class="card">		
@@ -25,7 +25,7 @@
 								<div class="row">
                                     <div class="col-md-6">
 										<div class="mb-3">
-											<label for="" class="control-label">ชื่อโปรเจค</label>
+											<label for="" class="control-label">ชื่องาน</label>
 											<input type="text" name="proname" class="form-control form-control">
 										</div>
                                     </div>

@@ -57,6 +57,7 @@
 												<p class="small mb-0 mt-2"><b>Note:</b></p> 
 											</div>
                                     </div>
+                                    
                                     <div class="justify-content-center">
                                             <label for="exampleFormControlTextarea1" class="form-label">รายละเอียด</label>
                                             <textarea class="form-control" id="exampleFormControlTextarea1" rows="7"></textarea>
@@ -74,7 +75,7 @@
                         </div> 		 		
 					</div>
                     
-                                    
+                    
                         
 
 

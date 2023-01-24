@@ -49,13 +49,27 @@
 											<label for="" class="control-label">วันที่เสร็จ</label>
                                             <input type="date" class="form-control form-control" autocomplete="off" name="start_date" value="">
 										</div>
-                                    </div>						
-									<div class="mb-3">
-											<div class="form-group">
-												<label for="" class="control-label"></label>	
-												<input type="file" name="file" class="form-control streched-link" accept="">
-												<p class="small mb-0 mt-2"><b>Note:</b></p> 
-											</div>
+                                    </div>
+                                    <div class="col-md-6">						
+                                    <div class="mb-3">
+											<label for="" class="control-label">สมาชิกทีม</label>
+												<select name="type" id="type" class="form-control">
+													<option value="" >เลือกสมาชิก</option>			
+												 <option value=""></option>
+												</select>
+										</div>
+                                    </div>
+                                    <div class="col-md-6">
+										
+                                    </div>
+                                    <div class="col-md-8" >						
+                                        <div class="mb-3">
+                                                <div class="form-group">
+                                                    <label for="" class="control-label">ไฟล์เเนบ</label>	
+                                                    <input type="file" name="file" class="form-control streched-link" accept="">
+                                                    <p class="small mb-0 mt-2"><b>Note:</b></p> 
+                                                </div>
+                                        </div>
                                     </div>
                                     <div class="justify-content-center">
                                             <label for="exampleFormControlTextarea1" class="form-label">รายละเอียด</label>

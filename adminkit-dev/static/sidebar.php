@@ -11,6 +11,7 @@
 				/* print_r ($row);
 				exit; */
             }
+			$level = $row['level'];
 			
 ?>
 <div class="wrapper">
@@ -83,10 +84,12 @@
               <i class="align-middle" data-feather="menu"></i> <span class="align-middle">รายงาน</span>
             </a>
 					</li>
+					<?php if($row['level'] != 5): ?>
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="">
               <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">ตรวจงาน</span>
             </a>
+			<?php endif; ?>
 					</li>
 
 					<?php if($row['level'] == 1 && 2): ?>

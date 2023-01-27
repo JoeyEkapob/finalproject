@@ -59,16 +59,15 @@
 											<input type="text" name="lastname" class="form-control form-control" >
 										</div>
 										<div class="mb-3">
-											<label for="" class="control-label">User Role</label>
-												<select name="type" id="type" class="form-control">
-													<option value="" >เลือกตำแหน่ง</option>
+											<label for="" class="control-label" >User Role</label>
+												<select name="type" id="type" class="form-control" >
 													<?php
 													$stmt = $db->query("SELECT * FROM position");
 													$stmt->execute();
 													$result = $stmt->fetchAll();
 													foreach($result as $row) {
 													?>
-												 <option value="<?= $row['role_id'];?>">-<?= $row['position_name'];?></option>
+												 <option value="<?= $row['role_id'];?>"><?= $row['position_name'];?></option>
                 									<?php } ?>
 												</select>
 										</div> 		

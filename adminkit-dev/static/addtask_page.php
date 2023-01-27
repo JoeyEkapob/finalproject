@@ -31,9 +31,9 @@
                                     </div>
                                     <div class="col-md-6">
 										<div class="mb-3">
-											<label for="" class="control-label">สมาชิกทีมโครงการ</label>
+											<label for="" class="control-label">ประเภทงาน</label>
 												<select name="type" id="type" class="form-control">
-													<option value="" >เลือกสมาชิก</option>			
+													<option value="" >เลือกประเภทงาน</option>			
 												 <option value=""></option>
 												</select>
 										</div>

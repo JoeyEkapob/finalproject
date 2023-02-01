@@ -3,12 +3,12 @@ session_start();
  include 'connect.php';
  $targetDir = "img/avatars/";
  
- if (isset($_REQUEST['update_id'])){
+ if (isset($_GET['update_id'])){
     try {
 		
         $id = $_REQUEST['update_id'];
 		//$sql = "SELECT * FROM user AS u  LEFT JOIN position AS p ON  u.role_id = p.role_id WHERE u.user_id = $user_id ";
-        $select_stmt = $db->prepare('SELECT * FROM user  AS u  LEFT JOIN position AS p ON  u.role_id = p.role_id  WHERE user_id = :id');
+        $select_stmt = $db->prepare('SELECT * FROM user  AS u  natural JOIN position  WHERE user_id = :id');
         $select_stmt->bindParam(":id", $id);
 	/* 	echo $id;
 		exit;  */ 
@@ -29,32 +29,6 @@ session_start();
 <form action="edituser.php" method="post" enctype="multipart/form-data">
 <?php include 'head.php'?> 
 <body>
-
-
-			<?php if(isset($_SESSION['error'])) { ?>
-                <div class="alert alert-danger" role="alert">
-                    <?php 
-                        echo $_SESSION['error'];
-                        unset($_SESSION['error']);
-                    ?>
-                </div>
-            <?php } ?>
-            <?php if(isset($_SESSION['success'])) { ?>
-                <div class="alert alert-success" role="alert">
-                    <?php 
-                        echo $_SESSION['success'];
-                        unset($_SESSION['success']);
-                    ?>
-                </div>
-            <?php } ?>
-            <?php if(isset($_SESSION['warning'])) { ?>
-                <div class="alert alert-warning" role="alert">
-                    <?php 
-                        echo $_SESSION['warning'];
-                        unset($_SESSION['warning']);
-                    ?>
-                </div>
-            <?php } ?>
 		
 		<main class="content">
 				<div class="container-fluid p-0">

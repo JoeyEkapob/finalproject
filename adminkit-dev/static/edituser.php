@@ -17,7 +17,7 @@ if (isset($_POST['btn_up'])) {
     $fileName = basename($_FILES["file"]["name"]);
     $targetFilePath = $targetDir . $fileName;
     $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-    $allowTypes = array('jpg', 'png', 'jpeg', 'gif', 'pdf'); 
+    $allowTypes = array('jpg', 'png', 'jpeg', 'gif'); 
     
 /* echo $fileName;
 exit; */
@@ -30,12 +30,12 @@ exit; */
                 unlink($targetDir.$row['avatar']);
                 if (move_uploaded_file($_FILES['file']['tmp_name'], $targetFilePath)) {
                 } else {
-                    $_SESSION['warning'] = "
+                    $_SESSION['error'] = "
                     ขออภัย มีข้อผิดพลาดในการอัปโหลดไฟล์ของคุณ";
                     header("location: user_list.php");
                 }
             } else {
-                $_SESSION['warning'] = "
+                $_SESSION['error'] = "
                 ขออภัย อนุญาตให้อัปโหลดเฉพาะไฟล์ JPG, JPEG, PNG และ GIF เท่านั้น";
                 header("location: user_list.php");
             }
@@ -67,10 +67,10 @@ exit; */
                     $row = $check_email->fetch(PDO::FETCH_ASSOC);
                 // print_r ($row);
 
-                    if ($row['email'] == $email) {
-                        $_SESSION['warning'] = "มีอีเมลนี้อยู่ในระบบแล้ว ";
+                     /* if ($row['email'] == $email) {
+                        $_SESSION['error'] = "มีอีเมลนี้อยู่ในระบบแล้ว ";
                         header("location:user_list.php");
-                    } else if (!isset($_SESSION['error'])) {
+                    } else  */ if (!isset($_SESSION['error'])) {
                             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
                     $update_stmt = $db->prepare('UPDATE user SET firstname = :firstname_up ,lastname = :lastname ,email =:email, password = :password , role_id = :role_id ,avatar = :avatar WHERE user_id = :id');
                     $update_stmt->bindParam(':firstname_up', $firstname);
@@ -81,11 +81,11 @@ exit; */
                     $update_stmt->bindParam(":role_id", $status);
                     $update_stmt->bindParam(':id', $id);
                     $update_stmt->execute();
-                    $errorMsg = "เเก้ไขเรียบร้อยแล้ว";
-                    header("location;user_list.php");
+                    $_SESSION['success'] = "เเก้ไขเรียบร้อยแล้ว";
+                    header("location: user_list.php");
                 } else {
-                    $errorMsg = "มีบางอย่างผิดพลาด";
-                    header("location; user_list.php");
+                    $_SESSION['error']= "มีบางอย่างผิดพลาด";
+                    header("location: user_list.php");
                 } 
            
                 } catch(PDOException $e) {

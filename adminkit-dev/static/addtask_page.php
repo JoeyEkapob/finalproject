@@ -35,6 +35,7 @@
 												<select name="type" id="type" class="form-control">
 													<option value="" >เลือกประเภทงาน</option>			
 												 <option value=""></option>
+                                                 <option value=""></option>
 												</select>
 										</div>
                                     </div>

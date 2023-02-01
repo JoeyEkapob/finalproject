@@ -3,7 +3,7 @@
             if (isset($_SESSION['user_login'])) {
                 $user_id = $_SESSION['user_login'];
              //echo $admin_id ;
-			 	$sql = "SELECT * FROM user AS u  LEFT JOIN position AS p ON  u.role_id = p.role_id WHERE u.user_id = $user_id ";
+			 	$sql = "SELECT * FROM user AS u  natural JOIN position  WHERE u.user_id = $user_id ";
 				$stmt = $db->prepare($sql);
                 $stmt->execute();
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -49,7 +49,7 @@
 						<a data-bs-target="#maps" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
 							<i class="align-middle" data-feather="layers"></i> 
 							 <span class="align-middle">
-								ประเภทงาน
+								เพิ่มงาน
 							</span>
 						</a>
 						<ul id="maps" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
@@ -59,14 +59,13 @@
 								</a>
 							</li>
 						</ul>
-						<ul id="maps" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
+						<!-- ul id="maps" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
 							<li class="sidebar-item">
 								<a class="sidebar-link" href="addtask_page.php">
-								&nbsp;&nbsp;&nbsp;--> งาน 
+								&nbsp;&nbsp;&nbsp; 
 								</a>
 							</li>
-						
-						</ul>
+						</ul> -->
 					</li>
 					<?php endif; ?>
 					<li class="sidebar-item">
@@ -92,24 +91,84 @@
 			<?php endif; ?>
 					</li>
 
-					<?php if($row['level'] == 1 && 2): ?>
+					<?php if($row['level'] == 1 ): ?>
+					<li class="sidebar-header">
+						ADMIN
+					</li>
+					<?php elseif($row['level'] == 2): ?>
 					<li class="sidebar-header">
 						USER
-					</li>
+					</li> 
 					<?php endif; ?>
-					<?php if($row['level'] == 1 ): ?>
+					
+					<?php if($row['level'] == 1 OR 2): ?>
+
 					<li class="sidebar-item">
+						<a data-bs-target="#่jobtype" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
+							<i class="align-middle" data-feather="layers"></i> 
+							 <span class="align-middle">
+								ประเภทงาน
+							</span>
+						</a>
+						<ul id="่jobtype" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
+							<li class="sidebar-item">
+								<a class="sidebar-link" href="addjobtype.php">
+								&nbsp;&nbsp;&nbsp;--> เพิ่มประเภทงาน 
+								</a>
+							</li>
+						</ul>
+						<ul id="่jobtype" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
+							<li class="sidebar-item">
+								<a class="sidebar-link" href="jobtype_list.php">
+								&nbsp;&nbsp;&nbsp;--> รายการประเภทงาน
+								</a>
+							</li>
+						</ul>
+					</li>
+
+					<li class="sidebar-item">
+						<a data-bs-target="#user" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
+							<i class="align-middle" data-feather="users"></i> 
+							 <span class="align-middle">
+								สมาชิก
+							</span>
+						</a>
+						<ul id="user" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
+							<li class="sidebar-item">
+								<a class="sidebar-link" href="sign-up.php">
+								&nbsp;&nbsp;&nbsp;--> เพิ่มสมาชิก
+								</a>
+							</li>
+						</ul>
+						<ul id="user" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
+							<li class="sidebar-item">
+								<a class="sidebar-link" href="user_list.php">
+								&nbsp;&nbsp;&nbsp;--> รายการสมาชิก
+								</a>
+							</li>
+						</ul>
+					</li>
+					
+					<!-- <li class="sidebar-item">
 						<a class="sidebar-link" href="sign-up.php">
               <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">+เพิ่มสมาชิก</span>
             </a>
-					</li>
+					</li> -->
+					
 					<?php endif; ?>
-					<?php if($row['level'] == 1 && 2): ?>
-					<li class="sidebar-item ">
+						
+					<?php if($row['level'] == 1 OR 2): ?>
+						<!-- <li class="sidebar-item ">
+						<a class="sidebar-link" href="addjobtype.php">
+              <i class="align-middle" data-feather="layers"></i> <span class="align-middle">+เพิ่มประเภทงาน</span>
+            </a>
+					</li> -->
+					<!-- <li class="sidebar-item ">
 						<a class="sidebar-link" href="user_list.php">
               <i class="align-middle" data-feather="users"></i> <span class="align-middle">สมาชิก</span>
             </a>
-					</li>
+					</li> -->
+					
 					<?php endif; ?>
 				</ul>
 

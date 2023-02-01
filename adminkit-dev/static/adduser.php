@@ -56,7 +56,7 @@ exit; */
                if(in_array($fileType, $allowTypes)) {
                 if(move_uploaded_file($_FILES['file']['tmp_name'], $targetFilePath)) {
                 if ($row['email'] == $email) {
-                    $_SESSION['warning'] = "มีอีเมลนี้อยู่ในระบบแล้ว <a href='sign-in.php'>คลิ๊กที่นี่</a> เพื่อเข้าสู่ระบบ";
+                    $_SESSION['error'] = "มีอีเมลนี้อยู่ในระบบแล้ว ";
                     header("location: sign-up.php");
                 } else if (!isset($_SESSION['error'])) {
                     $passwordHash = password_hash($password, PASSWORD_DEFAULT);

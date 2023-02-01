@@ -29,6 +29,7 @@
                     ?>
                 </div>
             <?php } ?>
+
 <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
     <main class="content">
         <div class="col-lg-12">

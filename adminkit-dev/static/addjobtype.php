@@ -7,7 +7,7 @@
         header('location:sign-in.php');
     }
 
-    if(isset($_POST['addjob'])){
+     if(isset($_POST['addjob'])){
         $namejob = $_POST['namejob'];
         $status = 1;
         if (empty($namejob)) {
@@ -21,12 +21,12 @@
             $stmtjob->bindParam(":status", $status);
             $stmtjob->execute();
             $_SESSION['success'] = "สมัครสมาชิกเรียบร้อยแล้ว! ";
-            header("location: jobtype_list.php.php");
+            header("location: jobtype_list.php");
         } else {
             $_SESSION['error'] = "มีบางอย่างผิดพลาด";
-            header("location: jobtype_list.php.php");
+            header("location: jobtype_list.php");
         } 
-    }
+    } 
 ?>
 
 <!DOCTYPE html>
@@ -36,6 +36,7 @@
 <body>
 <?php include "sidebar.php"?>
 <form action="" method="post" enctype="multipart/form-data">	
+    
 <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
                     <?php 

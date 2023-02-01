@@ -21,8 +21,8 @@
             $_SESSION['error'] = "มีบางอย่างผิดพลาด";
             header("location: jobtype_list.php");
         } 
+        
             
-
     } catch(PDOException $e) {
         $e->getMessage();
     }

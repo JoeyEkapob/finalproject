@@ -15,7 +15,7 @@
        if(isset($_POST['addpro'])){
          print_r($_POST['users_id']); 
 
-            $status1 = 1;
+           $status1 = 1;
            $proname = $_POST['proname'];
            $users_id=$_POST['users_id'];
            $start_date = $_POST['start_date'];
@@ -128,15 +128,15 @@
                                     <div class="col-md-6">   
                                         <label for="" class="control-label">สถานะงาน</label><br>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="งานปกติ">
+                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="1">
                                                     <label class="form-check-label" for="inlineRadio1">งานปกติ</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="งานด่วน">
+                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
                                                     <label class="form-check-label" for="inlineRadio2">งานด่วน</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="งานด่วนมาก">
+                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="3">
                                                     <label class="form-check-label" for="inlineRadio2">งานด่วนมาก</label>
                                                 </div>
                                         </div>

@@ -21,6 +21,7 @@ if(isset($_POST['addpro'])){
       $status2=$_POST['status2'];
       $file_project = null;
       $job = $_POST['job'];
+      $user=json_encode($users_id);
 
    /*    echo $job; 
       echo $proname; 
@@ -44,7 +45,7 @@ if(isset($_POST['addpro'])){
       
 
    }else if (!isset($_SESSION['error'])) {
-        $stmtpro = $db->prepare("INSERT INTO project(name_project, description, status_1, start_date, end_date, file_project, manager_id,status_2,id_jobtype,users_id) 
+        $stmtpro = $db->prepare("INSERT INTO project(name_project, description, status_1,start_date, end_date, file_project, manager_id,status_2,id_jobtype,users_id) 
       VALUES(:proname,:description,:status,:start_date,:end_date,:file_project,:manager_id,:status_2,:id_job,:users_id)");
        $stmtpro->bindParam(":proname", $proname);
        $stmtpro->bindParam(":description", $description);
@@ -55,7 +56,7 @@ if(isset($_POST['addpro'])){
        $stmtpro->bindParam(":manager_id", $manager_id);
        $stmtpro->bindParam(":status_2", $status2);
        $stmtpro->bindParam(":id_job", $job);
-       $stmtpro->bindParam(":users_id", json_encode($users_id));
+       $stmtpro->bindParam(":users_id",$user );
        $stmtpro->execute(); 
        $_SESSION['success'] = "เพิ่มโปรเจคเรียบร้อยแล้ว! ";
       
@@ -77,7 +78,7 @@ if(isset($_POST['addpro'])){
        }
    }     */
 } 
-/* $stmt = $db->query("SELECT * FROM project ");
+/* $stmt = $db->query("SELECT * FROM project where project_id=2");
 $stmt->execute();
 $result = $stmt->fetchAll();
 $json='';
@@ -95,7 +96,7 @@ $array = json_decode($json);
           echo $row1['firstname'];
    
        }
-   } */
+   }  */
 
 
 

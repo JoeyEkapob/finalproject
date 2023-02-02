@@ -34,15 +34,15 @@ if(isset($_POST['addpro'])){
 */
       if (empty($proname)) {
        $_SESSION['error'] = 'กรุณากรอกชื่อโปรเจค';
-
+       header('location:addproject_page.php');
 
      } else if (empty($start_date)) {
         $_SESSION['error'] ='กรุณากรอกวันที่เริ่ม';
-      
+        header('location:addproject_page.php');
 
    } else if (empty($end_date)) {
     $_SESSION['error'] = 'กรุณากรอกวันที่สิ้นสุด';
-      
+    header('location:addproject_page.php');
 
    }else if (!isset($_SESSION['error'])) {
         $stmtpro = $db->prepare("INSERT INTO project(name_project, description, status_1,start_date, end_date, file_project, manager_id,status_2,id_jobtype,users_id) 
@@ -59,10 +59,10 @@ if(isset($_POST['addpro'])){
        $stmtpro->bindParam(":users_id",$user );
        $stmtpro->execute(); 
        $_SESSION['success'] = "เพิ่มโปรเจคเรียบร้อยแล้ว! ";
-      
+       header('location:addproject_page.php');
    } else {
     $_SESSION['error']= "มีบางอย่างผิดพลาด";
-      
+    header('location:addproject_page.php');
    } 
    
       /*  $sql= "INSERT INTO `project`(``, `name_project`, `description`, `status`, `start_date`, `end_date`, `file_project`, `manager_id`)

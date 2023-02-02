@@ -42,36 +42,36 @@
                     </div>
                 </div>
             </div>
-                    <div class="row">
-                            <div class="col-12 col-lg-8 col-xxl-12 d-flex">
-                                <div class="card flex-fill">
-                                    <div class="card-header">
-
-                                        <h5 class="card-title mb-0">ประเภทงาน</h5>
-                                    </div>
-                                    <table class="table table-hover my-0">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center">ลำดับ</th>
-                                                <th class="d-none d-xl-table-cell">ชื่อประเภทงาน</th>
-                                                <th class="text-center">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                                            $i = 1;
-                                            //$type = array('',"Admin","คณบดี","รองคณบดีฝ่ายวิชาการ","ผู้ชวยรองรองคณบดีฝ่ายวิชาการ","หัวหน้าหน่วย","หัวสาขา","เจ้าหน้าที่");
-                                            $sql = "SELECT * 
-                                            FROM job_type  WHERE status = 1";
-                                            $qry = $db->query($sql);
-                                            $qry->execute();
-                                            while ($row = $qry->fetch(PDO::FETCH_ASSOC)){
-                                                //extract($row);
-                                        ?>
+        </div>
+           
+                 
+                          
+                    <div class="card flex-fill">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">ประเภทงาน</h5>
+                        </div>
+                            <table class="table table-hover my-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">ลำดับ</th>
+                                        <th class="text-left">ชื่อประเภทงาน</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                        $i = 1;
+                                        //$type = array('',"Admin","คณบดี","รองคณบดีฝ่ายวิชาการ","ผู้ชวยรองรองคณบดีฝ่ายวิชาการ","หัวหน้าหน่วย","หัวสาขา","เจ้าหน้าที่");
+                                        $sql = "SELECT * 
+                                        FROM job_type  WHERE status = 1";
+                                        $qry = $db->query($sql);
+                                        $qry->execute();
+                                        while ($row = $qry->fetch(PDO::FETCH_ASSOC)){
+                                            //extract($row);
+                                    ?>
                                         <tr>
                                             <td class="text-center"><?php echo $i++ ?></td>
-                                            <td class="d-none d-xl-table-cell"><?php echo $row['name_jobtype'] ?></td>
-                                            
+                                            <td class="text-left"><?php echo $row['name_jobtype'] ?></td>
                                             <td class="text-center">                               
                                                <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                       
                                                 <!-- <a href="edituser_page.php?update_id=<?php echo $row['id_jobtype']?>" class="btn btn-warning btn-sm">2</a>   --> 
@@ -79,15 +79,12 @@
                                                 <a href="deletejobtype.php?delete_id=<?php echo $row['id_jobtype']?>" class="btn btn-danger btn-sm" >trash</a>
                                             </td>
                                         </tr>
-                                       
-                                        
-                                            <?php } ?>
-                                        </tbody>
-                                        
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                                    <?php } ?>
+                                </tbody>           
+                            </table>
+                    </div>
+                        
+                  
         </main>
         
 </form>

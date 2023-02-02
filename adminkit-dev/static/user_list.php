@@ -50,8 +50,7 @@
                 </div>
             </div>
         </div>
-                    <div class="row">
-                            <div class="col-12 col-lg-8 col-xxl-12 d-flex">
+                    
                                 <div class="card flex-fill">
                                     <div class="card-header">
 
@@ -61,9 +60,9 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-center">ID</th>
-                                                <th class="d-none d-xl-table-cell">NAME</th>
-                                                <th class="d-none d-md-table-cell">Email</th>
-                                                <th class="">ตำเเหน่ง</th>
+                                                <th class="text-left">NAME</th>
+                                                <th class="text-left">Email</th>
+                                                <th class="text-left">ตำเเหน่ง</th>
                                                 <th class="text-center">Action</th>
                                             </tr>
                                         </thead>
@@ -82,9 +81,9 @@
                                         ?>
                                         <tr>
                                             <td class="text-center"><?php echo $i++ ?></td>
-                                            <td><?php echo ucwords($row['name']) ?></td>
-                                            <td><?php echo $row['email'] ?></td>
-                                            <td class=""><?php echo $row['position_name']?></td>
+                                            <td class="text-left"><?php echo ucwords($row['name']) ?></td>
+                                            <td class="text-left" ><?php echo $row['email'] ?></td>
+                                            <td class="text-left" ><?php echo $row['position_name']?></td>
                                             <td class="text-center">                               
                                                 <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>                          
                                                 <!-- <a href="edituser_page.php?update_id=<?php echo $row['user_id']?>" class="btn btn-warning btn-sm">2</a>   --> 
@@ -99,8 +98,7 @@
                                         
                                     </table>
                                 </div>
-                            </div>
-                        </div>
+                          
         </main>
         
 </form>

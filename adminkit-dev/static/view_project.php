@@ -5,6 +5,32 @@
          $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
         header('location:sign-in.php');
     }
+    
+    $id = $_GET['view_id'];
+    $targetDir = "img/avatars/";
+    $json='';
+    $stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","ส่งเรียบร้อยเเล้ว","รอการเเก้ไข","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
+    $stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
+    $select_project = $db->prepare('SELECT * FROM project  AS p  natural JOIN job_type  WHERE project_id = :id');
+    $select_project->bindParam(":id", $id);
+    $select_project->execute();
+    $row = $select_project->fetch(PDO::FETCH_ASSOC);
+    extract($row);
+  
+ 
+                                                                       
+
+
+    $manager = $db->query("SELECT *,concat(firstname,' ',lastname) as name FROM user where user_id = $manager_id");
+    $manager = $manager->fetch(PDO::FETCH_ASSOC);
+
+    $imageURL = 'img/avatars/'.$manager['avatar'];
+
+    
+    /* $stmt = $db->query("SELECT * FROM project where project_id=2");
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    $json='';*/
 
 ?>
 <!DOCTYPE html>
@@ -32,52 +58,79 @@
          
 <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
     <main class="content">
-    <div class="row">
-                        
-                        <div class="col-12 col-lg-8 col-xxl-12 d-flex">
-                            <div class="card flex-fill">  
-                                <div class="card-header">
-                                    <div class="row">
-                                        <div class="col-md-6">
+                 
+                    <div class="col-12 col-lg-8 col-xxl-12 d-flex">
+                         <div class="card flex-fill">  
+                             <div class="card-header">
+                                 <div class="row">
+                                    <div class="col-md-6">
                                                 <dl>
-                                                    <dt><b class="border-bottom border-primary">ชื่อโปรเจค</b></dt>
-                                                    <dd><?php  ?>หกดหกดหกดหกด</dd>
+                                               
+                                                    <dt><b class="border-bottom border-primary">ชื่อโปรเจค</b><?php echo "<span class='badge bg-danger'>".$stat2[$status_2]."</span>" ?></dt>
+                                                    <dd><?php echo $name_project  ?></dd>
                                                     <dt><b class="border-bottom border-primary">คำอธิบาย</b></dt>
-                                                    <dd><?php ?>หกดกหดหกด</dd>
+                                                    <dd><?php echo $description ?></dd>
                                                 </dl>
                                                 <dl>
+                                            
                                                     <dt><b class="border-bottom border-primary">ผู้สร้างโปรเจค</b></dt>
                                                     <dd>
-                                                        <?php //if(isset($manager['id'])) : ?>
-                                                        <div class="d-flex align-items-center mt-1">
-                                                            <img class="img-circle img-thumbnail p-0 shadow-sm border-info img-sm mr-3" src="" alt="Avatar">
-                                                            <b><?php  ?></b>
+                                                      
+                                                         <div class="d-flex align-items-center mt-1">
+                                                            <img class="avatar img-fluid rounded me-2" src="<?php echo $imageURL?>" alt="Avatar">
+                                                            <b><?php echo $manager['name'] ?> </b>
                                                         </div>
                                                     </dd>
                                                 </dl> 
-                                            </div>
+                                        </div>
+
                                             <div class="col-md-6">
                                                 <dl>
                                                     <dt><b class="border-bottom border-primary">วันที่เริ่ม</b></dt>
-                                                    <dd><?php ?>กหดหกดหก</dd>
+                                                    <dd><?php echo date("F d, Y",strtotime($start_date)) ?></dd>
                                                 </dl>
                                                 <dl>
                                                     <dt><b class="border-bottom border-primary">วันสิ้นสุด</b></dt>
-                                                    <dd><?php ?>หกดหกดกหด</dd>
+                                                    <dd><?php echo date("F d, Y",strtotime($end_date)) ?></dd>
                                                 </dl>
                                                 <dl>
                                                     <dt><b class="border-bottom border-primary">สถานะ</b></dt>
                                                     <dd>
-                                                    
+                                                        <?php
+                                                    if($status_1 =='1'){
+                                                    echo "<span class='badge bg-secondary'>".$stat1[$status_1]."</span>";
+                                                }elseif($status_1 =='2'){
+                                                    echo "<span class='badge bg-primary'>".$stat1[$status_1]."</span>";
+                                                }elseif($status_1 =='3'){
+                                                    echo "<span class='badge bg-success'>".$stat1[$status_1]."</span>";
+                                                }elseif($status_1 =='4'){
+                                                    echo "<span class='badge bg-warning'>".$stat1[$status_1]."</span>";
+                                                }elseif($status_1 =='5'){
+                                                    echo "<span class='badge bg-danger'>".$stat1[$status_1]."</span>";
+                                                }elseif($status_1 =='6'){
+                                                    echo "<span class='badge bg-danger'>".$stat1[$status_1]."</span>";
+                                                }
+                                                ?>
                                                     </dd>
                                                 </dl>
                                                 <dl>
+                                                    
                                                     <dt><b class="border-bottom border-primary">สมาชิก</b></dt>
                                                     <dd>
-                                                        <?php //if(isset($manager['id'])) : ?>
-                                                        <div class="d-flex align-items-center mt-1">
-                                                            <img class="img-circle img-thumbnail p-0 shadow-sm border-info img-sm mr-3" src="" alt="Avatar">
-                                                            <b><?php  ?></b>
+                                                        <?php //if(isset($manager['id'])) :
+                                                        foreach($row as $result) {
+                                                                    $json = $users_id;     
+                                                            }
+                                                            $array = json_decode($json);
+                                                                foreach($array as $value) {
+                                                                    $stmt1 = $db->query("SELECT * FROM user where user_id= $value ");
+                                                                    $stmt1->execute();
+                                                                    $result1 = $stmt1->fetchAll();
+                                                                        foreach($result1 as $row1) {         
+                                                                    ?>                            
+                                                        <div class="d-flex">
+                                                            <img class="avatar img-fluid rounded me-2" src="img/avatars/<?php echo $row1['avatar']?>" alt="Avatar">
+                                                            <b><?php  echo $row1['user_id']."".$row1['firstname']; }} ?></b>
                                                         </div>
                                                     </dd>
                                                 </dl> 
@@ -86,8 +139,8 @@
                                             <dt><b class="border-bottom border-primary">ไฟล์เเนบ</b></dt>
                                             <div class="d-flex align-items-center mt-1">
                                                          
-                                                            <b><?php  ?></b>
-                                                        </div>
+                                                <b><?php  ?></b>
+                                            </div>
                                     </div>
                                 </div>
                             </div>

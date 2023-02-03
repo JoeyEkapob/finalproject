@@ -69,17 +69,17 @@
 					</li>
 					<?php endif; ?>
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="">
+						<a class="sidebar-link" href="project_list.php">
               <i class="align-middle" data-feather="list"></i> <span class="align-middle">รายการโปรเจค</span>
             </a>
 					</li>
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="">
+						<a class="sidebar-link" href="task_list.php">
               <i class="align-middle" data-feather="list"></i> <span class="align-middle">รายการงาน</span>
             </a>
 					</li>
 					 <li class="sidebar-item">
-						<a class="sidebar-link" href="">
+						<a class="sidebar-link" href="report.php">
               <i class="align-middle" data-feather="menu"></i> <span class="align-middle">รายงาน</span>
             </a>
 					</li>
@@ -101,7 +101,7 @@
 					</li> 
 					<?php endif; ?>
 					
-					<?php if($row['level'] == 1 OR 2): ?>
+					<?php if($row['level'] <=2): ?>
 
 					<li class="sidebar-item">
 						<a data-bs-target="#่jobtype" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
@@ -157,7 +157,7 @@
 					
 					<?php endif; ?>
 						
-					<?php if($row['level'] == 1 OR 2): ?>
+					<?php if($row['level'] == 1 AND 2): ?>
 						<!-- <li class="sidebar-item ">
 						<a class="sidebar-link" href="addjobtype.php">
               <i class="align-middle" data-feather="layers"></i> <span class="align-middle">+เพิ่มประเภทงาน</span>

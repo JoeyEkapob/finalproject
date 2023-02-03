@@ -101,9 +101,9 @@
 											<label for="" class="control-label">สมาชิกทีมโครงการ</label>
 												 <select  name="status2" class="form-control"  >
                                                  
-              	                                    <option value="4">งานปกติ</option>
-                                                    <option value="5">งานด่วน</option>
-                                                    <option value="6">งานด่วนมาก</option>
+              	                                    <option value="1">งานปกติ</option>
+                                                    <option value="2">งานด่วน</option>
+                                                    <option value="3">งานด่วนมาก</option>
                 								
 												</select>  
                                            <?php// print_r ($result); ?>

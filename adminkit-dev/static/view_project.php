@@ -5,7 +5,7 @@
          $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
         header('location:sign-in.php');
     }
-    
+    $us=$_SESSION['user_login'];
     $id = $_GET['view_id'];
     $targetDir = "img/avatars/";
     $json='';
@@ -17,16 +17,15 @@
     $row = $select_project->fetch(PDO::FETCH_ASSOC);
     extract($row);
   
- 
-                                                                       
-
-
     $manager = $db->query("SELECT *,concat(firstname,' ',lastname) as name FROM user where user_id = $manager_id");
     $manager = $manager->fetch(PDO::FETCH_ASSOC);
 
-    $imageURL = 'img/avatars/'.$manager['avatar'];
+    //$imageURL = 'img/avatars/'.$manager['avatar'];
 
-    
+   
+ 
+  //
+   
     /* $stmt = $db->query("SELECT * FROM project where project_id=2");
     $stmt->execute();
     $result = $stmt->fetchAll();
@@ -66,7 +65,15 @@
                                     <div class="col-md-6">
                                                 <dl>
                                                
-                                                    <dt><b class="border-bottom border-primary">ชื่อโปรเจค</b><?php echo "<span class='badge bg-danger'>".$stat2[$status_2]."</span>" ?></dt>
+                                                    <dt><b class="border-bottom border-primary">ชื่อโปรเจค</b><?php
+                                                     if ($status_2 == '1') {
+                                                        echo " "."<span class='badge bg-secondary'>".$stat2[$status_2]."</span>";
+                                                    }else if($status_2 == '2'){
+                                                        echo " "."<span class='badge bg-warning'>".$stat2[$status_2]."</span>";
+                                                    }else if($status_2 == '3'){
+                                                        echo " "."<span class='badge bg-danger'>".$stat2[$status_2]."</span>";
+                                                    }
+                                                    //echo "  "."<span class='badge bg-danger'>".$stat2[$status_2]."</span>" ?></dt>
                                                     <dd><?php echo $name_project  ?></dd>
                                                     <dt><b class="border-bottom border-primary">คำอธิบาย</b></dt>
                                                     <dd><?php echo $description ?></dd>
@@ -77,7 +84,7 @@
                                                     <dd>
                                                       
                                                          <div class="d-flex align-items-center mt-1">
-                                                            <img class="avatar img-fluid rounded me-2" src="<?php echo $imageURL?>" alt="Avatar">
+                                                            <img class="avatar img-fluid rounded me-2" src="img/avatars/<?php echo $manager['avatar']?>" alt="Avatar">
                                                             <b><?php echo $manager['name'] ?> </b>
                                                         </div>
                                                     </dd>
@@ -118,20 +125,20 @@
                                                     <dt><b class="border-bottom border-primary">สมาชิก</b></dt>
                                                     <dd>
                                                         <?php //if(isset($manager['id'])) :
-                                                        foreach($row as $result) {
+                                                         /* foreach($row as $result) {
                                                                     $json = $users_id;     
                                                             }
                                                             $array = json_decode($json);
-                                                                foreach($array as $value) {
-                                                                    $stmt1 = $db->query("SELECT * FROM user where user_id= $value ");
-                                                                    $stmt1->execute();
-                                                                    $result1 = $stmt1->fetchAll();
-                                                                        foreach($result1 as $row1) {         
-                                                                    ?>                            
-                                                        <div class="d-flex">
-                                                            <img class="avatar img-fluid rounded me-2" src="img/avatars/<?php echo $row1['avatar']?>" alt="Avatar">
-                                                            <b><?php  echo $row1['user_id']."".$row1['firstname']; }} ?></b>
-                                                        </div>
+                                                                foreach($array as $value) { */
+                                                                    $sql = "SELECT * FROM project_list  natural join user  where project_id = $id ";
+                                                                    $qry = $db->query($sql);
+                                                                    $qry->execute();
+                                                                    while ($row = $qry->fetch(PDO::FETCH_ASSOC)){  ?>  
+                                                                     
+                                                         
+                                                                <img class="avatar img-fluid rounded me-2" src="img/avatars/<?php echo $row['avatar']?>" alt="Avatar">
+                                                                <b><?php  echo $row['firstname']." ".$row['lastname'] ?></b>
+                                                            <?php  }?>
                                                     </dd>
                                                 </dl> 
                                             </div>
@@ -139,7 +146,7 @@
                                             <dt><b class="border-bottom border-primary">ไฟล์เเนบ</b></dt>
                                             <div class="d-flex align-items-center mt-1">
                                                          
-                                                <b><?php  ?></b>
+                                                <b></b>
                                             </div>
                                     </div>
                                 </div>
@@ -166,13 +173,14 @@
         </div> -->
         
                         <div class="row">
-                            <div class="col-12 col-lg-8 col-xxl-12 d-flex">
+                            <div class="col-sm-12 col-lg-8 col-xxl-12 d-flex">
                                 <div class="card flex-fill">
                                     <div class="card-header">
-                                        
+                                        <?php   if ($manager_id == $us || $row['level'] <= 2) {?>
                                         <div class="d-flex flex-row-reverse">
-                                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary" href=""><i class="fa fa-plus"></i>  + Add task</a>
+                                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary"  type="button" id="new_task" ><i class="fa fa-plus"></i>  + Add task</a>
                                         </div>
+                                        <?php }?>
                                         <div class="d-flex justify-content-start">
                                             <h5 class="card-title mb-0">รายการงาน</h5>
                                             </div>
@@ -229,4 +237,13 @@
 
     </body>
 </html>
+
+
 <?php include "footer.php"?>
+<script>
+    $(document).ready(function () {
+    $('#example').DataTable();
+});
+</script>
+
+</script>

@@ -7,11 +7,14 @@
         
     }
 
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <?php include "head.php"?>
 <body>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css" 
 <?php include "sidebar.php"?>
 
 <?php if(isset($_SESSION['error'])) { ?>
@@ -57,7 +60,7 @@
                         <div class="card-header">
                             <h5 class="card-title mb-0">รายการโปรเจค</h5>
                         </div>
-                            <table class="table table-hover my-0">
+                            <table class="table table-hover my-0" id="example" >
                                 <thead>
                                     <tr>
                                         <th class="text-center">ลำดับ</th>
@@ -73,10 +76,10 @@
                                         $i = 1;
                                         $stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","อยู่ระหว่างการตรวจสอบ","รอการเเก้ไข","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
                                         $where = "";    
-                                        if($row['level'] >= 3){
+                                        if($row['level'] >= 3 ){
                                             $where = " where manager_id = '{$_SESSION['user_login']}' ";   
-                                        }     
-                                        $sql = "SELECT * FROM project $where order by name_project asc ";
+                                        }
+                                        $sql = "SELECT * FROM project  $where order by name_project asc ";
                                         $qry = $db->query($sql);
                                         $qry->execute();
                                         while ($row = $qry->fetch(PDO::FETCH_ASSOC)){
@@ -87,7 +90,7 @@
                                             <td class="text-center"><?php echo $i++ ?></td>
                                              <td>
                                                 <p><b><?php echo $row["name_project"]?></b></p>
-                                                <p class="truncate"><?php echo strip_tags($row['description']);  ?></p>
+                                                <p class="truncate"><?php echo substr($row['description'],0,100).'...';  ?></p>
 
 						                    </td>
                                          
@@ -132,4 +135,9 @@
 
     </body>
 </html>
+<script>
+$(document).ready(function () {
+    $('#example').DataTable();
+});
+</script>
 <?php include "footer.php"?>

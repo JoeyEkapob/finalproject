@@ -11,6 +11,7 @@
 <html lang="en">
 <?php include "head.php"?>
 <body>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css"  
 <?php include "sidebar.php"?>
 
 <?php if(isset($_SESSION['error'])) { ?>
@@ -56,7 +57,7 @@
 
                                         <h5 class="card-title mb-0">สมาชิก</h5>
                                     </div>
-                                    <table class="table table-hover my-0">
+                                    <table class="table table-hover table-responsive" id="example">
                                         <thead>
                                             <tr>
                                                 <th class="text-center">ID</th>
@@ -105,4 +106,9 @@
 
     </body>
 </html>
+<script>
+$(document).ready(function () {
+    $('#example').DataTable();
+});
+</script>
 <?php include "footer.php"?>

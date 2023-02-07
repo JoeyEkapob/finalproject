@@ -11,7 +11,7 @@ if(isset($_POST['addpro'])){
       $users_id=$_POST['users_id'];
       }else {
         $_SESSION['error'] = 'กรุณาเพิ่มคนลงในโปรเจค'; 
-        header('location:addproject_page.php');
+        
       }
 
       $start_date = $_POST['start_date'];
@@ -58,25 +58,24 @@ if(isset($_POST['addpro'])){
        $stmtpro->bindParam(":id_job", $job);
        $stmtpro->bindParam(":users_id",$user );
        $stmtpro->execute(); 
-       $_SESSION['success'] = "เพิ่มโปรเจคเรียบร้อยแล้ว! ";
-       header('location:addproject_page.php');
-   } else {
-    $_SESSION['error']= "มีบางอย่างผิดพลาด";
-    header('location:addproject_page.php');
-   } 
-   
-      /*  $sql= "INSERT INTO `project`(``, `name_project`, `description`, `status`, `start_date`, `end_date`, `file_project`, `manager_id`)
-       VALUES (null,$proname,$description,project_id1,$start_date,$end_date,null,$user_id )" ;
-      if $db->query($sql) === TRUE {
-           $last_id = $conn->insert_id;
-      }
-         if(!empty($_POST['users_id'])){
-           foreach ($_POST['users_id'] as $id => $users_id){
-           $sql1="INSERT INTO `project_list`(`project_id`, `user_id`) VALUES ($last_id,$users_id)";
-           $conn->query($sql1);
+       $lastId = $db->lastInsertId();
        
-       }
-   }     */
+   }  
+   if(!isset($_SESSION['error'])){
+      foreach ($users_id as $id => $users_id){
+      $sql= $db->prepare("INSERT INTO project_list(project_id,user_id) VALUES(:project_id,:user_id)");
+      $sql->bindParam(":project_id", $lastId );
+      $sql->bindParam(":user_id", $users_id );
+      $sql->execute(); 
+      $_SESSION['success'] = "เพิ่มโปรเจคเรียบร้อยแล้ว! ";
+      header('location:addproject_page.php');
+         
+   }
+   }else {
+      $_SESSION['error']= "มีบางอย่างผิดพลาด";
+      header('location:addproject_page.php');
+     }      
+
 } 
 /* $stmt = $db->query("SELECT * FROM project where project_id=2");
 $stmt->execute();

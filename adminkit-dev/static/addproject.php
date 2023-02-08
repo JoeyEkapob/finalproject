@@ -8,7 +8,7 @@ if(isset($_POST['addpro'])){
       $proname = $_POST['proname'];
 
       if(!empty($_POST['users_id'])){
-      $users_id=$_POST['users_id'];
+      $users_id1=$_POST['users_id'];
       }else {
         $_SESSION['error'] = 'กรุณาเพิ่มคนลงในโปรเจค'; 
         
@@ -21,17 +21,20 @@ if(isset($_POST['addpro'])){
       $status2=$_POST['status2'];
       $file_project = null;
       $job = $_POST['job'];
-      $user=json_encode($users_id);
 
-   /*    echo $job; 
+      $numbers_string = implode(",", $users_id1);
+      $users_id = explode(",", $numbers_string);
+     /* echo $job; 
       echo $proname; 
       echo $start_date;
       echo $end_date;
       echo $description;
       echo $manager_id;
       echo $status2;
+      print_r ($users_id);
+      exit;*/
 
-*/
+
       if (empty($proname)) {
        $_SESSION['error'] = 'กรุณากรอกชื่อโปรเจค';
        header('location:addproject_page.php');
@@ -45,8 +48,8 @@ if(isset($_POST['addpro'])){
     header('location:addproject_page.php');
 
    }else if (!isset($_SESSION['error'])) {
-        $stmtpro = $db->prepare("INSERT INTO project(name_project, description, status_1,start_date, end_date, file_project, manager_id,status_2,id_jobtype,users_id) 
-      VALUES(:proname,:description,:status,:start_date,:end_date,:file_project,:manager_id,:status_2,:id_job,:users_id)");
+        $stmtpro = $db->prepare("INSERT INTO project(name_project, description, status_1,start_date, end_date, file_project, manager_id,status_2,id_jobtype) 
+      VALUES(:proname,:description,:status,:start_date,:end_date,:file_project,:manager_id,:status_2,:id_job)");
        $stmtpro->bindParam(":proname", $proname);
        $stmtpro->bindParam(":description", $description);
        $stmtpro->bindParam(":status", $status1);
@@ -56,7 +59,6 @@ if(isset($_POST['addpro'])){
        $stmtpro->bindParam(":manager_id", $manager_id);
        $stmtpro->bindParam(":status_2", $status2);
        $stmtpro->bindParam(":id_job", $job);
-       $stmtpro->bindParam(":users_id",$user );
        $stmtpro->execute(); 
        $lastId = $db->lastInsertId();
        
@@ -68,12 +70,12 @@ if(isset($_POST['addpro'])){
       $sql->bindParam(":user_id", $users_id );
       $sql->execute(); 
       $_SESSION['success'] = "เพิ่มโปรเจคเรียบร้อยแล้ว! ";
-      header('location:addproject_page.php');
+      header('location:project_list.php');
          
    }
    }else {
       $_SESSION['error']= "มีบางอย่างผิดพลาด";
-      header('location:addproject_page.php');
+      header('location:project_list.php');
      }      
 
 } 

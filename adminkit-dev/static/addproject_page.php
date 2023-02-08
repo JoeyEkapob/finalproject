@@ -79,26 +79,18 @@
 										</div>
                                     </div>						
 									
+                                    
                                     <div class="col-md-6">
 										<div class="mb-4">
 											<label for="" class="control-label">สมาชิกทีมโครงการ</label>
-												 <select  name="users_id[]" id="countries" multiple>	
-                                                <?php
-													$employees = $db->query("SELECT *, concat(firstname,' ',lastname) as name From user natural join position where  level> $level ORDER by level asc");
-													$employees->execute();
-													$result = $employees->fetchAll();
-													foreach($result as $row) {
-													?>
-              	                                    <option value="<?php echo $row['user_id'] ?>"><?php echo $row['name'] ?></option>
-                									<?php } ?>
-												</select>  
-                                           <?php// print_r ($result); ?>
+                                            <input type="text" class="form-control" name="users_id[]"  id="user_id" data-access_multi_select="true" placeholder="Select a Country">
+                                               
 										</div>
                                     </div>
 
                                     <div class="col-md-6">   
-                                    <div class="mb-4">
-											<label for="" class="control-label">สมาชิกทีมโครงการ</label>
+                                    <div class="mb-4">l
+											<label for="" class="control-labe">สมาชิกทีมโครงการ</label>
 												 <select  name="status2" class="form-control"  >
                                                  
               	                                    <option value="1">งานปกติ</option>
@@ -131,7 +123,8 @@
                                         </div>
                                         <hr>
 										<div class="col-lg-12 text-right justify-content-center d-flex">
-											<button class="btn btn-primary" name="addpro">ADD</button>
+                                        
+											<button class="btn btn-primary"  id="display_selected" name="addpro">ADD</button>
 											<button class="btn btn-secondary" type="button" >Cancel</button>
 										</div>
                                        
@@ -147,15 +140,35 @@
 </html>
 <?php include "footer.php"?>
 <script>
-    new MultiSelectTag('countries')  // id
-</script>
-<script>
-/* $(document).ready(function(){
-    var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
+$(document).ready(function(){
+    var data=[];
+    var items = [];
+    
+      <?php
+      $employees = $db->query("SELECT *, concat(firstname,' ',lastname) as name From user natural join position where  level>  $level ORDER by level asc");
+      $employees->execute();
+      $result = $employees->fetchAll();
+      foreach($result as $row) {?>
+        items.push({value:<?php echo $row['user_id'];?>,text:'<?php echo $row['name'];?>'});
+    <?php  } ?>
+ 
+        var select = $('[data-access_multi_select="true"]').check_multi_select({
+            multi_select: true,
+            items: items,
+            rtl: false
+        });
+        // Display the selected Values
+        $('#display_selected').click(function () {
+            $('#user_id').val(select.check_multi_select('fetch_country'));
+            //alert(select.check_multi_select('fetch_country'))
+            console.log($('#user_id').val());
+        });
+    });
+    /*var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
        removeItemButton: true,
        maxItemCount:null,
        searchResultLimit:5,
        renderChoiceLimit:5
-     });   
-}); */
+     });   */
 </script>
+

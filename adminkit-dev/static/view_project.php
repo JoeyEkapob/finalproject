@@ -21,11 +21,30 @@
     $manager = $manager->fetch(PDO::FETCH_ASSOC);
 
     //$imageURL = 'img/avatars/'.$manager['avatar'];
+   /*  if(!isset($_POST['addtask_btn'])){
+        echo 5424245245245;
 
-   
- 
-  //
-   
+        /*  $stat = 1 ;
+      $start_date = $_POST['start_date'];
+      $end_date = $_POST['end_date'];
+      $taskname =$_POST['taskname'];
+      $user=$_POST['user'];
+      $textarea=$_POST['textarea'];
+      $pro_id= $_GET['view_id']
+     // $file_task = null;
+
+      $stmttask = $db->prepare("INSERT INTO task_list(name_tasklist, description_task,status_task, strat_date_task,end_date_task,file_task,project_id,user_id) 
+      VALUES(:taskname,:textarea,:status,:start_date,:end_date,:file_task,:pro_id,:users_id)");
+       $stmttask->bindParam(":taskname", $proname);
+       $stmttask->bindParam(":textarea", $textarea);
+       $stmttask->bindParam(":status", $stat);
+       $stmttask->bindParam(":start_date", $start_date);
+       $stmttask->bindParam(":end_date", $end_date);
+       $stmttask->bindParam(":file_task",$file_task);
+       $stmttask->bindParam(":pro_id", $pro_id);
+       $stmttask->bindParam(":users_id",$user );
+       $stmttask->execute();   
+    } */
     /* $stmt = $db->query("SELECT * FROM project where project_id=2");
     $stmt->execute();
     $result = $stmt->fetchAll();
@@ -55,7 +74,7 @@
                 </div>
             <?php } ?>
          
-<form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+<form action="addtask.php" method="post" class="form-horizontal" enctype="multipart/form-data">
     <main class="content">
                  
                     <div class="col-12 col-lg-8 col-xxl-12 d-flex">
@@ -64,7 +83,7 @@
                                  <div class="row">
                                     <div class="col-md-6">
                                                 <dl>
-                                               
+                                                    
                                                     <dt><b class="border-bottom border-primary">ชื่อโปรเจค</b><?php
                                                      if ($status_2 == '1') {
                                                         echo " "."<span class='badge bg-secondary'>".$stat2[$status_2]."</span>";
@@ -75,19 +94,27 @@
                                                     }
                                                     //echo "  "."<span class='badge bg-danger'>".$stat2[$status_2]."</span>" ?></dt>
                                                     <dd><?php echo $name_project  ?></dd>
+
                                                     <dt><b class="border-bottom border-primary">คำอธิบาย</b></dt>
                                                     <dd><?php echo $description ?></dd>
+
+                                                    <dt><b class="border-bottom border-primary">ประเภทงาน</b></dt>
+                                                    <dd><?php echo $name_jobtype ?></dd>
+
+
                                                 </dl>
                                                 <dl>
-                                            
+
+                                                    
+
                                                     <dt><b class="border-bottom border-primary">ผู้สร้างโปรเจค</b></dt>
-                                                    <dd>
-                                                      
+                                                    <dd> 
                                                          <div class="d-flex align-items-center mt-1">
                                                             <img class="avatar img-fluid rounded me-2" src="img/avatars/<?php echo $manager['avatar']?>" alt="Avatar">
                                                             <b><?php echo $manager['name'] ?> </b>
                                                         </div>
                                                     </dd>
+
                                                 </dl> 
                                         </div>
 
@@ -145,97 +172,125 @@
                                             <div class="col-md-12">
                                             <dt><b class="border-bottom border-primary">ไฟล์เเนบ</b></dt>
                                             <div class="d-flex align-items-center mt-1">
-                                                         
-                                                <b></b>
-                                            </div>
+                                             <b></b>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                   <!--  </div>
-                </div>
-            </div> --> 
+                    </div> 
+        
+                <div class="row">
+                    <div class="col-sm-12 col-lg-8 col-xxl-12 d-flex">
+                        <div class="card flex-fill">
+                            <div class="card-header">
+                                <?php   
+                                        if ($manager_id == $us || $level <= 2) {?>
+                                <div class="d-flex flex-row-reverse">
+                                    <a class="btn btn-block btn-sm btn-default btn-flat border-primary"  type="button" id="new_task" data-bs-toggle="modal" data-bs-target="#addModal1"> <i class="fa fa-plus"></i>  + Add task</a>
+                                </div>
+                                <?php  } ?>
+                                <div class="d-flex justify-content-start">
+                                    <h5 class="card-title mb-0">รายการงาน</h5>
+                                    </div>
+                            </div>
+                            
+                            <table class="table table-hover my-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">ID</th>
+                                        <th class="d-none d-xl-table-cell">ชื่องาน</th>
+                                        
+                                        <th class="d-none d-md-table-cell">วันที่เริ่ม</th>
+                                        <th class="d-none d-md-table-cell">วันที่สิ้นสุด</th>
+                                        <th class="text-center">ความคืบหน้า</th>
+                                        <th class="text-center">มอบหมาย</th>
+                                        <th class="text-center">สถานะ</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+                                    $i = 1;
+                                    $stmttasklist = "SELECT * FROM task_list natural join user where project_id = $id ";
+                                    $stmttasklist = $db->query($stmttasklist);
+                                    $stmttasklist->execute();
+                                    while ($row2 = $stmttasklist->fetch(PDO::FETCH_ASSOC)){  ?>  
+                                <tr>
+                                    <td class="text-center"><?php echo $i++ ?></td>
 
+                                    <td><h5><b><?php echo $row2['name_tasklist']  ?></h5></b>
+                                    <p class="truncate"><?php echo substr($row2['description_task'],0,100).'...';  ?></p>
+    
+                                    <td><?php echo date("F d, Y",strtotime($row2['strat_date_task'])); ?></td>
 
+                                    <td><?php echo date("F d, Y",strtotime($row2['end_date_task'])); ?></td>
 
+                                    <td>
 
-       <!--  <div class="col-lg-12">
-            <div class="card card-outline card-success">
-                <div class="container-fluid p-0">
-                    <div class="card-header">
-                        <div class="d-flex flex-row-reverse bd-highligh">
-                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="sign-up.php"><i class="fa fa-plus"></i>  + Add New User</a>
+                                        <div class="d-flex flex-column w-100">
+                                            <span class="me-2 mb-1 text-muted">0%</span>
+                                            <div class="progress progress-sm bg-secondary-light w-100">
+                                                <div class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
+                                            </div>
+                                        </div>
+
+                                    </td>
+
+                                    <td class="text-center" ><?php  echo $row2['firstname']." ".$row2['lastname'] ?>  </td>
+
+                                    <td class="text-center">
+                                        <?php  
+                                            if($row2['status_task'] =='1'){
+                                            echo "<span class='badge bg-secondary'>".$stat1[$row2['status_task']]."</span>";
+                                        }elseif($row2['status_task'] =='2'){
+                                            echo "<span class='badge bg-primary'>".$stat1[$row2['status_task']]."</span>";
+                                        }elseif($row2['status_task'] =='3'){
+                                            echo "<span class='badge bg-success'>".$stat1[$row2['status_task']]."</span>";
+                                        }elseif($row2['status_task'] =='4'){
+                                            echo "<span class='badge bg-warning'>".$stat1[$row2['status_task']]."</span>";
+                                        }elseif($row2['status_task'] =='5'){
+                                            echo "<span class='badge bg-danger'>".$stat1[$row2['status_task']]."</span>";
+                                        }elseif($row2['status_task'] =='6'){
+                                            echo "<span class='badge bg-danger'>".$stat1[$row2['status_task']]."</span>";
+                                        } ?>
+                                    </td>
+                                       
+                                    <td class="text-center">
+                                       <a href="?update_id=<?php echo $row2['task_id']?>" class="btn btn-info btn-sm"  >คอมเม้น</a>   
+
+                                       <a href="viewtask_page.php?update_id=<?php echo $row2['task_id']?>" class="btn btn-primary btn-sm"  >view</a>
+
+                                      <?php if($row2['user_id'] == $us || $level <= 2 || $manager_id == $us ){?>
+                                       <a href="?update_id=<?php echo $row2['task_id']?>" class="btn btn-success btn-sm"  >ส่งงาน</a>
+
+                                       <?php } ?>  
+
+                                       <?php if ($manager_id == $us || $level <= 2) {?>
+                                                <a href="edittask_page.php?update_id=<?php echo $row2['task_id']?>" class="btn btn-warning btn-sm">เเก้ไข</a>
+                                                <a href="deletetask.php?delete_id=<?php echo $row2['task_id']?>" class="btn btn-danger btn-sm" >ลบ</a> 
+                                        <?php } ?>
+
+                                    </td>
+                                </tr>
+                               
+                                
+                                    <?php } ?>
+                                </tbody>
+                                <?php include "addtask_page.php"?>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
-        </div> -->
-        
-                        <div class="row">
-                            <div class="col-sm-12 col-lg-8 col-xxl-12 d-flex">
-                                <div class="card flex-fill">
-                                    <div class="card-header">
-                                        <?php   if ($manager_id == $us || $row['level'] <= 2) {?>
-                                        <div class="d-flex flex-row-reverse">
-                                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary"  type="button" id="new_task" ><i class="fa fa-plus"></i>  + Add task</a>
-                                        </div>
-                                        <?php }?>
-                                        <div class="d-flex justify-content-start">
-                                            <h5 class="card-title mb-0">รายการงาน</h5>
-                                            </div>
-                                    </div>
-                                   
-                                    <table class="table table-hover my-0">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center">ID</th>
-                                                <th class="d-none d-xl-table-cell">ชื่องาน</th>
-                                                <th class="d-none d-md-table-cell">คำอธิบาย</th>
-                                                <th class="">สถานะ</th>
-                                                <th class="text-center">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                                            $i = 1;
-                                            //$type = array('',"Admin","คณบดี","รองคณบดีฝ่ายวิชาการ","ผู้ชวยรองรองคณบดีฝ่ายวิชาการ","หัวหน้าหน่วย","หัวสาขา","เจ้าหน้าที่");
-                                           /*  $sql = "SELECT *,concat(firstname,' ',lastname) as name 
-                                            FROM user as u
-                                            LEFT JOIN position AS p  ON  u.role_id = p.role_id
-                                            order by concat(firstname,' ',lastname) asc ";
-                                            $qry = $db->query($sql);
-                                            $qry->execute(); */
-                                          /*   while ($row = $qry->fetch(PDO::FETCH_ASSOC)){ */
-                                                //extract($row);
-                                        ?>
-                                        <tr>
-                                            <td class="text-center"><?php  ?></td>
-                                            <td><?php  ?></td>
-                                            <td><?php ?></td>
-                                            <td class=""><?php ?></td>
-                                            <td class="text-center">                               
-                                              <!--   <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>                   -->        
-                                                <!-- <a href="edituser_page.php?update_id=<?php echo $row['user_id']?>" class="btn btn-warning btn-sm">2</a>   --> 
-                                                <!-- <a href="edituser_page.php?update_id=<?php echo $row['user_id']?>" class="btn btn-warning btn-sm">2</a>
-                                                <a href="deleteuser.php?delete_id=<?php echo $row['user_id']?>" class="btn btn-danger btn-sm" >trash</a> -->
-                                            </td>
-                                        </tr>
-                                        <?php include "viewuser_modal.php"?>
-                                        
-                                            <?php// } ?>
-                                        </tbody>
-                                        
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
         </main>
         
 </form>
 
     </body>
+    <script>
+
+    </script>
 </html>
 
 
@@ -244,6 +299,4 @@
     $(document).ready(function () {
     $('#example').DataTable();
 });
-</script>
-
 </script>

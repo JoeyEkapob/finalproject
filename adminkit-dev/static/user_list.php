@@ -73,7 +73,7 @@
                                             //$type = array('',"Admin","คณบดี","รองคณบดีฝ่ายวิชาการ","ผู้ชวยรองรองคณบดีฝ่ายวิชาการ","หัวหน้าหน่วย","หัวสาขา","เจ้าหน้าที่");
                                             $sql = "SELECT *,concat(firstname,' ',lastname) as name 
                                             FROM user as u
-                                            LEFT JOIN position AS p  ON  u.role_id = p.role_id
+                                            natural join position
                                             order by concat(firstname,' ',lastname) asc ";
                                             $qry = $db->query($sql);
                                             $qry->execute();

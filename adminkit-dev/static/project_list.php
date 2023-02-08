@@ -65,6 +65,7 @@
                                     <tr>
                                         <th class="text-center">ลำดับ</th>
                                         <th class="text-left">ชื่อโปรเจค</th>
+                                        <th class="text-left">ความคืบหน้า</th>
                                         <th class="text-center">วันที่เริ่ม</th>
                                         <th class="text-center">วันที่สิ้นสุด</th>
                                         <th class="text-center">สถานะ</th>
@@ -91,11 +92,25 @@
                                              <td>
                                                 <p><b><?php echo $row["name_project"]?></b></p>
                                                 <p class="truncate"><?php echo substr($row['description'],0,100).'...';  ?></p>
-
 						                    </td>
+
+                                            <td class="">
+
+                                                <div class="d-flex flex-column w-100">
+                                                    <span class="me-2 mb-1 text-muted">0%</span>
+                                                    <div class="progress progress-sm bg-secondary-light w-100">
+                                                        <div class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
+                                                    </div>
+                                                </div>
+
+                                            </td>
+
                                          
                                             <td class="text-center" ><b><?php echo date("M d, Y",strtotime($row['start_date'])) ?></b></td>
 					                        <td class="text-center "><b><?php echo date("M d, Y",strtotime($row['end_date'])) ?></b></td>
+
+                                            
+
                                             <td class="text-center">
                                                 <?php
                                                 /*  echo $stat1[$row['status_1']];
@@ -119,7 +134,7 @@
                                             <td class="text-center">                   
                                                <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                       
                                                  <a href="view_project.php?view_id=<?php echo $row['project_id']?>" class="btn btn-primary btn-sm">2</a>   
-                                                <a href="editproject.php?update_id=<?php echo $row['project_id']?>" class="btn btn-warning btn-sm">2</a>
+                                                <a href="editproject_page.php?update_id=<?php echo $row['project_id']?>" class="btn btn-warning btn-sm">2</a>
                                                 <a href="deleteproject.php?delete_id=<?php echo $row['project_id']?>" class="btn btn-danger btn-sm" >trash</a>
                                             </td>
                                         </tr>

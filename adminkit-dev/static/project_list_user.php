@@ -65,6 +65,7 @@
                                     <tr>
                                         <th class="text-center">ลำดับ</th>
                                         <th class="text-left">ชื่อโปรเจค</th>
+                                        <th class="text-left">ตวามคืบหน้า</th>
                                         <th class="text-center">วันที่เริ่ม</th>
                                         <th class="text-center">วันที่สิ้นสุด</th>
                                         <th class="text-center">สถานะ</th>
@@ -78,7 +79,7 @@
                                         $where = "";    
                                         if($row['level'] >= 3 ){
                                             $where = "natural join project_list where user_id  = '{$_SESSION['user_login']}'"  ;
-                                            echo 555;
+                                            
                                         }
                                         $sql = "SELECT * FROM project  $where order by name_project asc ";
                                         $qry = $db->query($sql);
@@ -89,12 +90,19 @@
                                     
                                         <tr>
                                             <td class="text-center"><?php echo $i++ ?></td>
-                                             <td>
-                                                <p><b><?php echo $row["name_project"]?></b></p>
-                                                <p class="truncate"><?php echo substr($row['description'],0,100).'...';  ?></p>
-
-						                    </td>
-                                         
+                                                <td>
+                                                    <p><b><?php echo $row["name_project"]?></b></p>
+                                                    <p class="truncate"><?php echo substr($row['description'],0,100).'...';  ?></p>
+                                                
+                                                </td>
+                                            <td class="">
+                                                <div class="d-flex flex-column w-100">
+                                                    <span class="me-2 mb-1 text-muted">0%</span>
+                                                        <div class="progress progress-sm bg-secondary-light w-100">
+                                                            <div class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
+                                                        </div>
+                                                </div>
+                                            </td>
                                             <td class="text-center" ><b><?php echo date("M d, Y",strtotime($row['start_date'])) ?></b></td>
 					                        <td class="text-center "><b><?php echo date("M d, Y",strtotime($row['end_date'])) ?></b></td>
                                             <td class="text-center">

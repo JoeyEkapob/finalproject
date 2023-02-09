@@ -9,18 +9,20 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link rel="shortcut icon" href="img/icons/icon-48x48.png" />
 
-	<link rel="canonical" href="https://demo-basic.adminkit.io/" />
-
 	<title>AdminKit Demo - Bootstrap 5 Admin Template</title>
-	<link rel="stylesheet" type="text/css" href="https://getbootstrap.com/docs/5.2/dist/css/bootstrap.min.css" />
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+	
+	<link rel="stylesheet" href="css/multi_select.css"> 
+	<!-- Bootstrap 5.2  -->
+	 <!-- <link rel="stylesheet" type="text/css" href="https://getbootstrap.com/docs/5.2/dist/css/bootstrap.min.css" /> -->
+	 <!-- Bootstrap 5.3  -->
+	 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> 
+	<!-- fonts -->
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 <!-- 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css"> -->
-	<link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="css/multi_select.css">
-
-
-	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<!-- <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css"> -->
+	
+	<!-- data table -->
+	 <script src="https://code.jquery.com/jquery-3.5.1.js"></script> 
 	
 	
 

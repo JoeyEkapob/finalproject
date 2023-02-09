@@ -52,7 +52,7 @@
             </div>
         </div>
                     
-                                <div class="card flex-fill">
+                                <div class="card ">
                                     <div class="card-header">
 
                                         <h5 class="card-title mb-0">สมาชิก</h5>

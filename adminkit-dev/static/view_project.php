@@ -77,7 +77,7 @@
 <form action="addtask.php" method="post" class="form-horizontal" enctype="multipart/form-data">
     <main class="content">
                  
-                    <div class="col-12 col-lg-8 col-xxl-12 d-flex">
+                    <div class="col-12  d-flex">
                          <div class="card flex-fill">  
                              <div class="card-header">
                                  <div class="row">
@@ -181,7 +181,7 @@
                     </div> 
         
                 <div class="row">
-                    <div class="col-sm-12 col-lg-8 col-xxl-12 d-flex">
+                    <div class="col-sm-12 ">
                         <div class="card flex-fill">
                             <div class="card-header">
                                 <?php   
@@ -199,10 +199,11 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center">ID</th>
-                                        <th class="d-none d-xl-table-cell">ชื่องาน</th>
+                                        <th class="text-center">ชื่องาน</th>
+                                       <!--  <th class="d-none d-xl-table-cell">ชื่องาน</th> -->
                                         
-                                        <th class="d-none d-md-table-cell">วันที่เริ่ม</th>
-                                        <th class="d-none d-md-table-cell">วันที่สิ้นสุด</th>
+                                        <th class="text-center">วันที่เริ่ม</th>
+                                        <th class="text-center">วันที่สิ้นสุด</th>
                                         <th class="text-center">ความคืบหน้า</th>
                                         <th class="text-center">มอบหมาย</th>
                                         <th class="text-center">สถานะ</th>

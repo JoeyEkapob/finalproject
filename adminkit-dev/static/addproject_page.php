@@ -69,13 +69,13 @@
                                     <div class="col-md-6">
 										<div class="mb-3">
 											<label for="" class="control-label">วันที่สั่ง</label>
-                                            <input type="date" class="form-control form-control" autocomplete="off" name="start_date" value=""  >
+                                            <input type="date" class="form-control " autocomplete="off" name="start_date" value=""  >
 										</div>
                                     </div>
                                     <div class="col-md-6">
 										<div class="mb-3">
 											<label for="" class="control-label">วันที่เสร็จ</label>
-                                            <input type="date" class="form-control form-control" autocomplete="off" name="end_date" value=""  >
+                                            <input type="date" class="form-control " autocomplete="off" name="end_date" value=""  >
 										</div>
                                     </div>						
 									
@@ -83,14 +83,15 @@
                                     <div class="col-md-6">
 										<div class="mb-4">
 											<label for="" class="control-label">สมาชิกทีมโครงการ</label>
-                                            <input type="text" class="form-control" name="users_id[]"  id="user_id" data-access_multi_select="true" placeholder="Select a Country">
+                                            <input type="text" class="form-control" name="users_id[]"  id="user_id" data-access_multi_select="true" placeholder="&amp;">
+                                            
                                                
 										</div>
                                     </div>
 
                                     <div class="col-md-6">   
-                                    <div class="mb-4">l
-											<label for="" class="control-labe">สมาชิกทีมโครงการ</label>
+                                    <div class="mb-4">
+											<label for="" class="control-labe">สถานะงาน</label>
 												 <select  name="status2" class="form-control"  >
                                                  
               	                                    <option value="1">งานปกติ</option>

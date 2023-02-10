@@ -5,6 +5,26 @@
          $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
         header('location:sign-in.php');
     }
+    if(isset($_POST['addjob'])){
+        $namejob = $_POST['namejob'];
+        $status = 1;
+        if (empty($namejob)) {
+            $_SESSION['error'] = 'กรุณากรอกชื่อประเภทงาน';
+           // header("location: addjobtype.php");
+
+        }else if (!isset($_SESSION['error'])) {
+            $stmtjob = $db->prepare("INSERT INTO job_type(name_jobtype,status) 
+                                VALUES(:namejob, :status)");
+            $stmtjob->bindParam(":namejob", $namejob);
+            $stmtjob->bindParam(":status", $status);
+            $stmtjob->execute();
+            $_SESSION['success'] = "สมัครสมาชิกเรียบร้อยแล้ว! ";
+            header("location: jobtype_list.php");
+        } else {
+            $_SESSION['error'] = "มีบางอย่างผิดพลาด";
+            header("location: jobtype_list.php");
+        } 
+    } 
 
 ?>
 <!DOCTYPE html>
@@ -37,7 +57,7 @@
                 <div class="container-fluid p-0">
                     <div class="card-header">
                         <div class="d-flex flex-row-reverse bd-highligh">
-                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="addjobtype.php"><i class="fa fa-plus"></i>  + Add Job type</a>
+                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary" data-bs-toggle="modal" data-bs-target="#addModal1" ><i class="fa fa-plus"></i> + เพิ่มประเภทงาน</a>
                         </div>
                     </div>
                 </div>
@@ -82,6 +102,7 @@
                                     <?php } ?>
                                 </tbody>           
                             </table>
+                            <?php include 'addjobtype_model.php'?>
                     </div>
                         
                   

@@ -53,7 +53,7 @@
                                     <div class="col-md-6">
                                     <div class="mb-3">
 											<label for="" class="control-label" >ประเภทงาน</label>
-												<select name="job" id="type" class="form-control"  >
+												<select name="job" id="type" class="form-select"  >
 													<?php
 													$stmt = $db->query("SELECT * FROM job_type WHERE status = 1");
 													$stmt->execute();
@@ -92,7 +92,7 @@
                                     <div class="col-md-6">   
                                     <div class="mb-4">
 											<label for="" class="control-labe">สถานะงาน</label>
-												 <select  name="status2" class="form-control"  >
+												 <select  name="status2" class="form-select"  >
                                                  
               	                                    <option value="1">งานปกติ</option>
                                                     <option value="2">งานด่วน</option>

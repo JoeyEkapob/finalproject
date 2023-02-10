@@ -11,28 +11,28 @@
                         <div class="mb-3">
                             <input type="hidden" name="pro_id" value =<?php echo $id ?> >
                             <label for="" class="control-label">ชื่องาน</label>
-                            <input type="text" name="taskname" class="form-control form-control"   >
+                            <input type="text" name="taskname" class="form-control"   >
                         
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="mb-3">
                             <label for="" class="control-label">วันที่สั่ง</label>
-                            <input type="date" class="form-control form-control" autocomplete="off" name="start_date" value="" >
+                            <input type="date" class="form-control " autocomplete="off" name="start_date" value="" >
                         
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="mb-3">
                             <label for="" class="control-label">วันที่เสร็จ</label>
-                            <input type="date" class="form-control form-control" autocomplete="off" name="end_date" value="" >
+                            <input type="date" class="form-control " autocomplete="off" name="end_date" value="" >
                         
                         </div>
                     </div>
                     <div class="col-md-12">						
                     <div class="mb-3">
                             <label for="" class="control-label">สมาชิกทีม</label>
-                                <select name="user" id="type" class="form-control">
+                                <select name="user" id="type" class="form-select">
                                 <?php
                                     $stmtuser = $db->query("SELECT *, concat(firstname,' ',lastname) as name From project_list natural join user where project_id = $id");
                                     $stmtuser->execute();

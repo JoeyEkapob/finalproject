@@ -5,18 +5,34 @@
          $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
         header('location:sign-in.php');
     }
+	$user_id=$_SESSION['user_login'];
+	$where ="";
+	$stmt = "SELECT * FROM user natural join position WHERE user_id = $user_id";
+	$stmt = $db->prepare($stmt);
+	$stmt ->execute();
+	$stmt = $stmt->fetch(PDO::FETCH_ASSOC);
+
+	$level = $stmt['level'];
 
 	$stmtusernum = "SELECT COUNT(user_id) as num FROM user  ";
 	$stmtusernum = $db->prepare($stmtusernum);
 	$stmtusernum ->execute();
 	$stmtusernum = $stmtusernum->fetchColumn();
 
-	$stmtprojectnum = "SELECT COUNT(project_id) as num1 FROM project  ";
+
+	if($level > 2){
+		$where = " WHERE user_id = $user_id ";
+	}
+
+	$stmtprojectnum = "SELECT COUNT(project_id) as num1 FROM project natural join project_list $where  ";
 	$stmtprojectnum = $db->prepare($stmtprojectnum);
 	$stmtprojectnum ->execute();
 	$stmtprojectnum = $stmtprojectnum->fetchColumn();
+	
 
-	$stmttask = "SELECT COUNT(project_id) as num2 FROM task_list  ";
+
+
+	$stmttask = "SELECT COUNT(project_id) as num2 FROM task_list $where  ";
 	$stmttask = $db->prepare($stmttask);
 	$stmttask ->execute();
 	$stmttask = $stmttask->fetchColumn();
@@ -31,7 +47,7 @@
 			<main class="content">
 				<div class="container-fluid p-0">
 				
-					<h1 class="h3 mb-3"><strong>Analytics</strong> Dashboard</h1>
+					<!-- <h1 class="h3 mb-3"><strong>Analytics</strong> Dashboard</h1> -->
 					
 					<div class="row">
 						<div class="col-xxl-12 col-xxl- d-flex">
@@ -105,7 +121,7 @@
 												</div>
 											</div>
 										</div>
-										
+										<?php if ($level <= 2): ?>
 										<div class="col-sm-3">
 											<div class="card">
 												<div class="card-body">
@@ -127,7 +143,7 @@
 												</div>
 											</div>
 										</div>
-										
+										<?php endif; ?>
 									</div>
 								</div>
 							</div>
@@ -216,76 +232,95 @@
 							<div class="card flex-fill">
 								
 								<div class="card-header">
-									<h5 class="card-title mb-0">Latest Projects</h5>
+									<h5 class="card-title mb-0">หัวข้องานของคุณ</h5>
 								</div>
-								<table class="table table-hover my-0">
-									<thead>
-										<tr>
-											<th>Name</th>
-											<th class="d-none d-xl-table-cell">Start Date</th>
-											<th class="d-none d-xl-table-cell">End Date</th>
-											<th>Status</th>
-											<th class="d-none d-md-table-cell">Assignee</th>
-										</tr>
-									</thead>
+									<?php
+										$i = 1;
+										$stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","อยู่ระหว่างการตรวจสอบ","รอการเเก้ไข","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
+										$stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
+										if($level >= 3 ){
+											$where = "  natural join project_list where user_id  = $user_id ";   
+										}else {
+											$where = " where manager_id = $user_id "; 
+										}
+
+										$stmtshowproject = "SELECT * FROM project  $where ORDER BY  status_2  DESC LIMIT 5;";
+										$stmtshowproject = $db->query($stmtshowproject);
+										$stmtshowproject->execute();
+									?>
+									<table class="table table-hover my-0">
+										<thead>
+											<tr>
+												<th class="text-center">ลำดับ</th>
+												<th class="text-left">ชื่อโปรเจค</th>
+												<th class="text-left">ความคืบหน้า</th>
+												<th class="text-center">วันที่เริ่ม</th>
+												<th class="text-center">วันที่สิ้นสุด</th>
+												<th class="text-center">สถานะ</th>
+												<th class="text-center">Action</th>
+											</tr>
+										</thead>
 									<tbody>
-										<tr>
-											<td>Project Apollo</td>
-											<td class="d-none d-xl-table-cell">01/01/2021</td>
-											<td class="d-none d-xl-table-cell">31/06/2021</td>
-											<td><span class="badge bg-success">Done</span></td>
-											<td class="d-none d-md-table-cell">Vanessa Tucker</td>
-										</tr>
-										<tr>
-											<td>Project Fireball</td>
-											<td class="d-none d-xl-table-cell">01/01/2021</td>
-											<td class="d-none d-xl-table-cell">31/06/2021</td>
-											<td><span class="badge bg-danger">Cancelled</span></td>
-											<td class="d-none d-md-table-cell">William Harris</td>
-										</tr>
-										<tr>
-											<td>Project Hades</td>
-											<td class="d-none d-xl-table-cell">01/01/2021</td>
-											<td class="d-none d-xl-table-cell">31/06/2021</td>
-											<td><span class="badge bg-success">Done</span></td>
-											<td class="d-none d-md-table-cell">Sharon Lessman</td>
-										</tr>
-										<tr>
-											<td>Project Nitro</td>
-											<td class="d-none d-xl-table-cell">01/01/2021</td>
-											<td class="d-none d-xl-table-cell">31/06/2021</td>
-											<td><span class="badge bg-warning">In progress</span></td>
-											<td class="d-none d-md-table-cell">Vanessa Tucker</td>
-										</tr>
-										<tr>
-											<td>Project Phoenix</td>
-											<td class="d-none d-xl-table-cell">01/01/2021</td>
-											<td class="d-none d-xl-table-cell">31/06/2021</td>
-											<td><span class="badge bg-success">Done</span></td>
-											<td class="d-none d-md-table-cell">William Harris</td>
-										</tr>
-										<tr>
-											<td>Project X</td>
-											<td class="d-none d-xl-table-cell">01/01/2021</td>
-											<td class="d-none d-xl-table-cell">31/06/2021</td>
-											<td><span class="badge bg-success">Done</span></td>
-											<td class="d-none d-md-table-cell">Sharon Lessman</td>
-										</tr>
-										<tr>
-											<td>Project Romeo</td>
-											<td class="d-none d-xl-table-cell">01/01/2021</td>
-											<td class="d-none d-xl-table-cell">31/06/2021</td>
-											<td><span class="badge bg-success">Done</span></td>
-											<td class="d-none d-md-table-cell">Christina Mason</td>
-										</tr>
-										<tr>
-											<td>Project Wombat</td>
-											<td class="d-none d-xl-table-cell">01/01/2021</td>
-											<td class="d-none d-xl-table-cell">31/06/2021</td>
-											<td><span class="badge bg-warning">In progress</span></td>
-											<td class="d-none d-md-table-cell">William Harris</td>
-										</tr>
-									</tbody>
+											<tr>
+													
+												<?php while ($stmtshowprojectrow = $stmtshowproject->fetch(PDO::FETCH_ASSOC)){ ?>
+
+													<td class="text-center"><?php echo $i++ ?></td>
+														<td>
+															<p><b><?php echo $stmtshowprojectrow["name_project"]?></b>
+															<?php
+																if ($stmtshowprojectrow['status_2'] == '1') {
+																	echo " "." "."<span class='badge bg-secondary'>".$stat2[$stmtshowprojectrow['status_2']]."</span>";
+																}else if($stmtshowprojectrow['status_2'] == '2'){
+																	echo " "."<span class='badge bg-warning'>".$stat2[$stmtshowprojectrow['status_2']]."</span>";
+																}else if($stmtshowprojectrow['status_2'] == '3'){
+																	echo " "."<span class='badge bg-danger'>".$stat2[$stmtshowprojectrow['status_2']]."</span>";
+																}
+																?></p>
+															<p class="truncate"><?php echo substr($stmtshowprojectrow['description'],0,100).'...';  ?></p>
+														
+														</td>
+													<td class="">
+													
+														<div class="progress mb-3">
+										
+															<div class="progress-bar progress-bar-striped progress-bar-animated-sm" role="progressbar" style="width: 10%" >0</div>
+														</div>
+
+													</td>
+
+													<td class="text-center" ><b><?php echo date("M d, Y",strtotime($stmtshowprojectrow['start_date'])) ?></b></td>
+													<td class="text-center "><b><?php echo date("M d, Y",strtotime($stmtshowprojectrow['end_date'])) ?></b></td>
+													<td class="text-center">
+														<?php
+														/*  echo $stat1[$row['status_1']];
+														exit; */
+
+														if($stmtshowprojectrow['status_1'] =='1'){
+															echo "<span class='badge bg-secondary'>{$stat1[$stmtshowprojectrow['status_1']]}</span>";
+														}elseif($stmtshowprojectrow['status_1'] =='2'){
+															echo "<span class='badge bg-primary'>{$stat1[$stmtshowprojectrow['status_1']]}</span>";
+														}elseif($stmtshowprojectrow['status_1'] =='3'){
+															echo "<span class='badge bg-success'>{$stat1[$stmtshowprojectrow['status_1']]}</span>";
+														}elseif($stmtshowprojectrow['status_1'] =='4'){
+															echo "<span class='badge bg-warning'>{$stat1[$stmtshowprojectrow['status_1']]}</span>";
+														}elseif($stmtshowprojectrow['status_1'] =='5'){
+															echo "<span class='badge bg-danger'>{$stat1[$stmtshowprojectrow['status_1']]}</span>";
+														}elseif($stmtshowprojectrow['status_1']  =='6'){
+															echo "<span class='badge bg-danger'>{$stat1[$stmtshowprojectrow['status_1']]}</span>";
+														}
+														?>
+													</td>
+													<td class="text-center">                   
+													<!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                       
+														<a class="btn btn-bitbucket btn-sm" href="view_project.php?view_id=<?php echo $stmtshowprojectrow['project_id']?>"><i data-feather="zoom-in"></i></a>
+														<!-- <a href="editproject.php?update_id=<?php echo $stmtshowprojectrow['project_id']?>" class="btn btn-warning btn-sm">2</a>
+														<a href="deleteproject.php?delete_id=<?php echo $stmtshowprojectrow['project_id']?>" class="btn btn-danger btn-sm" >trash</a> -->
+														
+														</td>
+													</tr>
+										<?php } ?>
+									</tbody>           
 								</table>
 							</div>
 						</div>

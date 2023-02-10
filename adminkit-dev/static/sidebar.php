@@ -158,13 +158,13 @@
 								ประเภทงาน
 							</span>
 						</a>
-						<ul id="่jobtype" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
+						<!-- <ul id="่jobtype" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
 							<li class="sidebar-item">
 								<a class="sidebar-link" href="addjobtype.php">
-								&nbsp;&nbsp;&nbsp;--> เพิ่มประเภทงาน 
+								&nbsp;&nbsp;&nbsp; เพิ่มประเภทงาน 
 								</a>
 							</li>
-						</ul>
+						</ul> -->
 						<ul id="่jobtype" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
 							<li class="sidebar-item">
 								<a class="sidebar-link" href="jobtype_list.php">

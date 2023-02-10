@@ -18,7 +18,7 @@
 		<nav id="sidebar" class="sidebar js-sidebar">
 			<div class="sidebar-content js-simplebar">
 				<a class="sidebar-brand" href="index.php">
-				<?php if($row['level'] ==  1): ?>
+				<?php if($level ==  1): ?>
 				<span class="align-middle">Admin <?php echo $row['firstname'] ?></span>
 				<?php else: ?>
 					<span class="align-middle">user <?php echo $row['firstname'] ?></span>
@@ -37,7 +37,7 @@
             </a>
 					</li>
 
-					<?php if($row['level'] != 5 ): ?>
+					<?php if($level != 5 ): ?>
 					<!-- <li class="sidebar-item">
 						<a class="sidebar-link" href="">
               				<i class="align-middle" data-feather="check-square"></i> 
@@ -49,13 +49,13 @@
 						<a data-bs-target="#maps" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
 							<i class="align-middle" data-feather="layers"></i> 
 							 <span class="align-middle">
-								เพิ่มงาน
+								เพิ่มหัวข้องาน
 							</span>
 						</a>
 						<ul id="maps" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
 							<li class="sidebar-item">
 								<a class="sidebar-link" href="addproject_page.php">
-								&nbsp;&nbsp;&nbsp;--> โปรเจค 
+								&nbsp;&nbsp;&nbsp;--> หัวข้องาน
 								</a>
 							</li>
 						</ul>
@@ -72,20 +72,22 @@
 						<a data-bs-target="#project_list" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
 							<i class="align-middle" data-feather="list"></i> 
 							 <span class="align-middle">
-							 รายการโปรเจค
+							 รายการหัวข้องาน
 							</span>
 						</a>
+						<?php if($level != 5): ?>
 						<ul id="project_list" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
 							<li class="sidebar-item">
 								<a class="sidebar-link" href="project_list.php">
-								&nbsp;&nbsp;&nbsp;--> รายการโปรเจคที่สร้างเอง 
+								&nbsp;&nbsp;&nbsp;--> หัวข้องานที่สร้าง 
 								</a>
 							</li>
 						</ul>
+						<?php endif; ?>
 						<ul id="project_list" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
 							<li class="sidebar-item">
 								<a class="sidebar-link" href="project_list_user.php">
-								&nbsp;&nbsp;&nbsp;--> รายการโปรเจคที่ถูกมอบหมาย
+								&nbsp;&nbsp;&nbsp;--> หัวข้องานที่ถูกมอบหมาย
 								</a>
 							</li>
 						</ul>
@@ -102,17 +104,19 @@
 							 รายการงาน
 							</span>
 						</a>
+						<?php if($level != 5): ?>
 						<ul id="task_list" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
 							<li class="sidebar-item">
 								<a class="sidebar-link" href="task_list.php">
-								&nbsp;&nbsp;&nbsp;--> รายการงานที่สร้างเอง 
+								&nbsp;&nbsp;&nbsp;--> หัวงานที่สร้าง 
 								</a>
 							</li>
 						</ul>
+						<?php endif; ?>
 						<ul id="task_list" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
 							<li class="sidebar-item">
 								<a class="sidebar-link" href="task_list_user.php">
-								&nbsp;&nbsp;&nbsp;--> รายการงานที่ถูกมอบหมาย
+								&nbsp;&nbsp;&nbsp;--> หัวงานที่ถูกมอบหมาย
 								</a>
 							</li>
 						</ul>
@@ -127,7 +131,7 @@
               <i class="align-middle" data-feather="menu"></i> <span class="align-middle">รายงาน</span>
             </a>
 					</li>
-					<?php if($row['level'] != 5): ?>
+					<?php if($level != 5): ?>
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="">
               <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">ตรวจงาน</span>
@@ -135,17 +139,17 @@
 			<?php endif; ?>
 					</li>
 
-					<?php if($row['level'] == 1 ): ?>
+					<?php if($level == 1 ): ?>
 					<li class="sidebar-header">
 						ADMIN
 					</li>
-					<?php elseif($row['level'] == 2): ?>
+					<?php elseif($level == 2): ?>
 					<li class="sidebar-header">
 						USER
 					</li> 
 					<?php endif; ?>
 					
-					<?php if($row['level'] <=2): ?>
+					<?php if($level <=2): ?>
 
 					<li class="sidebar-item">
 						<a data-bs-target="#่jobtype" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
@@ -201,7 +205,7 @@
 					
 					<?php endif; ?>
 						
-					<?php if($row['level'] == 1 AND 2): ?>
+					<?php if($level == 1 AND 2): ?>
 						 <!-- <li class="sidebar-item ">
 						<a class="sidebar-link" href="addjobtype.php">
               <i class="align-middle" data-feather="layers"></i> <span class="align-middle">+เพิ่มประเภทงาน</span>

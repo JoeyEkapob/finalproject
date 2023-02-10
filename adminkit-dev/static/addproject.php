@@ -75,7 +75,7 @@ if(isset($_POST['addpro'])){
    }
    }else {
       $_SESSION['error']= "มีบางอย่างผิดพลาด";
-      header('location:project_list.php');
+      header('location:addproject_page.php');
      }      
 
 } 

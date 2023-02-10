@@ -36,7 +36,7 @@
 
 <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
     <main class="content">
-    <?php if($row['level'] != 5 ): ?>
+    <?php if($level != 5 ): ?>
         <div class="col-lg-12">
             <div class="card card-outline card-success">
                 <div class="container-fluid p-0">
@@ -65,7 +65,7 @@
                                     <tr>
                                         <th class="text-center">ลำดับ</th>
                                         <th class="text-left">ชื่อโปรเจค</th>
-                                        <th class="text-left">ตวามคืบหน้า</th>
+                                        <th class="text-left">ความคืบหน้า</th>
                                         <th class="text-center">วันที่เริ่ม</th>
                                         <th class="text-center">วันที่สิ้นสุด</th>
                                         <th class="text-center">สถานะ</th>
@@ -77,7 +77,7 @@
                                         $i = 1;
                                         $stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","อยู่ระหว่างการตรวจสอบ","รอการเเก้ไข","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
                                         $where = "";    
-                                        if($row['level'] >= 3 ){
+                                        if($level >= 3 ){
                                             $where = "natural join project_list where user_id  = '{$_SESSION['user_login']}'"  ;
                                             
                                         }
@@ -96,11 +96,8 @@
                                                 
                                                 </td>
                                             <td class="">
-                                                <div class="d-flex flex-column w-100">
-                                                    <span class="me-2 mb-1 text-muted">0%</span>
-                                                        <div class="progress progress-sm bg-secondary-light w-100">
-                                                            <div class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
-                                                        </div>
+                                                <div class="progress ">
+                                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 10%" >0</div>
                                                 </div>
                                             </td>
                                             <td class="text-center" ><b><?php echo date("M d, Y",strtotime($row['start_date'])) ?></b></td>
@@ -116,20 +113,21 @@
                                                     echo "<span class='badge bg-primary'>{$stat1[$row['status_1']]}</span>";
                                                 }elseif($row['status_1'] =='3'){
                                                     echo "<span class='badge bg-success'>{$stat1[$row['status_1']]}</span>";
-                                                }elseif($stat1[$row['status_1']] =='4'){
+                                                }elseif($row['status_1'] =='4'){
                                                     echo "<span class='badge bg-warning'>{$stat1[$row['status_1']]}</span>";
-                                                }elseif($stat1[$row['status_1']] =='5'){
+                                                }elseif($row['status_1'] =='5'){
                                                     echo "<span class='badge bg-danger'>{$stat1[$row['status_1']]}</span>";
-                                                }elseif($stat1[$row['status_1']] =='6'){
+                                                }elseif($row['status_1']  =='6'){
                                                     echo "<span class='badge bg-danger'>{$stat1[$row['status_1']]}</span>";
                                                 }
                                                 ?>
                                             </td>
                                             <td class="text-center">                   
                                                <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                       
-                                                 <a href="view_project.php?view_id=<?php echo $row['project_id']?>" class="btn btn-primary btn">2</a>   
+                                                 <a class="btn btn-bitbucket btn-sm" href="view_project.php?view_id=<?php echo $row['project_id']?>"><i data-feather="zoom-in"></i></a>
                                                 <!-- <a href="editproject.php?update_id=<?php echo $row['project_id']?>" class="btn btn-warning btn-sm">2</a>
                                                 <a href="deleteproject.php?delete_id=<?php echo $row['project_id']?>" class="btn btn-danger btn-sm" >trash</a> -->
+                                                
                                             </td>
                                         </tr>
                                     <?php } ?>

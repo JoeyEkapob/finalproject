@@ -110,7 +110,7 @@
                                                     <dt><b class="border-bottom border-primary">ผู้สร้างโปรเจค</b></dt>
                                                     <dd> 
                                                          <div class="d-flex align-items-center mt-1">
-                                                            <img class="avatar img-fluid rounded me-2" src="img/avatars/<?php echo $manager['avatar']?>" alt="Avatar">
+                                                            <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $manager['avatar']?>" alt="Avatar" width="35"  height="35">
                                                             <b><?php echo $manager['name'] ?> </b>
                                                         </div>
                                                     </dd>
@@ -163,7 +163,7 @@
                                                                     while ($row = $qry->fetch(PDO::FETCH_ASSOC)){  ?>  
                                                                      
                                                          
-                                                                <img class="avatar img-fluid rounded me-2" src="img/avatars/<?php echo $row['avatar']?>" alt="Avatar">
+                                                                <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $row['avatar']?>" alt="Avatar" width="35"  height="35">
                                                                 <b><?php  echo $row['firstname']." ".$row['lastname'] ?></b>
                                                             <?php  }?>
                                                     </dd>
@@ -199,11 +199,11 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center">ID</th>
-                                        <th class="text-center">ชื่องาน</th>
+                                        <th class="text-left">ชื่องาน</th>
                                        <!--  <th class="d-none d-xl-table-cell">ชื่องาน</th> -->
                                         
-                                        <th class="text-center">วันที่เริ่ม</th>
-                                        <th class="text-center">วันที่สิ้นสุด</th>
+                                        <th class="text-left">วันที่เริ่ม</th>
+                                        <th class="text-left">วันที่สิ้นสุด</th>
                                         <th class="text-center">ความคืบหน้า</th>
                                         <th class="text-center">มอบหมาย</th>
                                         <th class="text-center">สถานะ</th>
@@ -217,59 +217,66 @@
                                     $stmttasklist = $db->query($stmttasklist);
                                     $stmttasklist->execute();
                                     while ($row2 = $stmttasklist->fetch(PDO::FETCH_ASSOC)){  ?>  
-                                <tr>
-                                    <td class="text-center"><?php echo $i++ ?></td>
-
-                                    <td><h5><b><?php echo $row2['name_tasklist']  ?></h5></b>
-                                    <p class="truncate"><?php echo substr($row2['description_task'],0,100).'...';  ?></p>
-    
-                                    <td><?php echo date("F d, Y",strtotime($row2['strat_date_task'])); ?></td>
-
-                                    <td><?php echo date("F d, Y",strtotime($row2['end_date_task'])); ?></td>
-
-                                    <td>
-
-                                        <div class="d-flex flex-column w-100">
-                                            <span class="me-2 mb-1 text-muted">0%</span>
-                                            <div class="progress progress-sm bg-secondary-light w-100">
-                                                <div class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
-                                            </div>
-                                        </div>
-
+                             <tr>
+                                    <td class="text-center">
+                                        <?php echo $i++ ?>
                                     </td>
 
-                                    <td class="text-center" ><?php  echo $row2['firstname']." ".$row2['lastname'] ?>  </td>
+                                    <td>
+                                        <h5><b><?php echo $row2['name_tasklist']  ?></h5></b>
+                                        <p class="truncate"><?php echo substr($row2['description_task'],0,100).'...';  ?></p>
+                                    </td>
+    
+                                    <td >
+                                        <?php echo date("F d, Y",strtotime($row2['strat_date_task'])); ?>
+                                    </td>
+
+                                    <td>
+                                        <?php echo date("F d, Y",strtotime($row2['end_date_task'])); ?>
+                                    </td>
+
+                                    <td>
+                                        <div class="progress ">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 10%" >0</div>
+                                        </div>
+                                    </td>
+
+                                    <td class="text-center" >
+                                            <?php  echo $row2['firstname']." ".$row2['lastname'] ?>  
+                                    </td>
 
                                     <td class="text-center">
-                                        <?php  
-                                            if($row2['status_task'] =='1'){
-                                            echo "<span class='badge bg-secondary'>".$stat1[$row2['status_task']]."</span>";
-                                        }elseif($row2['status_task'] =='2'){
-                                            echo "<span class='badge bg-primary'>".$stat1[$row2['status_task']]."</span>";
-                                        }elseif($row2['status_task'] =='3'){
-                                            echo "<span class='badge bg-success'>".$stat1[$row2['status_task']]."</span>";
-                                        }elseif($row2['status_task'] =='4'){
-                                            echo "<span class='badge bg-warning'>".$stat1[$row2['status_task']]."</span>";
-                                        }elseif($row2['status_task'] =='5'){
-                                            echo "<span class='badge bg-danger'>".$stat1[$row2['status_task']]."</span>";
-                                        }elseif($row2['status_task'] =='6'){
-                                            echo "<span class='badge bg-danger'>".$stat1[$row2['status_task']]."</span>";
-                                        } ?>
+                                            <?php  
+                                                if($row2['status_task'] =='1'){
+                                                echo "<span class='badge bg-secondary'>".$stat1[$row2['status_task']]."</span>";
+                                            }elseif($row2['status_task'] =='2'){
+                                                echo "<span class='badge bg-primary'>".$stat1[$row2['status_task']]."</span>";
+                                            }elseif($row2['status_task'] =='3'){
+                                                echo "<span class='badge bg-success'>".$stat1[$row2['status_task']]."</span>";
+                                            }elseif($row2['status_task'] =='4'){
+                                                echo "<span class='badge bg-warning'>".$stat1[$row2['status_task']]."</span>";
+                                            }elseif($row2['status_task'] =='5'){
+                                                echo "<span class='badge bg-danger'>".$stat1[$row2['status_task']]."</span>";
+                                            }elseif($row2['status_task'] =='6'){
+                                                echo "<span class='badge bg-danger'>".$stat1[$row2['status_task']]."</span>";
+                                            } ?>
                                     </td>
                                        
                                     <td class="text-center">
-                                       <a href="?update_id=<?php echo $row2['task_id']?>" class="btn btn-info btn-sm"  >คอมเม้น</a>   
+                                  
+                                       <a class="btn btn-google btn-sm" href="?update_id=<?php echo $row2['task_id']?>"  > <i data-feather="message-square"></i></a>   
 
-                                       <a href="viewtask_page.php?update_id=<?php echo $row2['task_id']?>" class="btn btn-primary btn-sm"  >view</a>
+                                       <a class="btn btn-bitbucket btn-sm" href="viewtask_page.php?update_id=<?php echo $row2['task_id']?>"><i data-feather="zoom-in"></i></a>
 
                                       <?php if($row2['user_id'] == $us || $level <= 2 || $manager_id == $us ){?>
-                                       <a href="?update_id=<?php echo $row2['task_id']?>" class="btn btn-success btn-sm"  >ส่งงาน</a>
+                                       <a href="?update_id=<?php echo $row2['task_id']?>" class="btn btn-success btn-sm"  ><i data-feather="share"></i></a>
 
                                        <?php } ?>  
 
                                        <?php if ($manager_id == $us || $level <= 2) {?>
-                                                <a href="edittask_page.php?update_id=<?php echo $row2['task_id']?>" class="btn btn-warning btn-sm">เเก้ไข</a>
-                                                <a href="deletetask.php?delete_id=<?php echo $row2['task_id']?>&project_id=<?=$row2['project_id']?>" class="btn btn-danger btn-sm" >ลบ</a> 
+                                                <a class="btn btn-warning btn-sm" href="edittask_page.php?update_id=<?php echo $row2['task_id']?>" class="btn btn-warning btn-sm"><i  data-feather="edit"></i></a>
+                                                <a class="btn btn-danger btn-sm" href="deletetask.php?delete_id=<?php echo $row2['task_id']?>&project_id=<?=$row2['project_id']?>"><i data-feather="trash-2"></i></a> 
+                                               
                                         <?php } ?>
 
                                     </td>

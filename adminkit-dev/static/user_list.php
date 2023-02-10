@@ -86,10 +86,9 @@
                                             <td class="text-left" ><?php echo $row['email'] ?></td>
                                             <td class="text-left" ><?php echo $row['position_name']?></td>
                                             <td class="text-center">                               
-                                                <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>                          
-                                                <!-- <a href="edituser_page.php?update_id=<?php echo $row['user_id']?>" class="btn btn-warning btn-sm">2</a>   --> 
-                                                <a href="edituser_page.php?update_id=<?php echo $row['user_id']?>" class="btn btn-warning btn-sm">2</a>
-                                                <a href="deleteuser.php?delete_id=<?php echo $row['user_id']?>" class="btn btn-danger btn-sm" >trash</a>
+                                                <a class="btn btn-bitbucket btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal"><i data-feather="zoom-in"></i></a>                                                  
+                                                <a class="btn btn-warning btn-sm" href="edituser_page.php?update_id=<?php echo $row['user_id']?>"><i  data-feather="edit"></i></a>
+                                                <a class="btn btn-danger btn-sm" href="deleteuser.php?delete_id=<?php echo $row['user_id']?>"><i data-feather="trash-2"></i></a>
                                             </td>
                                         </tr>
                                         <?php include "viewuser_modal.php"?>

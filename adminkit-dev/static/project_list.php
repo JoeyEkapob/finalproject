@@ -96,12 +96,9 @@
 
                                             <td class="">
 
-                                                <div class="d-flex flex-column w-100">
-                                                    <span class="me-2 mb-1 text-muted">0%</span>
-                                                    <div class="progress progress-sm bg-secondary-light w-100">
-                                                        <div class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
-                                                    </div>
-                                                </div>
+                                            <div class="progress ">
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 10%" >0</div>
+                                            </div>
 
                                             </td>
 
@@ -133,9 +130,9 @@
                                             </td>
                                             <td class="text-center">                   
                                                <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                       
-                                                 <a href="view_project.php?view_id=<?php echo $row['project_id']?>" class="btn btn-primary btn-sm">2</a>   
-                                                <a href="editproject_page.php?update_id=<?php echo $row['project_id']?>" class="btn btn-warning btn-sm">2</a>
-                                                <a href="deleteproject.php?delete_id=<?php echo $row['project_id']?>" class="btn btn-danger btn-sm" >trash</a>
+                                                <a class="btn btn-bitbucket btn-sm" href="view_project.php?view_id=<?php echo $row['project_id']?>"><i data-feather="zoom-in"></i></a>
+                                                <a class="btn btn-warning btn-sm" href="editproject_page.php?update_id=<?php echo $row['project_id']?>"><i data-feather="edit"></i></a>
+                                                <a class="btn btn-danger btn-sm" href="deleteproject.php?delete_id=<?php echo $row['project_id']?>"><i data-feather="trash-2"></i></a>
                                             </td>
                                         </tr>
                                     <?php } ?>

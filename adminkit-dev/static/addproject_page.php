@@ -150,7 +150,7 @@ $(document).ready(function(){
       $employees->execute();
       $result = $employees->fetchAll();
       foreach($result as $row) {?>
-        items.push({value:<?php echo $row['user_id'];?>,text:'<?php echo $row['name'];?>'});
+        items.push({value:<?php echo $row['user_id'];?>,text:'<?php echo $row['name'];?><?php echo " ( ";?><?php echo $row['position_name'];?><?php echo " ) ";?>'});
     <?php  } ?>
  
         var select = $('[data-access_multi_select="true"]').check_multi_select({

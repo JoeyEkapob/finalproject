@@ -269,7 +269,7 @@
 
                                        <?php if ($manager_id == $us || $level <= 2) {?>
                                                 <a href="edittask_page.php?update_id=<?php echo $row2['task_id']?>" class="btn btn-warning btn-sm">เเก้ไข</a>
-                                                <a href="deletetask.php?delete_id=<?php echo $row2['task_id']?>" class="btn btn-danger btn-sm" >ลบ</a> 
+                                                <a href="deletetask.php?delete_id=<?php echo $row2['task_id']?>&project_id=<?=$row2['project_id']?>" class="btn btn-danger btn-sm" >ลบ</a> 
                                         <?php } ?>
 
                                     </td>

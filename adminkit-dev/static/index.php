@@ -6,11 +6,20 @@
         header('location:sign-in.php');
     }
 
-	$sql = "SELECT COUNT(user_id) as num FROM user ";
-	$stmt = $db->prepare($sql);
-	$stmt ->execute();
-	$num_rows = $stmt->fetchColumn();
-	
+	$stmtusernum = "SELECT COUNT(user_id) as num FROM user  ";
+	$stmtusernum = $db->prepare($stmtusernum);
+	$stmtusernum ->execute();
+	$stmtusernum = $stmtusernum->fetchColumn();
+
+	$stmtprojectnum = "SELECT COUNT(project_id) as num1 FROM project  ";
+	$stmtprojectnum = $db->prepare($stmtprojectnum);
+	$stmtprojectnum ->execute();
+	$stmtprojectnum = $stmtprojectnum->fetchColumn();
+
+	$stmttask = "SELECT COUNT(project_id) as num2 FROM task_list  ";
+	$stmttask = $db->prepare($stmttask);
+	$stmttask ->execute();
+	$stmttask = $stmttask->fetchColumn();
 	//extract($row);
 	//print_r ($num_rows); 
 ?>
@@ -28,46 +37,48 @@
 						<div class="col-xxl-12 col-xxl- d-flex">
 							<div class="w-100">
 								<div class="row">
-									<div class="col-sm-3">
-										<div class="card">
-											<div class="card-body">
-												<div class="row">
-													<div class="col mt-0">
-														<h5 class="card-title">Sales</h5>
-													</div>
+									<?php if ($level != 5): ?>
+										<div class="col-sm-3">
+											<div class="card">
+												<div class="card-body">
+													<div class="row">
+														<div class="col mt-0">
+															<h5 class="card-title">งานที่ต้องตรวจ</h5>
+														</div>
 
-													<div class="col-auto">
-														<div class="stat text-primary">
-															<i class="align-middle" data-feather="truck"></i>
+														<div class="col-auto">
+															<div class="stat text-primary">
+																<i class="align-middle" data-feather="clipboard"></i>
+															</div>
 														</div>
 													</div>
-												</div>
-												<h1 class="mt-1 mb-3">2.382</h1>
-												<div class="mb-0">
-													<span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -3.65% </span>
-													<span class="text-muted">Since last week</span>
+													<h1 class="mt-1 mb-3">0</h1>
+													<div class="mb-0">
+														<span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
+														<span class="text-muted">งานที่ต้องตรวจทั้งหมด</span>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
+									<?php endif ?>
 											<div class="col-sm-3">
 												<div class="card">
 													<div class="card-body">
 														<div class="row">
 															<div class="col mt-0">
-																<h5 class="card-title">Visitors</h5>
+																<h5 class="card-title">งาน</h5>
 															</div>
 
 															<div class="col-auto">
 																<div class="stat text-primary">
-																	<i class="align-middle" data-feather="users"></i>
+																	<i class="align-middle" data-feather="list"></i>
 																</div>
 															</div>
 														</div>
-														<h1 class="mt-1 mb-3">14.212</h1>
+														<h1 class="mt-1 mb-3"><?php echo $stmttask ?></h1>
 														<div class="mb-0">
-															<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 5.25% </span>
-															<span class="text-muted">Since last week</span>
+															<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
+															<span class="text-muted">งานทั้งหมด</span>
 														</div>
 													</div>
 												</div>
@@ -77,19 +88,19 @@
 												<div class="card-body">
 													<div class="row">
 														<div class="col mt-0">
-															<h5 class="card-title">Earnings</h5>
+															<h5 class="card-title">หัวข้องาน</h5>
 														</div>
 
 														<div class="col-auto">
 															<div class="stat text-primary">
-																<i class="align-middle" data-feather="dollar-sign"></i>
+																<i class="align-middle" data-feather="layers"></i>
 															</div>
 														</div>
 													</div>
-													<h1 class="mt-1 mb-3">$21.300</h1>
+													<h1 class="mt-1 mb-3"><?php echo $stmtprojectnum ?></h1>
 													<div class="mb-0">
-														<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 6.65% </span>
-														<span class="text-muted">Since last week</span>
+														<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
+														<span class="text-muted">หัวข้องานทั้งหมด</span>
 													</div>
 												</div>
 											</div>
@@ -109,7 +120,7 @@
 															</div>
 														</div>
 													</div>
-												<h1 class="mt-1 mb-3"><?php echo $num_rows ?></h1>
+												<h1 class="mt-1 mb-3"><?php echo $stmtusernum ?></h1>
 												<div class="mb-0">
 													<span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i></span>
 													<span class="text-muted">สมาชิกทั้งหมด</span>

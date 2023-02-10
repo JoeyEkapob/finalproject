@@ -10,9 +10,9 @@
             $select_stmt->bindParam(':id', $id);
             $select_stmt->execute();
             $row = $select_stmt->fetch(PDO::FETCH_ASSOC);
-            unlink("img/avatars/".$row['avatar']); // unlin functoin permanently remove your file
+            unlink("img/avatars/".$row['avatar']); 
     
-            // delete an original record from db
+            
             $delete_stmt = $db->prepare('DELETE FROM user WHERE user_id = :id');
             $delete_stmt->bindParam(':id', $id);
             $delete_stmt->execute();

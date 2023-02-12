@@ -64,9 +64,9 @@
 										<hr>
 										<div class="col-lg-12 text-right justify-content-center d-flex">
 
-											<button class="btn btn-primary" name="signup">Save</button>
+											<button type="button" class="btn btn-primary" name="signup">Save</button>
 
-											<button class="btn btn-secondary" type="button" >Cancel</button>
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
 										</div>
 									</div>
 								</div>

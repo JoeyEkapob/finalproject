@@ -10,7 +10,7 @@
 <!-- <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script> -->
 
 
-<!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
+ <script src="https://code.jquery.com/jquery-3.5.1.js"></script> 
 <!-- multi_select -->
  <script src="js/multi_select.js"></script> 
 <!-- datatable -->

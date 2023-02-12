@@ -76,12 +76,13 @@
                                     <?php
                                         $i = 1;
                                         $stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","อยู่ระหว่างการตรวจสอบ","รอการเเก้ไข","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
+                                        $stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
                                         $where = "";    
                                         if($level >= 3 ){
                                             $where = "natural join project_list where user_id  = '{$_SESSION['user_login']}'"  ;
                                             
                                         }
-                                        $sql = "SELECT * FROM project  $where order by name_project asc ";
+                                        $sql = "SELECT * FROM project  $where order by end_date,status_2  DESC ";
                                         $qry = $db->query($sql);
                                         $qry->execute();
                                         while ($row = $qry->fetch(PDO::FETCH_ASSOC)){
@@ -91,7 +92,17 @@
                                         <tr>
                                             <td class="text-center"><?php echo $i++ ?></td>
                                                 <td>
-                                                    <p><b><?php echo $row["name_project"]?></b></p>
+                                                    <p><b><?php echo $row["name_project"]?></b>
+                                                    <?php
+                                                    if ($row['status_2'] == '1') {
+                                                        echo " "." "."<span class='badge bg-secondary'>".$stat2[$row['status_2']]."</span>";
+                                                    }else if($row['status_2'] == '2'){
+                                                        echo " "."<span class='badge bg-warning'>".$stat2[$row['status_2']]."</span>";
+                                                    }else if($row['status_2'] == '3'){
+                                                        echo " "."<span class='badge bg-danger'>".$stat2[$row['status_2']]."</span>";
+                                                    }
+                                                    ?>
+                                                </p>
                                                     <p class="truncate"><?php echo substr($row['description'],0,100).'...';  ?></p>
                                                 
                                                 </td>

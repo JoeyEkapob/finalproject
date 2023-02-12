@@ -181,13 +181,13 @@
 								สมาชิก
 							</span>
 						</a>
-						<ul id="user" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
+						<!-- <ul id="user" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
 							<li class="sidebar-item">
 								<a class="sidebar-link" href="sign-up.php">
-								&nbsp;&nbsp;&nbsp;--> เพิ่มสมาชิก
+								&nbsp;&nbsp;&nbsp; เพิ่มสมาชิก
 								</a>
 							</li>
-						</ul>
+						</ul> -->
 						<ul id="user" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
 							<li class="sidebar-item">
 								<a class="sidebar-link" href="user_list.php">

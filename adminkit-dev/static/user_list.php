@@ -38,14 +38,14 @@
                     ?>
                 </div>
             <?php } ?>
-<form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+<form action="adduser.php" method="post" class="form-horizontal" enctype="multipart/form-data">
     <main class="content">
         <div class="col-lg-12">
             <div class="card card-outline card-success">
                 <div class="container-fluid p-0">
                     <div class="card-header">
                         <div class="d-flex flex-row-reverse bd-highligh">
-                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="sign-up.php"><i class="fa fa-plus"></i>  + Add New User</a>
+                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary" data-bs-toggle="modal" data-bs-target="#addModal1" ><i class="fa fa-plus"></i>  + Add New User</a>
                         </div>
                     </div>
                 </div>
@@ -71,10 +71,7 @@
                                         <?php
                                             $i = 1;
                                             //$type = array('',"Admin","คณบดี","รองคณบดีฝ่ายวิชาการ","ผู้ชวยรองรองคณบดีฝ่ายวิชาการ","หัวหน้าหน่วย","หัวสาขา","เจ้าหน้าที่");
-                                            $sql = "SELECT *,concat(firstname,' ',lastname) as name 
-                                            FROM user as u
-                                            natural join position
-                                            order by concat(firstname,' ',lastname) asc ";
+                                            $sql = "SELECT *,concat(firstname,' ',lastname) as name FROM user natural join position order by concat(firstname,' ',lastname) asc ";
                                             $qry = $db->query($sql);
                                             $qry->execute();
                                             while ($row = $qry->fetch(PDO::FETCH_ASSOC)){
@@ -91,12 +88,13 @@
                                                 <a class="btn btn-danger btn-sm" href="deleteuser.php?delete_id=<?php echo $row['user_id']?>"><i data-feather="trash-2"></i></a>
                                             </td>
                                         </tr>
-                                        <?php include "viewuser_modal.php"?>
+                                        <?php //include "adduser_modal.php"?>
                                         
                                             <?php } ?>
                                         </tbody>
                                         
                                     </table>
+                                    <?php include "adduser_modal.php"?>
                                 </div>
                           
         </main>

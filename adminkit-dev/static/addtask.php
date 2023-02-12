@@ -5,7 +5,7 @@ require_once 'connect.php';
 if(isset($_POST['addtask_btn'])){
  
 
-         $stat = 1 ;
+      $stat = 1 ;
       $start_date = $_POST['start_date'];
       $end_date = $_POST['end_date'];
       $taskname =$_POST['taskname'];
@@ -17,8 +17,8 @@ if(isset($_POST['addtask_btn'])){
       exit; */
     
      if (empty($taskname)) {
-        $_SESSION['error'] = 'กรุณากรอกชื่อประเภทงาน';
-        header('location:view_project.php?view_id'.$pro_id);
+        $_SESSION['error'] = 'กรุณากรอกชื่องาน';
+        header('location:view_project.php?view_id='.$pro_id);
 
      }else if (!isset($_SESSION['error'])) {
  

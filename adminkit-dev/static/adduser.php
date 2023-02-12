@@ -21,31 +21,31 @@
 exit; */
          if (empty($firstname)) {
             $_SESSION['error'] = 'กรุณากรอกชื่อ';
-            header("location: sign-up.php");
+            header("location: user_list.php");
           } else if (empty($lastname)) {
             $_SESSION['error'] = 'กรุณากรอกนามสกุล';
-            header("location:sign-up.php");
+            header("location: user_list.php");
         } else if (empty($email)) {
             $_SESSION['error'] = 'กรุณากรอกอีเมล';
-            header("location: sign-up.php");
+            header("location: user_list.php");
         } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $_SESSION['error'] = 'รูปแบบอีเมลไม่ถูกต้อง';
-            header("location: sign-up.php");
+            header("location: user_list.php");
         } else if (empty($password)) {
             $_SESSION['error'] = 'กรุณากรอกรหัสผ่าน';
-            header("location: sign-up.php");
+            header("location: user_list.php");
         } else if (strlen($_POST['password']) > 20 || strlen($_POST['password']) < 5) {
             $_SESSION['error'] = 'รหัสผ่านต้องมีความยาวระหว่าง 5 ถึง 20 ตัวอักษร';
-            header("location: sign-up.php");
+            header("location: user_list.php");
         } else if (empty($c_password)) {
             $_SESSION['error'] = 'กรุณายืนยันรหัสผ่าน';
-            header("location: sign-up.php");
+            header("location: user_list.php");
         } else if ($password != $c_password) {
             $_SESSION['error'] = 'รหัสผ่านไม่ตรงกัน';
-            header("location: sign-up.php");  
+            header("location: user_list.php");  
         }else if(empty($fileName)){
             $_SESSION['error'] = "กรุณาเเนบไฟล์รูปภาพ";
-            header("location: sign-up.php"); 
+            header("location: user_list.php"); 
          } else {
             try {
                 $check_email = $db->prepare("SELECT email FROM user WHERE email = :email");
@@ -57,7 +57,7 @@ exit; */
                 if(move_uploaded_file($_FILES['file']['tmp_name'], $targetFilePath)) {
                 if ($row['email'] == $email) {
                     $_SESSION['error'] = "มีอีเมลนี้อยู่ในระบบแล้ว ";
-                    header("location: sign-up.php");
+                    header("location: user_list.php");
                 } else if (!isset($_SESSION['error'])) {
                     $passwordHash = password_hash($password, PASSWORD_DEFAULT);
                     $stmt = $db->prepare("INSERT INTO user(firstname, lastname, email, password, role_id,avatar) 
@@ -70,10 +70,10 @@ exit; */
                     $stmt->bindParam(":avatar", $fileName);
                     $stmt->execute();
                     $_SESSION['success'] = "สมัครสมาชิกเรียบร้อยแล้ว! ";
-                    header("location: sign-up.php");
+                    header("location: user_list.php");
                 } else {
                     $_SESSION['error'] = "มีบางอย่างผิดพลาด";
-                    header("location: sign-up.php");
+                    header("location: user_list.php");
                 } 
             }
         }

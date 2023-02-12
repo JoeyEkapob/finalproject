@@ -21,10 +21,10 @@
 
 
 	if($level > 2){
-		$where = " WHERE user_id = $user_id ";
+		$where = "   natural join project_list WHERE user_id = $user_id ";
 	}
 
-	$stmtprojectnum = "SELECT COUNT(project_id) as num1 FROM project natural join project_list $where  ";
+	$stmtprojectnum = "SELECT COUNT(project_id) as num1 FROM project   $where";
 	$stmtprojectnum = $db->prepare($stmtprojectnum);
 	$stmtprojectnum ->execute();
 	$stmtprojectnum = $stmtprojectnum->fetchColumn();
@@ -238,13 +238,13 @@
 										$i = 1;
 										$stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","อยู่ระหว่างการตรวจสอบ","รอการเเก้ไข","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
 										$stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
-										if($level >= 3 ){
+										if($level >=2 ){
 											$where = "  natural join project_list where user_id  = $user_id ";   
 										}else {
-											$where = " where manager_id = $user_id "; 
+											
 										}
 
-										$stmtshowproject = "SELECT * FROM project  $where ORDER BY  status_2  DESC LIMIT 5;";
+										$stmtshowproject = "SELECT * FROM project  $where ORDER BY  end_date,status_2  DESC LIMIT 5;";
 										$stmtshowproject = $db->query($stmtshowproject);
 										$stmtshowproject->execute();
 									?>

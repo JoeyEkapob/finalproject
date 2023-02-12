@@ -11,7 +11,7 @@
     $json='';
     $stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","ส่งเรียบร้อยเเล้ว","รอการเเก้ไข","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
     $stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
-    $select_project = $db->prepare('SELECT * FROM project  AS p  natural JOIN job_type  WHERE project_id = :id');
+    $select_project = $db->prepare('SELECT * FROM project  natural JOIN job_type  WHERE project_id = :id');
     $select_project->bindParam(":id", $id);
     $select_project->execute();
     $row = $select_project->fetch(PDO::FETCH_ASSOC);

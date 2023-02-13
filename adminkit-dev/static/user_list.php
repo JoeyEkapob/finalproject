@@ -38,19 +38,19 @@
                     ?>
                 </div>
             <?php } ?>
-<form action="adduser.php" method="post" class="form-horizontal" enctype="multipart/form-data">
-    <main class="content">
-        <div class="col-lg-12">
-            <div class="card card-outline card-success">
-                <div class="container-fluid p-0">
-                    <div class="card-header">
-                        <div class="d-flex flex-row-reverse bd-highligh">
-                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary" data-bs-toggle="modal" data-bs-target="#addModal1" ><i class="fa fa-plus"></i>  + Add New User</a>
+    <form action="adduser.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+        <main class="content">
+            <div class="col-lg-12">
+                <div class="card card-outline card-success">
+                    <div class="container-fluid p-0">
+                        <div class="card-header">
+                            <div class="d-flex flex-row-reverse bd-highligh">
+                                <a class="btn btn-block btn-sm btn-default btn-flat border-primary" data-bs-toggle="modal" data-bs-target="#adduserModal" ><i class="fa fa-plus"></i>  + Add New User</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
                     
                                 <div class="card ">
                                     <div class="card-header">
@@ -74,6 +74,7 @@
                                             $sql = "SELECT *,concat(firstname,' ',lastname) as name FROM user natural join position order by concat(firstname,' ',lastname) asc ";
                                             $qry = $db->query($sql);
                                             $qry->execute();
+                                            
                                             while ($row = $qry->fetch(PDO::FETCH_ASSOC)){
                                                 //extract($row);
                                         ?>
@@ -83,25 +84,36 @@
                                             <td class="text-left" ><?php echo $row['email'] ?></td>
                                             <td class="text-left" ><?php echo $row['position_name']?></td>
                                             <td class="text-center">                               
-                                                <a class="btn btn-bitbucket btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal"><i data-feather="zoom-in"></i></a>                                                  
+                                                <a class="btn btn-bitbucket btn-sm "  data-bs-toggle="modal" data-bs-target="#viewusermodal<?php echo $row['user_id']?>"><i data-feather="zoom-in"></i></a>                                                  
                                                 <a class="btn btn-warning btn-sm" href="edituser_page.php?update_id=<?php echo $row['user_id']?>"><i  data-feather="edit"></i></a>
                                                 <a class="btn btn-danger btn-sm" href="deleteuser.php?delete_id=<?php echo $row['user_id']?>"><i data-feather="trash-2"></i></a>
                                             </td>
-                                        </tr>
-                                        <?php //include "adduser_modal.php"?>
-                                        
+                                        </tr>   
+                                        <?php include "viewuser_modal.php"?>
                                             <?php } ?>
-                                        </tbody>
-                                        
-                                    </table>
-                                    <?php include "adduser_modal.php"?>
-                                </div>
+                                     </tbody>    
+                                 </table>
+                                
+                                   <?php include "adduser_modal.php"?>
+                                
+                            </div>
                           
         </main>
         
-</form>
+    </form>
 
     </body>
+<  <!--  <script>
+         $(document).ready(function(){
+                $('.view_data').click(function(){
+                $('viewuserModal').modal('show');
+                  /* var userid = $(this).data('id');
+                    alert("userid"); */
+                    console.log('userid');
+                    
+                });
+            });
+    </script> --> 
 </html>
 <script>
 $(document).ready(function () {

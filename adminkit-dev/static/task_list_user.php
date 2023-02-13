@@ -142,7 +142,7 @@
                                        <?php } ?>  
 
                                        <?php if ($stmtprotasklistrow['manager_id'] == $user_id || $level <= 2) {?>
-                                                <a class="btn btn-warning btn-sm" href="edittask_page.php?update_id=<?php echo $stmtprotasklistrow['task_id']?>" class="btn btn-warning btn-sm"><i  data-feather="edit"></i></a>
+                                                <a class="btn btn-warning btn-sm" href="edittask_page.php?update_id=<?php echo $stmtprotasklistrow['task_id']?>&project_id=<?=$stmtprotasklistrow['project_id']?>" class="btn btn-warning btn-sm"><i  data-feather="edit"></i></a>
                                                 <a class="btn btn-danger btn-sm" href="deletetask.php?delete_id=<?php echo $stmtprotasklistrow['task_id']?>&project_id=<?=$stmtprotasklistrow['project_id']?>"><i data-feather="trash-2"></i></a> 
                                                
                                         <?php } ?>

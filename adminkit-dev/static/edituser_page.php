@@ -29,6 +29,7 @@ session_start();
 <form action="edituser.php" method="post" enctype="multipart/form-data">
 <?php include 'head.php'?> 
 <body>
+<?php include "sidebar.php"?>
 		
 		<main class="content">
 				<div class="container-fluid p-0">

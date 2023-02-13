@@ -274,7 +274,7 @@
                                        <?php } ?>  
 
                                        <?php if ($manager_id == $us || $level <= 2) {?>
-                                                <a class="btn btn-warning btn-sm" href="edittask_page.php?update_id=<?php echo $row2['task_id']?>" class="btn btn-warning btn-sm"><i  data-feather="edit"></i></a>
+                                                <a class="btn btn-warning btn-sm" href="edittask_page.php?update_id=<?php echo $row2['task_id']?>&project_id=<?=$row2['project_id']?>" class="btn btn-warning btn-sm"><i  data-feather="edit"></i></a>
                                                 <a class="btn btn-danger btn-sm" href="deletetask.php?delete_id=<?php echo $row2['task_id']?>&project_id=<?=$row2['project_id']?>"><i data-feather="trash-2"></i></a> 
                                                
                                         <?php } ?>

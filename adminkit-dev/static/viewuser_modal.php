@@ -1,4 +1,3 @@
-<form action="edituser.php" method="post" enctype="multipart/form-data">
 <div class="modal fade" id="viewusermodal<?php echo $row['user_id']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog modal-lg">
     <div class="modal-content">

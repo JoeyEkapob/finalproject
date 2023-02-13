@@ -84,7 +84,8 @@
                                             <td class="text-left" ><?php echo $row['email'] ?></td>
                                             <td class="text-left" ><?php echo $row['position_name']?></td>
                                             <td class="text-center">                               
-                                                <a class="btn btn-bitbucket btn-sm "  data-bs-toggle="modal" data-bs-target="#viewusermodal<?php echo $row['user_id']?>"><i data-feather="zoom-in"></i></a>                                                  
+                                             <a class="btn btn-bitbucket btn-sm view_data"  data-bs-toggle="modal" data-bs-target="#viewusermodal<?php echo $row['user_id']?>" ><i data-feather="zoom-in"></i></a> 
+                                                <!--  <a class="btn btn-bitbucket btn-sm view_data"  id="<?php echo $row['user_id']?>" ><i data-feather="zoom-in"></i></a>        -->                                             
                                                 <a class="btn btn-warning btn-sm" href="edituser_page.php?update_id=<?php echo $row['user_id']?>"><i  data-feather="edit"></i></a>
                                                 <a class="btn btn-danger btn-sm" href="deleteuser.php?delete_id=<?php echo $row['user_id']?>"><i data-feather="trash-2"></i></a>
                                             </td>
@@ -97,23 +98,23 @@
                                    <?php include "adduser_modal.php"?>
                                 
                             </div>
-                          
+                            <?php //include "viewuser_modal.php"?>
         </main>
         
     </form>
-
-    </body>
-<  <!--  <script>
-         $(document).ready(function(){
+  <!--  <script>
+       /*   $(document).ready(function(){
                 $('.view_data').click(function(){
-                $('viewuserModal').modal('show');
-                  /* var userid = $(this).data('id');
-                    alert("userid"); */
-                    console.log('userid');
+                $('#viewusermodal').modal('show');
+                   var userid = $(this).data('userid');
+                    /* alert(userid); 
+                    console.log(userid);
                     
                 });
-            });
-    </script> --> 
+            }); */
+    </script>    -->
+    </body>
+
 </html>
 <script>
 $(document).ready(function () {

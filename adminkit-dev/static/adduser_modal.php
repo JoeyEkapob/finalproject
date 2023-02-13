@@ -51,10 +51,15 @@
 												<input type="password" class="form-control form-control" name="c_password">	
 											</div>
 									</div>
+									<div class="col-md-12">
+										<div class="user-image mb-3 text-center">
+										<img class="rounded-circle rounded me-2 mb-2" id="img"   alt="Avatar" width="200"  height="200">
+										</div>
+									</div>
 										<div class="mb-3">
 											<div class="form-group">
 												<label for="" class="control-label">Avatar</label>	
-												<input type="file" name="file" class="form-control streched-link" accept="image/gif, image/jpeg, image/png">
+												<input type="file" name="file" class="form-control streched-link" accept="image/gif, image/jpeg, image/png" OnChange="Preview(this)" >
 												<p class="small mb-0 mt-2"><b>Note:</b> Only JPG, JPEG, PNG & GIF files are allowed to upload</p> 
 											</div>
 										</div>

@@ -120,4 +120,16 @@ $(document).ready(function () {
     $('#example').DataTable();
 });
 </script>
+<script type="text/javascript">
+        function Preview(ele) {
+        $('#img').attr('src', ele.value);
+                if (ele.files && ele.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#img').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(ele.files[0]);
+            }
+        }
+</script>
 <?php include "footer.php"?>

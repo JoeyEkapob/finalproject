@@ -5,6 +5,8 @@
          $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
         header('location:sign-in.php');
     }
+    date_default_timezone_set('asia/bangkok');
+    $date = date ("Y-m-d H:i");
     $us=$_SESSION['user_login'];
     $id = $_GET['view_id'];
     $targetDir = "img/avatars/";
@@ -54,6 +56,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php include "head.php"?>
+
 <body>
 <?php include "sidebar.php"?>
 
@@ -213,7 +216,15 @@
                                 <tbody>
                                 <?php
                                     $i = 1;
-                                    $stmttasklist = "SELECT * FROM task_list natural join user where project_id = $id ";
+                                    
+                                    $stmttasklist = "SELECT *,
+                                    DATE_FORMAT(strat_date_task, '%e %M %Y ') AS start_date, 
+                                    DATE_FORMAT(end_date_task, '%e %M %Y ') AS end_date,
+                                    DATE_FORMAT(strat_date_task, 'เวลา %H:%i น.') AS start_time, 
+                                    DATE_FORMAT(end_date_task, 'เวลา %H:%i น.') AS end_time
+                                FROM task_list 
+                                NATURAL JOIN user 
+                                WHERE project_id = $id";
                                     $stmttasklist = $db->query($stmttasklist);
                                     $stmttasklist->execute();
                                     while ($row2 = $stmttasklist->fetch(PDO::FETCH_ASSOC)){  ?>  
@@ -228,11 +239,13 @@
                                     </td>
     
                                     <td >
-                                        <?php echo date("F d, Y",strtotime($row2['strat_date_task'])); ?>
+                                        <?php echo $row2['start_date']; ?>
+                                        <p class="truncate" ><?php echo $row2['start_time']  ?></p>
                                     </td>
 
                                     <td>
-                                        <?php echo date("F d, Y",strtotime($row2['end_date_task'])); ?>
+                                        <?php echo $row2['end_date']; ?>
+                                        <p class="truncate" ><?php echo $row2['end_time']  ?></p>
                                     </td>
 
                                     <td>

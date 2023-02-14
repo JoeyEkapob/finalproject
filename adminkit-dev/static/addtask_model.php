@@ -18,14 +18,15 @@
                     <div class="col-md-12">
                         <div class="mb-3">
                             <label for="" class="control-label">วันที่สั่ง</label>
-                            <input type="date" class="form-control " autocomplete="off" name="start_date" value="" >
-                        
+                            <input type="datetime-local" class="form-control " autocomplete="off" name="start_date" value="<?php echo $date ?>">
+                    
                         </div>
+                        
                     </div>
                     <div class="col-md-12">
                         <div class="mb-3">
                             <label for="" class="control-label">วันที่เสร็จ</label>
-                            <input type="date" class="form-control " autocomplete="off" name="end_date" value="" >
+                            <input type="datetime-local" class="form-control " autocomplete="off" name="end_date" value="" >
                         
                         </div>
                     </div>

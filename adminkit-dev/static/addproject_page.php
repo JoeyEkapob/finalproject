@@ -7,7 +7,8 @@
          $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
         header('location:sign-in.php');
     }
-  
+    date_default_timezone_set('asia/bangkok');
+    $date = date('Y-m-d');
       
        
 ?> 
@@ -69,7 +70,7 @@
                                     <div class="col-md-6">
 										<div class="mb-3">
 											<label for="" class="control-label">วันที่สั่ง</label>
-                                            <input type="date" class="form-control " autocomplete="off" name="start_date" value=""  >
+                                            <input type="date" class="form-control " autocomplete="off" name="start_date" value="<?php echo $date ?>"  >
 										</div>
                                     </div>
                                     <div class="col-md-6">
@@ -83,7 +84,7 @@
                                     <div class="col-md-6">
 										<div class="mb-4">
 											<label for="" class="control-label">สมาชิกทีมโครงการ</label>
-                                            <input type="text" class="form-control" name="users_id[]"  id="user_id" data-access_multi_select="true" placeholder="&amp;">
+                                            <input type="text" class="form-control" name="users_id"  id="user_id" data-access_multi_select="true" placeholder="&amp;">
                                             
                                                
 										</div>
@@ -126,7 +127,7 @@
 										<div class="col-lg-12 text-right justify-content-center d-flex">
                                         
 											<button class="btn btn-primary"  id="display_selected" name="addpro">ADD</button>
-											<button class="btn btn-secondary" type="button" >Cancel</button>
+											<a href="project_list.php" class="btn btn-secondary"  type="button" >Cancel</a>
 										</div>
                                        
 

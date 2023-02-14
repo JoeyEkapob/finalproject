@@ -81,9 +81,8 @@
                                 <tbody>
                                     <?php
                                         $i = 1;
-                                        //$type = array('',"Admin","คณบดี","รองคณบดีฝ่ายวิชาการ","ผู้ชวยรองรองคณบดีฝ่ายวิชาการ","หัวหน้าหน่วย","หัวสาขา","เจ้าหน้าที่");
-                                        $sql = "SELECT * 
-                                        FROM job_type  WHERE status = 1";
+                                        
+                                        $sql = "SELECT * FROM job_type  WHERE status = 1";
                                         $qry = $db->query($sql);
                                         $qry->execute();
                                         while ($row = $qry->fetch(PDO::FETCH_ASSOC)){

@@ -1,23 +1,20 @@
 <?php 
     session_start();
     require_once 'connect.php';
-
-    //$user_id = $_SESSION['user_login'];
     if(!isset($_SESSION['user_login'])){
          $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
         header('location:sign-in.php');
     }
+
     $stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
+    
     if (isset($_GET['update_id'])){
         try {
             $id = $_REQUEST['update_id'];
             $select_stmt = $db->prepare("SELECT * ,concat(firstname,' ',lastname) as name FROM project natural JOIN project_list natural JOIN job_type natural JOIN user  WHERE project_id = :id");
             $select_stmt->bindParam(":id", $id);
-        /* 	echo $id;
-            exit;  */ 
             $select_stmt->execute();
             $row2 = $select_stmt->fetch(PDO::FETCH_ASSOC);
-            //print_r ($row);
         } catch(PDOException $e) {
             $e->getMessage();
         }
@@ -26,12 +23,6 @@
        
 if(isset($_POST['editpro'])){
     
-      
-      if(!empty($_POST['users_id'])){
-      $users_id1=$_POST['users_id'];
-      }else {
-      $_SESSION['error'] = 'กรุณาเพิ่มคนลงในโปรเจค'; 
-      }
       $id1=$_POST['editpro'];
       $status1 = 1;
       $proname = $_POST['proname'];
@@ -42,43 +33,54 @@ if(isset($_POST['editpro'])){
       $status2=$_POST['status2'];
       $file_project = null;
       $job = $_POST['job'];
-      $numbers_string = implode(",", $users_id1);
-      $users_id1 = explode(",", $numbers_string);
-
-
+      $users_id1 = $_POST['users_id'];
       
-    $update_stmtjob = $db->prepare('UPDATE project SET name_project=:name_project,description= :description,status_1=:status_1,start_date= :start_date,end_date=:end_date
+      $users_id = explode(",", $users_id1);
+     // $user_string = "(" . implode(",",$users_id) . ")";
+   /*   echo $users_id1;
+     exit; */
+    
+
+
+
+   if (!empty($users_id1)) {
+    $update_stmtpro = $db->prepare('UPDATE project SET name_project=:name_project,description= :description,status_1=:status_1,start_date= :start_date,end_date=:end_date
     ,status_2=:status_2,id_jobtype=:id_jobtype WHERE project_id =:id');
-    $update_stmtjob->bindParam(":name_project", $proname);
-    $update_stmtjob->bindParam(":description", $description);
-    $update_stmtjob->bindParam(":status_1", $status1);
-    $update_stmtjob->bindParam(":start_date", $start_date);
-    $update_stmtjob->bindParam(":end_date", $end_date);
+    $update_stmtpro->bindParam(":name_project", $proname);
+    $update_stmtpro->bindParam(":description", $description);
+    $update_stmtpro->bindParam(":status_1", $status1);
+    $update_stmtpro->bindParam(":start_date", $start_date);
+    $update_stmtpro->bindParam(":end_date", $end_date);
     //$update_stmtjob->bindParam(":file_project",$file_project);
     //$update_stmtjob->bindParam(":manager_id", $manager_id);
-    $update_stmtjob->bindParam(":status_2", $status2);
-    $update_stmtjob->bindParam(":id_jobtype", $job);
+    $update_stmtpro->bindParam(":status_2", $status2);
+    $update_stmtpro->bindParam(":id_jobtype", $job);
+    $update_stmtpro->bindParam(":id",$id1);
+    $update_stmtpro->execute(); 
 
-    $update_stmtjob->bindParam(":id",$id1);
-    $update_stmtjob->execute(); 
-    $update_stmtjob1 = $db->prepare('DELETE FROM project_list WHERE project_id=:id');
-    $update_stmtjob1->bindParam(":id",$id1);
-    $update_stmtjob1->execute(); 
+    $sql = "DELETE FROM task_list WHERE project_id = :project_id AND user_id NOT IN ($users_id1)";
+    $delete_stmttask = $db->prepare($sql);
+    $delete_stmttask->bindParam(":project_id", $id1);
+    $delete_stmttask->execute();
+   
+    $delete_stmtprojectlist = $db->prepare('DELETE FROM project_list WHERE project_id=:id');
+    $delete_stmtprojectlist->bindParam(":id",$id1);
+    $delete_stmtprojectlist->execute(); 
+     
+   
+   
+    foreach ($users_id as $id => $users_id){
+    $inser_stmtprolist= $db->prepare("INSERT INTO project_list(project_id,user_id) VALUES(:project_id,:user_id)");
+    $inser_stmtprolist->bindParam(":project_id", $id1 );
+    $inser_stmtprolist->bindParam(":user_id", $users_id );
+    $inser_stmtprolist->execute(); 
+            }
 
-    foreach ($users_id1 as $id => $users_id){
-        $sql= $db->prepare("INSERT INTO project_list(project_id,user_id) VALUES(:project_id,:user_id)");
-        $sql->bindParam(":project_id", $id1 );
-        $sql->bindParam(":user_id", $users_id );
-        $sql->execute(); 
-    }
-       // header("location: addjobtype.php");
-        if (!isset($_SESSION['error'])) {
-        
-            $_SESSION['success'] = "เเก้ไขเรียบร้อย! ";
-            header("location: project_list.php");
-        } else {
-            $_SESSION['error'] = "มีบางอย่างผิดพลาด";
-            header("location: project_list.php");
+        $_SESSION['success'] = "เเก้ไขเรียบร้อย! ";
+        header("location: project_list.php");
+    } else {
+        $_SESSION['error'] = "มีบางอย่างผิดพลาด";
+        header("location: project_list.php");
         } 
     }
 
@@ -87,11 +89,10 @@ if(isset($_POST['editpro'])){
 <!DOCTYPE html>
 <html lang="en">
         <?php include "head.php"?>
-   
     <body>
         <?php include "sidebar.php"?>
         <form action="editproject_page.php" method="post" class="form-horizontal" enctype="multipart/form-data">
-     
+        
                 <main class="content"> 
                 <div class="container-fluid p-0">
 					<h1 class="h3 mb-3">เเก้ไขโปรเจค</h1>
@@ -140,7 +141,7 @@ if(isset($_POST['editpro'])){
                                     <div class="col-md-6">
 										<div class="mb-4">
 											<label for="" class="control-label">สมาชิกทีมโครงการ</label>
-                                            <input type="text" class="form-control" name="users_id[]" id="user_id"  data-access_multi_select="true" placeholder="Select a Country">
+                                            <input type="text" class="form-control" name="users_id" id="user_id"  data-access_multi_select="true" placeholder="">
                                                 
               	                                
 										</div>
@@ -207,42 +208,27 @@ $(document).ready(function(){
       $employees->execute();
       $result = $employees->fetchAll();
       foreach($result as $row) {?>
-        items.push({value:<?php echo $row['user_id'];?>,text:'<?php echo $row['name'];?>'});
+        items.push({value:<?php echo $row['user_id'];?>,text:'<?php echo $row['name'];?><?php echo " ( ";?><?php echo $row['position_name'];?><?php echo " ) ";?>'});
+    <?php  } ?>
     <?php  
-    } ?>
-<?php  
       $id = $_REQUEST['update_id'];
-      //$sql = "SELECT * FROM user AS u  LEFT JOIN position AS p ON  u.role_id = p.role_id WHERE u.user_id = $user_id ";
       $select_stmt1 = $db->prepare("SELECT * from project_list WHERE project_id = :id");
       $select_stmt1->bindParam(":id", $id);
-  /* 	echo $id;
-      exit;  */ 
       $select_stmt1->execute();
       $row21 = $select_stmt1->fetchAll();
       foreach( $row21 as $rowa) {?>
            data.push(<?php echo $rowa['user_id'];?>);
-      <?php  
-    } ?>
-            // Country
-            
-        // Set a default values in list
+      <?php  } ?>
         var select = $('[data-access_multi_select="true"]').check_multi_select({
             multi_select: true,
             items: items,
             defaults: data,
             rtl: false
         });
-        // Display the selected Values
         $('#display_selected').click(function () {
             $('#user_id').val(select.check_multi_select('fetch_country'));
-            //alert(select.check_multi_select('fetch_country'))
+            alert(select.check_multi_select('fetch_country'))
             console.log($('#user_id').val());
         });
     });
-    /*var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
-       removeItemButton: true,
-       maxItemCount:null,
-       searchResultLimit:5,
-       renderChoiceLimit:5
-     });   */
 </script>

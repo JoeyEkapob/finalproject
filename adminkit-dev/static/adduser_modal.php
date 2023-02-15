@@ -14,15 +14,15 @@
 								<div class="row">
 									<div class="col-md-6">
 										<div class="mb-3">
-											<label for="" class="control-label">First Name</label>
+											<label for="" class="control-label">ชื่อจริง</label>
 											<input type="text" name="firstname" class="form-control form-control" >
 										</div>
 										<div class="mb-3">
-											<label for="" class="control-label">Last Name</label>
+											<label for="" class="control-label">นามสกุล</label>
 											<input type="text" name="lastname" class="form-control form-control" >
 										</div>
 										<div class="mb-3">
-											<label for="" class="control-label" >User Role</label>
+											<label for="" class="control-label" >ตำเเหน่ง</label>
 												<select name="type" id="type" class="form-control" >
 													<?php
 													$stmt = $db->query("SELECT * FROM position");
@@ -38,7 +38,7 @@
 									</div>	
 									<div class="col-md-6">
 											<div class="mb-3">
-												<label class="control-label">Email</label>
+												<label class="control-label">อีเมล</label>
 												<input type="email" class="form-control form-control" name="email" >
 												<small id="#msg"></small>
 											</div>
@@ -58,9 +58,11 @@
 									</div>
 										<div class="mb-3">
 											<div class="form-group">
-												<label for="" class="control-label">Avatar</label>	
+											
+												<label for="" class="control-label">รูปภาพ</label>	
 												<input type="file" name="file" class="form-control streched-link" accept="image/gif, image/jpeg, image/png" OnChange="Preview(this)" >
-												<p class="small mb-0 mt-2"><b>Note:</b> Only JPG, JPEG, PNG & GIF files are allowed to upload</p> 
+												<p class="small mb-0 mt-2"><b>Note:</b>อนุญาตให้อัปโหลดเฉพาะไฟล์ JPG, JPEG, PNG </p> 
+												
 											</div>
 										</div>
 										<div class="mb-4">

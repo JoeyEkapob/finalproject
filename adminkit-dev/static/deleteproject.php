@@ -20,7 +20,7 @@ if(isset($_GET['delete_id'])){
         $delete_pro->bindParam(':id', $id);
         $delete_pro->execute();
       
-        $_SESSION['success'] = "ลบงานเรียบร้อยแล้ว!";
+        $_SESSION['success'] = "ลบหัวข้องานเรียบร้อยแล้ว!";
         header('location:project_list.php');
         
         } else {

@@ -90,14 +90,14 @@ if(isset($_POST['edittask'])){
                     <div class="col-md-12">
                         <div class="mb-3">
                             <label for="" class="control-label">วันที่สั่ง</label>
-                            <input type="date" class="form-control " autocomplete="off" name="start_date" value="<?php echo $stmttaskrrow['strat_date_task']?>" >
+                            <input type="datetime-local" class="form-control" autocomplete="off" name="start_date" value="<?php echo $stmttaskrrow['strat_date_task']?>" >
                         
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="mb-3">
                             <label for="" class="control-label">วันที่เสร็จ</label>
-                            <input type="date" class="form-control " autocomplete="off" name="end_date" value="<?php echo $stmttaskrrow['end_date_task']?>" >
+                            <input type="datetime-local" class="form-control"  autocomplete="off" name="end_date" value="<?php echo $stmttaskrrow['end_date_task']?>" >
                         
                         </div>
                     </div>

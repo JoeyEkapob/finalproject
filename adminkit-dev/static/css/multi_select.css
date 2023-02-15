@@ -12,7 +12,14 @@ body{
     display: inline-block;
     padding: 6.5px;
 }
-
+.placeholder {
+display: inline-block;
+min-height: 1em;
+vertical-align: middle;
+cursor: auto;
+background-color: #FFFFFF !important;
+opacity: .10;
+}
 .access_multi_select > .selected-items > button {
     position: absolute;
     height: 28px;
@@ -26,12 +33,6 @@ body{
 
 .access_multi_select > .selected-items > button:hover {
     transform: scale(1.2);
-}
-
-.access_multi_select > .selected-items > button:nth-child(2) {
-    background: url("../images/select-all.jpg") no-repeat center center;
-    background-size: contain;
-    right: 7px;
 }
 
 .access_multi_select > .selected-items > button:nth-child(3) {
@@ -166,23 +167,15 @@ body{
     padding: 2px 2px 2px 80px;
 }
 
-.access_multi_select > .selected-items > button:nth-child(2) {
-    left: auto;
-    right: 7px;
-}
 
 .access_multi_select > .selected-items > button:nth-child(3) {
     left: auto;
-    right: 40px;
-}
-.access_multi_select.rtl > .selected-items > button:nth-child(2) {
-    right: auto;
-    left: 7px;
+    right: 1px;
 }
 
 .access_multi_select.rtl > .selected-items > button:nth-child(3) {
     right: auto;
-    left: 40px;
+    left:1px;
 }
 
 .access_multi_select.rtl > .dropdown > .filter > button {

@@ -69,7 +69,7 @@ function deselectAll(id) {
                 '<div class="access_multi_select ' + (settings.rtl ? 'rtl' : '') + '" id="access_multi_select-' + selectId + '">' +
                 '   <div class="selected-items form-control">' +
                 '      <span class="placeholder">' + input.attr('placeholder') + '</span>' +
-                '      <button type="button" onclick="selectAll(' + selectId + ', ' + settings.multi_select + ')"></button>' +
+                '      <span ></span>' +
                 '      <button type="button" onclick="deselectAll(' + selectId + ')"></button>' +
                 '   </div>' +
                 '   <div class="dropdown form-control">' +

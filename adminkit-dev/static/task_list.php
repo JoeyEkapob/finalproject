@@ -6,8 +6,10 @@
         header('location:sign-in.php');
         
     }
+
     $user_id=$_SESSION['user_login'];
-    
+    $manager = $db->query("SELECT *,concat(firstname,' ',lastname) as name FROM user where user_id = $user_id");
+    $manager = $manager->fetch(PDO::FETCH_ASSOC);
     
 ?>
 <!DOCTYPE html>
@@ -84,32 +86,32 @@
                                  if($level >= 2 ){
                                     $where = " where manager_id  = $user_id ";
                                  }
-                                    
-                                    
-                                
-                             
-                                 
-                                 $stmtprotasklist = "SELECT * FROM project natural join project_list natural join task_list natural join user $where order by end_date,status_2  DESC ";
+                                 $stmtprotasklist = "SELECT *,
+                                 DATE_FORMAT(strat_date_task, '%e %M %Y ') AS start_date, 
+                                 DATE_FORMAT(end_date_task, '%e %M %Y ') AS end_date,
+                                 DATE_FORMAT(strat_date_task, 'เวลา %H:%i น.') AS start_time, 
+                                 DATE_FORMAT(end_date_task, 'เวลา %H:%i น.') AS end_time
+                                  FROM project natural join project_list natural join task_list natural join user $where order by end_date,status_2  DESC ";
                                  $stmtprotasklist = $db->query($stmtprotasklist);
                                  $stmtprotasklist->execute();
-                                while($stmtprotasklistrow = $stmtprotasklist->fetch(PDO::FETCH_ASSOC)){  ?>  
+                                while($row2 = $stmtprotasklist->fetch(PDO::FETCH_ASSOC)){  ?>  
                              <tr>
                                     <td class="text-center">
                                         <?php echo $i++ ?>
                                     </td>
 
                                     <td>
-                                        <h5><b><?php echo $stmtprotasklistrow['name_tasklist']  ?></h5></b>
+                                        <h5><b><?php echo $row2['name_tasklist']  ?></h5></b>
                                         
-                                        <p class="truncate"><?php echo substr($stmtprotasklistrow['description_task'],0,100).'...';  ?></p>
+                                        <p class="truncate"><?php echo substr($row2['description_task'],0,100).'...';  ?></p>
                                     </td>
     
                                     <td >
-                                        <?php echo date("F d, Y",strtotime($stmtprotasklistrow['strat_date_task'])); ?>
+                                    <?php echo $row2['start_date'].'<br>'.$row2['start_time']  ?>
                                     </td>
 
                                     <td>
-                                        <?php echo date("F d, Y",strtotime($stmtprotasklistrow['end_date_task'])); ?>
+                                    <?php echo $row2['end_date'].'<br>'.$row2['end_time']  ?>
                                     </td>
 
                                     <td>
@@ -119,47 +121,47 @@
                                     </td>
 
                                     <td class="text-center" >
-                                            <?php  echo $stmtprotasklistrow['firstname']." ".$stmtprotasklistrow['lastname'] ?>  
+                                            <?php  echo $row2['firstname']." ".$row2['lastname'] ?>  
                                     </td>
 
                                     <td class="text-center">
                                             <?php  
-                                                if($stmtprotasklistrow['status_task'] =='1'){
-                                                echo "<span class='badge bg-secondary'>".$stat1[$stmtprotasklistrow['status_task']]."</span>";
-                                            }elseif($stmtprotasklistrow['status_task'] =='2'){
-                                                echo "<span class='badge bg-primary'>".$stat1[$stmtprotasklistrow['status_task']]."</span>";
-                                            }elseif($stmtprotasklistrow['status_task'] =='3'){
-                                                echo "<span class='badge bg-success'>".$stat1[$stmtprotasklistrow['status_task']]."</span>";
-                                            }elseif($stmtprotasklistrow['status_task'] =='4'){
-                                                echo "<span class='badge bg-warning'>".$stat1[$stmtprotasklistrow['status_task']]."</span>";
-                                            }elseif($stmtprotasklistrow['status_task'] =='5'){
-                                                echo "<span class='badge bg-danger'>".$stat1[$stmtprotasklistrow['status_task']]."</span>";
-                                            }elseif($stmtprotasklistrow['status_task'] =='6'){
-                                                echo "<span class='badge bg-danger'>".$stat1[$stmtprotasklistrow['status_task']]."</span>";
+                                                if($row2['status_task'] =='1'){
+                                                echo "<span class='badge bg-secondary'>".$stat1[$row2['status_task']]."</span>";
+                                            }elseif($row2['status_task'] =='2'){
+                                                echo "<span class='badge bg-primary'>".$stat1[$row2['status_task']]."</span>";
+                                            }elseif($row2['status_task'] =='3'){
+                                                echo "<span class='badge bg-success'>".$stat1[$row2['status_task']]."</span>";
+                                            }elseif($row2['status_task'] =='4'){
+                                                echo "<span class='badge bg-warning'>".$stat1[$row2['status_task']]."</span>";
+                                            }elseif($row2['status_task'] =='5'){
+                                                echo "<span class='badge bg-danger'>".$stat1[$row2['status_task']]."</span>";
+                                            }elseif($row2['status_task'] =='6'){
+                                                echo "<span class='badge bg-danger'>".$stat1[$row2['status_task']]."</span>";
                                             } ?>
                                     </td>
                                        
                                     <td class="text-center">
                                   
-                                       <a class="btn btn-google btn-sm" href="?update_id=<?php echo $stmtprotasklistrow['task_id']?>"  > <i data-feather="message-square"></i></a>   
+                                    <a class="btn btn-google btn-sm" href="?update_id=<?php echo $row2['task_id']?>"  > <i data-feather="message-square"></i></a>   
 
-                                       <a class="btn btn-bitbucket btn-sm" href="viewtask_page.php?update_id=<?php echo $stmtprotasklistrow['task_id']?>"><i data-feather="zoom-in"></i></a>
+                                       <a class="btn btn-bitbucket btn-sm" data-bs-toggle="modal" data-bs-target="#viewtaskmodal<?php echo $row2['task_id']?>"><i data-feather="zoom-in"></i></a>
 
-                                      <?php if($stmtprotasklistrow['manager_id'] == $user_id || $level <= 2 || $stmtprotasklistrow['manager_id'] == $user_id ){?>
-                                       <a href="?update_id=<?php echo $stmtprotasklistrow['task_id']?>" class="btn btn-success btn-sm"  ><i data-feather="share"></i></a>
+                                      <?php if($row2['manager_id'] == $user_id || $level <= 2 || $row2['manager_id'] == $user_id ){?>
+                                       <a href="?update_id=<?php echo $row2['task_id']?>" class="btn btn-success btn-sm"  ><i data-feather="share"></i></a>
 
                                        <?php } ?>  
 
-                                       <?php if ($stmtprotasklistrow['manager_id'] == $user_id || $level <= 2) {?>
-                                                <a class="btn btn-warning btn-sm" href="edittask_page.php?update_id=<?php echo $stmtprotasklistrow['task_id']?>&project_id=<?=$stmtprotasklistrow['project_id']?>" class="btn btn-warning btn-sm"><i  data-feather="edit"></i></a>
-                                                <a class="btn btn-danger btn-sm" href="deletetask.php?delete_id=<?php echo $stmtprotasklistrow['task_id']?>&project_id=<?=$stmtprotasklistrow['project_id']?>"><i data-feather="trash-2"></i></a> 
+                                       <?php if ($row2['manager_id'] == $user_id || $level <= 2) {?>
+                                                <a class="btn btn-warning btn-sm" href="edittask_page.php?update_id=<?php echo $row2['task_id']?>&project_id=<?=$row2['project_id']?>" class="btn btn-warning btn-sm"><i  data-feather="edit"></i></a>
+                                                <a class="btn btn-danger btn-sm" href="deletetask.php?delete_id=<?php echo $row2['task_id']?>&project_id=<?=$row2['project_id']?>"><i data-feather="trash-2"></i></a> 
                                                
                                         <?php } ?>
 
                                     </td>
                                 </tr>
                                
-                                
+                                <?php include "viewtask_modal.php"?>
                                     <?php } ?>
                                 </tbody>
                             

@@ -32,17 +32,15 @@
 
                                                 </dl>
                                                 <dl>
-
-                                                    
-
-                                                    <dt><b class="border-bottom border-primary">ผู้สร้างงาน</b></dt>
-                                                    <dd> 
-                                                         <div class="d-flex align-items-center mt-1">
-                                                            <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $manager['avatar']?>" alt="Avatar" width="35"  height="35">
-                                                            <b><?php echo $manager['name'] ?> </b>
-                                                        </div>
-                                                    </dd>
-
+                                                        <dt>
+                                                            <b class="border-bottom border-primary">ผู้สร้างงาน</b>
+                                                        </dt>
+                                                        <dd> 
+                                                            <div class="d-flex align-items-center mt-1">
+                                                                <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $manager['avatar']?>" alt="Avatar" width="35"  height="35">
+                                                                <b><?php echo $manager['name'] ?> </b>
+                                                            </div>
+                                                        </dd>
                                                 </dl> 
                                         </div>
 
@@ -52,7 +50,7 @@
                                                     <dd><?php echo $row2['start_date'].''.$row2['start_time']  ?></dd>
                                                 </dl>
                                                 <dl>
-                                                    <dt><b class="border-bottom border-primary">วันสิ้นสุด</b></dt>
+                                                    <dt><b class="border-bottom border-primary">วันสิ้นสุดเเละเวลาสิ้นสุด</b></dt>
                                                     <dd><?php echo $row2['end_date'].''.$row2['end_time']  ?></dd>
                                                 </dl>
                                                 <dl>

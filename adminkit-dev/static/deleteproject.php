@@ -2,9 +2,6 @@
 session_start();
 include 'connect.php';
 
-
-
-                    
 if(isset($_GET['delete_id'])){
     try {
  

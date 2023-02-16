@@ -10,10 +10,9 @@
     $us=$_SESSION['user_login'];
     $id = $_GET['view_id'];
     $targetDir = "img/avatars/";
-    $json='';
     $stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","ส่งเรียบร้อยเเล้ว","รอการเเก้ไข","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
     $stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
-    $select_project = $db->prepare('SELECT * FROM project  natural JOIN job_type  WHERE project_id = :id');
+    $select_project = $db->prepare('SELECT * FROM project natural join file natural join file_item_project natural JOIN job_type  WHERE project_id = :id');
     $select_project->bindParam(":id", $id);
     $select_project->execute();
     $row = $select_project->fetch(PDO::FETCH_ASSOC);
@@ -76,7 +75,6 @@
                     ?>
                 </div>
             <?php } ?>
-         
 <form action="addtask.php" method="post" class="form-horizontal" enctype="multipart/form-data">
     <main class="content">
                  
@@ -154,29 +152,30 @@
                                                     
                                                     <dt><b class="border-bottom border-primary">สมาชิก</b></dt>
                                                     <dd>
-                                                        <?php //if(isset($manager['id'])) :
-                                                         /* foreach($row as $result) {
-                                                                    $json = $users_id;     
-                                                            }
-                                                            $array = json_decode($json);
-                                                                foreach($array as $value) { */
-                                                                    $sql = "SELECT * FROM project_list  natural join user  where project_id = $id ";
-                                                                    $qry = $db->query($sql);
-                                                                    $qry->execute();
-                                                                    while ($row = $qry->fetch(PDO::FETCH_ASSOC)){  ?>  
+                                                        <?php 
+                                                                $sql = "SELECT * FROM project_list  natural join user  where project_id = $id ";
+                                                                $qry = $db->query($sql);
+                                                                $qry->execute();
+                                                                while ($row = $qry->fetch(PDO::FETCH_ASSOC)){  ?>  
                                                                      
-                                                         
                                                                 <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $row['avatar']?>" alt="Avatar" width="35"  height="35">
                                                                 <b><?php  echo $row['firstname']." ".$row['lastname'] ?></b>
                                                             <?php  }?>
                                                     </dd>
                                                 </dl> 
                                             </div>
-                                            <div class="col-md-12">
-                                            <dt><b class="border-bottom border-primary">ไฟล์เเนบ</b></dt>
-                                            <div class="d-flex align-items-center mt-1">
-                                             <b></b>
-                                        </div>
+                                            <div class="col-md-6">
+                                                <dt><b class="border-bottom border-primary">ไฟล์เเนบ</b></dt>
+
+                                                <?php 
+                                                    $sql = "SELECT * from project natural join file natural join file_item_project where project_id = $id ";
+                                                    $qry = $db->query($sql);
+                                                    $qry->execute();
+                                                    while ($row2 = $qry->fetch(PDO::FETCH_ASSOC)){  ?>  
+
+                                              <?php echo $row2['filename'].'<br>'?>
+                                                <?php  }?>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -222,9 +221,9 @@
                                     DATE_FORMAT(end_date_task, '%e %M %Y ') AS end_date,
                                     DATE_FORMAT(strat_date_task, 'เวลา %H:%i น.') AS start_time, 
                                     DATE_FORMAT(end_date_task, 'เวลา %H:%i น.') AS end_time
-                                FROM task_list 
-                                NATURAL JOIN user 
-                                WHERE project_id = $id";
+                                    FROM task_list 
+                                    NATURAL JOIN user 
+                                    WHERE project_id = $id";
                                     $stmttasklist = $db->query($stmttasklist);
                                     $stmttasklist->execute();
                                     while ($row2 = $stmttasklist->fetch(PDO::FETCH_ASSOC)){  ?>  
@@ -279,7 +278,7 @@
                                   
                                        <a class="btn btn-google btn-sm" href="?update_id=<?php echo $row2['task_id']?>"  > <i data-feather="message-square"></i></a>   
 
-                                       <a class="btn btn-bitbucket btn-sm" href="viewtask_page.php?update_id=<?php echo $row2['task_id']?>"><i data-feather="zoom-in"></i></a>
+                                       <a class="btn btn-bitbucket btn-sm" data-bs-toggle="modal" data-bs-target="#viewtaskmodal<?php echo $row2['task_id']?>"><i data-feather="zoom-in"></i></a>
 
                                       <?php if($row2['user_id'] == $us || $level <= 2 || $manager_id == $us ){?>
                                        <a href="?update_id=<?php echo $row2['task_id']?>" class="btn btn-success btn-sm"  ><i data-feather="share"></i></a>
@@ -295,7 +294,7 @@
                                     </td>
                                 </tr>
                                
-                                
+                                <?php include "viewtask_modal.php"?>
                                     <?php } ?>
                                 </tbody>
                                 <?php include "addtask_model.php"?>

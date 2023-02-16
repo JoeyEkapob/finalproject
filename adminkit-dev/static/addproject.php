@@ -17,15 +17,9 @@ if(isset($_POST['addpro'])){
       $users_id1=$_POST['users_id']; // รับค้ามาเป็น arery id เดียว
       //$numbers_string = implode(",", $users_id1); // implode ลูกน้ำเข้าไปเเล้วทำให้เป็น string
       $users_id = explode(",", $users_id1); // เเล้วก็นำ string มาทำเป็น array หลาย id 
-     /* echo $job; 
-      echo $proname; 
-      echo $start_date;
-      echo $end_date;
-      echo $description;
-      echo $manager_id;
-      echo $status2;*/
-        /* print_r ($users_id);
-      exit;  */
+      $filelist=null;
+
+    
 
 
      if (empty($proname)) {
@@ -45,14 +39,14 @@ if(isset($_POST['addpro'])){
       header('location:addproject_page.php');
    
    } else if(!isset($_SESSION['error'])) {
-       $inserstmtpro = $db->prepare("INSERT INTO project(name_project, description, status_1,start_date, end_date, file_project, manager_id,status_2,id_jobtype) 
-      VALUES(:proname,:description,:status,:start_date,:end_date,:file_project,:manager_id,:status_2,:id_job)");
+       $inserstmtpro = $db->prepare("INSERT INTO project(name_project, description, status_1,start_date, end_date,file_id, manager_id,status_2,id_jobtype) 
+      VALUES(:proname,:description,:status,:start_date,:end_date,:file_id,:manager_id,:status_2,:id_job)");
        $inserstmtpro->bindParam(":proname", $proname);
        $inserstmtpro->bindParam(":description", $description);
        $inserstmtpro->bindParam(":status", $status1);
        $inserstmtpro->bindParam(":start_date", $start_date);
        $inserstmtpro->bindParam(":end_date", $end_date);
-       $inserstmtpro->bindParam(":file_project",$file_project);
+       $inserstmtpro->bindParam(":file_id",$file_project);
        $inserstmtpro->bindParam(":manager_id", $manager_id);
        $inserstmtpro->bindParam(":status_2", $status2);
        $inserstmtpro->bindParam(":id_job", $job);
@@ -64,18 +58,52 @@ if(isset($_POST['addpro'])){
       $inserstmtprolist->bindParam(":project_id", $lastId );
       $inserstmtprolist->bindParam(":user_id", $users_id );
       $inserstmtprolist->execute(); 
-    
-      $_SESSION['success'] = "เพิ่มโปรเจคเรียบร้อยแล้ว! ";
-      header('location:project_list.php');
-     
-   }  
-   }else {
+         } 
+
+      }else {
       $_SESSION['error']= "มีบางอย่างผิดพลาด";
       header('location:addproject_page.php');
-     
-     }       
+  
+      }       
+ 
+         if(!isset($_SESSION['error'])) {
+            $inserfile = $db->prepare("INSERT INTO file(filelist) VALUES(:filelist)");
+            $inserfile->bindParam(":filelist",$filelist);
+            $inserfile->execute(); 
+            $lastIdfile = $db->lastInsertId(); 
 
-} 
+            $files = $_FILES['files'];
+            foreach ($files['name'] as $i => $file_name) {
+            $file_tmp = $files['tmp_name'][$i];
+            $file_dest = $file_name; 
+            move_uploaded_file($file_tmp,"img/file/".$file_dest);
+            
+            $inserfile_item_porject = $db->prepare("INSERT INTO file_item_project(file_id,project_id,filename) 
+            VALUES(:file_id,:project_id,:filename)");
+            $inserfile_item_porject->bindParam(":file_id",$lastIdfile );
+            $inserfile_item_porject->bindParam(":project_id",$lastId);
+            $inserfile_item_porject->bindParam(":filename",$file_dest);
+            $inserfile_item_porject->execute(); 
+            
+            
+           
+            }
+
+         $uploadstmtproject = $db->prepare('UPDATE project SET file_id =:file_id WHERE project_id = :project_id');
+         $uploadstmtproject->bindParam(':file_id',$lastIdfile);
+         $uploadstmtproject->bindParam(':project_id',$lastId);
+         $uploadstmtproject->execute(); 
+
+         $_SESSION['success'] = "เพิ่มโปรเจคเรียบร้อยแล้ว! ";
+         header('location:project_list.php');
+            }else {
+               $_SESSION['error']= "มีบางอย่างผิดพลาด";
+               header('location:addproject_page.php');
+         
+            }       
+
+         }
+
 /* $stmt = $db->query("SELECT * FROM project where project_id=2");
 $stmt->execute();
 $result = $stmt->fetchAll();

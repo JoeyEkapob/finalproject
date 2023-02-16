@@ -7,14 +7,15 @@
     }
 
     $stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
-    
     if (isset($_GET['update_id'])){
         try {
             $id = $_REQUEST['update_id'];
-            $select_stmt = $db->prepare("SELECT * ,concat(firstname,' ',lastname) as name FROM project natural JOIN project_list natural JOIN job_type natural JOIN user  WHERE project_id = :id");
+            $fileid = $_REQUEST['fileid'];
+            $select_stmt = $db->prepare("SELECT * ,concat(firstname,' ',lastname) as name FROM project natural join file_item_project natural join file  natural JOIN project_list natural JOIN job_type natural JOIN user  WHERE project_id = :id");
             $select_stmt->bindParam(":id", $id);
             $select_stmt->execute();
             $row2 = $select_stmt->fetch(PDO::FETCH_ASSOC);
+
         } catch(PDOException $e) {
             $e->getMessage();
         }
@@ -23,7 +24,8 @@
        
 if(isset($_POST['editpro'])){
     
-      $id1=$_POST['editpro'];
+      $proid=$_POST['editpro'];
+      $fileid=$_POST['fileid'];
       $status1 = 1;
       $proname = $_POST['proname'];
       $start_date = $_POST['start_date'];
@@ -37,52 +39,73 @@ if(isset($_POST['editpro'])){
       
       $users_id = explode(",", $users_id1);
      // $user_string = "(" . implode(",",$users_id) . ")";
-   /*   echo $users_id1;
-     exit; */
-    
+ 
+     $sql = "DELETE FROM file_item_project WHERE project_id = :project_id ";
+     $delete_filepro = $db->prepare($sql);
+     $delete_filepro->bindParam(":project_id", $proid);
+     $delete_filepro->execute();
+ 
 
 
+        if (!empty($users_id1)) {
+            $update_stmtpro = $db->prepare('UPDATE project SET name_project=:name_project,description= :description,status_1=:status_1,start_date= :start_date,end_date=:end_date
+            ,status_2=:status_2,id_jobtype=:id_jobtype WHERE project_id =:id');
+            $update_stmtpro->bindParam(":name_project", $proname);
+            $update_stmtpro->bindParam(":description", $description);
+            $update_stmtpro->bindParam(":status_1", $status1);
+            $update_stmtpro->bindParam(":start_date", $start_date);
+            $update_stmtpro->bindParam(":end_date", $end_date);
+            //$update_stmtjob->bindParam(":file_project",$file_project);
+            //$update_stmtjob->bindParam(":manager_id", $manager_id);
+            $update_stmtpro->bindParam(":status_2", $status2);
+            $update_stmtpro->bindParam(":id_jobtype", $job);
+            $update_stmtpro->bindParam(":id", $proid);
+            $update_stmtpro->execute(); 
 
-   if (!empty($users_id1)) {
-    $update_stmtpro = $db->prepare('UPDATE project SET name_project=:name_project,description= :description,status_1=:status_1,start_date= :start_date,end_date=:end_date
-    ,status_2=:status_2,id_jobtype=:id_jobtype WHERE project_id =:id');
-    $update_stmtpro->bindParam(":name_project", $proname);
-    $update_stmtpro->bindParam(":description", $description);
-    $update_stmtpro->bindParam(":status_1", $status1);
-    $update_stmtpro->bindParam(":start_date", $start_date);
-    $update_stmtpro->bindParam(":end_date", $end_date);
-    //$update_stmtjob->bindParam(":file_project",$file_project);
-    //$update_stmtjob->bindParam(":manager_id", $manager_id);
-    $update_stmtpro->bindParam(":status_2", $status2);
-    $update_stmtpro->bindParam(":id_jobtype", $job);
-    $update_stmtpro->bindParam(":id",$id1);
-    $update_stmtpro->execute(); 
+            $sql = "DELETE FROM task_list WHERE project_id = :project_id AND user_id NOT IN ($users_id1)";
+            $delete_stmttask = $db->prepare($sql);
+            $delete_stmttask->bindParam(":project_id", $proid);
+            $delete_stmttask->execute();
 
-    $sql = "DELETE FROM task_list WHERE project_id = :project_id AND user_id NOT IN ($users_id1)";
-    $delete_stmttask = $db->prepare($sql);
-    $delete_stmttask->bindParam(":project_id", $id1);
-    $delete_stmttask->execute();
-   
-    $delete_stmtprojectlist = $db->prepare('DELETE FROM project_list WHERE project_id=:id');
-    $delete_stmtprojectlist->bindParam(":id",$id1);
-    $delete_stmtprojectlist->execute(); 
-     
-   
-   
-    foreach ($users_id as $id => $users_id){
-    $inser_stmtprolist= $db->prepare("INSERT INTO project_list(project_id,user_id) VALUES(:project_id,:user_id)");
-    $inser_stmtprolist->bindParam(":project_id", $id1 );
-    $inser_stmtprolist->bindParam(":user_id", $users_id );
-    $inser_stmtprolist->execute(); 
+            $delete_stmtprojectlist = $db->prepare('DELETE FROM project_list WHERE project_id=:id');
+            $delete_stmtprojectlist->bindParam(":id", $proid);
+            $delete_stmtprojectlist->execute(); 
+            
+            foreach ($users_id as $id => $users_id){
+            $inser_stmtprolist= $db->prepare("INSERT INTO project_list(project_id,user_id) VALUES(:project_id,:user_id)");
+            $inser_stmtprolist->bindParam(":project_id", $proid );
+            $inser_stmtprolist->bindParam(":user_id", $users_id );
+            $inser_stmtprolist->execute(); 
             }
 
-        $_SESSION['success'] = "เเก้ไขเรียบร้อย! ";
-        header("location: project_list.php");
-    } else {
-        $_SESSION['error'] = "มีบางอย่างผิดพลาด";
-        header("location: project_list.php");
-        } 
-    }
+            $files = $_FILES['files'];
+            if (!empty($users_id1)) {
+                foreach ($files['name'] as $i => $file_name) {
+                $file_tmp = $files['tmp_name'][$i];
+                $file_dest = $file_name; 
+                move_uploaded_file($file_tmp,"img/file/".$file_dest);
+                
+                $inserfile_item_porject = $db->prepare("INSERT INTO file_item_project(file_id,project_id,filename) 
+                VALUES(:file_id,:project_id,:filename)");
+                $inserfile_item_porject->bindParam(":file_id",$fileid);
+                $inserfile_item_porject->bindParam(":project_id",$proid);
+                $inserfile_item_porject->bindParam(":filename",$file_dest);
+                $inserfile_item_porject->execute(); 
+                }
+            } else {
+            $_SESSION['error'] = "กาอัปเดทไฟล์เกิดข้อผิดพลาด";
+            header("location: project_list.php");
+                } 
+
+            $_SESSION['success'] = "เเก้ไขเรียบร้อย! ";
+            header("location: project_list.php");
+
+            } else {
+
+            $_SESSION['error'] = "มีบางอย่างผิดพลาด";
+            header("location: project_list.php");
+            } 
+            }
 
 
 ?> 
@@ -91,6 +114,17 @@ if(isset($_POST['editpro'])){
         <?php include "head.php"?>
     <body>
         <?php include "sidebar.php"?>
+        <style>
+            .placeholder {
+                display: inline-block;
+                min-height: 1em;
+                vertical-align: middle;
+                cursor: auto;
+                background-color: #FFFFFF !important;
+                opacity: .10;
+            }
+
+        </style> 
         <form action="editproject_page.php" method="post" class="form-horizontal" enctype="multipart/form-data">
         
                 <main class="content"> 
@@ -105,6 +139,7 @@ if(isset($_POST['editpro'])){
 										<div class="mb-3">
 											<label for="" class="control-label">ชื่อโปรเจค</label>
 											<input type="text" name="proname" class="form-control"  value="<?php echo $row2['name_project']; ?>">
+                                            <input type="hidden" name="fileid" value="<?php echo $fileid ?>">
 										</div>
                                     </div>
                                  
@@ -141,7 +176,7 @@ if(isset($_POST['editpro'])){
                                     <div class="col-md-6">
 										<div class="mb-4">
 											<label for="" class="control-label">สมาชิกทีมโครงการ</label>
-                                            <input type="text" class="form-control" name="users_id" id="user_id"  data-access_multi_select="true" placeholder="">
+                                            <input type="text" class="form-control" name="users_id" id="user_id"  data-access_multi_select="true"  placeholder="กรุณาใส่สมาชิก">
                                                 
               	                                
 										</div>
@@ -165,9 +200,9 @@ if(isset($_POST['editpro'])){
 
                                     <div class="mb-3">
 											<div class="form-group">
-												<label for="" class="control-label"></label>	
-												<input type="file" name="file" class="form-control streched-link" accept="">
-												<p class="small mb-0 mt-2"><b>Note:</b></p> 
+                                            <label for="" class="control-label">ไฟล์เเนบ</label>	
+												<input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png" multiple>
+												<p class="small mb-0 mt-2"><b>Note:</b>กรุณาเเนบไฟล์ใหม่ทุกครั้ง</p> 
 											</div>
                                     </div>
                                    
@@ -183,7 +218,7 @@ if(isset($_POST['editpro'])){
                                         </div>
                                         <hr>
 										<div class="col-lg-12 text-right justify-content-center d-flex">
-											<button class="btn btn-primary" id="display_selected" name="editpro" value=<?php echo  $id; ?>>EDIT</button>
+											<button class="btn btn-primary" id="display_selected" name="editpro" value=<?php echo  $id ?>>EDIT</button>
 											<a class="btn btn-secondary" href="project_list.php" type="button" >Cancel</a>
 										</div>
                                        
@@ -227,7 +262,7 @@ $(document).ready(function(){
         });
         $('#display_selected').click(function () {
             $('#user_id').val(select.check_multi_select('fetch_country'));
-            alert(select.check_multi_select('fetch_country'))
+            //alert(select.check_multi_select('fetch_country'))
             console.log($('#user_id').val());
         });
     });

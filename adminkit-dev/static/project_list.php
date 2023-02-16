@@ -139,9 +139,9 @@
                                                 ?>
                                             </td>
                                             <td class="text-center">                   
-                                               <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                       
+                                               <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                      
                                                 <a class="btn btn-bitbucket btn-sm" href="view_project.php?view_id=<?php echo $row['project_id']?>"><i data-feather="zoom-in"></i></a>
-                                                <a class="btn btn-warning btn-sm" href="editproject_page.php?update_id=<?php echo $row['project_id']?>"><i data-feather="edit"></i></a>
+                                                <a class="btn btn-warning btn-sm" href="editproject_page.php?update_id=<?php echo $row['project_id']?>&fileid=<?= $row['file_id']?>"><i data-feather="edit"></i></a>
                                                 <a class="btn btn-danger btn-sm" href="deleteproject.php?delete_id=<?php echo $row['project_id']?>"><i data-feather="trash-2"></i></a>
                                             </td>
                                         </tr>

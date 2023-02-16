@@ -33,9 +33,18 @@
                     ?>
                 </div>
             <?php } ?>
+            <style>
+                .placeholder {
+                    display: inline-block;
+                    min-height: 1em;
+                    vertical-align: middle;
+                    cursor: auto;
+                    background-color: #FFFFFF !important;
+                    opacity: .10;
+                }
+
+             </style>   
             <form action="addproject.php" method="post" class="form-horizontal" enctype="multipart/form-data">
-          
-     
                 <main class="content"> 
                 <div class="container-fluid p-0">
 					<h1 class="h3 mb-3">หัวข้องาน</h1>
@@ -84,7 +93,7 @@
                                     <div class="col-md-6">
 										<div class="mb-4">
 											<label for="" class="control-label">สมาชิกทีมโครงการ</label>
-                                            <input type="text" class="form-control" name="users_id"  id="user_id" data-access_multi_select="true" placeholder="&amp;">
+                                            <input type="text" class="form-control" name="users_id"  id="user_id" data-access_multi_select="true" placeholder="กรุณาใส่สมาชิก;">
                                             
                                                
 										</div>
@@ -110,7 +119,7 @@
                                     <div class="mb-3">
 											<div class="form-group">
 												<label for="" class="control-label">ไฟล์เเนบ</label>	
-												<input type="file" name="file" class="form-control streched-link" accept="">
+												<input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png" multiple>
 												<p class="small mb-0 mt-2"><b>Note:</b></p> 
 											</div>
                                     </div>

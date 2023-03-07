@@ -7,8 +7,6 @@
         
     }
 
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +14,7 @@
 <body>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css" 
 <?php include "sidebar.php"?>
-
+<?php include "funtion.php"?>
 <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
                     <?php 
@@ -34,7 +32,11 @@
                 </div>
             <?php } ?>
 
-<form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+<form action="proc.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+
+    <input type="hidden" id="proc" name="proc" value="">
+    <input type="hidden" id="task_id" name="task_id" value="">
+    <input type="hidden" id="project_id" name="project_id" value="">
     <main class="content">
     <?php if($level != 5 ): ?>
         <div class="col-lg-12">
@@ -75,32 +77,29 @@
                                 <tbody>
                                     <?php
                                         $i = 1;
-                                        $stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","อยู่ระหว่างการตรวจสอบ","รอการเเก้ไข","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
-                                        $stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
                                         $where = "";    
                                         if($row['level'] >= 3 ){
                                             $where = " where manager_id = '{$_SESSION['user_login']}' ";   
                                         }
+                                       /*  $numsql ="SELECT COUNT(task_id) as numtask, task_list.* FROM task_list natural JOIN project ";
+                                        $numqry = $db->query($numsql);
+                                        $numqry->execute(); */
+                                        
+                                      
                                         $sql = "SELECT * FROM project  $where order by end_date,status_2  DESC ";
                                         $qry = $db->query($sql);
                                         $qry->execute();
                                         while ($row = $qry->fetch(PDO::FETCH_ASSOC)){
-                                           
+                                            $pro_id=$row['project_id'];
+                                            $stmt = $db->query("SELECT * FROM task_list WHERE project_id =  $pro_id");
+                                            $numtask = $stmt->rowCount();
                                     ?>
                                     
                                         <tr>
                                             <td class="text-center"><?php echo $i++ ?></td>
                                              <td>
                                                 <p><b><?php echo $row["name_project"]?></b>
-                                                <?php
-                                                    if ($row['status_2'] == '1') {
-                                                        echo " "." "."<span class='badge bg-secondary'>".$stat2[$row['status_2']]."</span>";
-                                                    }else if($row['status_2'] == '2'){
-                                                        echo " "."<span class='badge bg-warning'>".$stat2[$row['status_2']]."</span>";
-                                                    }else if($row['status_2'] == '3'){
-                                                        echo " "."<span class='badge bg-danger'>".$stat2[$row['status_2']]."</span>";
-                                                    }
-                                                    ?></p>
+                                                <?php showstatpro2($row['status_2']);?></p>
                                                 <p class="truncate"><?php echo substr($row['description'],0,100).'...';  ?></p>
 						                    </td>
 
@@ -113,38 +112,28 @@
                                             </td>
 
                                          
-                                            <td class="text-center" ><b><?php echo date("M d, Y",strtotime($row['start_date'])) ?></b></td>
-					                        <td class="text-center "><b><?php echo date("M d, Y",strtotime($row['end_date'])) ?></b></td>
+                                            <td class="text-center" ><?php echo ThDate($row['start_date']) ?></td>
+					                        <td class="text-center "><?php echo ThDate($row['end_date']) ?></td>
 
                                             
 
                                             <td class="text-center">
-                                                <?php
-                                                /*  echo $stat1[$row['status_1']];
-                                                 exit; */
-
-                                                if($row['status_1'] =='1'){
-                                                    echo "<span class='badge bg-secondary'>{$stat1[$row['status_1']]}</span>";
-                                                }elseif($row['status_1'] =='2'){
-                                                    echo "<span class='badge bg-primary'>{$stat1[$row['status_1']]}</span>";
-                                                }elseif($row['status_1'] =='3'){
-                                                    echo "<span class='badge bg-success'>{$stat1[$row['status_1']]}</span>";
-                                                }elseif($stat1[$row['status_1']] =='4'){
-                                                    echo "<span class='badge bg-warning'>{$stat1[$row['status_1']]}</span>";
-                                                }elseif($stat1[$row['status_1']] =='5'){
-                                                    echo "<span class='badge bg-danger'>{$stat1[$row['status_1']]}</span>";
-                                                }elseif($stat1[$row['status_1']] =='6'){
-                                                    echo "<span class='badge bg-danger'>{$stat1[$row['status_1']]}</span>";
-                                                }
-                                                ?>
+                                                <?php showstatpro($row['status_1']);  ?>
                                             </td>
                                             <td class="text-center">                   
                                                <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                      
                                                 <a class="btn btn-bitbucket btn-sm" href="view_project.php?view_id=<?php echo $row['project_id']?>"><i data-feather="zoom-in"></i></a>
-                                                <a class="btn btn-warning btn-sm" href="editproject_page.php?update_id=<?php echo $row['project_id']?>&fileid=<?= $row['file_id']?>"><i data-feather="edit"></i></a>
-                                                <a class="btn btn-danger btn-sm" href="deleteproject.php?delete_id=<?php echo $row['project_id']?>"><i data-feather="trash-2"></i></a>
+                                                <a class="btn btn-warning btn-sm" href="editproject_page.php?update_id=<?php echo $row['project_id']?>"><i data-feather="edit"></i></a>
+                                                <?php 
+                                                    if ($numtask == 0) {
+                                                    echo '<button class="btn btn-danger btn-sm" onclick="deleteproject(\''. $row['project_id'] .'\')"><i data-feather="trash-2"></i></button>';
+                                                    } else {
+                                                    echo '<button class="btn btn-danger btn-sm disabled" onclick="deleteproject(\''. $row['project_id'] .'\')"><i data-feather="trash-2"></i></button>';
+                                                    }
+                                                    ?>
                                             </td>
                                         </tr>
+                                        
                                     <?php } ?>
                                 </tbody>           
                             </table>
@@ -161,5 +150,10 @@
 $(document).ready(function () {
     $('#example').DataTable();
 });
+function deleteproject(project_id){
+    $('#proc').val('deleteproject');
+    $('#project_id').val(project_id);
+}
+
 </script>
 <?php include "footer.php"?>

@@ -21,10 +21,10 @@
 
                                                  <dt><b class="border-bottom border-primary mb-3">ความคืบหน้า</b></dt>
                                                     <dd>
-                                                        <div class="mb-3">
+                                                        <div class="mb-3">     
                                                         </div>
                                                             <div class="progress" style="height: 20px;width:250px;" >
-                                                                <div class="progress-bar progress-bar-striped progress-bar-animated-sm" role="progressbar" style="width: 10%" width=""  >0</div>
+                                                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:<?php echo $row2['progress_task'] ?>%" ><?php echo $row2['progress_task'] ?></div>
                                                             </div>
                                                        
                                                     </dd> 
@@ -47,29 +47,18 @@
                                             <div class="col-md-6">
                                                 <dl>
                                                     <dt><b class="border-bottom border-primary">วันที่เริ่มเเละเวลาเริ่ม</b></dt>
-                                                    <dd><?php echo $row2['start_date'].''.$row2['start_time']  ?></dd>
+                                                    <dd><?php echo ThDate($row2['start_date']).'<br>'.$row2['start_time']  ?></dd>
                                                 </dl>
                                                 <dl>
                                                     <dt><b class="border-bottom border-primary">วันสิ้นสุดเเละเวลาสิ้นสุด</b></dt>
-                                                    <dd><?php echo $row2['end_date'].''.$row2['end_time']  ?></dd>
+                                                    <dd><?php echo ThDate($row2['end_date']).'<br>'.$row2['end_time']  ?></dd>
                                                 </dl>
                                                 <dl>
                                                     <dt><b class="border-bottom border-primary">สถานะ</b></dt>
                                                     <dd>
                                                     <?php  
-                                                if($row2['status_task'] =='1'){
-                                                echo "<span class='badge bg-secondary'>".$stat1[$row2['status_task']]."</span>";
-                                            }elseif($row2['status_task'] =='2'){
-                                                echo "<span class='badge bg-primary'>".$stat1[$row2['status_task']]."</span>";
-                                            }elseif($row2['status_task'] =='3'){
-                                                echo "<span class='badge bg-success'>".$stat1[$row2['status_task']]."</span>";
-                                            }elseif($row2['status_task'] =='4'){
-                                                echo "<span class='badge bg-warning'>".$stat1[$row2['status_task']]."</span>";
-                                            }elseif($row2['status_task'] =='5'){
-                                                echo "<span class='badge bg-danger'>".$stat1[$row2['status_task']]."</span>";
-                                            }elseif($row2['status_task'] =='6'){
-                                                echo "<span class='badge bg-danger'>".$stat1[$row2['status_task']]."</span>";
-                                            } ?>
+                                               showstattask($row2['status_task']); 
+                                               ?>
                                                     </dd>
                                                 </dl>
                                                 <dl>
@@ -83,16 +72,28 @@
                                                     </dd>
                                                 </dl> 
                                             </div>
+                                            
                                             <div class="col-md-12">
                                             <dt><b class="border-bottom border-primary">ไฟล์เเนบ</b></dt>
-                                            <div class="d-flex align-items-center mt-1">
-                                             <b></b>
+                                            <?php 
+                                                $task_id=$row2['task_id'];
+                                                    $sql = "SELECT * FROM project NATURAL JOIN file_item_task WHERE task_id = $task_id";
+                                                    $qry = $db->query($sql);
+                                                    $qry->execute();
+                                                    while ($row2 = $qry->fetch(PDO::FETCH_ASSOC)) {  ?>
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <a href="proc.php?proc=download&file_item_task=<?php echo $row2['file_item_task']?>"><?php echo $row2['filename_task']?></a> 
+                                                    
+                                                    </div>
+                                                </div>
+                                            <?php } ?>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div> 			
+                   
         </div>
 
       <div class="modal-footer">

@@ -133,7 +133,7 @@
 					</li>
 					<?php if($level != 5): ?>
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="">
+						<a class="sidebar-link" href="checktask_list.php">
               <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">ตรวจงาน</span>
             </a>
 			<?php endif; ?>

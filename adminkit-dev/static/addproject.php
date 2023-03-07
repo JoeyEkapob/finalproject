@@ -76,7 +76,7 @@ if(isset($_POST['addpro'])){
       foreach ($files['name'] as $i => $file_name) {
          $file_tmp = $files['tmp_name'][$i];
          $file_dest = $file_name; 
-         $file_data = "img/file/";
+         $file_data = "img/file/file_project/";
          move_uploaded_file($file_tmp,$file_data.$file_dest);
          
          $inserfile_item_porject = $db->prepare("INSERT INTO file_item_project(file_id,project_id,filename) 

@@ -44,7 +44,10 @@
                 }
 
              </style>   
-            <form action="addproject.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+            <form action="proc.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+
+        <input type="hidden" id="proc" name="proc" value="">
+
                 <main class="content"> 
                 <div class="container-fluid p-0">
 					<h1 class="h3 mb-3">หัวข้องาน</h1>
@@ -56,7 +59,7 @@
                                     <div class="col-md-6">
 										<div class="mb-3">
 											<label for="" class="control-label">หัวข้องาน</label>
-											<input type="text" name="proname" class="form-control"  >
+											<input type="text" name="proname" id="proname" class="form-control"  >
 										</div>
                                     </div>
                                  
@@ -79,13 +82,13 @@
                                     <div class="col-md-6">
 										<div class="mb-3">
 											<label for="" class="control-label">วันที่สั่ง</label>
-                                            <input type="date" class="form-control " autocomplete="off" name="start_date" value="<?php echo $date ?>"  >
+                                            <input type="date" class="form-control " autocomplete="off" name="start_date" id="start_date"  min="<?php echo date('Y-m-d'); ?>" value="<?php echo $date ?>"  >
 										</div>
                                     </div>
                                     <div class="col-md-6">
 										<div class="mb-3">
 											<label for="" class="control-label">วันที่เสร็จ</label>
-                                            <input type="date" class="form-control " autocomplete="off" name="end_date" value=""  >
+                                            <input type="date" class="form-control " autocomplete="off" name="end_date" id="end_date" value=""  >
 										</div>
                                     </div>						
 									
@@ -102,7 +105,7 @@
                                     <div class="col-md-6">   
                                     <div class="mb-4">
 											<label for="" class="control-labe">สถานะงาน</label>
-												 <select  name="status2" class="form-select"  >
+												 <select  name="status2"  id="status2" class="form-select"  >
                                                  
               	                                    <option value="1">งานปกติ</option>
                                                     <option value="2">งานด่วน</option>
@@ -119,7 +122,7 @@
                                     <div class="mb-3">
 											<div class="form-group">
 												<label for="" class="control-label">ไฟล์เเนบ</label>	
-												<input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png" multiple>
+                                                <input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
 												<p class="small mb-0 mt-2"><b>Note:</b></p> 
 											</div>
                                     </div>
@@ -135,7 +138,7 @@
                                         <hr>
 										<div class="col-lg-12 text-right justify-content-center d-flex">
                                         
-											<button class="btn btn-primary"  id="display_selected" name="addpro">ADD</button>
+											<button class="btn btn-primary"  id="display_selected"  onclick="addpro();">ADD</button>
 											<a href="project_list.php" class="btn btn-secondary"  type="button" >Cancel</a>
 										</div>
                                        
@@ -172,14 +175,16 @@ $(document).ready(function(){
         $('#display_selected').click(function () {
             $('#user_id').val(select.check_multi_select('fetch_country'));
             //alert(select.check_multi_select('fetch_country'))
-            console.log($('#user_id').val());
+            //console.log($('#user_id').val());
         });
     });
-    /*var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
-       removeItemButton: true,
-       maxItemCount:null,
-       searchResultLimit:5,
-       renderChoiceLimit:5
-     });   */
+
+  
+
+    function addpro(){
+        $('#proc').val('addpro');
+        
+        //console.log('#addpro');
+    }
 </script>
 

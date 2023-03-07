@@ -8,12 +8,12 @@ if(isset($_GET['delete_id'])){
     $id=$_GET['delete_id'];
 
         if(isset($id)){
-
+        $file_path = 'img/file/file_project/';
         $sql = "SELECT * from project natural join file natural join file_item_project where project_id = $id ";
         $qry = $db->query($sql);
         $qry->execute();
         while ($row2 = $qry->fetch(PDO::FETCH_ASSOC)){  
-            unlink("img/file/".$row2['filename']); 
+            unlink($file_path.$row2['filename']); 
         }
 
 

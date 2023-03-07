@@ -43,6 +43,7 @@
 <html lang="en">
 <?php include "head.php"?>
 <body>
+	<?php include "funtion.php"?>
 <?php include "sidebar.php"?>
 			<main class="content">
 				<div class="container-fluid p-0">
@@ -289,26 +290,13 @@
 
 													</td>
 
-													<td class="text-center" ><b><?php echo date("M d, Y",strtotime($stmtshowprojectrow['start_date'])) ?></b></td>
-													<td class="text-center "><b><?php echo date("M d, Y",strtotime($stmtshowprojectrow['end_date'])) ?></b></td>
+													<td class="text-center" ><b><?php echo ThDate($stmtshowprojectrow['start_date']) ?></b></td>
+													<td class="text-center "><b><?php echo ThDate(($stmtshowprojectrow['end_date'])) ?></b></td>
 													<td class="text-center">
 														<?php
 														/*  echo $stat1[$row['status_1']];
 														exit; */
-
-														if($stmtshowprojectrow['status_1'] =='1'){
-															echo "<span class='badge bg-secondary'>{$stat1[$stmtshowprojectrow['status_1']]}</span>";
-														}elseif($stmtshowprojectrow['status_1'] =='2'){
-															echo "<span class='badge bg-primary'>{$stat1[$stmtshowprojectrow['status_1']]}</span>";
-														}elseif($stmtshowprojectrow['status_1'] =='3'){
-															echo "<span class='badge bg-success'>{$stat1[$stmtshowprojectrow['status_1']]}</span>";
-														}elseif($stmtshowprojectrow['status_1'] =='4'){
-															echo "<span class='badge bg-warning'>{$stat1[$stmtshowprojectrow['status_1']]}</span>";
-														}elseif($stmtshowprojectrow['status_1'] =='5'){
-															echo "<span class='badge bg-danger'>{$stat1[$stmtshowprojectrow['status_1']]}</span>";
-														}elseif($stmtshowprojectrow['status_1']  =='6'){
-															echo "<span class='badge bg-danger'>{$stat1[$stmtshowprojectrow['status_1']]}</span>";
-														}
+														showstatpro($stmtshowprojectrow['status_1']);									
 														?>
 													</td>
 													<td class="text-center">                   
@@ -319,6 +307,7 @@
 														
 														</td>
 													</tr>
+												
 										<?php } ?>
 									</tbody>           
 								</table>

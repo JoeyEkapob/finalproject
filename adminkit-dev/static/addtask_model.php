@@ -11,14 +11,15 @@
                         <div class="mb-3">
                             <input type="hidden" name="pro_id" value =<?php echo $id ?> >
                             <label for="" class="control-label">ชื่องาน</label>
-                            <input type="text" name="taskname" class="form-control"   >
-                        
+                            <input type="text" name="taskname" class="form-control">
+                          
                         </div>
                     </div>
+                   
                     <div class="col-md-12">
                         <div class="mb-3">
                             <label for="" class="control-label">วันที่สั่ง</label>
-                            <input type="datetime-local" class="form-control " autocomplete="off" name="start_date" value="<?php echo $date ?>">
+                            <input type="datetime-local" class="form-control " autocomplete="off" name="start_date" min="<?php //echo $start_date ?>" value="<?php echo $start_date ?>">
                     
                         </div>
                         
@@ -50,7 +51,8 @@
                         <div class="mb-3">
                                 <div class="form-group">
                                     <label for="" class="control-label">ไฟล์เเนบ</label>	
-                                    <input type="file" name="file" class="form-control streched-link" accept="">
+                                    <input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
+
                                     <p class="small mb-0 mt-2"><b>Note:</b></p> 
                                 </div>
                         </div>
@@ -63,8 +65,8 @@
                         </div>
                         <hr>
                         <div class="col-lg-12 text-right justify-content-center d-flex">
-                            <button class="btn btn-primary " name ="addtask_btn">ADD</button>
-                            <button class="btn btn-secondary" type="button" aria-label="Close">Cancel</button>
+                            <button class="btn btn-primary " name ="addtask_btn" onclick="add_task();">ADD</button>
+                            <button class="btn btn-secondary" type="button"  data-bs-dismiss="modal" aria-label="Close">Cancel</button>
                         </div>
                     </div>
       </div>

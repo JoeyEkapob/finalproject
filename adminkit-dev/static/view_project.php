@@ -12,7 +12,7 @@
     $targetDir = "img/avatars/";
     $stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","ส่งเรียบร้อยเเล้ว","รอการเเก้ไข","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
     $stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
-    $select_project = $db->prepare('SELECT * FROM project natural join file natural join file_item_project natural JOIN job_type  WHERE project_id = :id');
+    $select_project = $db->prepare('SELECT * FROM project   natural JOIN job_type  WHERE project_id = :id');
     $select_project->bindParam(":id", $id);
     $select_project->execute();
     $row = $select_project->fetch(PDO::FETCH_ASSOC);
@@ -21,35 +21,6 @@
     $manager = $db->query("SELECT *,concat(firstname,' ',lastname) as name FROM user where user_id = $manager_id");
     $manager = $manager->fetch(PDO::FETCH_ASSOC);
 
-    //$imageURL = 'img/avatars/'.$manager['avatar'];
-   /*  if(!isset($_POST['addtask_btn'])){
-        echo 5424245245245;
-
-        /*  $stat = 1 ;
-      $start_date = $_POST['start_date'];
-      $end_date = $_POST['end_date'];
-      $taskname =$_POST['taskname'];
-      $user=$_POST['user'];
-      $textarea=$_POST['textarea'];
-      $pro_id= $_GET['view_id']
-     // $file_task = null;
-
-      $stmttask = $db->prepare("INSERT INTO task_list(name_tasklist, description_task,status_task, strat_date_task,end_date_task,file_task,project_id,user_id) 
-      VALUES(:taskname,:textarea,:status,:start_date,:end_date,:file_task,:pro_id,:users_id)");
-       $stmttask->bindParam(":taskname", $proname);
-       $stmttask->bindParam(":textarea", $textarea);
-       $stmttask->bindParam(":status", $stat);
-       $stmttask->bindParam(":start_date", $start_date);
-       $stmttask->bindParam(":end_date", $end_date);
-       $stmttask->bindParam(":file_task",$file_task);
-       $stmttask->bindParam(":pro_id", $pro_id);
-       $stmttask->bindParam(":users_id",$user );
-       $stmttask->execute();   
-    } */
-    /* $stmt = $db->query("SELECT * FROM project where project_id=2");
-    $stmt->execute();
-    $result = $stmt->fetchAll();
-    $json='';*/
 
 ?>
 <!DOCTYPE html>
@@ -58,7 +29,7 @@
 
 <body>
 <?php include "sidebar.php"?>
-
+<?php include "funtion.php"?>
 <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
                     <?php 
@@ -75,7 +46,13 @@
                     ?>
                 </div>
             <?php } ?>
-<form action="addtask.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+<!-- form action="addtask.php" method="post" class="form-horizontal" enctype="multipart/form-data" -->
+<form action="proc.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+    <input type="hidden" id="proc" name="proc" value="">
+    <input type="hidden" id="task_id" name="task_id" value="">
+    <input type="hidden" id="project_id" name="project_id" value="">
+    <input type="hidden" id="file_item_project" name="file_item_project" value="">
+
     <main class="content">
                  
                     <div class="col-12  d-flex">
@@ -85,15 +62,9 @@
                                     <div class="col-md-6">
                                                 <dl>
                                                     
-                                                    <dt><b class="border-bottom border-primary">ชื่อโปรเจค</b><?php
-                                                     if ($status_2 == '1') {
-                                                        echo " "."<span class='badge bg-secondary'>".$stat2[$status_2]."</span>";
-                                                    }else if($status_2 == '2'){
-                                                        echo " "."<span class='badge bg-warning'>".$stat2[$status_2]."</span>";
-                                                    }else if($status_2 == '3'){
-                                                        echo " "."<span class='badge bg-danger'>".$stat2[$status_2]."</span>";
-                                                    }
-                                                    //echo "  "."<span class='badge bg-danger'>".$stat2[$status_2]."</span>" ?></dt>
+                                                    <dt><b class="border-bottom border-primary">ชื่อโปรเจค</b>
+                                                    <?php  showstatpro2($status_2); ?>
+                                                </dt>
                                                     <dd><?php echo $name_project  ?></dd>
 
                                                     <dt><b class="border-bottom border-primary">คำอธิบาย</b></dt>
@@ -101,13 +72,8 @@
 
                                                     <dt><b class="border-bottom border-primary">ประเภทงาน</b></dt>
                                                     <dd><?php echo $name_jobtype ?></dd>
-
-
                                                 </dl>
                                                 <dl>
-
-                                                    
-
                                                     <dt><b class="border-bottom border-primary">ผู้สร้างโปรเจค</b></dt>
                                                     <dd> 
                                                          <div class="d-flex align-items-center mt-1">
@@ -122,30 +88,16 @@
                                             <div class="col-md-6">
                                                 <dl>
                                                     <dt><b class="border-bottom border-primary">วันที่เริ่ม</b></dt>
-                                                    <dd><?php echo date("F d, Y",strtotime($start_date)) ?></dd>
+                                                    <dd><?php echo ThDate($start_date) ?></dd>
                                                 </dl>
                                                 <dl>
                                                     <dt><b class="border-bottom border-primary">วันสิ้นสุด</b></dt>
-                                                    <dd><?php echo date("F d, Y",strtotime($end_date)) ?></dd>
+                                                    <dd><?php echo ThDate($end_date) ?></dd>
                                                 </dl>
                                                 <dl>
                                                     <dt><b class="border-bottom border-primary">สถานะ</b></dt>
                                                     <dd>
-                                                        <?php
-                                                    if($status_1 =='1'){
-                                                    echo "<span class='badge bg-secondary'>".$stat1[$status_1]."</span>";
-                                                }elseif($status_1 =='2'){
-                                                    echo "<span class='badge bg-primary'>".$stat1[$status_1]."</span>";
-                                                }elseif($status_1 =='3'){
-                                                    echo "<span class='badge bg-success'>".$stat1[$status_1]."</span>";
-                                                }elseif($status_1 =='4'){
-                                                    echo "<span class='badge bg-warning'>".$stat1[$status_1]."</span>";
-                                                }elseif($status_1 =='5'){
-                                                    echo "<span class='badge bg-danger'>".$stat1[$status_1]."</span>";
-                                                }elseif($status_1 =='6'){
-                                                    echo "<span class='badge bg-danger'>".$stat1[$status_1]."</span>";
-                                                }
-                                                ?>
+                                                        <?php  showstatpro($status_1); ?>
                                                     </dd>
                                                 </dl>
                                                 <dl>
@@ -165,18 +117,34 @@
                                                 </dl> 
                                             </div>
                                             <div class="col-md-6">
-                                                <dt><b class="border-bottom border-primary">ไฟล์เเนบ</b></dt>
-
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <b class="border-bottom border-primary">ไฟล์เเนบ</b>
+                                                    </div>
+                                                    
+                                                </div>
+                                                
+                                               
+                                               
+                                            
                                                 <?php 
-                                                    $sql = "SELECT * from project natural join file natural join file_item_project where project_id = $id ";
+                                                    $sql = "SELECT * FROM project 
+                                                    NATURAL JOIN file_item_project 
+                                                    WHERE project_id = $id";
                                                     $qry = $db->query($sql);
                                                     $qry->execute();
-                                                    while ($row2 = $qry->fetch(PDO::FETCH_ASSOC)){  ?>  
-
-                                              <?php echo $row2['filename'].'<br>'?>
-                                                <?php  }?>
-                                        
-                                    </div>
+                                                    while ($row2 = $qry->fetch(PDO::FETCH_ASSOC)) {  ?>
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                     <a href="proc.php?proc=download&file_item_project=<?php echo $row2['file_item_project']?>"><?php echo $row2['filename']?></a> 
+                                                        <!-- <a onclick="download('<?php echo $row2['file_item_project']?>') "><?php echo $row2['filename']?></a> -->
+                                                        <!-- <a href="../static/img/file/<?php echo $row2['filename']?> " target="_blank"><?php echo $row2['filename']?></a><br>  -->
+                                                    </div>
+                                                    
+                                                </div>          
+                                                <?php } ?>
+                                            </div>
+                                          
                                 </div>
                             </div>
                         </div>
@@ -215,7 +183,6 @@
                                 <tbody>
                                 <?php
                                     $i = 1;
-                                    
                                     $stmttasklist = "SELECT *,
                                     DATE_FORMAT(strat_date_task, '%e %M %Y ') AS start_date, 
                                     DATE_FORMAT(end_date_task, '%e %M %Y ') AS end_date,
@@ -226,7 +193,11 @@
                                     WHERE project_id = $id";
                                     $stmttasklist = $db->query($stmttasklist);
                                     $stmttasklist->execute();
-                                    while ($row2 = $stmttasklist->fetch(PDO::FETCH_ASSOC)){  ?>  
+                                    while ($row2 = $stmttasklist->fetch(PDO::FETCH_ASSOC)){  
+                                        $task_id = $row2['task_id'];
+                                        $stmt = $db->query("SELECT * FROM details WHERE task_id =  $task_id AND state_details = 'Y' ");
+                                        $numsenddetails = $stmt->rowCount();
+                                            ?>
                              <tr>
                                     <td class="text-center">
                                         <?php echo $i++ ?>
@@ -234,22 +205,22 @@
 
                                     <td>
                                         <h5><b><?php echo $row2['name_tasklist']  ?></h5></b>
-                                        <p class="truncate"><?php echo substr($row2['description_task'],0,100).'...';  ?></p>
+                                        <p class="truncate"><?php echo substr($row2['description_task'],0,20).'...';  ?></p>
                                     </td>
     
                                     <td >
-                                        <?php echo $row2['start_date']; ?>
+                                        <?php echo ThDate($row2['start_date']); ?>
                                         <p class="truncate" ><?php echo $row2['start_time']  ?></p>
                                     </td>
 
                                     <td>
-                                        <?php echo $row2['end_date']; ?>
+                                        <?php echo ThDate($row2['end_date']); ?>
                                         <p class="truncate" ><?php echo $row2['end_time']  ?></p>
                                     </td>
 
                                     <td>
                                         <div class="progress ">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 10%" >0</div>
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:<?php echo $row2['progress_task'] ?>%" ><?php echo $row2['progress_task'] ?></div>
                                         </div>
                                     </td>
 
@@ -258,20 +229,7 @@
                                     </td>
 
                                     <td class="text-center">
-                                            <?php  
-                                                if($row2['status_task'] =='1'){
-                                                echo "<span class='badge bg-secondary'>".$stat1[$row2['status_task']]."</span>";
-                                            }elseif($row2['status_task'] =='2'){
-                                                echo "<span class='badge bg-primary'>".$stat1[$row2['status_task']]."</span>";
-                                            }elseif($row2['status_task'] =='3'){
-                                                echo "<span class='badge bg-success'>".$stat1[$row2['status_task']]."</span>";
-                                            }elseif($row2['status_task'] =='4'){
-                                                echo "<span class='badge bg-warning'>".$stat1[$row2['status_task']]."</span>";
-                                            }elseif($row2['status_task'] =='5'){
-                                                echo "<span class='badge bg-danger'>".$stat1[$row2['status_task']]."</span>";
-                                            }elseif($row2['status_task'] =='6'){
-                                                echo "<span class='badge bg-danger'>".$stat1[$row2['status_task']]."</span>";
-                                            } ?>
+                                            <?php   showstattask($row2['status_task']);?>
                                     </td>
                                        
                                     <td class="text-center">
@@ -280,22 +238,35 @@
 
                                        <a class="btn btn-bitbucket btn-sm" data-bs-toggle="modal" data-bs-target="#viewtaskmodal<?php echo $row2['task_id']?>"><i data-feather="zoom-in"></i></a>
 
-                                      <?php if($row2['user_id'] == $us || $level <= 2 || $manager_id == $us ){?>
-                                       <a href="?update_id=<?php echo $row2['task_id']?>" class="btn btn-success btn-sm"  ><i data-feather="share"></i></a>
-
-                                       <?php } ?>  
+                                       <?php
+                                            if ($row2['user_id'] == $us || $level <= 2 || $manager_id == $us AND $row2['progress_task'] != 100  AND $numsenddetails == 0 ) {
+                                                echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] . '" class="btn btn-success btn-sm"><i data-feather="share"></i></a>';  
+                                            }else{
+                                                // echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] . '" class="btn btn-danger btn-sm"><i data-feather="x"></i></a>';
+                                                if( $row2['progress_task'] != 100){
+                                                echo '<button class="btn btn-danger btn-sm"  onclick="deldetails('. $row2['task_id'] .''.$row2['project_id'].')"><i data-feather="x"></i></button> '; 
+                                                echo ' '; 
+                                                }else{
+                                                    
+                                                }
+                                                // echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] . '" class="btn btn-success btn-sm disabled"><i data-feather="share"></i></a>'; 
+                                            }
+                                            ?>  
 
                                        <?php if ($manager_id == $us || $level <= 2) {?>
-                                                <a class="btn btn-warning btn-sm" href="edittask_page.php?update_id=<?php echo $row2['task_id']?>&project_id=<?=$row2['project_id']?>" class="btn btn-warning btn-sm"><i  data-feather="edit"></i></a>
-                                                <a class="btn btn-danger btn-sm" href="deletetask.php?delete_id=<?php echo $row2['task_id']?>&project_id=<?=$row2['project_id']?>"><i data-feather="trash-2"></i></a> 
+                                                <a class="btn btn-warning btn-sm" href="edittask_page.php?updatetask_id=<?php echo $row2['task_id']?>&project_id=<?=$row2['project_id']?>" class="btn btn-warning btn-sm"><i  data-feather="edit"></i></a>
+                                                <!-- <a class="btn btn-danger btn-sm" onclick="test();"><i  data-feather="edit"></i></a> -->
+                                                <!-- <a class="btn btn-danger btn-sm" href="deletetask.php?delete_id=<?php echo $row2['task_id']?>&project_id=<?=$row2['project_id']?>"><i data-feather="trash-2"></i></a>  -->
+                                                <button class="btn btn-danger btn-sm"  onclick="del_task('<?php echo $row2['task_id']?>','<?php echo $row2['project_id']?>')"><i data-feather="trash-2"></i></button> 
+
                                                
                                         <?php } ?>
 
                                     </td>
                                 </tr>
                                
-                                <?php include "viewtask_modal.php"?>
-                                    <?php } ?>
+                                <?php include "viewtask_modal.php";
+                             } ?>
                                 </tbody>
                                 <?php include "addtask_model.php"?>
                             </table>
@@ -306,17 +277,54 @@
         </main>
         
 </form>
-
     </body>
-    <script>
-
-    </script>
 </html>
 
 
 <?php include "footer.php"?>
 <script>
     $(document).ready(function () {
-    $('#example').DataTable();
-});
+        $('#example').DataTable();
+    });
+
+    function del_task(id_task,project_id){
+        $('#proc').val('deltask');
+        $('#task_id').val(id_task);
+        $('#project_id').val(project_id);
+    }
+
+    function add_task(){
+        $('#proc').val('add_task');
+    }
+    function download(file_item_project){
+        $('#proc').val('download');
+        $('#file_item_project').val(file_item_project);
+
+    }
+
+    function delfilepro(file_item_project,project_id){
+        $('#proc').val('delfile');
+        $('#file_item_project').val(file_item_project);
+        $('#project_id').val(project_id);
+    } 
+    function deldetails(id_task,project_id){
+        $('#proc').val('deldetails');
+        $('#task_id').val(id_task);
+        $('#project_id').val(project_id);
+    }
+     // function test(){
+        //     var url = "proc.php";
+        //     var data = {proc:'add_task',taskname:'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        //         pro_id:170,
+        //         start_date:'',
+        //         end_date:'',
+        //         user:'2',
+        //         textarea:'', 
+        //     };
+        //     $.post(url,data,function(data){
+        //         console.log(data);
+        //     });
+        // }
+
+
 </script>

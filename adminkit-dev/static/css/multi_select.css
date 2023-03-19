@@ -13,20 +13,20 @@ body{
     padding: 6.5px;
 }
 .placeholder {
-display: inline-block;
-min-height: 1em;
-vertical-align: middle;
-cursor: auto;
-background-color: #FFFFFF !important;
-opacity: .10;
+    display: inline-block;
+    min-height: 1em;
+    vertical-align: middle;
+    cursor: auto;
+    background-color: #FFFFFF !important;
+    opacity: 0.5;
 }
 .access_multi_select > .selected-items > button {
     position: absolute;
-    height: 28px;
-    width: 28px;
+    height: 25px;
+    width: 25px;
     background-color: transparent;
-    top: 7px;
-    border: 2px solid transparent;
+    top: 8px;
+    border: 3px solid transparent;
     cursor: pointer;
     transition: 0.2s;
 }

@@ -366,12 +366,13 @@
        $proname = $_POST['proname'];
        $start_date = $_POST['start_date'];
        $end_date = $_POST['end_date'];
-       $description =$_POST['description'];
+       $description =trim($_POST['description']);
        $status2=$_POST['status2'];
        $job = $_POST['job'];
        $users_id1=$_POST['users_id']; // รับค้ามาเป็น arery id เดียว
        //$numbers_string = implode(",", $users_id1); // implode ลูกน้ำเข้าไปเเล้วทำให้เป็น string
        $users_id = explode(",", $users_id1); // เเล้วก็นำ string มาทำเป็น array หลาย id 
+       $progress_project = 0;
        
         $files = $_FILES['files']; 
         foreach ($files['name'] as $i => $file_name) {
@@ -399,8 +400,8 @@
           $_SESSION['error'] = 'กรุณากรอกชื่อสมาชิก';
           $url_return ="location:addproject_page.php";
        }else  if(!isset($_SESSION['error'])) {
-           $inserstmtpro = $db->prepare("INSERT INTO project(project_id,name_project, description, status_1,start_date, end_date, manager_id,status_2,id_jobtype) 
-                                              VALUES(:project_id,:proname,:description,:status,:start_date,:end_date,:manager_id,:status_2,:id_job)");
+           $inserstmtpro = $db->prepare("INSERT INTO project(project_id,name_project, description, status_1,start_date, end_date, manager_id,status_2,id_jobtype,progress_project) 
+                                              VALUES(:project_id,:proname,:description,:status,:start_date,:end_date,:manager_id,:status_2,:id_job,:progress_project)");
            $inserstmtpro->bindParam(":project_id",$nextId);
            $inserstmtpro->bindParam(":proname", $proname);
            $inserstmtpro->bindParam(":description", $description);
@@ -410,6 +411,7 @@
            $inserstmtpro->bindParam(":manager_id", $manager_id);
            $inserstmtpro->bindParam(":status_2", $status2);
            $inserstmtpro->bindParam(":id_job", $job);
+           $inserstmtpro->bindParam(":progress_project", $progress_project);
            $inserstmtpro->execute(); 
           // $lastId = $db->lastInsertId();
         
@@ -525,6 +527,7 @@
             unlink($file_path1.$row2['filename']); 
             unlink($file_path2.$row2['filename_task']); 
         }  
+
         $delete_taskitem = $db->prepare('DELETE  FROM file_item_task  WHERE project_id=:id');
         $delete_taskitem->bindParam(':id', $project_id);
         $delete_taskitem->execute(); 
@@ -549,7 +552,9 @@
        
         $project_id= $_POST['project_id'];
         $taskid = $_POST['task_id'];
-        $commenttask = $_POST['text_comment'];
+        $commenttask = trim($_POST['text_comment']);
+        $progress_task = $_POST['progress_task'];
+
         $senddate = $_POST['senddate'];
         $state_details = $_POST['state_details'];
         $status_task = "3";
@@ -562,14 +567,18 @@
         $file_data = "img/file/file_details/";
         move_uploaded_file($file_tmp,$file_data.$file_dest);
        }   
+       $numfilesend =sizeof(array_filter($_FILES['files']['name']));
+     
+       if ($numfilesend != "0" OR $commenttask != ""){ 
 
-        $inserstmtdetails = $db->prepare("INSERT INTO details(project_id,task_id,comment,date_detalis,state_details) 
-                                              VALUES(:project_id,:task_id,:comment,:date_detalis,:state_details)");
+        $inserstmtdetails = $db->prepare("INSERT INTO details(project_id,task_id,comment,date_detalis,state_details,progress_details) 
+                                              VALUES(:project_id,:task_id,:comment,:date_detalis,:state_details,:progress_details)");
         $inserstmtdetails->bindParam(":project_id",$project_id);
         $inserstmtdetails->bindParam(":task_id", $taskid);
         $inserstmtdetails->bindParam(":comment", $commenttask);
         $inserstmtdetails->bindParam(":state_details", $state_details);
         $inserstmtdetails->bindParam(":date_detalis",$senddate);
+        $inserstmtdetails->bindParam(":progress_details",$progress_task);
         $inserstmtdetails->execute(); 
         $lastId = $db->lastInsertId(); 
 
@@ -592,14 +601,48 @@
 
            $_SESSION['success'] = "ส่งงานเรียบร้อยแล้ว! ";
            $url_return ="location:view_project.php?view_id=".$project_id;
-        
+        } else {
+            $_SESSION['error'] = "กรุณากรอกข้อความ หรือ เเนบไฟล์ส่ง";
+            $url_return ="location:send_task.php?task_id=".$taskid."&project_id=".$project_id;
+        }
       
        
       
     }
     else if($_POST['proc'] == 'deldetails'){
-        echo "ไม่เข้า";
-        exit;
+
+        $details_id = $_POST['details'];
+        $project_id= $_POST['project_id'];
+        $taskid = $_POST['task_id'];
+        $status_task = 1;
+      
+        // echo $taskid.' '.$project_id.' '.$details_id;details
+        
+        $delete_fileitemdetails = $db->prepare('DELETE FROM file_item_details WHERE  details_id = :id');
+        $delete_fileitemdetails->bindParam(':id',$details_id);
+        $delete_fileitemdetails->execute();
+        
+        $delete_details= $db->prepare('DELETE FROM details WHERE details_id = :id');
+        $delete_details->bindParam(':id',$details_id);
+        $delete_details->execute();  
+
+        $updatestattask = $db->prepare("UPDATE task_list SET status_task = :status_task WHERE task_id = :task_id");
+        $updatestattask->bindParam(":status_task",$status_task);
+        $updatestattask->bindParam(":task_id",$taskid);
+        $updatestattask->execute(); 
+       
+        $_SESSION['success'] = "ยกเลิกงานเรียบร้อยแล้ว!";
+        $url_return ="location:view_project.php?view_id=".$project_id;
+
+
+   
+
+       
+
+   
+        
+
+  
     }   
     else if($_POST['proc'] == 'checktasksuccess'){
 
@@ -647,10 +690,10 @@
         move_uploaded_file($file_tmp,$file_data.$file_dest);
         }   
      
-        $updatestatdetails = $db->prepare("UPDATE details SET state_details = :state_details ,progress_details = :progress WHERE details_id = :details_id");
-        $updatestatdetails->bindParam(":state_details",$state_details);
-        $updatestatdetails->bindParam(":progress",$progress_task);
-        $updatestatdetails->bindParam(":details_id",$details_id);
+        $updatestatdetails = $db->prepare("UPDATE details SET state_details = :state_details, progress_details = :progress WHERE details_id = :details_id");
+        $updatestatdetails->bindParam(":state_details", $state_details);
+        $updatestatdetails->bindParam(":progress", $progress_task);
+        $updatestatdetails->bindParam(":details_id", $details_id);
         $updatestatdetails->execute(); 
  
         $inserstmtdetails = $db->prepare("INSERT INTO details(project_id,task_id,comment,date_detalis,state_details,progress_details) 

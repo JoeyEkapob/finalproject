@@ -8,31 +8,30 @@
       
 
 				
-        <div class="modal-body">
-            <div class="card">		
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="" class="control-label">ชื่อประเภทงาน</label>
-                                <input type="text" name="namejob" class="form-control form-control" >
-                            </div>
-                        </div>
-                            
-                            <hr>
-                            <div class="col-lg-12 text-right justify-content-center d-flex">
+            <div class="modal-body">
+                <div class="card">		
+                    <div class="card-body">
+                        <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="" class="control-label">ชื่อประเภทงาน</label>
+                                        <input type="text" name="namejob" class="form-control form-control" >
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="col-lg-12 text-right justify-content-center d-flex">
 
-                                <button class="btn btn-primary" name="addjob">Save</button>
-                                <button class="btn btn-secondary" type="button" >Cancel</button>
-                                
-                            </div>
+                                    <button class="btn btn-primary" name="addjob">Save</button>
+                                    <button class="btn btn-secondary" type="button" >Cancel</button>
+                                    
+                                </div>
                         </div>
                     </div>
                 </div>
             </div>
+        
+    
         </div>	
-		
-      
     </div>
   </div>
 </div>

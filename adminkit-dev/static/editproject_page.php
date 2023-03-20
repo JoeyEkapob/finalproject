@@ -38,7 +38,7 @@
             }
 
         </style> 
-        <form action="proc.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+        <form action="proc.php" method="post" id="form_data" class="form-horizontal" enctype="multipart/form-data" >
 
         <input type="hidden" id="proc" name="proc" value="">
         <input type="hidden" id="project_id" name="project_id" value="">
@@ -124,9 +124,9 @@
                                                     $qry = $db->query($sql);
                                                     $qry->execute();
                                                     while ($row = $qry->fetch(PDO::FETCH_ASSOC)) {  ?>
-                                    <a><?php echo $row['filename']?>
-                                    <button    onclick="delfilepro('<?php echo $row['project_id'] ?>','<?php echo $row['file_item_project']?>');"><i data-feather="trash-2"></i></button>
-                                    </a> 
+                                    <?php echo $row['filename']?> 
+                                    <a  onclick="delfilepro('<?php echo $row['project_id'] ?>','<?php echo $row['file_item_project']?>');"><i data-feather="trash-2"></i></a>
+                                  
                                 </div>
                            
                               
@@ -203,6 +203,7 @@ $(document).ready(function(){
         $('#proc').val('delfilepro');
         $('#file_item_project').val(file_item_project);
         $('#project_id').val(project_id);
+        $('#form_data').submit();
         
     }
 </script>

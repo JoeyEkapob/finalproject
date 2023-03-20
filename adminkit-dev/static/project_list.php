@@ -106,7 +106,7 @@
                                             <td class="">
 
                                             <div class="progress ">
-                                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 10%" >0</div>
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:<?php echo number_format($row['progress_project'],2) ?>%" ><?php  echo number_format($row['progress_project'],2) ?></div>
                                             </div>
 
                                             </td>

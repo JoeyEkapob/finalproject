@@ -33,17 +33,7 @@
                     ?>
                 </div>
             <?php } ?>
-            <style>
-                .placeholder {
-                    display: inline-block;
-                    min-height: 1em;
-                    vertical-align: middle;
-                    cursor: auto;
-                    background-color: #FFFFFF !important;
-                    opacity: .10;
-                }
 
-             </style>   
             <form action="proc.php" method="post" class="form-horizontal" enctype="multipart/form-data">
 
         <input type="hidden" id="proc" name="proc" value="">
@@ -96,7 +86,7 @@
                                     <div class="col-md-6">
 										<div class="mb-4">
 											<label for="" class="control-label">สมาชิกทีมโครงการ</label>
-                                            <input type="text" class="form-control" name="users_id"  id="user_id" data-access_multi_select="true" placeholder="กรุณาใส่สมาชิก;">
+                                            <input type="text" class="form-control" name="users_id"  id="user_id" data-access_multi_select="true" placeholder="กรุณาใส่สมาชิก">
                                             
                                                
 										</div>

@@ -118,8 +118,8 @@
                                             </td>
                                             <td class="text-center">                   
                                                <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                      
-                                                <a class="btn btn-bitbucket btn-sm" data-bs-toggle="modal" data-bs-target="#viewdetailsmodal<?php echo $row['details_id']?>"><i data-feather="zoom-in"></i></a>
-                                                <button class="btn btn-success btn-sm" onclick="checktasksuccess('<?php echo $row['details_id'] ?>','<?php echo $row['task_id'] ?>','<?php echo $row['project_id'] ?>');"> <i data-feather="check-square"></i></button>
+                                                <a class="btn btn-bitbucket btn-sm" title="Free Web tutorials" data-bs-toggle="modal" data-bs-target="#viewdetailsmodal<?php echo $row['details_id']?>"><i data-feather="zoom-in"></i></a>
+                                                <button class="btn btn-success btn-sm" title="Free Web tutorials" onclick="checktasksuccess('<?php echo $row['details_id'] ?>','<?php echo $row['task_id'] ?>','<?php echo $row['project_id'] ?>');"> <i data-feather="check-square"></i></button>
                                                 <a class="btn btn-warning btn-sm" href="checktaskedit.php?details_id=<?php echo $row['details_id'] ?>&task_id=<?php echo $row['task_id'] ?>&project_id=<?php echo $row['project_id'] ?>&progress_task=<?php echo $row['progress_task']?>"> <i data-feather="check-square"></i></a>
                                                 <!-- <a class="btn btn-warning btn-sm" href=""><i data-feather="share"></i></a> -->
                                   
@@ -154,6 +154,7 @@ function checktasksuccess(details_id,task_id,project_id){
     $('#details_id').val(details_id);
     $('#task_id').val(task_id);
     $('#project_id').val(project_id);
+    $('#proc').submid
 }
 /* function checktaskedit(details_id,task_id,project_id){
     $('#proc').val('checktaskedit');

@@ -22,11 +22,28 @@ session_start();
     <?php include 'head.php'?> 
     <body>
     <?php include "sidebar.php"?>
+    <?php if(isset($_SESSION['error'])) { ?>
+                <div class="alert alert-danger" role="alert">
+                    <?php 
+                        echo $_SESSION['error'];
+                        unset($_SESSION['error']);
+                    ?>
+                </div>
+            <?php } ?>
+            <?php if(isset($_SESSION['success'])) { ?>
+                <div class="alert alert-success" role="alert">
+                    <?php 
+                        echo $_SESSION['success'];
+                        unset($_SESSION['success']);
+                    ?>
+                </div>
+            <?php } ?>
     <input type="hidden" id="proc" name="proc" value="">
     <input type="hidden" id="task_id" name="task_id" value="">
     <input type="hidden" id="project_id" name="project_id" value="">
     <input type="hidden" id="senddate" name="senddate" value=" ">
     <input type="hidden" id="state_details" name="state_details" value=" ">
+    <input type="hidden" id="progress_task" name="progress_task" value=" ">
    
 		<main class="content">
 				<div class="container-fluid p-0">
@@ -77,7 +94,7 @@ session_start();
                         </div>
                         <hr>
                         <div class="col-lg-12 text-right justify-content-center d-flex">
-                            <button class="btn btn-primary " name ="edittask" onclick="send_task('<?php echo $taskid ?>','<?php echo $project_id?>');">Send</button>
+                            <button class="btn btn-primary " name ="edittask" onclick="send_task('<?php echo $taskid ?>','<?php echo $project_id?>','<?php echo $stmttaskrrow['progress_task'] ?>');">Send</button>
                             <a href="view_project.php?view_id=<?php echo $project_id?>" class="btn btn-secondary" type="button"  >Cancel</a>
                         </div>
                     </div>
@@ -91,10 +108,11 @@ session_start();
     </body>
 </html>
 <script>
-     function send_task(taskid,project_id){
+     function send_task(taskid,project_id,progress_task){
         $('#proc').val('sendtask');
         $('#task_id').val(taskid);
         $('#project_id').val(project_id);
+        $('#progress_task').val(progress_task);
         $('#state_details').val('Y');
         $('#senddate').val('<?php echo $date?>');
         

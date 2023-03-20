@@ -39,6 +39,7 @@
                 </div>
             <?php } ?>
     <form action="adduser.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+
         <main class="content">
             <div class="col-lg-12">
                 <div class="card card-outline card-success">
@@ -51,10 +52,8 @@
                     </div>
                 </div>
             </div>
-                    
                                 <div class="card ">
                                     <div class="card-header">
-
                                         <h5 class="card-title mb-0">สมาชิก</h5>
                                     </div>
                                     <table class="table table-hover table-responsive" id="example">
@@ -68,6 +67,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                       
                                         <?php
                                             $i = 1;
                                             //$type = array('',"Admin","คณบดี","รองคณบดีฝ่ายวิชาการ","ผู้ชวยรองรองคณบดีฝ่ายวิชาการ","หัวหน้าหน่วย","หัวสาขา","เจ้าหน้าที่");
@@ -78,26 +78,27 @@
                                             while ($row = $qry->fetch(PDO::FETCH_ASSOC)){
                                                 //extract($row);
                                         ?>
+                                        
                                         <tr>
                                             <td class="text-center"><?php echo $i++ ?></td>
                                             <td class="text-left"><?php echo ucwords($row['name']) ?></td>
                                             <td class="text-left" ><?php echo $row['email'] ?></td>
                                             <td class="text-left" ><?php echo $row['position_name']?></td>
                                             <td class="text-center">                               
-                                             <a class="btn btn-bitbucket btn-sm view_data"  data-bs-toggle="modal" data-bs-target="#viewusermodal<?php echo $row['user_id']?>" ><i data-feather="zoom-in"></i></a> 
+                                             <a class="btn btn-bitbucket btn-sm view_data"  title="ดูรายละเอียด" data-bs-toggle="modal" data-bs-target="#viewusermodal<?php echo $row['user_id']?>" ><i data-feather="zoom-in"></i></a> 
                                                 <!--  <a class="btn btn-bitbucket btn-sm view_data"  id="<?php echo $row['user_id']?>" ><i data-feather="zoom-in"></i></a>        -->                                             
-                                                <a class="btn btn-warning btn-sm" href="edituser_page.php?update_id=<?php echo $row['user_id']?>"><i  data-feather="edit"></i></a>
-                                                <a class="btn btn-danger btn-sm" href="deleteuser.php?delete_id=<?php echo $row['user_id']?>"><i data-feather="trash-2"></i></a>
+                                                <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลสมาชิก" href="edituser_page.php?update_id=<?php echo $row['user_id']?>"><i  data-feather="edit"></i></a>
+                                                <a class="btn btn-danger btn-sm" title="ลบข้อมูลสมาชิก" href="deleteuser.php?delete_id=<?php echo $row['user_id']?>"><i data-feather="trash-2"></i></a>
                                             </td>
                                         </tr>   
                                         <?php include "viewuser_modal.php"?>
                                             <?php } ?>
                                      </tbody>    
                                  </table>
-                                
-                                   <?php include "adduser_modal.php"?>
-                                
-                            </div>
+                                 <?php include "adduser_modal.php"?>
+                                 
+                                </div>
+                            
                             <?php //include "viewuser_modal.php"?>
         </main>
         
@@ -121,7 +122,8 @@ $(document).ready(function () {
     $('#example').DataTable();
 });
 </script>
-<script type="text/javascript">
+<!-- // showpic -->
+ <script type="text/javascript">
         function Preview(ele) {
         $('#img').attr('src', ele.value);
                 if (ele.files && ele.files[0]) {
@@ -132,5 +134,5 @@ $(document).ready(function () {
                 reader.readAsDataURL(ele.files[0]);
             }
         }
-</script>
+</script> 
 <?php include "footer.php"?>

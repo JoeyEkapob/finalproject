@@ -94,8 +94,8 @@
                                             <td class="text-center">                               
                                                <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                       
                                                 <!-- <a href="edituser_page.php?update_id=<?php echo $row['id_jobtype']?>" class="btn btn-warning btn-sm">2</a>   --> 
-                                                <a class="btn btn-warning btn-sm" href="editjobtype_page.php?update_id=<?php echo $row['id_jobtype']?>"><i  data-feather="edit"></i></a>
-                                                <a class="btn btn-danger btn-sm" href="deletejobtype.php?delete_id=<?php echo $row['id_jobtype']?>"><i data-feather="trash-2"></i></a>
+                                                <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลประเภทงาน" href="editjobtype_page.php?update_id=<?php echo $row['id_jobtype']?>"><i  data-feather="edit"></i></a>
+                                                <a class="btn btn-danger btn-sm" title="ลบข้อมูลประเภทงาน" href="deletejobtype.php?delete_id=<?php echo $row['id_jobtype']?>"><i data-feather="trash-2"></i></a>
                                             </td>
                                         </tr>
                                     <?php } ?>

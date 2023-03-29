@@ -1,6 +1,5 @@
-
 <?php 
-    session_start();
+     session_start(); 
     require_once 'connect.php';
     //$user_id = $_SESSION['user_login'];
     if(!isset($_SESSION['user_login'])){

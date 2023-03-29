@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 07, 2023 at 06:18 PM
+-- Generation Time: Mar 29, 2023 at 10:52 AM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -34,15 +34,22 @@ CREATE TABLE `details` (
   `comment` varchar(255) NOT NULL,
   `date_detalis` datetime DEFAULT NULL,
   `state_details` char(1) NOT NULL,
-  `progress_details` float NOT NULL
+  `progress_details` float NOT NULL,
+  `usersenddetails` int(30) NOT NULL,
+  `send_status` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `details`
 --
 
-INSERT INTO `details` (`details_id`, `project_id`, `task_id`, `comment`, `date_detalis`, `state_details`, `progress_details`) VALUES
-(60, 66001, 66001, '  \r\n                        786768786', '2023-03-08 00:16:00', 'Y', 0);
+INSERT INTO `details` (`details_id`, `project_id`, `task_id`, `comment`, `date_detalis`, `state_details`, `progress_details`, `usersenddetails`, `send_status`) VALUES
+(154, 66001, 66003, '1111111111111111111111111111111111111111111111111', '2023-03-24 16:35:00', 'N', 50, 2, 1),
+(155, 66001, 66003, 'หกดกหดกหดกหดกหดกหด', '2023-03-24 16:35:00', 'N', 60, 1, 2),
+(156, 66001, 66003, 'sdfsdfdsfdsfds', '2023-03-24 21:28:00', 'N', 60, 2, 1),
+(157, 66001, 66003, '222222222222222222222222222222222222222222', '2023-03-24 21:28:00', 'N', 80, 1, 2),
+(159, 66001, 66003, 'dfgdgfdfg', '2023-03-27 18:23:00', 'N', 50, 2, 1),
+(160, 66001, 66003, '564824248254444444444422222222', '2023-03-28 22:19:00', 'y', 80, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -55,24 +62,23 @@ CREATE TABLE `file_item_details` (
   `project_id` int(30) NOT NULL,
   `task_id` int(30) NOT NULL,
   `filename_details` varchar(200) NOT NULL,
-  `details_id` int(30) NOT NULL
+  `details_id` int(30) NOT NULL,
+  `newname_filedetails` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `file_item_details`
 --
 
-INSERT INTO `file_item_details` (`file_details_id`, `project_id`, `task_id`, `filename_details`, `details_id`) VALUES
-(25, 66003, 66002, 'Lab06 (1).pdf', 24),
-(34, 66003, 66001, 'Lab06 (1).pdf', 47),
-(35, 66003, 66001, 'EC011.pdf', 49),
-(36, 66003, 66001, 'Lab06 (1).pdf', 50),
-(37, 66003, 66002, '79966804b6d2dbf2.docx', 52),
-(38, 66003, 66001, '5-การพัฒนาระบบติดตามความก้าวหน้าการขออนุมัติโครงการ-มรภเพชรบุรี-(44-61).pdf', 53),
-(39, 66003, 66001, '1673529677386 (2).jpg', 56),
-(40, 66003, 66002, 'EC011.pdf', 58),
-(41, 66003, 66002, 'Lab06 (1).pdf', 58),
-(42, 66001, 66001, '79966804b6d2dbf2.docx', 60);
+INSERT INTO `file_item_details` (`file_details_id`, `project_id`, `task_id`, `filename_details`, `details_id`, `newname_filedetails`) VALUES
+(102, 66001, 66003, '334905070_2527666600724293_4874601570530760713_n (1).jpg', 154, '2023-03-2443871338.jpg'),
+(103, 66001, 66003, 'messageImage_1678097778769 (1).jpg', 154, '2023-03-241277866416.jpg'),
+(104, 66001, 66003, '2023-03-211075674713.jpg', 155, '2023-03-241352630762.jpg'),
+(106, 66001, 66003, '2023-03-22T1847041618.jpg', 156, '2023-03-24751760931.jpg'),
+(107, 66001, 66003, '2023-03-22T225333098.jpg', 156, '2023-03-241349006073.jpg'),
+(108, 66001, 66003, 'EC013_ทบทวน.pdf', 157, '2023-03-24312575471.pdf'),
+(111, 66001, 66003, '2023-03-21582637952 (1).pdf', 160, '2023-03-29d1877338571.pdf'),
+(112, 66001, 66003, 'GL รวมลอง.xlsx', 160, '2023-03-29d1340333359.xlsx');
 
 -- --------------------------------------------------------
 
@@ -83,15 +89,17 @@ INSERT INTO `file_item_details` (`file_details_id`, `project_id`, `task_id`, `fi
 CREATE TABLE `file_item_project` (
   `file_item_project` int(30) NOT NULL,
   `project_id` int(30) NOT NULL,
-  `filename` varchar(255) NOT NULL
+  `filename` varchar(255) NOT NULL,
+  `newname_filepro` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `file_item_project`
 --
 
-INSERT INTO `file_item_project` (`file_item_project`, `project_id`, `filename`) VALUES
-(206, 66001, 'Lab06 (1).pdf');
+INSERT INTO `file_item_project` (`file_item_project`, `project_id`, `filename`, `newname_filepro`) VALUES
+(266, 66001, 'คิดตามงาน.pdf', '2023-03-221516791807.pdf'),
+(267, 66001, 'Lab06 (1) (2).pdf', '2023-03-221762047449.pdf');
 
 -- --------------------------------------------------------
 
@@ -103,15 +111,9 @@ CREATE TABLE `file_item_task` (
   `file_item_task` int(30) NOT NULL,
   `task_id` int(30) NOT NULL,
   `filename_task` varchar(255) NOT NULL,
-  `project_id` int(30) NOT NULL
+  `project_id` int(30) NOT NULL,
+  `newname_filetask` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `file_item_task`
---
-
-INSERT INTO `file_item_task` (`file_item_task`, `task_id`, `filename_task`, `project_id`) VALUES
-(79, 66001, 'Lab06 (1).pdf', 66001);
 
 -- --------------------------------------------------------
 
@@ -137,12 +139,7 @@ INSERT INTO `job_type` (`id_jobtype`, `name_jobtype`, `status`) VALUES
 (5, 'งานประจำ', 1),
 (6, 'งานวิจัย', 1),
 (7, 'การบริการวิชาการ', 1),
-(8, 'รับสมัครคนศประจำปี', 1),
-(9, 'test', 2),
-(10, 'test', 2),
-(11, 'test1', 2),
-(12, 'test 2', 2),
-(13, 'test', 2);
+(8, 'รับสมัครคนศประจำปี', 1);
 
 -- --------------------------------------------------------
 
@@ -185,15 +182,16 @@ CREATE TABLE `project` (
   `end_date` datetime NOT NULL,
   `manager_id` int(30) NOT NULL,
   `status_2` int(30) NOT NULL,
-  `id_jobtype` int(30) NOT NULL
+  `id_jobtype` int(30) NOT NULL,
+  `progress_project` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `project`
 --
 
-INSERT INTO `project` (`project_id`, `name_project`, `description`, `status_1`, `create_project`, `start_date`, `end_date`, `manager_id`, `status_2`, `id_jobtype`) VALUES
-(66001, 'test', '456456456', 1, '2023-03-07 17:15:55', '2023-03-08 00:00:00', '2023-03-11 00:00:00', 1, 3, 4);
+INSERT INTO `project` (`project_id`, `name_project`, `description`, `status_1`, `create_project`, `start_date`, `end_date`, `manager_id`, `status_2`, `id_jobtype`, `progress_project`) VALUES
+(66001, 'test', 'sdfsdf254245555555524245278245245245245254245245214527272452542424524512752542452452425425424524524', 4, '2023-03-29 08:08:29', '2023-03-22 00:00:00', '2023-03-31 00:00:00', 1, 3, 3, 80);
 
 -- --------------------------------------------------------
 
@@ -214,7 +212,6 @@ INSERT INTO `project_list` (`project_id`, `user_id`) VALUES
 (66001, 2),
 (66001, 3),
 (66001, 4),
-(66001, 5),
 (66001, 6),
 (66001, 7);
 
@@ -241,7 +238,7 @@ CREATE TABLE `task_list` (
 --
 
 INSERT INTO `task_list` (`task_id`, `name_tasklist`, `description_task`, `status_task`, `strat_date_task`, `end_date_task`, `project_id`, `user_id`, `progress_task`) VALUES
-(66001, 'test', '7867676', 3, '2023-03-08 00:00:00', '2023-03-09 00:16:00', 66001, 2, 0);
+(66003, 'test', '2452425452', 4, '2023-03-22 00:00:00', '2023-03-30 22:16:00', 66001, 2, 80);
 
 -- --------------------------------------------------------
 
@@ -266,12 +263,12 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`user_id`, `firstname`, `lastname`, `email`, `password`, `role_id`, `avatar`, `date_created`) VALUES
 (1, 'joey', '1', 'admin@admin.com', '$2y$10$nSq5KOwMP1SsEebkwEPiG.PIvFm4GzjGMS8v7NhqjLyMiME37Caqm', 1, '09.jpg', '2023-01-16 18:00:29'),
-(2, 'ball', '3', 'honhon8989@hotmail.com', '$2y$10$nSq5KOwMP1SsEebkwEPiG.PIvFm4GzjGMS8v7NhqjLyMiME37Caqm', 3, '62505120009-9.jpg', '2023-02-06 12:57:01'),
+(2, 'ball', '3', 'honhon8989@hotmail.com', '$2y$10$nSq5KOwMP1SsEebkwEPiG.PIvFm4GzjGMS8v7NhqjLyMiME37Caqm', 5, '62505120009-9.jpg', '2023-03-19 16:53:51'),
 (3, 'cat', '4', 'joey16461@gmail.com', '$2y$10$nSq5KOwMP1SsEebkwEPiG.PIvFm4GzjGMS8v7NhqjLyMiME37Caqm', 4, 'd3.jpg', '2023-02-06 12:57:08'),
 (4, 'pang', '5', 'honhon16461@sss.com', '$2y$10$nSq5KOwMP1SsEebkwEPiG.PIvFm4GzjGMS8v7NhqjLyMiME37Caqm', 5, 'รูปคนอ้วน.png', '2023-02-06 12:57:11'),
-(5, 'pong     ', '6', 'admin1@admin.com', '$2y$10$nSq5KOwMP1SsEebkwEPiG.PIvFm4GzjGMS8v7NhqjLyMiME37Caqm', 6, 'p2.jpg', '2023-02-06 12:57:17'),
 (6, 'bas', '2', 'joey1646111@gmail.com', '$2y$10$nSq5KOwMP1SsEebkwEPiG.PIvFm4GzjGMS8v7NhqjLyMiME37Caqm', 2, '01.jpg', '2023-02-06 12:57:20'),
-(7, 'aeng', '7', 'honhon16461@gmail.com', '$2y$10$nSq5KOwMP1SsEebkwEPiG.PIvFm4GzjGMS8v7NhqjLyMiME37Caqm', 7, 'S__68296732.jpg', '2023-02-06 12:57:22');
+(7, 'aeng', '7', 'honhon16461@gmail.com', '$2y$10$nSq5KOwMP1SsEebkwEPiG.PIvFm4GzjGMS8v7NhqjLyMiME37Caqm', 7, 'S__68296732.jpg', '2023-02-06 12:57:22'),
+(9, 'joey', '4', 'admin4@admin.com', '$2y$10$4F8x08ukzfVyZIsfxsqtreedLMGOHcTPfE2TsYJtFVi4QBsfof2J2', 1, 'ครุย copy (1).jpg', '2023-03-19 11:41:12');
 
 --
 -- Indexes for dumped tables
@@ -354,25 +351,25 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `details`
 --
 ALTER TABLE `details`
-  MODIFY `details_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `details_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=161;
 
 --
 -- AUTO_INCREMENT for table `file_item_details`
 --
 ALTER TABLE `file_item_details`
-  MODIFY `file_details_id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `file_details_id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
 
 --
 -- AUTO_INCREMENT for table `file_item_project`
 --
 ALTER TABLE `file_item_project`
-  MODIFY `file_item_project` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=207;
+  MODIFY `file_item_project` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=268;
 
 --
 -- AUTO_INCREMENT for table `file_item_task`
 --
 ALTER TABLE `file_item_task`
-  MODIFY `file_item_task` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `file_item_task` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- AUTO_INCREMENT for table `job_type`
@@ -390,7 +387,7 @@ ALTER TABLE `task_list`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables

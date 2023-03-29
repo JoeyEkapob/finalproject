@@ -17,10 +17,26 @@ session_start();
 ?> 
 <!DOCTYPE html>
 <html lang="en">
-    <form action="proc.php" method="post" class="form-horizontal" enctype="multipart/form-data">
     <?php include 'head.php'?> 
     <body>
     <?php include "sidebar.php"?>
+    <?php if(isset($_SESSION['error'])) { ?>
+                <div class="alert alert-danger" role="alert">
+                    <?php 
+                        echo $_SESSION['error'];
+                        unset($_SESSION['error']);
+                    ?>
+                </div>
+            <?php } ?>
+            <?php if(isset($_SESSION['success'])) { ?>
+                <div class="alert alert-success" role="alert">
+                    <?php 
+                        echo $_SESSION['success'];
+                        unset($_SESSION['success']);
+                    ?>
+                </div>
+            <?php } ?>
+    <form action="proc.php" method="post" id="formedittask" class="form-horizontal" enctype="multipart/form-data">
     <input type="hidden" id="proc" name="proc" value="">
     <input type="hidden" id="task_id" name="task_id" value="">
     <input type="hidden" id="project_id" name="project_id" value="">
@@ -82,7 +98,8 @@ session_start();
                                                     $qry->execute();
                                                     while ($row2 = $qry->fetch(PDO::FETCH_ASSOC)) {  ?>
                                     <a><?php echo $row2['filename_task']?>
-                                    <button    onclick="delfiletask('<?php echo $row2['file_item_task'] ?>','<?php echo $row2['task_id']?>','<?php echo $project_id?>');"><i data-feather="trash-2"></i></button>
+                                    <a onclick="delfiletask('<?php echo $row2['file_item_task'] ?>','<?php echo $row2['task_id']?>','<?php echo $project_id?>');"><i data-feather="trash-2"></i></a>
+                                    <!-- <a onclick="delfiletask('<?php echo $row2['file_item_task'] ?>','<?php echo $row2['task_id']?>','<?php echo $project_id?>');"><i data-feather="trash-2"></i></a> -->
                                     </a> 
                                 </div>
                                 <?php } ?>
@@ -90,8 +107,7 @@ session_start();
                     </div>
                     <div class="justify-content-center">
                             <label for="exampleFormControlTextarea1" class="form-label">รายละเอียด</label>
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="7" name="textarea">  <?php echo  $stmttaskrrow['description_task']; ?>  
-                        </textarea>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="7" name="textarea"><?php echo trim($stmttaskrrow['description_task']);?></textarea>
                           
                         </div>
                         <div class="mb-3">
@@ -122,7 +138,7 @@ session_start();
         $('#task_id').val(taskid);
         $('#file_item_task').val(file_item_task);
         $('#project_id').val(project_id);
-
+        $('#formedittask').submit();
     }
 </script>
 <?php include "footer.php"?>

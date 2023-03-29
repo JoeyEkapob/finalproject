@@ -2,10 +2,195 @@
 
     session_start();
     require_once 'connect.php';
+    include "funtion.php";
     date_default_timezone_set('asia/bangkok');
     $date = date('Y-m-d');
     $url_return = "";
-    if($_POST['proc'] == 'add_task'){
+    $user_id=$_SESSION['user_login'];
+ 
+    if($_POST['proc'] == 'viewdetails'){
+        $details_id = $_POST['detail_id'];
+        $usersendid = $_POST['usersendid'];
+        $sendstatus = $_POST['sendstatus'];
+        $outp ="";
+        $sql = "SELECT * FROM details NATURAL join user  NATURAL join task_list  NATURAL join project  where details_id = $details_id";
+        $qry = $db->query($sql);
+        $qry->execute();
+        if($sendstatus == 1){
+        while($row = $qry->fetch(PDO::FETCH_ASSOC)){ 
+    
+        $outp.='<dl>                                   
+                    <dt><b class="border-bottom border-primary">ชื่อโปรเจค</b></dt>
+                    <dd>'.$row['name_project'].'</dd>
+
+                    <dt><b class="border-bottom border-primary">ชื่องาน</b></dt>
+                    <dd>'.$row['name_tasklist'] .'</dd>
+
+                    <dt><b class="border-bottom border-primary">วันเเละเวลาที่ส่งงาน</b></dt>
+                    <dd>'.ThDate($row['date_detalis']).'</dd>
+
+                    <dt><b class="border-bottom border-primary">รายละเอียด</b></dt>
+                    <dd>'.$row['comment'].'</dd>
+                </dl>';
+        }
+       
+        $profileusersendsql = "SELECT * FROM details NATURAL JOIN user WHERE user_id = $usersendid";
+        $profileusersendqry = $db->query($profileusersendsql);
+        $profileusersendqry->execute(); 
+        $profileusersendrow = $profileusersendqry->fetch(PDO::FETCH_ASSOC);
+
+        $outp.=' <dt><b class="border-bottom border-primary">คนที่ส่งงาน</b></dt>
+                    <dd> 
+                        <div class="d-flex align-items-center mt-1">
+                            <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/'. $profileusersendrow['avatar'].'" alt="Avatar" width="35"  height="35">
+                            <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>
+                        </div>
+                    </dd>
+                    <dt><b class="border-bottom border-primary">ไฟล์เเนบ</b></dt>'; /* */
+ 
+        $filedetailsql = "SELECT * FROM details  NATURAL JOIN file_item_details WHERE details_id = $details_id";
+        $filedetailqry = $db->query($filedetailsql);
+        $filedetailqry->execute();
+        while ($filedetailqryrow = $filedetailqry->fetch(PDO::FETCH_ASSOC)) { 
+
+        $outp.=' <div class="row">
+                <div class="col-sm">
+                    <a href="img/file/file_details/' . $filedetailqryrow['newname_filedetails'] . '" download="' . $filedetailqryrow['filename_details'] . '">' . $filedetailqryrow['filename_details'] . '</a> 
+                </div>
+                </div>';  
+            
+              }  
+        }else if($sendstatus == 2){
+            while($row = $qry->fetch(PDO::FETCH_ASSOC)){ 
+    
+                $outp.='<dl>                                   
+                            <dt><b class="border-bottom border-primary">ชื่อโปรเจค</b></dt>
+                            <dd>'.$row['name_project'].'</dd>
+        
+                            <dt><b class="border-bottom border-primary">ชื่องาน</b></dt>
+                            <dd>'.$row['name_tasklist'] .'</dd>
+        
+                            <dt><b class="border-bottom border-primary">วันเเละเวลาที่งานส่งกลับเเก้</b></dt>
+                            <dd>'.ThDate($row['date_detalis']).'</dd>
+        
+                            <dt><b class="border-bottom border-primary">รายละเอียด</b></dt>
+                            <dd>'.$row['comment'].'</dd>
+                        </dl>';
+                }
+               
+                $profileusersendsql = "SELECT * FROM details NATURAL JOIN user WHERE user_id = $usersendid";
+                $profileusersendqry = $db->query($profileusersendsql);
+                $profileusersendqry->execute(); 
+                $profileusersendrow = $profileusersendqry->fetch(PDO::FETCH_ASSOC);
+        
+                $outp.=' <dt><b class="border-bottom border-primary">คนที่ตรวจงาน</b></dt>
+                            <dd> 
+                                <div class="d-flex align-items-center mt-1">
+                                    <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/'. $profileusersendrow['avatar'].'" alt="Avatar" width="35"  height="35">
+                                    <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>
+                                </div>
+                            </dd>
+                            <dt><b class="border-bottom border-primary">ไฟล์เเนบ</b></dt>'; /* */
+         
+                $filedetailsql = "SELECT * FROM details  NATURAL JOIN file_item_details WHERE details_id = $details_id";
+                $filedetailqry = $db->query($filedetailsql);
+                $filedetailqry->execute();
+                while ($filedetailqryrow = $filedetailqry->fetch(PDO::FETCH_ASSOC)) { 
+        
+                $outp.=' <div class="row">
+                        <div class="col-sm">
+                            <a href="img/file/file_details/' . $filedetailqryrow['newname_filedetails'] . '" download="' . $filedetailqryrow['filename_details'] . '">' . $filedetailqryrow['filename_details'] . '</a> 
+                        </div>
+                        </div>';  
+                    
+                      }  
+        }
+        
+         echo  $outp;
+         exit;
+    }
+    else if($_POST['proc'] == 'editdetails'){
+   
+       /*  $details_id = $_POST['detail_id'];
+        $sql = "SELECT * FROM details natural join file_item_details  where details_id = $details_id";
+        $qry = $db->query($sql);
+        $qry->execute();
+        while($row = $qry->fetch(PDO::FETCH_ASSOC)){;
+        echo json_encode($row);
+        } */
+        $code ="d";
+        $details_id = $_POST['details_id'];
+        $task_id = $_POST['task_id'];
+        $project_id = $_POST['project_id'];
+        $progressdetails = $_POST['progress'];
+        $text_comment = $_POST['text_comment'];
+        $files = $_FILES['files'];
+        $progress =$_POST['progress'];
+
+        foreach ($files['name'] as $i => $file_name) {
+            $numrand = (mt_rand());
+            $type = strrchr($file_name,".");
+            $newname = $date.$code.$numrand.$type;
+            $file_tmp = $files['tmp_name'][$i];
+            $file_dest = $file_name; 
+            $file_data = "img/file/file_details/";
+            move_uploaded_file($file_tmp,$file_data.$newname);
+            if (!empty(array_filter($_FILES['files']['name']))) {
+                $inserfile_item_task = $db->prepare("INSERT INTO file_item_details(task_id,filename_details,project_id,details_id,newname_filedetails) 
+                VALUES(:task_id,:filename_details,:project_id,:details_id,:newname_filedetails)");
+                $inserfile_item_task->bindParam(":task_id",$task_id);
+                $inserfile_item_task->bindParam(":project_id",$project_id);
+                $inserfile_item_task->bindParam(":filename_details",$file_name);
+                $inserfile_item_task->bindParam(":details_id",$details_id);
+                $inserfile_item_task->bindParam(":newname_filedetails",$newname);
+                $inserfile_item_task->execute(); 
+            }
+        }
+        $updateeditdetails = $db->prepare("UPDATE details SET comment = :comment ,progress_details =:progress_details WHERE details_id = :details_id");
+        $updateeditdetails->bindParam(":comment",$text_comment);
+        $updateeditdetails->bindParam(":progress_details",$progressdetails);
+        $updateeditdetails->bindParam(":details_id",$details_id);
+        $updateeditdetails->execute(); 
+
+        $updetatask = $db->prepare("UPDATE task_list SET progress_task =:progress_task WHERE  task_id = :task_id");
+        $updetatask->bindParam(":progress_task",$progress);
+        $updetatask->bindParam(":task_id",$task_id);
+        $updetatask->execute(); 
+
+        $_SESSION['success'] = "เเก้ไขรายละเอียดงานเเก้เรียบร้อยเเล้ว!";
+        $url_return = "location:details_page.php?task_id=".$task_id."&project_id=".$project_id."";
+
+    }
+    else if($_POST['proc'] == 'delfileeditdetails'){
+
+        $file_path = 'img/file/file_details/';
+
+        $file_details_id = $_POST['file_details_id'];
+        $task_id = $_POST['task_id'];
+        $project_id = $_POST['project_id'];
+        $details_id = $_POST['details_id'];
+
+        $sql = "SELECT * from file_item_details  where file_details_id = $file_details_id ";
+        $qry = $db->query($sql);
+        $qry->execute();
+
+        while ($row2 = $qry->fetch(PDO::FETCH_ASSOC)){  
+            unlink($file_path.$row2['newname_filedetails']); 
+        }
+
+        $stmt = $db->prepare("DELETE FROM file_item_details WHERE file_details_id = :file_details_id");
+        $stmt->bindParam(":file_details_id", $file_details_id);
+        $stmt->execute();
+
+        $_SESSION['success'] = "ลบไฟล์เรียบร้อยแล้ว!";
+        $url_return = "location:editdetails.php?details_id=".$details_id."&task_id=".$task_id."&project_id=".$project_id."";
+    
+    
+
+
+
+    }
+    else if($_POST['proc'] == 'add_task'){
 
         $pro_id= $_POST['pro_id'];
         $sql = "SELECT * FROM project  where project_id = $pro_id";
@@ -40,12 +225,7 @@
         $textarea=$_POST['textarea'];
         
         $files = $_FILES['files'];
-        foreach ($files['name'] as $i => $file_name) {
-        $file_tmp = $files['tmp_name'][$i];
-        $file_dest = $file_name; 
-        $file_data = "img/file/file_task/";
-        move_uploaded_file($file_tmp,$file_data.$file_dest);
-        }
+      
 
            /*   echo strtotime($datestartproject).'__________'.strtotime($dateendproject).'__________'.strtotime($start_date).'__________'.strtotime($end_date);
            exit; */
@@ -78,16 +258,25 @@
             $stmttask->bindParam(":users_id",$user );
             $stmttask->execute();   
             //$lastId = $db->lastInsertId(); 
+            foreach ($files['name'] as $i => $file_name) {
+                $numrand = (mt_rand());
+                $type = strrchr($file_name,".");
+                $newname = $date.$code.$numrand.$type;
+                $file_tmp = $files['tmp_name'][$i];
+                $file_dest = $file_name; 
+                $file_data = "img/file/file_task/";
+                move_uploaded_file($file_tmp,$file_data.$newname);
                 if (!empty(array_filter($_FILES['files']['name']))) {
-                foreach($files['name'] as $id => $filename_task){
-                $inserfile_item_task = $db->prepare("INSERT INTO file_item_task(task_id,filename_task,project_id) 
-                VALUES(:task_id,:filename_task,:project_id)");
-                $inserfile_item_task->bindParam(":task_id",$nextId);
-                $inserfile_item_task->bindParam(":project_id",$pro_id);
-                $inserfile_item_task->bindParam(":filename_task",$filename_task);
-                $inserfile_item_task->execute(); 
+                    $inserfile_item_task = $db->prepare("INSERT INTO file_item_task(task_id,filename_task,project_id,newname_filetask) 
+                    VALUES(:task_id,:filename_task,:project_id,:newname_filetask)");
+                    $inserfile_item_task->bindParam(":task_id",$nextId);
+                    $inserfile_item_task->bindParam(":project_id",$pro_id);
+                    $inserfile_item_task->bindParam(":filename_task",$file_name);
+                    $inserfile_item_task->bindParam(":newname_filetask",$newname);
+                    $inserfile_item_task->execute(); 
                 }
             }
+        
             $_SESSION['success'] = "เพิ่มงานเรียบร้อย! ";
             $url_return = "location:view_project.php?view_id=".$pro_id;
 
@@ -127,7 +316,7 @@
             $qry->execute();
         
             while ($row2 = $qry->fetch(PDO::FETCH_ASSOC)){  
-                unlink($file_path_task.$row2['filename_task']); 
+                unlink($file_path_task.$row2['newname_filetask']); 
             }
 
         
@@ -154,12 +343,12 @@
             echo "ttttttttttttttttttttttttttttttt";
             exit;
     }
-    else if($_GET['proc'] == 'download'){
+    else if($_POST['proc'] == 'download'){
         
 
-            $file_item_project = $_GET['file_item_project'];
-            $file_item_task = $_GET['file_item_task'];
-            $file_item_details = $_GET ['file_item_details'];
+            $file_item_project = $_POST['file_item_project'];
+            $file_item_task = $_POST['file_item_task'];
+            $file_item_details = $_POST['file_item_details'];
 
             if(isset($file_item_project)){
 
@@ -168,9 +357,14 @@
                 $stmt->execute();
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 $filename = $row['filename'];
-                $filepath = "img/file/file_project/".$filename;
+                $original_filename = $row['newname_filepro'];
+                $filepath = "img/file/file_project/".$original_filename;
+                
+              
+                /* header('Content-Disposition: attachment; filename="' . $filename . '"');
+                readfile($filepath); */
 
-            }else if(isset($file_item_task)){
+            }/* else if(isset($file_item_task)){
 
                 $stmt = $db->prepare("SELECT * FROM file_item_task WHERE file_item_task = :file_item_task");
                 $stmt->bindParam(":file_item_task", $file_item_task);
@@ -187,10 +381,10 @@
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 $filename = $row['filename_details'];
                 $filepath = "img/file/file_details/".$filename;   
-            }
+            } */
            
-                header('Content-Disposition: attachment; filename=' . basename($filepath));
-                readfile($filepath); 
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
+            readfile($filepath);
         
     }
     else if($_POST['proc'] == 'delfilepro'){
@@ -205,7 +399,7 @@
         $qry->execute();
 
         while ($row2 = $qry->fetch(PDO::FETCH_ASSOC)){  
-            unlink($file_path.$row2['filename']); 
+            unlink($file_path.$row2['newname_filepro']); 
         }
 
         $stmt = $db->prepare("DELETE FROM file_item_project WHERE file_item_project = :file_item_project");
@@ -227,7 +421,8 @@
         $qry = $db->query($sql);
         $qry->execute();
         while ($row2 = $qry->fetch(PDO::FETCH_ASSOC)){  
-            unlink($file_path.$row2['filename_task']); 
+
+            unlink($file_path.$row2['newname_filetask']); 
         }
 
         $stmt = $db->prepare("DELETE FROM file_item_task WHERE file_item_task = :file_item_task");
@@ -255,15 +450,10 @@
         $end_date = $_POST['end_date'];
         $taskname =$_POST['taskname'];
         $user=$_POST['user'];
-        $textarea=$_POST['textarea'];
+        $textarea=trim($_POST['textarea']);
         $stat = 1 ;
         $files = $_FILES['files'];
-        foreach ($files['name'] as $i => $file_name) {
-        $file_tmp = $files['tmp_name'][$i];
-        $file_dest = $file_name; 
-        $file_data = "img/file/file_task/";
-        move_uploaded_file($file_tmp,$file_data.$file_dest);
-        }
+        
 
 
         if(empty($taskname)) {
@@ -295,16 +485,25 @@
             $updatestmttask->bindParam(":id", $taskid);
             $updatestmttask->execute();   
 
-            if(!empty(array_filter($_FILES['files']['name']))) {
-            foreach($files['name']  as $id =>$file_name){
-            $inserfile_item_task = $db->prepare("INSERT INTO file_item_task(task_id,filename_task,project_id) 
-            VALUES(:task_id,:filename_task,:proid)");
-            $inserfile_item_task->bindParam(":task_id",$taskid);
-            $inserfile_item_task->bindParam(":filename_task",$file_dest);
-            $inserfile_item_task->bindParam(":proid",$pro_id );
-            $inserfile_item_task->execute(); 
-                }
-            }
+            foreach ($files['name'] as $i => $file_name) {
+                $numrand = (mt_rand());
+                $type = strrchr($file_name,".");
+                $newname = $date.$code.$numrand.$type;
+                $file_tmp = $files['tmp_name'][$i];
+                $file_dest = $file_name; 
+                $file_data = "img/file/file_task/";
+                move_uploaded_file($file_tmp,$file_data.$newname);
+                if(!empty(array_filter($_FILES['files']['name']))) {
+                    $inserfile_item_task = $db->prepare("INSERT INTO file_item_task(task_id,filename_task,project_id,newname_filetask) 
+                    VALUES(:task_id,:filename_task,:proid,:newname_filetask)");
+                    $inserfile_item_task->bindParam(":task_id",$taskid);
+                    $inserfile_item_task->bindParam(":filename_task",$file_dest);
+                    $inserfile_item_task->bindParam(":proid",$pro_id );
+                    $inserfile_item_task->bindParam(":newname_filetask",$newname);
+                    $inserfile_item_task->execute(); 
+                        }
+                    }
+        
             $_SESSION['success'] = "เพิ่มงานเรียบร้อย! ";
             $url_return = "location:view_project.php?view_id=".$pro_id;
             
@@ -346,6 +545,8 @@
 
         $code = "P";
         $yearMonth = substr(date("Y")+543, -2);
+
+
         $sql = "SELECT MAX(project_id) AS last_id FROM project";
         $qry = $db->query($sql);
         $qry->execute();
@@ -373,16 +574,18 @@
        //$numbers_string = implode(",", $users_id1); // implode ลูกน้ำเข้าไปเเล้วทำให้เป็น string
        $users_id = explode(",", $users_id1); // เเล้วก็นำ string มาทำเป็น array หลาย id 
        $progress_project = 0;
-       
+      
         $files = $_FILES['files']; 
-        foreach ($files['name'] as $i => $file_name) {
-        $file_tmp = $files['tmp_name'][$i];
-        $file_dest = $file_name; 
-        $file_data = "img/file/file_project/";
-        move_uploaded_file($file_tmp,$file_data.$file_dest);
-       }   
-   
-     
+        //$type = strrchr($files['name'],".");
+      /*   $type = strrchr($_FILES['files']['name'],".");
+        print_r($type);
+        exit; */
+        
+       
+       //print_r($files['tmp_name'][$i]);
+       //echo $file_tmp.$file_data.$file_dest;
+       //echo $newname;
+       //exit;
           if (empty($proname)) {
           $_SESSION['error'] = 'กรุณากรอกชื่อโปรเจค';
           $url_return ="location:addproject_page.php";
@@ -421,15 +624,26 @@
              $inserstmtprolist->bindParam(":user_id", $users_id);
              $inserstmtprolist->execute(); 
             }
-
-            foreach ($files['name'] as $id => $filesname){
-            $inserfile_item_porject = $db->prepare("INSERT INTO file_item_project(project_id,filename) 
-            VALUES(:project_id,:filename)");
-            $inserfile_item_porject->bindParam(":project_id",$nextId);
-            $inserfile_item_porject->bindParam(":filename",$filesname);
-            $inserfile_item_porject->execute();  
-       }
-             
+            
+          
+            foreach ($files['name'] as $i => $file_name) {
+                $numrand = (mt_rand());
+                $type = strrchr($file_name,".");
+                $newname = $date.$code.$numrand.$type;
+                $file_tmp = $files['tmp_name'][$i];
+                $file_dest = $file_name; 
+                $file_data = "img/file/file_project/";
+                move_uploaded_file($file_tmp,$file_data.$newname);
+                if (!empty(array_filter($_FILES['files']['name']))) {
+                $inserfile_item_porject = $db->prepare("INSERT INTO file_item_project(project_id,filename,newname_filepro) 
+                VALUES(:project_id,:filename,:newname_filepro)");
+                $inserfile_item_porject->bindParam(":project_id",$nextId);
+                $inserfile_item_porject->bindParam(":filename",$file_name);
+                $inserfile_item_porject->bindParam(":newname_filepro",$newname);
+                $inserfile_item_porject->execute();  
+                }
+            }
+        
             $_SESSION['success'] = "เพิ่มโปรเจคเรียบร้อยแล้ว! ";
             $url_return="location:project_list.php"; 
     
@@ -445,18 +659,23 @@
     else if($_POST['proc'] == 'editpro'){
  
             $proid=$_POST['project_id'];
-            $status1 = 1;
+           // $status1 = 1;
             $proname = $_POST['proname'];
             $start_date = $_POST['start_date'];
             $end_date = $_POST['end_date'];
-            $description =$_POST['description'];
+            $description =trim($_POST['description']);
             $manager_id=$_SESSION['user_login'];
             $status2=$_POST['status2'];
             $file_project = null;
             $job = $_POST['job'];
             $users_id1 = $_POST['users_id'];
             $users_id = explode(",", $users_id1);
+            $status1 =$_POST['status1'];
+ 
+
+        
            // $user_string = "(" . implode(",",$users_id) . ")";
+
             if (!empty($users_id1)) {
                 $update_stmtpro = $db->prepare('UPDATE project SET name_project=:name_project,description= :description,status_1=:status_1,start_date= :start_date,end_date=:end_date
                 ,status_2=:status_2,id_jobtype=:id_jobtype WHERE project_id =:id');
@@ -495,15 +714,19 @@
             if (!empty(array_filter($_FILES['files']['name']))) {
                 $files = $_FILES['files'];
                 foreach ($files['name'] as $i => $file_name) {
+                $numrand = (mt_rand());
+                $type = strrchr($file_name,".");
+                $newname = $date.$code.$numrand.$type;    
                 $file_tmp = $files['tmp_name'][$i];
                 $file_dest = $file_name; 
                 $file_data = "img/file/file_project/";
-                move_uploaded_file($file_tmp,$file_data.$file_dest);
+                move_uploaded_file($file_tmp,$file_data.$newname);
                 
-                $inserfile_item_porject = $db->prepare("INSERT INTO file_item_project(project_id,filename) 
-                VALUES(:project_id,:filename)");
+                $inserfile_item_porject = $db->prepare("INSERT INTO file_item_project(project_id,filename,newname_filepro) 
+                VALUES(:project_id,:filename,:newname_filepro)");
                 $inserfile_item_porject->bindParam(":project_id",$proid);
                 $inserfile_item_porject->bindParam(":filename",$file_dest);
+                $inserfile_item_porject->bindParam(":newname_filepro",$newname);
                 $inserfile_item_porject->execute(); 
                 }
             }
@@ -518,23 +741,19 @@
 
        
         if(isset($project_id)){
+            
         $file_path1 = 'img/file/file_project/';
-        $file_path2 = 'img/file/file_task/';
-        $sql = "SELECT * from project  natural join file_item_project natural join  file_item_task where project_id = $project_id ";
+        $sql = "SELECT * from project  natural join file_item_project where project_id = $project_id ";
         $qry = $db->query($sql);
         $qry->execute();
         while ($row2 = $qry->fetch(PDO::FETCH_ASSOC)){  
-            unlink($file_path1.$row2['filename']); 
-            unlink($file_path2.$row2['filename_task']); 
+            unlink($file_path1.$row2['newname_filepro']);
+            
         }  
-
+       
         $delete_taskitem = $db->prepare('DELETE  FROM file_item_task  WHERE project_id=:id');
         $delete_taskitem->bindParam(':id', $project_id);
         $delete_taskitem->execute(); 
-
-        $delete_tasklist = $db->prepare('DELETE  FROM task_list  WHERE project_id=:id');
-        $delete_tasklist->bindParam(':id', $project_id);
-        $delete_tasklist->execute(); 
 
         $delete_task = $db->prepare('DELETE project_list,file_item_project,project FROM project_list natural join file_item_project natural join project WHERE project_id=:id');
         $delete_task->bindParam(':id', $project_id);
@@ -554,31 +773,34 @@
         $taskid = $_POST['task_id'];
         $commenttask = trim($_POST['text_comment']);
         $progress_task = $_POST['progress_task'];
-
+        $user_id = $_POST['user_id'];
         $senddate = $_POST['senddate'];
         $state_details = $_POST['state_details'];
         $status_task = "3";
+        $send_status = "1";
+        
 
         $files = $_FILES['files']; 
 
-        foreach ($files['name'] as $i => $file_name) {
-        $file_tmp = $files['tmp_name'][$i];
-        $file_dest = $file_name; 
-        $file_data = "img/file/file_details/";
-        move_uploaded_file($file_tmp,$file_data.$file_dest);
-       }   
+        
        $numfilesend =sizeof(array_filter($_FILES['files']['name']));
+
+        //echo  $numfilesend;
+        //exit;
      
        if ($numfilesend != "0" OR $commenttask != ""){ 
 
-        $inserstmtdetails = $db->prepare("INSERT INTO details(project_id,task_id,comment,date_detalis,state_details,progress_details) 
-                                              VALUES(:project_id,:task_id,:comment,:date_detalis,:state_details,:progress_details)");
+        $inserstmtdetails = $db->prepare("INSERT INTO details(project_id,task_id,comment,date_detalis,state_details,progress_details,usersenddetails,send_status) 
+                                              VALUES(:project_id,:task_id,:comment,:date_detalis,:state_details,:progress_details,:usersenddetails,:send_status)");
         $inserstmtdetails->bindParam(":project_id",$project_id);
         $inserstmtdetails->bindParam(":task_id", $taskid);
         $inserstmtdetails->bindParam(":comment", $commenttask);
         $inserstmtdetails->bindParam(":state_details", $state_details);
         $inserstmtdetails->bindParam(":date_detalis",$senddate);
         $inserstmtdetails->bindParam(":progress_details",$progress_task);
+        $inserstmtdetails->bindParam(":usersenddetails",$user_id);
+        $inserstmtdetails->bindParam(":send_status",$send_status);
+        
         $inserstmtdetails->execute(); 
         $lastId = $db->lastInsertId(); 
 
@@ -586,25 +808,36 @@
         $updatestattask->bindParam(":status_task",$status_task);
         $updatestattask->bindParam(":task_id",$taskid);
         $updatestattask->execute(); 
-
-        foreach ($files['name'] as $id => $filesname){
-        $inserfile_item_details = $db->prepare("INSERT INTO file_item_details(project_id,task_id,filename_details,details_id) 
-        VALUES(:project_id,:task_id,:filename_details,:details_id)");
-        $inserfile_item_details->bindParam(":project_id",$project_id);
-        $inserfile_item_details->bindParam(":task_id",$taskid);
-        $inserfile_item_details->bindParam(":filename_details",$filesname);
-        $inserfile_item_details->bindParam(":details_id",$lastId);
-        $inserfile_item_details->execute();  
+       
+       
+            foreach ($files['name'] as $i => $file_name) {
+            $numrand = (mt_rand());
+            $type = strrchr($file_name,".");
+            $newname = $date.$code.$numrand.$type;
+            $file_tmp = $files['tmp_name'][$i];
+            $file_dest = $file_name; 
+            $file_data = "img/file/file_details/";
+            move_uploaded_file($file_tmp,$file_data.$newname);
+            if($numfilesend != "0" ){
+            $inserfile_item_details = $db->prepare("INSERT INTO file_item_details(project_id,task_id,filename_details,details_id,newname_filedetails) 
+            VALUES(:project_id,:task_id,:filename_details,:details_id,:newname_filedetails)");
+            $inserfile_item_details->bindParam(":project_id",$project_id);
+            $inserfile_item_details->bindParam(":task_id",$taskid);
+            $inserfile_item_details->bindParam(":filename_details",$file_name);
+            $inserfile_item_details->bindParam(":details_id",$lastId);
+            $inserfile_item_details->bindParam(":newname_filedetails",$newname);
+            $inserfile_item_details->execute();  
+            }
        }
-
-      
 
            $_SESSION['success'] = "ส่งงานเรียบร้อยแล้ว! ";
            $url_return ="location:view_project.php?view_id=".$project_id;
-        } else {
+     } else {
             $_SESSION['error'] = "กรุณากรอกข้อความ หรือ เเนบไฟล์ส่ง";
-            $url_return ="location:send_task.php?task_id=".$taskid."&project_id=".$project_id;
-        }
+            $url_return ="location:send_task.php?task_id=".$taskid."&project_id=".$project_id."&user_id=".$user_id;
+           }
+    
+        
       
        
       
@@ -681,29 +914,28 @@
         $progress_task = $_POST['progress_task'];
         $commenttask = $_POST['text_comment'];
         $status_task = "4";
-        $files = $_FILES['files']; 
-        
-        foreach ($files['name'] as $i => $file_name) {
-        $file_tmp = $files['tmp_name'][$i];
-        $file_dest = $file_name; 
-        $file_data = "img/file/file_details/";
-        move_uploaded_file($file_tmp,$file_data.$file_dest);
-        }   
-     
+        $send_status = "2";
+        $files = $_FILES['files'];
+       
+
+        $numfilesend =sizeof(array_filter($_FILES['files']['name']));
+
         $updatestatdetails = $db->prepare("UPDATE details SET state_details = :state_details, progress_details = :progress WHERE details_id = :details_id");
         $updatestatdetails->bindParam(":state_details", $state_details);
         $updatestatdetails->bindParam(":progress", $progress_task);
         $updatestatdetails->bindParam(":details_id", $details_id);
         $updatestatdetails->execute(); 
  
-        $inserstmtdetails = $db->prepare("INSERT INTO details(project_id,task_id,comment,date_detalis,state_details,progress_details) 
-        VALUES(:project_id,:task_id,:comment,:date_detalis,:state_details,:progress)");
+        $inserstmtdetails = $db->prepare("INSERT INTO details(project_id,task_id,comment,date_detalis,state_details,progress_details,usersenddetails,send_status) 
+        VALUES(:project_id,:task_id,:comment,:date_detalis,:state_details,:progress,:usersenddetails,:send_status)");
         $inserstmtdetails->bindParam(":project_id",$project_id);
         $inserstmtdetails->bindParam(":task_id", $task_id);
         $inserstmtdetails->bindParam(":comment", $commenttask);
         $inserstmtdetails->bindParam(":date_detalis",$senddate);
         $inserstmtdetails->bindParam(":state_details",$state_details);
         $inserstmtdetails->bindParam(":progress",$progress);
+        $inserstmtdetails->bindParam(":usersenddetails",$user_id);
+        $inserstmtdetails->bindParam(":send_status",$send_status);
         $inserstmtdetails->execute();
         $lastId = $db->lastInsertId(); 
 
@@ -715,21 +947,31 @@
         $updatestattask->execute(); 
 
        
-        /* foreach ($files['name'] as $id => $filesname){
-        $inserfile_item_details = $db->prepare("INSERT INTO file_item_details(project_id,task_id,filename_details,details_id) 
-        VALUES(:project_id,:task_id,:filename_details,:details_id)");
-        $inserfile_item_details->bindParam(":project_id",$project_id);
-        $inserfile_item_details->bindParam(":task_id",$task_id);
-        $inserfile_item_details->bindParam(":filename_details",$filesname);
-        $inserfile_item_details->bindParam(":details_id",$lastId);
-        $inserfile_item_details->execute();  
-        } */
+        foreach ($files['name'] as $i => $file_name) {
+            $numrand = (mt_rand());
+            $type = strrchr($file_name,".");
+            $newname = $date.$code.$numrand.$type;
+            $file_tmp = $files['tmp_name'][$i];
+            $file_dest = $file_name; 
+            $file_data = "img/file/file_details/";
+            move_uploaded_file($file_tmp,$file_data.$newname);
+            if($numfilesend != "0" ){
+            $inserfile_item_details = $db->prepare("INSERT INTO file_item_details(project_id,task_id,filename_details,details_id,newname_filedetails) 
+            VALUES(:project_id,:task_id,:filename_details,:details_id,:newname_filedetails)");
+            $inserfile_item_details->bindParam(":project_id",$project_id);
+            $inserfile_item_details->bindParam(":task_id",$task_id);
+            $inserfile_item_details->bindParam(":filename_details",$file_name);
+            $inserfile_item_details->bindParam(":details_id",$lastId);
+            $inserfile_item_details->bindParam(":newname_filedetails",$newname);
+            $inserfile_item_details->execute();  
+            }
+       }
 
         $_SESSION['success'] = "ส่งงานกลับเเก้ไขเรียบร้อยแล้ว!!! ";
         $url_return ="location:checktask_list.php";
 
     }
-    echo "ไม่เข้าไอ้โง่";
+ 
     
         header($url_return);
 

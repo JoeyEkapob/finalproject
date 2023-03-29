@@ -12,12 +12,13 @@
                              <div class="card-header">
                                  <div class="row">
                                     <div class="col-md-6">
+                                    <p id="item-details"></p>
                                                 <dl>
                                                     <dt><b class="border-bottom border-primary">ชื่องาน</b></dt>
                                                     <dd><?php echo $row2['name_tasklist'] ?></dd>
 
                                                     <dt><b class="border-bottom border-primary">คำอธิบาย</b></dt>
-                                                    <dd><?php echo $row2['description_task']  ?></dd>
+                                                    <dd><?php echo trim($row2['description_task'])  ?></dd>
 
                                                  <dt><b class="border-bottom border-primary mb-3">ความคืบหน้า</b></dt>
                                                     <dd>
@@ -83,7 +84,7 @@
                                                     while ($row2 = $qry->fetch(PDO::FETCH_ASSOC)) {  ?>
                                                 <div class="row">
                                                     <div class="col-sm">
-                                                        <a href="proc.php?proc=download&file_item_task=<?php echo $row2['file_item_task']?>"><?php echo $row2['filename_task']?></a> 
+                                                    <a href="img/file/file_task/<?php echo $row2['newname_filetask']; ?>" download="<?php echo $row2['filename_task']?>"><?php echo $row2['filename_task']?></a> 
                                                     
                                                     </div>
                                                 </div>

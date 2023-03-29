@@ -83,7 +83,8 @@
                                                        while ($row2 = $qryfiledetails->fetch(PDO::FETCH_ASSOC)) {   ?>
                                                     <div class="row">
                                                         <div class="col-sm">
-                                                     <a href="proc.php?proc=download&file_item_details=<?php echo $row2['file_details_id']?>"><?php echo $row2['filename_details']?></a> 
+                                                     <!-- <a href="proc.php?proc=download&file_item_details=<?php echo $row2['file_details_id']?>"><?php echo $row2['filename_details']?></a>  -->
+                                                    <a href="img/file/file_details/<?php echo $row2['newname_filedetails']; ?>" download="<?php echo $row2['filename_details']?>"><?php echo $row2['filename_details']?></a> 
                                                         
                                                         </div>
                                                     </div>  

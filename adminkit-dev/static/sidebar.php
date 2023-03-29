@@ -97,7 +97,7 @@
               <i class="align-middle" data-feather="list"></i> <span class="align-middle">รายการโปรเจค</span>
             </a>
 					</li> -->
-					<li class="sidebar-item">
+					<!-- <li class="sidebar-item">
 						<a data-bs-target="#task_list" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
 							<i class="align-middle" data-feather="list"></i> 
 							 <span class="align-middle">
@@ -108,7 +108,7 @@
 						<ul id="task_list" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
 							<li class="sidebar-item">
 								<a class="sidebar-link" href="task_list.php">
-								&nbsp;&nbsp;&nbsp;--> หัวงานที่สร้าง 
+								&nbsp;&nbsp;&nbsp; หัวงานที่สร้าง 
 								</a>
 							</li>
 						</ul>
@@ -116,11 +116,11 @@
 						<ul id="task_list" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
 							<li class="sidebar-item">
 								<a class="sidebar-link" href="task_list_user.php">
-								&nbsp;&nbsp;&nbsp;--> หัวงานที่ถูกมอบหมาย
+								&nbsp;&nbsp;&nbsp; หัวงานที่ถูกมอบหมาย
 								</a>
 							</li>
 						</ul>
-					</li>
+					</li> -->
 					<!-- <li class="sidebar-item">
 						<a class="sidebar-link" href="task_list.php">
               <i class="align-middle" data-feather="list"></i> <span class="align-middle">รายการงาน</span>

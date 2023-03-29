@@ -5,14 +5,16 @@
          $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
         header('location:sign-in.php');
     }
+	 include "sidebar.php";
+	 
 	$user_id=$_SESSION['user_login'];
 	$where ="";
-	$stmt = "SELECT * FROM user natural join position WHERE user_id = $user_id";
+/* 	$stmt = "SELECT * FROM user natural join position WHERE user_id = $user_id";
 	$stmt = $db->prepare($stmt);
 	$stmt ->execute();
 	$stmt = $stmt->fetch(PDO::FETCH_ASSOC);
 
-	$level = $stmt['level'];
+	$level = $stmt['level']; */
 
 	$stmtusernum = "SELECT COUNT(user_id) as num FROM user  ";
 	$stmtusernum = $db->prepare($stmtusernum);
@@ -20,7 +22,7 @@
 	$stmtusernum = $stmtusernum->fetchColumn();
 
 
-	if($level > 2){
+	if($level >= 2){
 		$where = "   natural join project_list WHERE user_id = $user_id ";
 	}
 
@@ -29,22 +31,30 @@
 	$stmtprojectnum ->execute();
 	$stmtprojectnum = $stmtprojectnum->fetchColumn();
 	
+	$stmttasknum = "SELECT COUNT(project_id) as num2 FROM task_list $where  ";
+	$stmttasknum = $db->prepare($stmttasknum);
+	$stmttasknum ->execute();
+	$stmttasknum = $stmttasknum->fetchColumn();
 
-
-
-	$stmttask = "SELECT COUNT(project_id) as num2 FROM task_list $where  ";
-	$stmttask = $db->prepare($stmttask);
-	$stmttask ->execute();
-	$stmttask = $stmttask->fetchColumn();
+	$state_details = "";
+	if($level >= 2){
+	$stmtdetails = "SELECT COUNT(details_id) as num3 FROM details WHERE state_details = 'Y'  ";
+	}else{
+	$stmtdetails = "SELECT COUNT(details_id) as num3 FROM details WHERE state_details = 'Y' AND  usersenddetails = $user_id ";
+	}
+	$stmtdetails = $db->prepare($stmtdetails);
+	$stmtdetails ->execute();
+	$stmtdetails = $stmtdetails->fetchColumn();
 	//extract($row);
 	//print_r ($num_rows); 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <?php include "head.php"?>
 <body>
 	<?php include "funtion.php"?>
-<?php include "sidebar.php"?>
+
 			<main class="content">
 				<div class="container-fluid p-0">
 				
@@ -69,7 +79,7 @@
 															</div>
 														</div>
 													</div>
-													<h1 class="mt-1 mb-3">0</h1>
+													<h1 class="mt-1 mb-3"><?php echo $stmtdetails; ?></h1>
 													<div class="mb-0">
 														<span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
 														<span class="text-muted">งานที่ต้องตรวจทั้งหมด</span>
@@ -92,7 +102,7 @@
 																</div>
 															</div>
 														</div>
-														<h1 class="mt-1 mb-3"><?php echo $stmttask ?></h1>
+														<h1 class="mt-1 mb-3"><?php echo $stmttasknum ?></h1>
 														<div class="mb-0">
 															<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
 															<span class="text-muted">งานทั้งหมด</span>
@@ -237,8 +247,6 @@
 								</div>
 									<?php
 										$i = 1;
-										$stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","อยู่ระหว่างการตรวจสอบ","รอการเเก้ไข","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
-										$stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
 										if($level >=2 ){
 											$where = "  natural join project_list where user_id  = $user_id ";   
 										}else {
@@ -269,29 +277,21 @@
 													<td class="text-center"><?php echo $i++ ?></td>
 														<td>
 															<p><b><?php echo $stmtshowprojectrow["name_project"]?></b>
-															<?php
-																if ($stmtshowprojectrow['status_2'] == '1') {
-																	echo " "." "."<span class='badge bg-secondary'>".$stat2[$stmtshowprojectrow['status_2']]."</span>";
-																}else if($stmtshowprojectrow['status_2'] == '2'){
-																	echo " "."<span class='badge bg-warning'>".$stat2[$stmtshowprojectrow['status_2']]."</span>";
-																}else if($stmtshowprojectrow['status_2'] == '3'){
-																	echo " "."<span class='badge bg-danger'>".$stat2[$stmtshowprojectrow['status_2']]."</span>";
-																}
-																?></p>
-															<p class="truncate"><?php echo substr($stmtshowprojectrow['description'],0,100).'...';  ?></p>
+															<?php showstatpro2($stmtshowprojectrow['status_2']) ?></p>
+															<p class="truncate"><?php echo substr($stmtshowprojectrow['description'],0,20).'...';  ?></p>
 														
 														</td>
 													<td class="">
 													
 														<div class="progress mb-3">
 										
-															<div class="progress-bar progress-bar-striped progress-bar-animated-sm" role="progressbar" style="width: 10%" >0</div>
+															<div class="progress-bar progress-bar-striped progress-bar-animated-sm" role="progressbar" style="width:<?php echo $stmtshowprojectrow['progress_project'] ?>%" ><?php echo $stmtshowprojectrow['progress_project'] ?>%</div>
 														</div>
 
 													</td>
 
-													<td class="text-center" ><b><?php echo ThDate($stmtshowprojectrow['start_date']) ?></b></td>
-													<td class="text-center "><b><?php echo ThDate(($stmtshowprojectrow['end_date'])) ?></b></td>
+													<td class="text-center" ><?php echo ThDate($stmtshowprojectrow['start_date']) ?></td>
+													<td class="text-center "><?php echo ThDate(($stmtshowprojectrow['end_date'])) ?></td>
 													<td class="text-center">
 														<?php
 														/*  echo $stat1[$row['status_1']];

@@ -1,6 +1,6 @@
 <?php
     function showstatpro($status){
-        $stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
+        $stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","เลยระยะเวลาที่กำหนด","ปิดโปรเจค");
         if($status =='1'){
             echo "<span class='badge bg-secondary'>".$stat1[$status]."</span>";
         }elseif($status =='2'){

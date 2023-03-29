@@ -100,7 +100,7 @@
                                              <td>
                                                 <p><b><?php echo $row["name_project"]?></b>
                                                 <?php showstatpro2($row['status_2']);?></p>
-                                                <p class="truncate"><?php echo substr($row['description'],0,100).'...';  ?></p>
+                                                <p class="truncate"><?php echo mb_substr($row['description'],0,20).'...';  ?></p>
 						                    </td>
 
                                             <td class="">
@@ -113,7 +113,7 @@
 
                                          
                                             <td class="text-center" ><?php echo ThDate($row['start_date']) ?></td>
-					                        <td class="text-center "><?php echo ThDate($row['end_date']) ?></td>
+					                        <td class="text-center "><?php echo ThDate($row['end_date'])  ?></td>
 
                                             
 
@@ -123,9 +123,12 @@
                                             <td class="text-center">                   
                                                <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                      
                                                 <a class="btn btn-bitbucket btn-sm" href="view_project.php?view_id=<?php echo $row['project_id']?>"><i data-feather="zoom-in"></i></a>
+                                            
                                                 <a class="btn btn-warning btn-sm" href="editproject_page.php?update_id=<?php echo $row['project_id']?>"><i data-feather="edit"></i></a>
+                                            
+
                                                 <?php 
-                                                    if ($numtask == 0) {
+                                                    if ($numtask == 0 || $row['status_1'] == 4) {
                                                     echo '<button class="btn btn-danger btn-sm" onclick="deleteproject(\''. $row['project_id'] .'\')"><i data-feather="trash-2"></i></button>';
                                                     } else {
                                                     echo '<button class="btn btn-danger btn-sm disabled" onclick="deleteproject(\''. $row['project_id'] .'\')"><i data-feather="trash-2"></i></button>';

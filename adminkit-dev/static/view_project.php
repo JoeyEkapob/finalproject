@@ -12,6 +12,7 @@
     $targetDir = "img/avatars/";
     $stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","ส่งเรียบร้อยเเล้ว","รอการเเก้ไข","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
     $stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
+    
     $select_project = $db->prepare('SELECT * FROM project  natural JOIN job_type  WHERE project_id = :id');
     $select_project->bindParam(":id", $id);
     $select_project->execute();
@@ -47,7 +48,7 @@
                 </div>
             <?php } ?>
 <!-- form action="addtask.php" method="post" class="form-horizontal" enctype="multipart/form-data" -->
-<form action="proc.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+<form action="proc.php" method="post" id="viewpro" class="form-horizontal" enctype="multipart/form-data">
 
     <input type="hidden" id="proc" name="proc" value="">
     <input type="hidden" id="task_id" name="task_id" value="">
@@ -94,14 +95,14 @@
                                                         $stmt->bindParam(":file_item_project", $row2['file_item_project']);
                                                         $stmt->execute();  
                                                         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                                                         
 
                                                         ?>
                                                 <div class="row">
                                                     <div class="col-sm">
-                                                     <a href="img/file/file_project/<?php echo $row['filename']; ?>" download><?php echo $row2['filename']?></a> 
-                                                        <!-- <a onclick="download('<?php echo $row2['file_item_project']?>') "><?php echo $row2['filename']?></a> -->
-                                                        <!-- <a href="../static/img/file/<?php echo $row2['filename']?> " target="_blank"><?php echo $row2['filename']?></a><br>  -->
+                                                     <a href="img/file/file_project/<?php echo $row['newname_filepro']; ?>" download="<?php echo $row2['filename']; ?>"><?php echo $row2['filename']?></a> 
+                                                       <!-- <u onclick="download('<?php echo $row2['file_item_project']?>') "style="color:#3399FF;"><?php echo $row2['filename']?></u>  -->
+                                                    <!-- <a onclick="download('<?php echo $row2['file_item_project']?>') "><?php echo $row2['filename']?></a> -->
+                                                    <!-- <a href="../static/img/file/<?php echo $row2['filename']?> " target="_blank"><?php echo $row2['filename']?></a><br>  -->
                                                     </div>
                                                     
                                                 </div>          
@@ -122,10 +123,8 @@
                                                         <dt><b class="border-bottom border-primary">ความคืบหน้า</b></dt>
                                                         <dd>
                                                             <?php
-                                                            if($progress_project == 0){
-                                                                $progressproject = array(0);
-                                                            }
-                                                            $progressproject = array();
+                                                             $progressproject = array();
+
                                                             $sqlprogressproject = "SELECT * FROM project NATURAL JOIN task_list WHERE project_id = $id";
                                                             $qryprogressproject = $db->query($sqlprogressproject);
                                                             $qryprogressproject->execute();
@@ -136,18 +135,18 @@
                                                             //print_r($progressproject);
                                                             $sumprogress =  array_sum($progressproject);
                                                             $numprogress = sizeof($progressproject);
+                                                            $totalprogress2 = 0;
+                                                            if($numprogress != 0 ){
                                                             $totalprogress = $sumprogress/$numprogress;
                                                             $totalprogress2=number_format($totalprogress,2);   
-
-                                                           
-                                                            
-                                                            echo $totalprogress2;
+                                                           }
+                                                            //echo $totalprogress2;
                                                             
                                                             $updateproject = $db->prepare('UPDATE project  SET  progress_project = :progress_project WHERE project_id = :project_id');
                                                             $updateproject->bindParam(":progress_project",$totalprogress2);
                                                             $updateproject->bindParam(":project_id",$id);
                                                             $updateproject->execute(); 
-                                                            ?> 
+                                                             ?> 
                                                         <br>
                                                             <div class="col-md-3">
                                                                 <div class="progress ">
@@ -275,7 +274,8 @@
                                        
                                     <td class="text-center">
                                   
-                                       <a class="btn btn-google btn-sm" href="?update_id=<?php echo $row2['task_id']?>"  > <i data-feather="message-square"></i></a>   
+                                       <a class="btn btn-google btn-sm" href="details_page.php?task_id=<?php echo $row2['task_id']?>&project_id=<?php echo $row2['project_id']?>"><i data-feather="message-square"></i></a>   
+                                       <!-- <a class="btn btn-google btn-sm" data-bs-toggle="modal" data-bs-target="#viewdetailsmodal<?php echo $row2['details_id']?>"><i data-feather="message-square"></i></a> -->
 
                                        <a class="btn btn-bitbucket btn-sm" data-bs-toggle="modal" data-bs-target="#viewtaskmodal<?php echo $row2['task_id']?>"><i data-feather="zoom-in"></i></a>
 
@@ -290,8 +290,8 @@
                                                /*  print_r ($member) ; */
                                           
                                         // if (in_array($us,$member) || ( $level <= 2 || $manager_id == $us ) AND $row2['status_task'] != 3 AND $row2['progress_task'] != 100  ) {
-                                        if ($row2['user_id'] == $us|| $level <= 2 || $manager_id == $us  AND $row2['status_task'] != 3 AND $row2['progress_task'] != 100  ) {
-                                            echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] . '" class="btn btn-success btn-sm"><i data-feather="share"></i></a>';  
+                                        if ($row2['user_id'] == $us|| $level <= 2 || $manager_id == $us  AND $row2['status_task'] != 3 AND $row2['progress_task'] != 100  AND $status_1 != 4) {
+                                            echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] .'&user_id='. $us .' " class="btn btn-success btn-sm"><i data-feather="share"></i></a>';  
                                         }
                                         else if( $row2['progress_task'] != 100 AND $row2['status_task'] == 3 ){
                                             echo '<button class="btn btn-danger btn-sm"  onclick="deldetails('.$row2['task_id'].','.$row2['project_id'].','.$stmt2['details_id'].')"><i data-feather="x"></i></button> '; 
@@ -300,10 +300,10 @@
                                             // echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] . '" class="btn btn-danger btn-sm"><i data-feather="x"></i></a>';
                                             // echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] . '" class="btn btn-success btn-sm disabled"><i data-feather="share"></i></a>'; 
                                             echo ' ';
-                                        if($manager_id == $us || $level <= 2) {
+                                        if($manager_id == $us || $level <= 2 AND $status_1 != 4) {
                                             echo '<a class="btn btn-warning btn-sm" href="edittask_page.php?updatetask_id='.$row2['task_id'].'&project_id='.$row2['project_id'].'"><i data-feather="edit"></i></a>';
                                             echo ' ';
-                                        }if($numsenddetails == 0 AND $manager_id == $us || $level <= 2){
+                                        }if($numsenddetails == 0 AND $manager_id == $us || $level <= 2 AND $status_1 != 4){
                                                 echo '<button class="btn btn-danger btn-sm" onclick="del_task(\''.$row2['task_id'].'\',\''.$row2['project_id'].'\')"><i data-feather="trash-2"></i></button>';
                                         }   
                                         ?>
@@ -319,8 +319,8 @@
                                     </td>
                                 </tr>
                                
-                                <?php include "viewtask_modal.php";
-                             } ?>
+                                <?php include "viewtask_modal.php";?>
+                            <?php  } ?>
                                 </tbody>
                                 <?php include "addtask_model.php"?>
                             </table>
@@ -337,6 +337,7 @@
 
 <?php include "footer.php"?>
 <script>
+     
     $(document).ready(function () {
         $('#example').DataTable();
     });
@@ -350,9 +351,11 @@
     function add_task(){
         $('#proc').val('add_task');
     }
+
     function download(file_item_project){
         $('#proc').val('download');
         $('#file_item_project').val(file_item_project);
+        $('#viewpro').submit();
 
     }
 

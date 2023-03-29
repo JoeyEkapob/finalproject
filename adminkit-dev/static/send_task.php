@@ -8,6 +8,7 @@ session_start();
 		
         $taskid =  $_REQUEST['task_id'];
         $project_id= $_REQUEST['project_id'];
+        $user_id= $_REQUEST['user_id'];
 
         $stmttask = $db->prepare("SELECT *  ,concat(firstname,' ',lastname) as name  FROM task_list natural JOIN user  WHERE task_id = :id");
         $stmttask->bindParam(":id", $taskid);
@@ -44,7 +45,8 @@ session_start();
     <input type="hidden" id="senddate" name="senddate" value=" ">
     <input type="hidden" id="state_details" name="state_details" value=" ">
     <input type="hidden" id="progress_task" name="progress_task" value=" ">
-   
+    <input type="hidden" id="user_id" name="user_id" value=" ">
+  
 		<main class="content">
 				<div class="container-fluid p-0">
 					<h1 class="h3 mb-3">ส่งงาน</h1>
@@ -86,15 +88,14 @@ session_start();
                     </div>
                     <div class="justify-content-center">
                             <label for="exampleFormControlTextarea1" class="form-label">รายละเอียด</label>
-                            <textarea class="form-control" name="text_comment" id="exampleFormControlTextarea1" rows="7" >  
-                        </textarea>
+                            <textarea class="form-control" name="text_comment" id="exampleFormControlTextarea1" rows="7"></textarea>
                           
                         </div>
                         <div class="mb-3">
                         </div>
                         <hr>
                         <div class="col-lg-12 text-right justify-content-center d-flex">
-                            <button class="btn btn-primary " name ="edittask" onclick="send_task('<?php echo $taskid ?>','<?php echo $project_id?>','<?php echo $stmttaskrrow['progress_task'] ?>');">Send</button>
+                            <button class="btn btn-primary " name ="edittask" onclick="send_task('<?php echo $taskid ?>','<?php echo $project_id?>','<?php echo $stmttaskrrow['progress_task'] ?>','<?php echo $user_id ?>');">Send</button>
                             <a href="view_project.php?view_id=<?php echo $project_id?>" class="btn btn-secondary" type="button"  >Cancel</a>
                         </div>
                     </div>
@@ -108,11 +109,12 @@ session_start();
     </body>
 </html>
 <script>
-     function send_task(taskid,project_id,progress_task){
+     function send_task(taskid,project_id,progress_task,user_id){
         $('#proc').val('sendtask');
         $('#task_id').val(taskid);
         $('#project_id').val(project_id);
         $('#progress_task').val(progress_task);
+        $('#user_id').val(user_id);
         $('#state_details').val('Y');
         $('#senddate').val('<?php echo $date?>');
         

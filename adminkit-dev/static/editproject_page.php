@@ -6,18 +6,17 @@
         header('location:sign-in.php');
     }
 
-    $stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
+
     if (isset($_GET['update_id'])){
-        try {
             $pro_id = $_REQUEST['update_id'];
-            $select_stmt = $db->prepare("SELECT * ,concat(firstname,' ',lastname) as name FROM project   natural JOIN project_list natural JOIN job_type natural JOIN user  WHERE project_id = :id");
+            $select_stmt = $db->prepare("SELECT * ,concat(firstname,' ',lastname) as name ,
+            DATE_FORMAT(start_date,'%Y-%m-%d') AS start_date_pro,
+            DATE_FORMAT(end_date,'%Y-%m-%d') AS end_date_pro
+            FROM project   natural JOIN project_list natural JOIN job_type natural JOIN user  WHERE project_id = :id");
             $select_stmt->bindParam(":id", $pro_id);
             $select_stmt->execute();
             $row2 = $select_stmt->fetch(PDO::FETCH_ASSOC);
 
-        } catch(PDOException $e) {
-            $e->getMessage();
-        }
     }   
       
 
@@ -27,6 +26,7 @@
         <?php include "head.php"?>
     <body>
         <?php include "sidebar.php"?>
+        <?php include "funtion.php" ?>
         <style>
             .placeholder {
                 display: inline-block;
@@ -38,7 +38,23 @@
             }
 
         </style> 
-        <form action="proc.php" method="post" id="form_data" class="form-horizontal" enctype="multipart/form-data" >
+        <?php if(isset($_SESSION['error'])) { ?>
+                <div class="alert alert-danger" role="alert">
+                    <?php 
+                        echo $_SESSION['error'];
+                        unset($_SESSION['error']);
+                    ?>
+                </div>
+            <?php } ?>
+            <?php if(isset($_SESSION['success'])) { ?>
+                <div class="alert alert-success" role="alert">
+                    <?php 
+                        echo $_SESSION['success'];
+                        unset($_SESSION['success']);
+                    ?>
+                </div>
+            <?php } ?>
+        <form action="proc.php" method="post" id="formeditpro" class="form-horizontal" enctype="multipart/form-data" >
 
         <input type="hidden" id="proc" name="proc" value="">
         <input type="hidden" id="project_id" name="project_id" value="">
@@ -76,17 +92,18 @@
 												</select>
 										</div> 		
                                     </div>
-                                 
+                                    
+                                
                                     <div class="col-md-6">
 										<div class="mb-3">
 											<label for="" class="control-label">วันที่สั่ง</label>
-                                            <input type="date" class="form-control form-control" autocomplete="off" name="start_date" value="<?php echo $row2['start_date']; ?>"  >
+                                            <input type="date" class="form-control form-control" autocomplete="off" name="start_date" value="<?php echo $row2['start_date_pro']; ?>"  >
 										</div>
                                     </div>
                                     <div class="col-md-6">
 										<div class="mb-3">
 											<label for="" class="control-label">วันที่เสร็จ</label>
-                                            <input type="date" class="form-control form-control" autocomplete="off" name="end_date" value="<?php echo $row2['end_date']; ?>"  >
+                                            <input type="date" class="form-control form-control" autocomplete="off" name="end_date" value="<?php echo $row2['end_date_pro']; ?>"  >
 										</div>
                                     </div>						
 									
@@ -100,47 +117,56 @@
                                     </div>
 
                                     <div class="col-md-6">   
-                                    <div class="mb-4">
-											<label for="" class="control-label">สมาชิกทีมโครงการ</label>
-												 <select  name="status2" class="form-control"  >
-                                                 <option value="<?php  echo $row2['status_2']; ?>" ><?php echo  $stat2[$row2['status_2']]; ?></option>	
+                                        <div class="mb-4">
+											<label for="" class="control-label">ความเร่งของงาน</label>
+												 <select  name="status2" class="form-select"  >
+                                                 <option value="<?php  echo $row2['status_2']; ?>" ><?php  showstatpro2($row2['status_2']) ?></option>	
               	                                    <option value="1">งานปกติ</option>
                                                     <option value="2">งานด่วน</option>
                                                     <option value="3">งานด่วนมาก</option>
 												</select>  
                                            <?php// print_r ($result); ?>
 										</div>
-                                        </div>
-
+                                    </div>
+                                    <div class="col-md-6"> 
+                                    </div>   
+                                    <div class="col-md-6">   
+                                        <div class="mb-4">
+											<label for="" class="control-label">สถานะงาน</label>
+												 <select  name="status1" class="form-select"  >
+                                                 <option value="<?php  echo $row2['status_1']; ?>" ><?php   showstatpro($row2['status_1']); ?></option>	
+              	                                    <option value="1">รอดำเนินการ</option>
+                                                    <option value="2">กำลังดำเนินการ</option>
+                                                    <option value="3">เลยระยะเวลาที่กำหนด</option>
+                                                    <option value="4">ปิดโปรเจค</option>
+												</select>  
+                                           <?php// print_r ($result); ?>
+										</div>
+                                    </div>                 
 
 
 
                                     <div class="mb-3">
 											<div class="form-group">
-                                            <label for="" class="control-label">ไฟล์เเนบ</label>	
-												<input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
-												<?php 
-                                                    $sql = "SELECT * FROM  file_item_project  WHERE project_id = $pro_id";
-                                                    $qry = $db->query($sql);
-                                                    $qry->execute();
-                                                    while ($row = $qry->fetch(PDO::FETCH_ASSOC)) {  ?>
-                                    <?php echo $row['filename']?> 
-                                    <a  onclick="delfilepro('<?php echo $row['project_id'] ?>','<?php echo $row['file_item_project']?>');"><i data-feather="trash-2"></i></a>
-                                  
+                                                <label for="" class="control-label">ไฟล์เเนบ</label>	
+                                                    <input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
+                                                    <?php 
+                                                        $sql = "SELECT * FROM  file_item_project  WHERE project_id = $pro_id";
+                                                        $qry = $db->query($sql);
+                                                        $qry->execute();
+                                                        while ($row = $qry->fetch(PDO::FETCH_ASSOC)) {  ?>
+                                                        <?php echo $row['filename']?> 
+                                                        <a  onclick="delfilepro('<?php echo $row['project_id'] ?>','<?php echo $row['file_item_project']?>');"><i data-feather="trash-2"></i></a>
+                                            </div>
+                                        <?php } ?>
+									</div>
                                 </div>
-                           
-                              
-                                <?php } ?>
-											</div>
-                                    </div>
                                    
 
                                     
                                     <div class="justify-content-center">
                                             <label for="exampleFormControlTextarea1" class="form-label">รายละเอียด</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" name ="description" rows="7">
-                                            <?php echo  $row2['description']; ?>  
-                                            </textarea>
+                                            <textarea class="form-control" id="exampleFormControlTextarea1" name ="description" rows="7"><?php echo $row2['description'];?></textarea>
                                         </div>
                                         <div class="mb-3">
                                         </div>
@@ -203,7 +229,7 @@ $(document).ready(function(){
         $('#proc').val('delfilepro');
         $('#file_item_project').val(file_item_project);
         $('#project_id').val(project_id);
-        $('#form_data').submit();
+        $('#formeditpro').submit();
         
     }
 </script>

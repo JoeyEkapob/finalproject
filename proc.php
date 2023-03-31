@@ -6,7 +6,7 @@
     $date = date('Y-m-d');
     $url_return = "";
     $user_id=$_SESSION['user_login'];
- 
+  
     if($_POST['proc'] == 'viewdetails'){
         $details_id = $_POST['detail_id'];
         $usersendid = $_POST['usersendid'];
@@ -117,7 +117,7 @@
         while($row = $qry->fetch(PDO::FETCH_ASSOC)){;
         echo json_encode($row);
         } */
-        $code ="d";
+        $code ="ED";
         $details_id = $_POST['details_id'];
         $task_id = $_POST['task_id'];
         $project_id = $_POST['project_id'];
@@ -224,7 +224,7 @@
         $textarea=$_POST['textarea'];
         
         $files = $_FILES['files'];
-      
+        $progress_task = 0;
 
            /*   echo strtotime($datestartproject).'__________'.strtotime($dateendproject).'__________'.strtotime($start_date).'__________'.strtotime($end_date);
            exit; */
@@ -244,8 +244,8 @@
             $url_return = "location:view_project.php?view_id=".$pro_id;
           
         } else if(!isset($_SESSION['error'])) {
-            $stmttask = $db->prepare("INSERT INTO task_list(task_id,name_tasklist, description_task,status_task, strat_date_task,end_date_task,project_id,user_id) 
-            VALUES(:task_id,:taskname,:textarea,:status,:start_date,:end_date,:pro_id,:users_id)");
+            $stmttask = $db->prepare("INSERT INTO task_list(task_id,name_tasklist, description_task,status_task, strat_date_task,end_date_task,project_id,user_id,progress_task) 
+            VALUES(:task_id,:taskname,:textarea,:status,:start_date,:end_date,:pro_id,:users_id,:progress_task)");
             $stmttask->bindParam(":task_id", $nextId);
             $stmttask->bindParam(":taskname", $taskname);
             $stmttask->bindParam(":textarea", $textarea);
@@ -255,9 +255,11 @@
             // $stmttask->bindParam(":file_task",$file_task);
             $stmttask->bindParam(":pro_id", $pro_id);
             $stmttask->bindParam(":users_id",$user );
+            $stmttask->bindParam(":progress_task",$progress_task );
             $stmttask->execute();   
             //$lastId = $db->lastInsertId(); 
             foreach ($files['name'] as $i => $file_name) {
+                $code = "AT";
                 $numrand = (mt_rand());
                 $type = strrchr($file_name,".");
                 $newname = $date.$code.$numrand.$type;
@@ -485,6 +487,7 @@
             $updatestmttask->execute();   
 
             foreach ($files['name'] as $i => $file_name) {
+                $code = "ET";
                 $numrand = (mt_rand());
                 $type = strrchr($file_name,".");
                 $newname = $date.$code.$numrand.$type;
@@ -541,7 +544,7 @@
     }
     else if($_POST['proc'] == 'addpro'){
         //print_r($_POST['users_id']); 
-
+       
         $code = "P";
         $yearMonth = substr(date("Y")+543, -2);
 
@@ -574,15 +577,15 @@
        $users_id = explode(",", $users_id1); // เเล้วก็นำ string มาทำเป็น array หลาย id 
        $progress_project = 0;
 
-       echo $users_id1;
-       print_r($users_id);
+       //echo $users_id1;
+       //print_r($users_id);
 
         $files = $_FILES['files']; 
-        //$type = strrchr($files['name'],".");
+        //$type = strrchr($files['name'],".");                                      
       /*   $type = strrchr($_FILES['files']['name'],".");
         print_r($type);
         exit; */
-      
+   
        //print_r($files['tmp_name'][$i]);
        //echo $file_tmp.$file_data.$file_dest;
        //echo $newname;
@@ -625,9 +628,10 @@
              $inserstmtprolist->bindParam(":user_id", $users_id);
              $inserstmtprolist->execute(); 
             }
-            
+         
           
             foreach ($files['name'] as $i => $file_name) {
+                $code = "P";
                 $numrand = (mt_rand());
                 $type = strrchr($file_name,".");
                 $newname = $date.$code.$numrand.$type;
@@ -645,7 +649,8 @@
                 }
             }
 
-            $stmtuser = "SELECT CONCAT(firstName, ' ', lastName) As FullName  FROM user where user_id = ".$manager_id."";
+            exit;
+           $stmtuser = "SELECT CONCAT(firstName, ' ', lastName) As FullName  FROM user where user_id = ".$manager_id."";
             $stmtuser = $db->prepare($stmtuser);
             $stmtuser ->execute();
             $stmtuserrow = $stmtuser->fetch(PDO::FETCH_ASSOC);
@@ -656,9 +661,26 @@
             $stmtjobtyperow = $stmtjobtype->fetch(PDO::FETCH_ASSOC);
            // echo showstatpro2($status2);
          
+         
+           require_once __DIR__ . '/vendor/autoload.php';
+           $channelAccessToken = 'dsB5jRO+WPi8Zqd7/Q/ozHktOD6B9TSFg2xu9ZQYGF79MT3qkQr0AnjRhzRyHGGTlC/fNSUkd7vFCyvhSuxstNiQ7FrCnnxYt2nbxRQck5t2fV1c6B30npHw7+f+A8spoSZI7Ceh/UNScDFlz0al5gdB04t89/1O/w1cDnyilFU=';
+           $channelSecret = '738ce0c60bb1e04ace0e31516fa337f1';
+
+            $userId = 'U966e6a5801abecfb88d7c1bb49b9775d'; // เปลี่ยนเป็น User ID ของผู้ใช้งาน LINE ที่ต้องการส่งข้อความ
+           $text = 'สวัสดี LINE Messaging API'; // เปลี่ยนเป็นข้อความที่ต้องการส่ง
            
-    
-         $sToken = "dsB5jRO+WPi8Zqd7/Q/ozHktOD6B9TSFg2xu9ZQYGF79MT3qkQr0AnjRhzRyHGGTlC/fNSUkd7vFCyvhSuxstNiQ7FrCnnxYt2nbxRQck5t2fV1c6B30npHw7+f+A8spoSZI7Ceh/UNScDFlz0al5gdB04t89/1O/w1cDnyilFU=";
+            $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient('$channelAccessToken');
+            $bot = new \LINE\LINEBot($httpClient, [$channelSecret => $channelSecret]);
+            $textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($text);
+            $response = $bot->pushMessage($userId, $textMessageBuilder);
+           echo $response;
+           exit;
+           if (!$response->isSucceeded()) {
+               error_log('Failed to push message: ' . $response->getHTTPStatus() . ' ' . $response->getRawBody());
+           }
+                
+
+         /* $sToken = "dsB5jRO+WPi8Zqd7/Q/ozHktOD6B9TSFg2xu9ZQYGF79MT3qkQr0AnjRhzRyHGGTlC/fNSUkd7vFCyvhSuxstNiQ7FrCnnxYt2nbxRQck5t2fV1c6B30npHw7+f+A8spoSZI7Ceh/UNScDFlz0al5gdB04t89/1O/w1cDnyilFU=";
             $sMessage = "มีการเพื่มโปรเจค \n";
             $sMessage .= "ชื่อห้วงาน : ".$proname." \n";
             $sMessage .= "ประเภทงาน : ".$stmtjobtyperow['name_jobtype']." \n";
@@ -682,7 +704,7 @@
             if($result){
                 $_SESSION['success'] = "เพิ่มโปรเจคเรียบร้อย! ";
                 $url_return ="location:project_list.php";
-            } 
+            }  */
             //Result error 
             /*if(curl_error($chOne)) 
             { 
@@ -693,8 +715,9 @@
                 echo "status : ".$result_['status']; echo "message : ". $result_['message'];
             } 
             curl_close( $chOne );*/   
-    
-
+            exit;
+            $_SESSION['success'] = "เพิ่มโปรเจคเรียบร้อย! ";
+            $url_return ="location:project_list.php";
     
         }else {
          
@@ -763,6 +786,7 @@
             if (!empty(array_filter($_FILES['files']['name']))) {
                 $files = $_FILES['files'];
                 foreach ($files['name'] as $i => $file_name) {
+                $code = "EP";
                 $numrand = (mt_rand());
                 $type = strrchr($file_name,".");
                 $newname = $date.$code.$numrand.$type;    
@@ -867,6 +891,7 @@
        
        
             foreach ($files['name'] as $i => $file_name) {
+            $code = "ST";
             $numrand = (mt_rand());
             $type = strrchr($file_name,".");
             $newname = $date.$code.$numrand.$type;
@@ -1004,6 +1029,7 @@
 
        
         foreach ($files['name'] as $i => $file_name) {
+            $code = "D";
             $numrand = (mt_rand());
             $type = strrchr($file_name,".");
             $newname = $date.$code.$numrand.$type;
@@ -1032,3 +1058,6 @@
         header($url_return);
 
 ?>  
+
+
+        

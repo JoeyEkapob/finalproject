@@ -18,7 +18,6 @@ exit;  */
             $_SESSION['error'] = '<center>กรุณากรอกรหัสผ่าน</center>';
             header("location: sign-in.php");
         } else {
-            try {
                 $check_data = $db->prepare("SELECT * FROM user WHERE email = :uemail");
                 $check_data->bindParam(":uemail", $email);
                 $check_data->execute();
@@ -26,25 +25,23 @@ exit;  */
 
                 //print_r ($row);
                 if ($check_data->rowCount() > 0) {
-                if ($email == $row['email'] ){
-                   if(password_verify($password ,$row['password'])) {
-                        $_SESSION['user_login'] = $row['user_id'];
-                        header("location: index.php");
-                }  else {
-                    $_SESSION['error'] = '<center>รหัสผ่านผิด</center>';
+                    if ($email == $row['email'] ){
+                        if(password_verify($password ,$row['password'])) {
+                            $_SESSION['user_login'] = $row['user_id'];
+                            header("location: index.php");
+                        }else{
+                            $_SESSION['error'] = '<center>รหัสผ่านผิด</center>';
+                            header("location: sign-in.php");
+                        }   
+                    }else{
+                        $_SESSION['error'] = '<center>อีเมลผิด</center>';
+                        header("location: sign-in.php");
+                    }  
+                }else{
+                    $_SESSION['error'] = "<center>ไม่มีข้อมูลในระบบ</center>";
                     header("location: sign-in.php");
-                }   
-            } else{
-                $_SESSION['error'] = '<center>อีเมลผิด</center>';
-                header("location: sign-in.php");
-            }  
-        }  else{
-            $_SESSION['error'] = "<center>ไม่มีข้อมูลในระบบ</center>";
-            header("location: sign-in.php");
-        }  
-            }catch(PDOException $e) {
-                echo $e->getMessage();
-            }
+                }  
+
         }
     }
 

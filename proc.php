@@ -197,8 +197,8 @@
         $qry->execute();
         $row2 = $qry->fetch(PDO::FETCH_ASSOC);
         
-         $datestartproject = $row2['start_date'];
-         $dateendproject = $row2['end_date'];
+        $datestartproject = $row2['start_date'];
+        $dateendproject = $row2['end_date'];
      
         $yearMonth = substr(date("Y")+543, -2);
         $sql = "SELECT MAX(task_id) AS last_id FROM task_list ";
@@ -277,7 +277,43 @@
                     $inserfile_item_task->execute(); 
                 }
             }
-        
+            $dataproject = $db->prepare("SELECT manager_id FROM project WHERE project_id = :projectid");
+            $dataproject->bindParam(":projectid",$pro_id);
+            $dataproject ->execute();
+            $dataprojectrow = $dataproject->fetch(PDO::FETCH_ASSOC); 
+            $manager_id = $dataprojectrow['manager_id'];
+
+            $stmtuser = "SELECT CONCAT(firstName, ' ', lastName) As FullName  FROM user where user_id = ".$manager_id."";
+            $stmtuser = $db->prepare($stmtuser);
+            $stmtuser ->execute();
+            $stmtuserrow = $stmtuser->fetch(PDO::FETCH_ASSOC);
+
+            $datauser = $db->prepare("SELECT line_token FROM user WHERE user_id = :userid");
+            $datauser->bindParam(":userid",$user);
+            $datauser ->execute();
+            $datauserrow = $datauser->fetch(PDO::FETCH_ASSOC); 
+            
+            $sToken = $datauserrow['line_token'];
+            $sMessage = "มีการเพิ่มงาน \n";
+            $sMessage .= "ชื่อห้วงาน : ".$proname." \n";
+            $sMessage .= "ชื่องาน : ".$taskname." \n";
+            $sMessage .= "วันที่สั่ง : ".ThDate($start_date)." \n";
+            $sMessage .= "วันที่สิ้นสุด : ".ThDate($end_date)." \n";
+            $sMessage .= "คนที่สั่งงาน : ".$stmtuserrow['FullName']." \n";
+           // showstatprotext2($status2);
+            //echo  $sMessage;
+    
+            $chOne = curl_init(); 
+            curl_setopt( $chOne, CURLOPT_URL, "https://notify-api.line.me/api/notify"); 
+            curl_setopt( $chOne, CURLOPT_SSL_VERIFYHOST, 0); 
+            curl_setopt( $chOne, CURLOPT_SSL_VERIFYPEER, 0); 
+            curl_setopt( $chOne, CURLOPT_POST, 1); 
+            curl_setopt( $chOne, CURLOPT_POSTFIELDS, "message=".$sMessage); 
+            $headers = array( 'Content-type: application/x-www-form-urlencoded', 'Authorization: Bearer '.$sToken.'', );
+            curl_setopt($chOne, CURLOPT_HTTPHEADER, $headers); 
+            curl_setopt( $chOne, CURLOPT_RETURNTRANSFER, 1); 
+            $result = curl_exec( $chOne );  
+
             $_SESSION['success'] = "เพิ่มงานเรียบร้อย! ";
             $url_return = "location:view_project.php?view_id=".$pro_id;
 
@@ -286,6 +322,7 @@
             $_SESSION['error']= "มีบางอย่างผิดพลาด";
             $url_return ="location:addproject_page.php";
         }  
+    
 
         /* if (!empty(array_filter($_FILES['files']['name']))) {
             $files = $_FILES['files'];
@@ -577,8 +614,9 @@
        $users_id = explode(",", $users_id1); // เเล้วก็นำ string มาทำเป็น array หลาย id 
        $progress_project = 0;
 
+  
        //echo $users_id1;
-       //print_r($users_id);
+      /*  print_r($users_id);
 
         $files = $_FILES['files']; 
         //$type = strrchr($files['name'],".");                                      
@@ -590,7 +628,7 @@
        //echo $file_tmp.$file_data.$file_dest;
        //echo $newname;
        //exit;
-          if (empty($proname)) {
+        if (empty($proname)) {
           $_SESSION['error'] = 'กรุณากรอกชื่อโปรเจค';
           $url_return ="location:addproject_page.php";
           //header("location:addproject_page.php");
@@ -621,11 +659,11 @@
            $inserstmtpro->bindParam(":progress_project", $progress_project);
            $inserstmtpro->execute(); 
           // $lastId = $db->lastInsertId();
-        
-            foreach ($users_id as $id => $users_id){
+      
+            foreach ($users_id as $id => $user_id){
              $inserstmtprolist= $db->prepare("INSERT INTO project_list(project_id,user_id) VALUES(:project_id,:user_id)");
              $inserstmtprolist->bindParam(":project_id", $nextId);
-             $inserstmtprolist->bindParam(":user_id", $users_id);
+             $inserstmtprolist->bindParam(":user_id", $user_id);
              $inserstmtprolist->execute(); 
             }
          
@@ -649,8 +687,8 @@
                 }
             }
 
-            exit;
-           $stmtuser = "SELECT CONCAT(firstName, ' ', lastName) As FullName  FROM user where user_id = ".$manager_id."";
+      
+            $stmtuser = "SELECT CONCAT(firstName, ' ', lastName) As FullName  FROM user where user_id = ".$manager_id."";
             $stmtuser = $db->prepare($stmtuser);
             $stmtuser ->execute();
             $stmtuserrow = $stmtuser->fetch(PDO::FETCH_ASSOC);
@@ -662,25 +700,40 @@
            // echo showstatpro2($status2);
          
          
-           require_once __DIR__ . '/vendor/autoload.php';
+           /* require_once __DIR__ . '/vendor/autoload.php';
            $channelAccessToken = 'dsB5jRO+WPi8Zqd7/Q/ozHktOD6B9TSFg2xu9ZQYGF79MT3qkQr0AnjRhzRyHGGTlC/fNSUkd7vFCyvhSuxstNiQ7FrCnnxYt2nbxRQck5t2fV1c6B30npHw7+f+A8spoSZI7Ceh/UNScDFlz0al5gdB04t89/1O/w1cDnyilFU=';
            $channelSecret = '738ce0c60bb1e04ace0e31516fa337f1';
 
             $userId = 'U966e6a5801abecfb88d7c1bb49b9775d'; // เปลี่ยนเป็น User ID ของผู้ใช้งาน LINE ที่ต้องการส่งข้อความ
-           $text = 'สวัสดี LINE Messaging API'; // เปลี่ยนเป็นข้อความที่ต้องการส่ง
+            $text = 'สวัสดี LINE Messaging API'; // เปลี่ยนเป็นข้อความที่ต้องการส่ง
            
-            $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient('$channelAccessToken');
-            $bot = new \LINE\LINEBot($httpClient, [$channelSecret => $channelSecret]);
+             $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient($channelAccessToken);
+            $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => $channelSecret]);
             $textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($text);
             $response = $bot->pushMessage($userId, $textMessageBuilder);
-           echo $response;
-           exit;
+            print_r($response);
+          
            if (!$response->isSucceeded()) {
                error_log('Failed to push message: ' . $response->getHTTPStatus() . ' ' . $response->getRawBody());
-           }
-                
+           } 
+           $path = __DIR__ . '/vendor/autoload.php';
+           $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient($channelAccessToken);
+           $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => $channelSecret]);
+           
+           $textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($text);
+           $response = $bot->pushMessage($userId, $textMessageBuilder);
+           
+           echo $response->getHTTPStatus() . ' ' . $response->getRawBody();*/
+          
 
-         /* $sToken = "dsB5jRO+WPi8Zqd7/Q/ozHktOD6B9TSFg2xu9ZQYGF79MT3qkQr0AnjRhzRyHGGTlC/fNSUkd7vFCyvhSuxstNiQ7FrCnnxYt2nbxRQck5t2fV1c6B30npHw7+f+A8spoSZI7Ceh/UNScDFlz0al5gdB04t89/1O/w1cDnyilFU=";
+           foreach($users_id as $i => $userid ){
+            
+            $datauser = $db->prepare("SELECT line_token FROM user WHERE user_id = :userid");
+            $datauser->bindParam(":userid",$userid);
+            $datauser ->execute();
+            $datauserrow = $datauser->fetch(PDO::FETCH_ASSOC); 
+           
+            $sToken = $datauserrow['line_token'];
             $sMessage = "มีการเพื่มโปรเจค \n";
             $sMessage .= "ชื่อห้วงาน : ".$proname." \n";
             $sMessage .= "ประเภทงาน : ".$stmtjobtyperow['name_jobtype']." \n";
@@ -700,11 +753,11 @@
             curl_setopt($chOne, CURLOPT_HTTPHEADER, $headers); 
             curl_setopt( $chOne, CURLOPT_RETURNTRANSFER, 1); 
             $result = curl_exec( $chOne );  
-        
+           }
             if($result){
                 $_SESSION['success'] = "เพิ่มโปรเจคเรียบร้อย! ";
                 $url_return ="location:project_list.php";
-            }  */
+            }  
             //Result error 
             /*if(curl_error($chOne)) 
             { 
@@ -715,7 +768,7 @@
                 echo "status : ".$result_['status']; echo "message : ". $result_['message'];
             } 
             curl_close( $chOne );*/   
-            exit;
+        
             $_SESSION['success'] = "เพิ่มโปรเจคเรียบร้อย! ";
             $url_return ="location:project_list.php";
     
@@ -1053,11 +1106,294 @@
         $url_return ="location:checktask_list.php";
 
     }
- 
-    
+    else if($_POST['proc'] == 'adduser'){
+      //  echo 234234234234;
+       
+        $firstname = $_POST['firstname'];
+        $lastname = $_POST['lastname'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $c_password = $_POST['c_password'];
+        $role = $_POST['role'];
+        $phone = $_POST['phone'];
+        $switch = $_POST['switch'];
+        $tokenline = $_POST['tokenline'];
+        $phone = $_POST['phone'];
+        if($switch == "on"){
+            $switch = 1;
+        }else{
+            $switch = 0;
+        }
+
+        $file = $_FILES['file'];
+        $filename = $file['name'];
+        if($filename != "" ){
+        $code = "U";
+        $numrand = (mt_rand());
+        $type = strrchr($filename,".");
+        $newname = $date.$code.$numrand.$type;
+        $file_tmp = $file['tmp_name'];
+        $file_dest = $filename; 
+        $file_data = "img/avatars/";
+        move_uploaded_file($file_tmp,$file_data.$newname);
+        }else{
+            $newname = "09.jpg";
+        }
+
+         if (empty($firstname)) {
+            $_SESSION['error'] = 'กรุณากรอกชื่อ';
+            $url_return ="location:user_list.php";
+          } else if (empty($lastname)) {
+            $_SESSION['error'] = 'กรุณากรอกนามสกุล';
+            $url_return ="location:user_list.php";
+        } else if (empty($email)) {
+            $_SESSION['error'] = 'กรุณากรอกอีเมล';
+            $url_return ="location:user_list.php";
+        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $_SESSION['error'] = 'รูปแบบอีเมลไม่ถูกต้อง';
+            $url_return ="location:user_list.php";
+        } else if (empty($password)) {
+            $_SESSION['error'] = 'กรุณากรอกรหัสผ่าน';
+            $url_return ="location:user_list.php";
+        } else if (strlen($_POST['password']) > 20 || strlen($_POST['password']) < 5) {
+            $_SESSION['error'] = 'รหัสผ่านต้องมีความยาวระหว่าง 5 ถึง 20 ตัวอักษร';
+            $url_return ="location:user_list.php";
+        } else if (empty($c_password)) {
+            $_SESSION['error'] = 'กรุณายืนยันรหัสผ่าน';
+            $url_return ="location:user_list.php";
+        } else if ($password != $c_password) {
+            $_SESSION['error'] = 'รหัสผ่านไม่ตรงกัน';
+            $url_return ="location:user_list.php";
+        }else if(empty($file)){
+            $_SESSION['error'] = "กรุณาเเนบไฟล์รูปภาพ";
+            $url_return ="location:user_list.php";
+        }else if (!preg_match("/^[0-9]{10}$/", $phone)) {
+            $_SESSION['error'] = "รูปเเบบเบอร์โทรไม่ถูกต้อง";
+            $url_return ="location:user_list.php";
+        }else{
+                $check_email = $db->prepare("SELECT email FROM user WHERE email = :email");
+                $check_email->bindParam(":email", $email);
+                $check_email->execute();
+                $row = $check_email->fetch(PDO::FETCH_ASSOC);
+               // print_r ($row);
+               $email1 = $row['email'];   
+                        if ($email1 == $email) {
+                            $_SESSION['error'] = "มีอีเมลนี้อยู่ในระบบแล้ว ";
+                            $url_return ="location:user_list.php";
+                        } else if (!isset($_SESSION['error'])) {
+                            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+                            $stmt = $db->prepare("INSERT INTO user(firstname, lastname, email, password, role_id,avatar,status_user,tel,line_token) 
+                                                    VALUES(:firstname, :lastname, :email, :password, :role_id,:avatar,:status_user,:tel,:line_token)");
+                            $stmt->bindParam(":firstname", $firstname);
+                            $stmt->bindParam(":lastname", $lastname);
+                            $stmt->bindParam(":email", $email);
+                            $stmt->bindParam(":password", $passwordHash);
+                            $stmt->bindParam(":role_id", $role);
+                            $stmt->bindParam(":avatar", $newname);
+                            $stmt->bindParam(":status_user",$switch);
+                            $stmt->bindParam(":tel", $phone);
+                            $stmt->bindParam(":line_token",$tokenline);
+                            $stmt->execute();
+                            $_SESSION['success'] = "สมัครสมาชิกเรียบร้อยแล้ว! ";
+                            $url_return ="location:user_list.php";
+                        } else {
+                            $_SESSION['error'] = "มีบางอย่างผิดพลาด";
+                            $url_return ="location:user_list.php";
+                        } 
+                    }
+    }
+    else if($_POST['proc'] == 'edituser'){
+        $userid = $_POST['userid'];
+        $firstname = $_POST['firstname'];
+        $lastname = $_POST['lastname'];
+        $email = $_POST['email'];
+        $role = $_POST['role'];
+        $phone = $_POST['phone'];
+        $tokenline = $_POST['tokenline'];
+        $switch = $_POST['switch'];
+
+        if($switch == "on"){
+            $switch = 1;
+        }else{
+            $switch = 0;
+        }
+
+        $file = $_FILES['file'];
+        $filename = $file['name'];
+
+        if($filename != "" ){
+            $code = "U";
+            $numrand = (mt_rand());
+            $type = strrchr($filename,".");
+            $newname = $date.$code.$numrand.$type;
+            $file_tmp = $file['tmp_name'];
+            $file_dest = $filename; 
+            $file_data = "img/avatars/";
+            move_uploaded_file($file_tmp,$file_data.$newname);
+            $check_img = $db->prepare("SELECT avatar FROM user WHERE user_id = :id");
+            $check_img->bindParam(":id", $userid);
+            $check_img->execute();
+            $check_imgrow = $check_img->fetch(PDO::FETCH_ASSOC);
+                unlink("img/avatars/".$check_imgrow['avatar']);
+        }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $_SESSION['error'] = 'รูปแบบอีเมลไม่ถูกต้อง';
+            $url_return ="location:edituser_page.php?update_id=".$userid."";    
+        }else if (!preg_match("/^[0-9]{10}$/", $phone)) {
+            $_SESSION['error'] = "รูปเเบบเบอร์โทรไม่ถูกต้อง";
+            $url_return ="location:edituser_page.php?update_id=".$userid."";    
+        }
+            $check_email = $db->prepare("SELECT email FROM user WHERE email = :email AND user_id != :user_id");
+            $check_email->bindParam(":email", $email);
+            $check_email->bindParam(":user_id", $userid);
+            $check_email->execute();
+            $check_emailrow = $check_email->fetch(PDO::FETCH_ASSOC);
+
+        if ($check_emailrow['email'] == $email) {
+            $_SESSION['error'] = "มีอีเมลนี้อยู่ในระบบแล้ว ";
+            $url_return ="location:edituser_page.php?update_id=".$userid."";    
+
+        }else if($file['name'] == "" AND !isset($_SESSION['error'])){
+            $update_stmt = $db->prepare('UPDATE user SET firstname = :firstname ,lastname = :lastname ,email =:email , role_id = :role_id,status_user = :status_user ,tel = :tel ,line_token = :line_token  WHERE user_id = :id');
+            $update_stmt->bindParam(':firstname', $firstname);
+            $update_stmt->bindParam(":lastname", $lastname);
+            $update_stmt->bindParam(":email", $email);
+            //$update_stmt->bindParam(":avatar", $newname);
+            $update_stmt->bindParam(":role_id", $role);
+            $update_stmt->bindParam(":status_user", $switch);
+            $update_stmt->bindParam(":tel", $phone);
+            $update_stmt->bindParam(":line_token", $tokenline);
+            $update_stmt->bindParam(':id', $userid);
+            $update_stmt->execute();
+
+            $_SESSION['success'] = "เเก้ไขเรียบร้อยแล้ว";
+            $url_return ="location:edituser_page.php?update_id=".$userid."";    
+
+        }else if($file['name'] != "" AND !isset($_SESSION['error'])){  
+            $update_stmt = $db->prepare('UPDATE user SET firstname = :firstname ,lastname = :lastname ,email =:email , role_id = :role_id ,avatar = :avatar, status_user = :status_user ,tel = :tel ,line_token = :line_token  WHERE user_id = :id');
+            $update_stmt->bindParam(':firstname', $firstname);
+            $update_stmt->bindParam(":lastname", $lastname);
+            $update_stmt->bindParam(":email", $email);
+            $update_stmt->bindParam(":avatar", $newname);
+            $update_stmt->bindParam(":role_id", $role);
+            $update_stmt->bindParam(":status_user", $switch);
+            $update_stmt->bindParam(":tel", $phone);
+            $update_stmt->bindParam(":line_token", $tokenline);
+            $update_stmt->bindParam(':id', $userid);
+            $update_stmt->execute();
+
+            $_SESSION['success'] = "เเก้ไขเรียบร้อยแล้ว";
+            $url_return ="location:user_list.php";    
+
+        } else {
+            $url_return ="location:edituser_page.php?update_id=".$userid."";     
+        } 
+           
+            
+                
+    }
+    else if($_POST['proc'] == 'login'){
+       
+
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+
+        if (empty($email)) {
+            $_SESSION['error'] = '<center>กรุณากรอกอีเมล</center>';
+            $url_return ="location:sign-in.php";   
+        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $_SESSION['error'] = '<center>แบบอีเมลไม่ถูกต้อง</center>';
+            $url_return ="location:sign-in.php";   
+        } else if (empty($password)) {
+            $_SESSION['error'] = '<center>กรุณากรอกรหัสผ่าน</center>';
+            $url_return ="location:sign-in.php";    
+        } else {
+                $check_data = $db->prepare("SELECT * FROM user WHERE email = :uemail");
+                $check_data->bindParam(":uemail", $email);
+                $check_data->execute();
+                $row = $check_data->fetch(PDO::FETCH_ASSOC);
+
+                //print_r ($row);
+                if ($check_data->rowCount() > 0) {
+                    if ($email == $row['email'] ){
+                        if ($row['status_user'] == 1 ){
+                            if(password_verify($password ,$row['password'])){
+                                if($password == $row['tel']){
+                                    $_SESSION['user_login'] = $row['user_id'];
+                                    $_SESSION['error'] = '<center>กรุณาตั้งค่ารหัสผ่านใหม่</center>';
+                                    $url_return ="location:editnewpass.php";
+                                }else{
+                                    $_SESSION['user_login'] = $row['user_id'];
+                                    $url_return ="location:index.php";
+
+                                }   
+                            }else{
+                                $_SESSION['error'] = '<center>รหัสผ่านผิด</center>';
+                                $url_return ="location:sign-in.php";
+                            }   
+                        }else{
+                            $_SESSION['error'] = '<center>สถานะของคุณยังไม่เปิดใช้งาน</center>';
+                            $url_return ="location:sign-in.php";
+                        }
+                    }else{
+                            $_SESSION['error'] = '<center>อีเมลผิด</center>';
+                            $url_return ="location:sign-in.php";
+                    }  
+                }else{
+                    $_SESSION['error'] = "<center>ไม่มีข้อมูลในระบบ</center>";
+                    $url_return ="location:sign-in.php";
+                }  
+
+        }
+    }
+    else if($_POST['proc'] == 'editpass'){
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $password_c = $_POST['password_c'];
+        $userid = $_POST['userid'];
+
+        $datauser = $db->prepare("SELECT email FROM user WHERE email = :uemail");
+        $datauser->bindParam(":uemail", $email);
+        $datauser->execute();
+        $datauserrow = $datauser->fetch(PDO::FETCH_ASSOC);
+
+        if ($email != $datauserrow['email'] ){
+            $_SESSION['error'] = '<center>อีเมลไม่มีในระบบ</center>';
+            $url_return ="location:editnewpass.php";
+        }else if($password != $password_c){
+            $_SESSION['error'] = '<center>Password ที่คุณใส่ไม่ตรงกัน</center>';
+            $url_return ="location:editnewpass.php";
+        }else{
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+            $update_datauser = $db->prepare("UPDATE user SET password = :password WHERE email = :uemail");
+            $update_datauser->bindParam(":uemail",$email);
+            $update_datauser->bindParam(":password",$passwordHash);
+            $update_datauser->execute();
+
+            $_SESSION['success'] = 'เเก้ไข Password ของคุณเเล้ว ';
+            $url_return ="location:index.php";
+        }
+            
+    }
+    else if($_POST['proc'] == 'resetpass'){
+
+        $userid = $_POST['user_id'];
+
+        $datauser = $db->prepare("SELECT tel from user where user_id = :userid");
+        $datauser->bindParam(":userid", $userid);
+        $datauser->execute();
+        $datauserrow = $datauser->fetch(PDO::FETCH_ASSOC);
+
+        $password = $datauserrow['tel'];
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+        $updatauserdata = $db->prepare("UPDATE user SET password =:password where user_id = :userid");
+        $updatauserdata->bindParam(":password", $passwordHash);
+        $updatauserdata->bindParam(":userid", $userid);
+        $updatauserdata->execute();
+
+        $_SESSION['success'] = 'reset Password สมาชิกท่านนี้เเล้ว ';
+        $url_return ="location:user_list.php";
+
+    }
         header($url_return);
-
-?>  
-
-
-        
+?>

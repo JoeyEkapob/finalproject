@@ -54,7 +54,22 @@
 <?php include "head.php"?>
 <body>
 	<?php include "funtion.php"?>
-
+	<?php if(isset($_SESSION['error'])) { ?>
+                <div class="alert alert-danger" role="alert">
+                    <?php 
+                        echo $_SESSION['error'];
+                        unset($_SESSION['error']);
+                    ?>
+                </div>
+            <?php } ?>
+            <?php if(isset($_SESSION['success'])) { ?>
+                <div class="alert alert-success" role="alert">
+                    <?php 
+                        echo $_SESSION['success'];
+                        unset($_SESSION['success']);
+                    ?>
+                </div>
+            <?php } ?>		
 			<main class="content">
 				<div class="container-fluid p-0">
 				

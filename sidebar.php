@@ -8,12 +8,16 @@
                 $stmt->execute();
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 				$imageURL = 'img/avatars/'.$row['avatar'];
+				 /* echo $imageURL ; */
+				//exit;  
 				/* print_r ($row);
 				exit; */
             }
 			$level = $row['level'];
 			
 ?>
+<!--                 	<img src="img/avatars/2023-04-03U84124813.jpg" class="avatar rounded-circle rounded me-1" alt="" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
+ -->
 <div class="wrapper">
 		<nav id="sidebar" class="sidebar js-sidebar">
 			<div class="sidebar-content js-simplebar">
@@ -231,7 +235,7 @@
 
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav navbar-align">
-						<li class="nav-item dropdown">
+						<!-- <li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
 								<div class="position-relative">
 									<i class="align-middle" data-feather="bell"></i>
@@ -295,7 +299,7 @@
 									<a href="#" class="text-muted">Show all notifications</a>
 								</div>
 							</div>
-						</li>
+						</li> -->
 
 						<li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
@@ -303,16 +307,18 @@
               </a>
 
 							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                	<img src="<?php echo $imageURL ?>" class="avatar rounded-circle rounded me-1" alt="" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
+                	<img src="img/avatars/<?php echo $row['avatar'] ?>" class="avatar rounded-circle rounded me-1" alt="" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
               </a>
 							<div class="dropdown-menu dropdown-menu-end">
-								<a class="dropdown-item" href=""><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+								<a class="dropdown-item" href=""><i class="align-middle me-1" data-feather="user"></i> โปรไฟล์</a>
+								<a class="dropdown-item" href=""><i class="align-middle me-1" data-feather="key"></i> เปลียนรหัสผ่าน</a>
+
 								<!-- <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="pie-chart"></i> Analytics</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="index.html"><i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy</a>
 								<a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="help-circle"></i> Help Center</a> -->
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" onclick="alert('คุณต้องการออกจากระบบใช่ไหม')" href="logout.php">Log out</a>
+								<a class="dropdown-item" onclick="alert('คุณต้องการออกจากระบบใช่ไหม')" href="logout.php">ออกจากระบบ</a>
 							</div>
 						</li>
 					</ul>

@@ -5,7 +5,8 @@
 <?php include 'head.php'?>
 
 <body>
-<form  method="POST" action="chklogin.php" >
+<form  method="POST" action="proc.php" >
+	<input type="hidden" id="proc" name="proc" value="">
 	<main class="d-flex w-100">
 		<div class="container d-flex flex-column">
 			<div class="row vh-100">
@@ -55,7 +56,7 @@
 										</label>
 										</div>
 										<div class="text-center mt-3">
-											 <button type="submit" name ="btnlogin" class="btn btn-lg btn-primary">Sign in</button> 
+											 <button type="submit" name ="btnlogin" class="btn btn-lg btn-primary" onclick="singin()">Sign in</button> 
 										</div>
 								</div>
 							</div>
@@ -72,4 +73,9 @@
 </body>
 
 </html>
+<script>
+	function singin(){
+		$('#proc').val('login');
+	}
+</script>
 <?php include "footer.php"?>

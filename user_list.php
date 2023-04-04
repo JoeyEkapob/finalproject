@@ -30,15 +30,10 @@
                     ?>
                 </div>
             <?php } ?>
-            <?php if(isset($_SESSION['warning'])) { ?>
-                <div class="alert alert-warning" role="alert">
-                    <?php 
-                        echo $_SESSION['warning'];
-                        unset($_SESSION['warning']);
-                    ?>
-                </div>
-            <?php } ?>
-    <form action="adduser.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+    <form action="proc.php" method="post" id="userlist" class="form-horizontal" enctype="multipart/form-data">
+
+        <input type=hidden id="proc" name="proc" value="">
+        <input type=hidden id="user_id" name="user_id" value="">
 
         <main class="content">
             <div class="col-lg-12">
@@ -84,7 +79,9 @@
                                             <td class="text-left"><?php echo ucwords($row['name']) ?></td>
                                             <td class="text-left" ><?php echo $row['email'] ?></td>
                                             <td class="text-left" ><?php echo $row['position_name']?></td>
-                                            <td class="text-center">                               
+                                            <td class="text-center">  
+                                            <a class="" type="button" onclick="resetpass('<?php echo $row['user_id']?>')"> <h3> <i  data-feather="key"></i> </h3> </a>
+                            
                                              <a class="btn btn-bitbucket btn-sm view_data"  title="ดูรายละเอียด" data-bs-toggle="modal" data-bs-target="#viewusermodal<?php echo $row['user_id']?>" ><i data-feather="zoom-in"></i></a> 
                                                 <!--  <a class="btn btn-bitbucket btn-sm view_data"  id="<?php echo $row['user_id']?>" ><i data-feather="zoom-in"></i></a>        -->                                             
                                                 <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลสมาชิก" href="edituser_page.php?update_id=<?php echo $row['user_id']?>"><i  data-feather="edit"></i></a>
@@ -93,9 +90,10 @@
                                         </tr>   
                                         <?php include "viewuser_modal.php"?>
                                             <?php } ?>
-                                     </tbody>    
+                                     </tbody>   
+                                     <?php include "adduser_modal.php"?> 
                                  </table>
-                                 <?php include "adduser_modal.php"?>
+                                 
                                  
                                 </div>
                             
@@ -103,17 +101,6 @@
         </main>
         
     </form>
-  <!--  <script>
-       /*   $(document).ready(function(){
-                $('.view_data').click(function(){
-                $('#viewusermodal').modal('show');
-                   var userid = $(this).data('userid');
-                    /* alert(userid); 
-                    console.log(userid);
-                    
-                });
-            }); */
-    </script>    -->
     </body>
 
 </html>
@@ -121,9 +108,10 @@
 $(document).ready(function () {
     $('#example').DataTable();
 });
+
 </script>
 <!-- // showpic -->
- <script type="text/javascript">
+ <script>
         function Preview(ele) {
         $('#img').attr('src', ele.value);
                 if (ele.files && ele.files[0]) {
@@ -134,5 +122,17 @@ $(document).ready(function () {
                 reader.readAsDataURL(ele.files[0]);
             }
         }
+        function adduser(){
+
+            $('#proc').val('adduser');
+        }
+        function resetpass(user_id){
+            console.log('user_id');
+            $('#proc').val('resetpass');
+            $('#user_id').val(user_id);
+            $('#userlist').submit();
+
+        }
+       
 </script> 
 <?php include "footer.php"?>

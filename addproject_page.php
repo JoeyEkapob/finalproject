@@ -33,7 +33,7 @@
                 </div>
             <?php } ?>
 
-            <form action="proc.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+    <form action="proc.php" method="post" class="form-horizontal" enctype="multipart/form-data">
 
         <input type="hidden" id="proc" name="proc" value="">
 

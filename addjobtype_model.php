@@ -20,9 +20,8 @@
                                 </div>
                                 <hr>
                                 <div class="col-lg-12 text-right justify-content-center d-flex">
-
-                                    <button class="btn btn-primary" name="addjob">Save</button>
-                                    <button class="btn btn-secondary" type="button" >Cancel</button>
+                                <button class="btn btn-primary"  onclick="addjob()">เพิ่มประเภท</button>
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">กลับ</button>
                                     
                                 </div>
                         </div>

@@ -47,16 +47,17 @@
                         <div class="card-header">
                             <h5 class="card-title mb-0">รายการโปรเจค</h5>
                         </div>
+                        <div class="table-responsive-xl">
                             <table class="table table-hover my-0" id="example" >
                                 <thead>
                                     <tr>
-                                        <th class="text-center">ลำดับ</th>
-                                        <th class="text-left">ชื่อโปรเจค</th>
-                                        <th class="text-left">ชื่องาน</th>
-                                        <th class="text-center">วันที่สั่งงาน</th>
-                                        <th class="text-center">วันที่ส่ง</th>
-                                        <th class="text-center">สถานะ</th>
-                                        <th class="text-center">Action</th>
+                                        <th class="id-col text-center">ลำดับ</th>
+                                        <th class="name-col text-center">ชื่อโปรเจค</th>
+                                        <th class="name-col text-center ">ชื่องาน</th>
+                                        <th class="start-col text-center">วันที่สั่งงาน</th>
+                                        <th class="end-col text-center">วันที่ส่ง</th>
+                                        <th class="status-col text-center ">สถานะ</th>
+                                        <th class="action-col text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -73,11 +74,7 @@
                                         $numqry->execute(); */
                                         
                                       
-                                        $sql = "SELECT * ,
-                                        DATE_FORMAT(strat_date_task, '%e %M %Y ') AS start_date_task, 
-                                        DATE_FORMAT(end_date_task, '%e %M %Y ') AS end_date_task,
-                                        DATE_FORMAT(strat_date_task, 'เวลา %H:%i น.') AS start_time_task, 
-                                        DATE_FORMAT(end_date_task, 'เวลา %H:%i น.') AS end_time_task
+                                        $sql = "SELECT *
                                         FROM details
                                         natural  JOIN task_list/*  ON details.task_id = task_list.task_id */
                                         natural  JOIN project 
@@ -93,33 +90,30 @@
                                             $manager = $manager->fetch(PDO::FETCH_ASSOC);  
                                             
                                     ?>
-                                    
-                                        <tr>
-                                            <td class="text-center"><?php echo $i++ ?></td>
-                                             <td>
-                                                <p><b><?php echo $row['name_project'] ?></b>
-                                                <?php ?></p>
-                                                <p class="truncate"><?php  ?></p>
-						                    </td>
+                                  
+                                        <tr class="id-col">
+                                            <td ><?php echo $i++ ?></td>
+                                                <td class="name-col">
+                                                    <b><?php echo $row['name_project'] ?></b>
+						                        </td>
 
-                                            <td class="">
-                                            <p><b><?php echo $row['name_tasklist']?></b>
-                                           
+                                            <td class="name-col">
+                                                <b><?php echo $row['name_tasklist']?>
                                             </td>
 
-                                            <td class="text-center" ><?php echo ThDate($row['strat_date_task']); ?></td>
-					                        <td class="text-center "><?php echo ThDate($row['date_detalis']) ?></td>
+                                            <td class="start-col " ><?php echo ThDate($row['strat_date_task']); ?></td>
+					                        <td class="end-col " ><?php echo ThDate($row['date_detalis']) ?></td>
 
                                             
 
-                                            <td class="text-center">
+                                            <td class="status-col ">
                                                 <?php  showstattask($row['status_task']);  ?>
                                                 
                                             </td>
                                             <td class="text-center">                   
                                                <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                      
                                                 <a class="btn btn-bitbucket btn-sm" title="ดูรายละเอียดงาน" data-bs-toggle="modal" data-bs-target="#viewdetailsmodal<?php echo $row['details_id']?>"><i data-feather="zoom-in"></i></a>
-                                                <button class="btn btn-success btn-sm" title="เช็คว่างงานเสร็จสิ้นเรียบร้อย" onclick="checktasksuccess('<?php echo $row['details_id'] ?>','<?php echo $row['task_id'] ?>','<?php echo $row['project_id'] ?>');"> <i data-feather="check-square"></i></button>
+                                                <button class="btn btn-success btn-sm checktasksuccess" title="เช็คว่างงานเสร็จสิ้นเรียบร้อย" data-details_id="<?php echo $row['details_id'] ?>" data-task_id="<?php echo $row['task_id'] ?>" data-project_id="<?php echo $row['project_id'] ?>"> <i data-feather="check-square"></i></button>
                                                 <a class="btn btn-warning btn-sm" href="checktaskedit.php?details_id=<?php echo $row['details_id'] ?>&task_id=<?php echo $row['task_id'] ?>&project_id=<?php echo $row['project_id'] ?>&progress_task=<?php echo $row['progress_task']?>"> <i data-feather="check-square"></i></a>
                                                 <!-- <a class="btn btn-warning btn-sm" href=""><i data-feather="share"></i></a> -->
                                   
@@ -131,6 +125,7 @@
                                     <?php } ?>
                                 </tbody>           
                             </table>
+                            </div>
                     </div>
                         
                   
@@ -149,13 +144,65 @@ function deleteproject(project_id){
     $('#project_id').val(project_id);
 }
 
-function checktasksuccess(details_id,task_id,project_id){
+$(".checktasksuccess").click(function(e) {
+            var project_id = $(this).data('project_id');
+            var task_id  = $(this).data('task_id');
+            var details_id  = $(this).data('details_id');
+            console.log(details_id);
+            e.preventDefault();
+            checktasksuccess(project_id, task_id,details_id);
+        })
+
+        function checktasksuccess(project_id,task_id,details_id) {
+            console.log(details_id);
+            Swal.fire({
+                
+                title: 'งานชิ้นนี้เสร็จสิ้นเเล้วใช่หรือไม่',
+                icon: 'info',
+                //text: "It will be deleted permanently!",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ใช่งานเสร็จเเล้ว!',
+                cancelButtonText: 'กลับ',
+                showLoaderOnConfirm: true,
+               
+                preConfirm: function() {
+                
+                    return new Promise(function(resolve) {
+               
+                        $.ajax({
+                            
+                                url: 'proc.php',
+                                type: 'post',
+                                data: 'proc=' + 'checktasksuccess' + '&project_id=' + project_id + '&task_id=' + task_id + '&details_id=' + details_id ,
+                            })
+                            .done(function() {
+                                Swal.fire({
+                                    title: 'success',
+                                    text: 'ตรวจงานเสร็จเรียบร้อย!',
+                                    icon: 'success',
+                                }).then(() => {
+                                    document.location.href = 'checktask_list.php';
+                                    
+                                    
+                                })
+                            })
+                            .fail(function() {
+                                Swal.fire('Oops...', 'Something went wrong with ajax !', 'error')
+                                window.location.reload();
+                            });
+                    });
+                },
+            });
+        }
+/* function checktasksuccess(details_id,task_id,project_id){
     $('#proc').val('checktasksuccess');
     $('#details_id').val(details_id);
     $('#task_id').val(task_id);
     $('#project_id').val(project_id);
     $('#proc').submid
-}
+} */
 /* function checktaskedit(details_id,task_id,project_id){
     $('#proc').val('checktaskedit');
     $('#details_id').val(details_id);

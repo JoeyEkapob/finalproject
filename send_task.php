@@ -84,6 +84,7 @@ session_start();
                                 <div class="form-group">
                                     <label for="" class="control-label">ไฟล์เเนบ</label>	
                                     <input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
+                                    <p class="small mb-0 mt-2"><b>รายละเอียด:รองรับไฟล์งาน .pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx </b></p> 
                                 </div>
                     </div>
                     <div class="justify-content-center">
@@ -95,8 +96,8 @@ session_start();
                         </div>
                         <hr>
                         <div class="col-lg-12 text-right justify-content-center d-flex">
-                            <button class="btn btn-primary " name ="edittask" onclick="send_task('<?php echo $taskid ?>','<?php echo $project_id?>','<?php echo $stmttaskrrow['progress_task'] ?>','<?php echo $user_id ?>');">Send</button>
-                            <a href="view_project.php?view_id=<?php echo $project_id?>" class="btn btn-secondary" type="button"  >Cancel</a>
+                            <button class="btn btn-primary " name ="edittask" onclick="send_task('<?php echo $taskid ?>','<?php echo $project_id?>','<?php echo $stmttaskrrow['progress_task'] ?>','<?php echo $user_id ?>');">ส่งงาน</button>
+                            <a href="view_project.php?view_id=<?php echo $project_id?>" class="btn btn-secondary" type="button"  >กลับ</a>
                         </div>
                     </div>
 								</div>

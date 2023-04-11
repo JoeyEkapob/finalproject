@@ -272,16 +272,17 @@
 										$stmtshowproject = $db->query($stmtshowproject);
 										$stmtshowproject->execute();
 									?>
-									<table class="table table-hover my-0">
+								<div class="table-responsive-xl">
+									<table class="table table-hover">
 										<thead>
 											<tr>
-												<th class="text-center">ลำดับ</th>
-												<th class="text-left">ชื่อโปรเจค</th>
-												<th class="text-left">ความคืบหน้า</th>
-												<th class="text-center">วันที่เริ่ม</th>
-												<th class="text-center">วันที่สิ้นสุด</th>
-												<th class="text-center">สถานะ</th>
-												<th class="text-center">Action</th>
+												<th class="id-col">ลำดับ</th>
+												<th class="name-col">ชื่อโปรเจค</th>
+												<th class="progress-col" >ความคืบหน้า</th>
+												<th class="start-col">วันที่เริ่ม</th>
+												<th class="end-col">วันที่สิ้นสุด</th>
+												<th class="status-col">สถานะ</th>
+												<th class="action-col">Action</th>
 											</tr>
 										</thead>
 									<tbody>
@@ -289,32 +290,24 @@
 													
 												<?php while ($stmtshowprojectrow = $stmtshowproject->fetch(PDO::FETCH_ASSOC)){ ?>
 
-													<td class="text-center"><?php echo $i++ ?></td>
-														<td>
-															<p><b><?php echo $stmtshowprojectrow["name_project"]?></b>
-															<?php showstatpro2($stmtshowprojectrow['status_2']) ?></p>
-															<p class="truncate"><?php echo substr($stmtshowprojectrow['description'],0,20).'...';  ?></p>
-														
-														</td>
-													<td class="">
-													
+													<td class="id-col"><?php echo $i++ ?></td>
+													<td class="name-col">
+														<p><b><?php echo $stmtshowprojectrow["name_project"]?></b>
+														<?php showstatpro2($stmtshowprojectrow['status_2']) ?></p>
+														<p class="truncate"><?php echo mb_substr($stmtshowprojectrow['description'],0,20).'...';  ?></p>
+													</td>
+													<td class="progress-col">
 														<div class="progress mb-3">
-										
 															<div class="progress-bar progress-bar-striped progress-bar-animated-sm" role="progressbar" style="width:<?php echo $stmtshowprojectrow['progress_project'] ?>%" ><?php echo $stmtshowprojectrow['progress_project'] ?>%</div>
 														</div>
-
 													</td>
 
-													<td class="text-center" ><?php echo ThDate($stmtshowprojectrow['start_date']) ?></td>
-													<td class="text-center "><?php echo ThDate(($stmtshowprojectrow['end_date'])) ?></td>
-													<td class="text-center">
-														<?php
-														/*  echo $stat1[$row['status_1']];
-														exit; */
-														showstatpro($stmtshowprojectrow['status_1']);									
-														?>
+													<td class="start-col " ><?php echo ThDate($stmtshowprojectrow['start_date']) ?></td>
+													<td class="end-col "><?php echo ThDate(($stmtshowprojectrow['end_date'])) ?></td>
+													<td class="status-col">
+														<?php showstatpro($stmtshowprojectrow['status_1']);	?>
 													</td>
-													<td class="text-center">                   
+													<td class="action-col">                   
 													<!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                       
 														<a class="btn btn-bitbucket btn-sm" href="view_project.php?view_id=<?php echo $stmtshowprojectrow['project_id']?>"><i data-feather="zoom-in"></i></a>
 														<!-- <a href="editproject.php?update_id=<?php echo $stmtshowprojectrow['project_id']?>" class="btn btn-warning btn-sm">2</a>
@@ -326,9 +319,10 @@
 										<?php } ?>
 									</tbody>           
 								</table>
-							</div>
+							</div>	
 						</div>
 					</div>
+				</div>
 
 				</div>
 			</main>

@@ -46,12 +46,12 @@
 
                                             <div class="col-md-6">
                                                 <dl>
-                                                    <dt><b class="border-bottom border-primary">วันที่เริ่มเเละเวลาเริ่ม</b></dt>
-                                                    <dd><?php echo ThDate($row['strat_date_task']).'<br>'.$row['start_time_task']  ?></dd>
+                                                    <dt><b class="border-bottom border-primary">วันที่สิ้นสุดงาน</b></dt>
+                                                    <dd><?php echo thai_date_and_time($row['end_date_task'])  ?></dd>
                                                 </dl>
                                                 <dl>
-                                                    <dt><b class="border-bottom border-primary">วันสิ้นสุดเเละเวลาสิ้นสุด</b></dt>
-                                                    <dd><?php echo ThDate($row['date_detalis']).'<br>'.$row['end_time_task']  ?></dd>
+                                                    <dt><b class="border-bottom border-primary">เวลาที่ส่งงานมา</b></dt>
+                                                    <dd><?php echo thai_date_and_time($row['date_detalis']) ?></dd>
                                                 </dl>
                                                 <dl>
                                                     <dt><b class="border-bottom border-primary">สถานะ</b></dt>
@@ -63,7 +63,7 @@
                                                 </dl>
                                                 <dl>
                                                     
-                                                    <dt><b class="border-bottom border-primary">สมาชิก</b></dt>
+                                                    <dt><b class="border-bottom border-primary">ผู้ส่งงาน</b></dt>
                                                     <dd>
 
                                                     <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $row['avatar']?>" alt="Avatar" width="35"  height="35">
@@ -98,7 +98,7 @@
         </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">กลับ</button>
        <!--  <button type="button" class="btn btn-primary">Save changes</button> -->
       </div>
     </div>

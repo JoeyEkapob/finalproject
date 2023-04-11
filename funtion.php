@@ -1,19 +1,17 @@
 <?php
     function showstatpro($status){
-        $stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","เลยระยะเวลาที่กำหนด","ปิดโปรเจค");
+        $stat1 = array("","รอดำเนินการ","เลยระยะเวลา","ปิดโปรเจค");
         if($status =='1'){
             echo "<span class='badge bg-secondary'>".$stat1[$status]."</span>";
         }elseif($status =='2'){
-            echo "<span class='badge bg-primary'>".$stat1[$status]."</span>";
+            echo "<span class='badge bg-warning'>".$stat1[$status]."</span>";
         }elseif($status =='3'){
-            echo "<span class='badge bg-danger'>".$stat1[$status]."</span>";
-        }elseif($status =='4'){
             echo "<span class='badge bg-danger'>".$stat1[$status]."</span>";
         }
     }
 
     function showstatpro2($status_2){
-        $stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
+        $stat2 = array("","ปกติ","ด่วน","ด่วนมาก");
     if ($status_2 == '1') {
         echo " "."<span class='badge bg-secondary'>".$stat2[$status_2]."</span>";
     }else if($status_2== '2'){
@@ -37,19 +35,17 @@
     }
  
     function showstattask($statustask){
-        $stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","ส่งเรียบร้อยเเล้ว","รอการเเก้ไข","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
+        $stat1 = array("","รอดำเนินการ","ส่งเเล้ว","รอเเก้ไข","เลยเวลา","เสร็จสิ้น");
         if($statustask =='1'){
-            echo "<span class='badge bg-secondary'>".$stat1[$statustask]."</span>";
-        }elseif($statustask =='2'){
             echo "<span class='badge bg-primary'>".$stat1[$statustask]."</span>";
-        }elseif($statustask =='3'){
+        }elseif($statustask =='2'){
             echo "<span class='badge bg-success'>".$stat1[$statustask]."</span>";
+        }elseif($statustask =='3'){
+            echo "<span class='badge bg-warning'>".$stat1[$statustask]."</span>";
         }elseif($statustask =='4'){
             echo "<span class='badge bg-warning'>".$stat1[$statustask]."</span>";
         }elseif($statustask =='5'){
             echo "<span class='badge bg-danger'>".$stat1[$statustask]."</span>";
-        }elseif($statustask =='6'){
-            echo "<span class='badge bg-success'>".$stat1[$statustask]."</span>";
         } 
     }
 
@@ -70,8 +66,52 @@
     $months = date("m",strtotime($date2))-1; // ค่าเดือน (1-12)
     $day = date("d",strtotime($date2)); // ค่าวันที่(1-31)
     $years = date("Y",strtotime($date2))+543; // ค่า ค.ศ.บวก 543 ทำให้เป็น ค.ศ.
-    
+    $time = " เวลา ".date("H:i",strtotime($date2));
+
     return "วัน$ThDay[$week] ที่ $day $ThMonth[$months] $years";
     }
+  
+    $dayTH = [null,'อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
+    $monthTH = [null,'มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+    $monthTH_brev = [null,'ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    function thai_date_and_time($time){   // 19 ธันวาคม 2556 เวลา 10:10:43
+        global $dayTH,$monthTH;   
+        $thai_date_return= " วัน ".$dayTH[date("w",strtotime($time))];
+        $thai_date_return.=" ที่  ".date("d",strtotime($time));   
+        $thai_date_return.=" ".$monthTH[date("n",strtotime($time))];   
+        $thai_date_return.= " ".(date("Y",strtotime($time))+543);   
+        $time= " เวลา ".date("H:i",strtotime($time))." น. ";
+        return "$thai_date_return <br> $time" ;   
+    } 
+    function thai_date_and_time_short($time){   // 19  ธ.ค. 2556 10:10:4
+        global $dayTH,$monthTH_brev;   
+        $thai_date_return = date("j",strtotime($time));   
+        $thai_date_return.=" ".$monthTH_brev[date("n",strtotime($time))];   
+        $thai_date_return.= " ".(date("Y",strtotime($time))+543);   
+        $thai_date_return.= " เวลา ".date("H:i",strtotime($time))." น. ";
+        return $thai_date_return;   
+    } 
+    function thai_date_short($time){   // 19  ธ.ค. 2556a
+        global $dayTH,$monthTH_brev;   
+        $thai_date_return = date("j",$time);   
+        $thai_date_return.=" ".$monthTH_brev[date("n",$time)];   
+        $thai_date_return.= " ".(date("Y",$time)+543);   
+        return $thai_date_return;   
+    } 
+    function thai_date_fullmonth($time){   // 19 ธันวาคม 2556
+        global $dayTH,$monthTH;   
+        $thai_date_return = date("j",$time);   
+        $thai_date_return.=" ".$monthTH[date("n",$time)];   
+        $thai_date_return.= " ".(date("Y",$time)+543);   
+        return $thai_date_return;   
+    } 
+    function thai_date_short_number($time){   // 19-12-56
+        global $dayTH,$monthTH;   
+        $thai_date_return = date("d",$time);   
+        $thai_date_return.="-".date("m",$time);   
+        $thai_date_return.= "-".substr((date("Y",$time)+543),-2);   
+        return $thai_date_return;   
+    }  
+   
+    ?>
 
-?>

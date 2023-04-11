@@ -1,4 +1,8 @@
-<?php session_start();?>
+<?php 
+session_start();
+require_once 'connect.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,17 +11,17 @@
 	<input type="hidden" id="proc" name="proc" value="">
 
 <body>
+<?php include "sidebar.php"?>
+<?php include "funtion.php"?>
 	<main class="d-flex w-100">
 		<div class="container d-flex flex-column">
-			<div class="row vh-100">
-				<div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
+			<div class="row vh-30">
+				<div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-80">
 					<div class="d-table-cell align-middle">
 
 						<div class="text-center mt-4">
-							<h1 class="h2">กรุณาเเก้ไขรหัสผ่าน</h1>
-							<p class="lead">
-								หากคุณไม่เเก้ไขรหัสผ่านจะไม่สามารถเข้าสู่ระบบได้
-							</p>
+							<h1 class="h2">เเก้ไขรหัสผ่าน</h1>
+
 						</div>
 
                                 <div class="card">
@@ -67,7 +71,7 @@
                                                         </div>
                                                     </div>
                                                 <div class="text-center mt-3">
-                                                    <button  class="btn btn-lg btn-primary" onclick="newpass()">เเก้ไข</button>
+                                                    <button  class="btn btn-lg btn-primary newpass" onclick="newpass()">เเก้ไข</button>
 
                                                     <!-- <button type="submit" class="btn btn-lg btn-primary">Sign up</button> -->
                                                 </div>
@@ -87,10 +91,10 @@
 <script>
     
 	function newpass(){
-		$('#proc').val('editpass');
+		$('#proc').val('editpassuser');
 	}
 
-$(document).ready(function() {
+    $(document).ready(function() {
   $('#show-password1').click(function() {
     var password = $('#password1');
     var type = password.attr('type') === 'password' ? 'text' : 'password';

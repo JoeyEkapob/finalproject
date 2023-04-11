@@ -12,7 +12,7 @@
                              <div class="card-header">
                                  <div class="row">
                                     <div class="col-md-6">
-                                    <p id="item-details"></p>
+                                   
                                                 <dl>
                                                     <dt><b class="border-bottom border-primary">ชื่องาน</b></dt>
                                                     <dd><?php echo $row2['name_tasklist'] ?></dd>
@@ -48,18 +48,16 @@
                                             <div class="col-md-6">
                                                 <dl>
                                                     <dt><b class="border-bottom border-primary">วันที่เริ่มเเละเวลาเริ่ม</b></dt>
-                                                    <dd><?php echo ThDate($row2['start_date']).'<br>'.$row2['start_time']  ?></dd>
+                                                    <dd><?php echo thai_date_and_time($row2['strat_date_task'])  ?></dd>
                                                 </dl>
                                                 <dl>
                                                     <dt><b class="border-bottom border-primary">วันสิ้นสุดเเละเวลาสิ้นสุด</b></dt>
-                                                    <dd><?php echo ThDate($row2['end_date']).'<br>'.$row2['end_time']  ?></dd>
+                                                    <dd><?php echo thai_date_and_time($row2['end_date_task']) ?></dd>
                                                 </dl>
                                                 <dl>
                                                     <dt><b class="border-bottom border-primary">สถานะ</b></dt>
                                                     <dd>
-                                                    <?php  
-                                               showstattask($row2['status_task']); 
-                                               ?>
+                                                    <?php  showstattask($row2['status_task']); ?>
                                                     </dd>
                                                 </dl>
                                                 <dl>

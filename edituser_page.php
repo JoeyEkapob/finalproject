@@ -1,7 +1,6 @@
 <?php 
 session_start();
  include 'connect.php';
- $targetDir = "img/avatars/";
  
  if (isset($_GET['update_id'])){
         $id = $_REQUEST['update_id'];
@@ -52,7 +51,11 @@ session_start();
 							<div class="card-body">
 								<div class="row">
 									<div class="text-center">
-                        			  	<img class="rounded-circle rounded me-1 mb-3" src="img/avatars/<?php echo $avatar ?>" id ="img" alt="avatar" width="200"  height="200">
+										<?php if($avatar != ""){?>
+											<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $row['avatar']?>" alt="Avatar" width="200"  height="200">
+										<?php }else{ ?>
+											<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="200"  height="200">
+										<?php } ?>
                       				</div>
 									<div class="col-md-2">
 										
@@ -91,7 +94,7 @@ session_start();
 												<input type="email" class="form-control form-control" name="email" required  value="<?php echo $email; ?>">
 												<small id="#msg"></small>
 										</div>
-										
+								
 										<div class="mb-3">
 											<label for="" class="control-label">ตำเเหน่ง</label>
 												<select name="role" id="role" class="form-select" value="">
@@ -106,6 +109,31 @@ session_start();
                 									<?php }?>
 												</select>
 										</div>
+									
+										<div class="mb-3">
+											<label for="control-label">เลขบัตรประชาชน</label>
+											<input  class="form-control" type="tel" id="idcard" name="idcard" placeholder="กรอกหมายเลขบัตรประชาชนของคุณ" value="<?php echo $idcard; ?>">
+										</div>
+
+										
+									</div>	
+									<div class="col-md-6">
+										<div class="mb-3">
+											<label for="" class="control-label">นามสกุล</label>
+											<input type="text" name="lastname" class="form-control form-control"  required value="<?php echo $lastname; ?>">
+										</div>
+										
+										<div class="mb-3">
+											<label for="control-label">เบอร์โทรศัพท์</label>
+											<input  class="form-control" type="tel" id="phone" name="phone" placeholder="กรอกหมายเลขโทรศัพท์ของคุณ" value="<?php echo $tel; ?>">
+										</div>
+
+										<div class="mb-3">
+											<label for="" class="control-label">ไลน์โทเค็น</label>
+											<input type="text" name="tokenline" class="form-control" placeholder="กรอกไลน์โทเค็นของคุณ" value = "<?php echo $line_token ?>">
+											<p class="small mb-0 mt-2"><b>Note:</b>หากต้องการเเจ้งได้รับการเเจ้งตื่อนผ่านไลน์อนุญาตโปรดกรอกไลน์โทเค็นของคุณ</p> 
+										</div> 	
+								
 										<?php if($status_user == 1){ ?>
 										<div class="form-check form-switch ">
 											<input class="form-check-input" type="checkbox" role="switch" id="switch" name="switch"  checked>
@@ -113,27 +141,11 @@ session_start();
 										</div>
 										<?php }else{ ?>
 										<div class="form-check form-switch">
-											<input class="form-check-input" type="checkbox" role="switch" id="switch" name="switch"  >
+											<input class="form-check-input" type="checkbox" role="switch" id="switch" name="switch">
 											<label class="form-check-label" for="flexSwitchCheckChecked">สถานะการใช้งาน</label>
 										</div>
-										<?php } ?>			
-									</div>	
-									<div class="col-md-6">
-										<div class="mb-3">
-											<label for="" class="control-label">นามสกุล</label>
-											<input type="text" name="lastname" class="form-control form-control"  required value="<?php echo $lastname; ?>">
-										</div>
-										<div class="mb-3">
-											<label for="control-label">เบอร์โทรศัพท์</label>
-											<input  class="form-control" type="tel" id="phone" name="phone" placeholder="กรอกหมายเลขโทรศัพท์ของคุณ" value="<?php echo $tel; ?>">
-										</div>
-
-										
-										<div class="mb-3">
-												<label for="" class="control-label">ไลน์โทเค็น</label>
-												<input type="text" name="tokenline" class="form-control" placeholder="กรอกไลน์โทเค็นของคุณ" value = "<?php echo $line_token ?>">
-												<p class="small mb-0 mt-2"><b>Note:</b>หากต้องการเเจ้งได้รับการเเจ้งตื่อนผ่านไลน์อนุญาตโปรดกรอกไลน์โทเค็นของคุณ</p> 
-											</div> 	
+										<?php } ?>		
+									
 											<!--  <div class="mb-3">
 												<label class="control-label">Password</label>
 												<input type="password" class="form-control form-control" name="password" value="">	
@@ -171,7 +183,7 @@ session_start();
 </html>
 <script>
 	function edituser(id){
-		$('#proc').val('edituser');
+		$('#proc').val('edituseradmin');
 		 $('#userid').val(id);
 		//console.log(id) 
 	}function Preview(ele) {

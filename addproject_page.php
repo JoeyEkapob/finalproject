@@ -127,8 +127,8 @@
                                         <hr>
 										<div class="col-lg-12 text-right justify-content-center d-flex">
                                         
-											<button class="btn btn-primary"  id="display_selected"  onclick="addpro();">ADD</button>
-											<a href="project_list.php" class="btn btn-secondary"  type="button" >Cancel</a>
+											<button class="btn btn-primary"  id="display_selected"  onclick="addpro();">เพิ่มหัวข้องาน</button>
+											<a href="project_list.php" class="btn btn-secondary"  type="button" >กลับ</a>
 										</div>
                                        
 

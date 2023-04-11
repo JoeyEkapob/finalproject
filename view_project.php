@@ -13,7 +13,7 @@
     $stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","ส่งเรียบร้อยเเล้ว","รอการเเก้ไข","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
     $stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
     
-    $select_project = $db->prepare('SELECT * FROM project  natural JOIN job_type  WHERE project_id = :id');
+    $select_project = $db->prepare("SELECT * FROM project  natural JOIN job_type  WHERE project_id = :id");
     $select_project->bindParam(":id", $id);
     $select_project->execute();
     $row = $select_project->fetch(PDO::FETCH_ASSOC);
@@ -31,6 +31,8 @@
 <body>
 <?php include "sidebar.php"?>
 <?php include "funtion.php"?>
+
+
 <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
                     <?php 
@@ -112,7 +114,7 @@
                                             <div class="col-md-6">
                                                 <dl>
                                                     <dt><b class="border-bottom border-primary">วันที่เริ่ม</b></dt>
-                                                    <dd><?php echo ThDate($start_date) ?></dd>
+                                                    <dd><?php echo  ThDate($start_date) ?></dd>
                                                 </dl>
                                                 <dl>
                                                     <dt><b class="border-bottom border-primary">วันสิ้นสุด</b></dt>
@@ -123,7 +125,7 @@
                                                         <dt><b class="border-bottom border-primary">ความคืบหน้า</b></dt>
                                                         <dd>
                                                             <?php
-                                                             $progressproject = array();
+                                                            $progressproject = array();
 
                                                             $sqlprogressproject = "SELECT * FROM project NATURAL JOIN task_list WHERE project_id = $id";
                                                             $qryprogressproject = $db->query($sqlprogressproject);
@@ -137,8 +139,8 @@
                                                             $numprogress = sizeof($progressproject);
                                                             $totalprogress2 = 0;
                                                             if($numprogress != 0 ){
-                                                            $totalprogress = $sumprogress/$numprogress;
-                                                            $totalprogress2=number_format($totalprogress,2);   
+                                                                $totalprogress = $sumprogress/$numprogress;
+                                                                $totalprogress2=number_format($totalprogress,2);   
                                                            }
                                                             //echo $totalprogress2;
                                                             
@@ -150,7 +152,7 @@
                                                         <br>
                                                             <div class="col-md-3">
                                                                 <div class="progress ">
-                                                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:<?php echo $totalprogress2 ?>%"><?php  echo $totalprogress2 ?>%</div>
+                                                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:<?php echo $progress_project ?>%"><?php  echo $progress_project   ?>%</div>
                                                                 </div>
                                                             </div>
                                                     
@@ -190,140 +192,137 @@
                     <div class="col-sm-12 ">
                         <div class="card flex-fill">
                             <div class="card-header">
-                                <?php   
-                                        if ($manager_id == $us || $level <= 2) {?>
+                                <?php  
+                                        if ($manager_id == $us || $level <= 2 AND $status_1 != 4)  {?>
                                 <div class="d-flex flex-row-reverse">
                                     <a class="btn btn-block btn-sm btn-default btn-flat border-primary"  type="button" id="new_task" data-bs-toggle="modal" data-bs-target="#addModal1"> <i class="fa fa-plus"></i>  + Add task</a>
                                 </div>
                                 <?php  } ?>
                                 <div class="d-flex justify-content-start">
                                     <h5 class="card-title mb-0">รายการงาน</h5>
-                                    </div>
-                            </div>
-                           
-                            <table class="table table-hover my-0">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">ID</th>
-                                        <th class="text-left">ชื่องาน</th>
-                                       <!--  <th class="d-none d-xl-table-cell">ชื่องาน</th> -->
-                                        
-                                        <th class="text-left">วันที่เริ่ม</th>
-                                        <th class="text-left">วันที่สิ้นสุด</th>
-                                        <th class="text-center">ความคืบหน้า</th>
-                                        <th class="text-center">มอบหมาย</th>
-                                        <th class="text-center">สถานะ</th>
-                                        <th class="text-center">Action</th>
-                                    </tr>
-                                </thead>
+                                </div>
+                            </div> 
+                            <div class="table-responsive-xl">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="id-col">ลำดับที่</th>
+                                            <th class="name-col">ชื่องาน</th>
+                                            <th class="start-col">วันที่เริ่ม</th>
+                                            <th class="end-col">วันที่สิ้นสุด</th>
+                                            <th class="progress-col">ความคืบหน้า</th>
+                                            <th class="assign-col">มอบหมาย</th>
+                                            <th class="status-col">สถานะ</th>
+                                            <th class="action-col">Action</th>
+                                        </tr>
+                                    </thead>
                                 <tbody>
-                                  
-                                <?php
-                                    $i = 1;
-                                    
-                                    $stmttasklist = "SELECT *,
-                                    DATE_FORMAT(strat_date_task, '%e %M %Y ') AS start_date, 
-                                    DATE_FORMAT(end_date_task, '%e %M %Y ') AS end_date,
-                                    DATE_FORMAT(strat_date_task, 'เวลา %H:%i น.') AS start_time, 
-                                    DATE_FORMAT(end_date_task, 'เวลา %H:%i น.') AS end_time
-                                    FROM task_list 
-                                    NATURAL JOIN user 
-                                    WHERE project_id = $id";
-                                    $stmttasklist = $db->query($stmttasklist);
-                                    $stmttasklist->execute();  
-                                    while ($row2 = $stmttasklist->fetch(PDO::FETCH_ASSOC)){
-                                        $task_id = $row2['task_id'];
-                                        $stmt = $db->query("SELECT * FROM details WHERE task_id =  $task_id ORDER BY details_id DESC ");
-                                        $stmt->execute();
-                                        $stmt2 = $stmt->fetch(PDO::FETCH_ASSOC);
-                                        $numsenddetails = $stmt->rowCount();
-                                            ?>
-                             <tr>
-                                    <td class="text-center">
-                                        <?php echo $i++ ?>
-                                    </td>
+  
+                                        <?php
+                                            $i = 1;
+                                            
+                                            $stmttasklist = "SELECT *
+                                            FROM task_list 
+                                            NATURAL JOIN user 
+                                            WHERE project_id = $id";
+                                            $stmttasklist = $db->query($stmttasklist);
+                                            $stmttasklist->execute();  
+                                            while ($row2 = $stmttasklist->fetch(PDO::FETCH_ASSOC)){
+                                                $task_id = $row2['task_id'];
+                                                $stmt = $db->query("SELECT * FROM details WHERE task_id =  $task_id ORDER BY details_id DESC ");
+                                                $stmt->execute();
+                                                $stmt2 = $stmt->fetch(PDO::FETCH_ASSOC);
+                                                $numsenddetails = $stmt->rowCount();
+                                                    ?>
+                                        <tr>
+                                            <td  class="id-col" >
+                                                <?php echo $i++ ?>
+                                            </td>
 
-                                    <td>
-                                        <h5><b><?php echo $row2['name_tasklist']  ?></h5></b>
-                                        <p class="truncate"><?php echo substr($row2['description_task'],0,20).'...';  ?></p>
-                                    </td>
-    
-                                    <td >
-                                        <?php echo ThDate($row2['start_date']); ?>
-                                        <p class="truncate" ><?php echo $row2['start_time']  ?></p>
-                                    </td>
+                                            <td class="name-col">
+                                                <h5><b><?php echo $row2['name_tasklist']  ?></h5></b>
+                                                <p class="truncate"><?php echo mb_substr($row2['description_task'],0,20).'...';  ?></p>
+                                            </td>
 
-                                    <td>
-                                        <?php echo ThDate($row2['end_date']); ?>
-                                        <p class="truncate" ><?php echo $row2['end_time']  ?></p>
-                                    </td>
+                                            <td class="start-col">
+                                                <?php echo thai_date_and_time($row2['strat_date_task']); ?>
+                                              
+                                            </td>
 
-                                    <td>
-                                        <div class="progress ">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:<?php echo $row2['progress_task'] ?>%" ><?php echo $row2['progress_task'] ?></div>
-                                        </div>
-                                    </td>
+                                            <td class="end-col">
+                                                <?php echo thai_date_and_time($row2['end_date_task']); ?>
+                                             
+                                            </td>
 
-                                    <td class="text-center" >
-                                            <?php  echo $row2['firstname']." ".$row2['lastname'] ?>  
-                                    </td>
+                                            <td class="progress-col">
+                                                <div class="progress ">
+                                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:<?php echo $row2['progress_task'] ?>%" ><?php echo $row2['progress_task'] ?></div>
+                                                </div>
+                                            </td>
 
-                                    <td class="text-center">
-                                            <?php   showstattask($row2['status_task']);?>
-                                    </td>
-                                       
-                                    <td class="text-center">
-                                  
-                                       <a class="btn btn-google btn-sm" href="details_page.php?task_id=<?php echo $row2['task_id']?>&project_id=<?php echo $row2['project_id']?>"><i data-feather="message-square"></i></a>   
-                                       <!-- <a class="btn btn-google btn-sm" data-bs-toggle="modal" data-bs-target="#viewdetailsmodal<?php echo $row2['details_id']?>"><i data-feather="message-square"></i></a> -->
+                                            <td class="assign-col" >
+                                                    <?php  echo $row2['firstname']." ".$row2['lastname'] ?>  
+                                            </td>
 
-                                       <a class="btn btn-bitbucket btn-sm" data-bs-toggle="modal" data-bs-target="#viewtaskmodal<?php echo $row2['task_id']?>"><i data-feather="zoom-in"></i></a>
+                                            <td class="status-col" >
+                                                    <?php   showstattask($row2['status_task']);?>
+                                            </td>
+                                            
+                                            <td class="action-col">
+                                        
+                                            <a class="btn btn-google btn-sm" href="details_page.php?task_id=<?php echo $row2['task_id']?>&project_id=<?php echo $row2['project_id']?>"><i data-feather="message-square"></i></a>   
+                                            <!-- <a class="btn btn-google btn-sm" data-bs-toggle="modal" data-bs-target="#viewdetailsmodal<?php echo $row2['details_id']?>"><i data-feather="message-square"></i></a> -->
 
-                                       <?php
-                                       /* $member = array();
-                                       $stmtprojectuser = "SELECT * FROM project_list NATURAL JOIN user  WHERE project_id = $id";
-                                       $stmtprojectuser = $db->query($stmtprojectuser);
-                                       $stmtprojectuser->execute();  
-                                       while ($row = $stmtprojectuser->fetch(PDO::FETCH_ASSOC)){
-                                           $member[] = $row["user_id"];
-                                       } */
-                                               /*  print_r ($member) ; */
-                                          
-                                        // if (in_array($us,$member) || ( $level <= 2 || $manager_id == $us ) AND $row2['status_task'] != 3 AND $row2['progress_task'] != 100  ) {
-                                        if ($row2['user_id'] == $us|| $level <= 2 || $manager_id == $us  AND $row2['status_task'] != 3 AND $row2['progress_task'] != 100  AND $status_1 != 4) {
-                                            echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] .'&user_id='. $us .' " class="btn btn-success btn-sm"><i data-feather="share"></i></a>';  
-                                        }
-                                        else if( $row2['progress_task'] != 100 AND $row2['status_task'] == 3 ){
-                                            echo '<button class="btn btn-danger btn-sm"  onclick="deldetails('.$row2['task_id'].','.$row2['project_id'].','.$stmt2['details_id'].')"><i data-feather="x"></i></button> '; 
-                                            //echo $stmt2['details_id']; 
-                                        } 
-                                            // echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] . '" class="btn btn-danger btn-sm"><i data-feather="x"></i></a>';
-                                            // echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] . '" class="btn btn-success btn-sm disabled"><i data-feather="share"></i></a>'; 
-                                            echo ' ';
-                                        if($manager_id == $us || $level <= 2 AND $status_1 != 4) {
-                                            echo '<a class="btn btn-warning btn-sm" href="edittask_page.php?updatetask_id='.$row2['task_id'].'&project_id='.$row2['project_id'].'"><i data-feather="edit"></i></a>';
-                                            echo ' ';
-                                        }if($numsenddetails == 0 AND $manager_id == $us || $level <= 2 AND $status_1 != 4){
-                                                echo '<button class="btn btn-danger btn-sm" onclick="del_task(\''.$row2['task_id'].'\',\''.$row2['project_id'].'\')"><i data-feather="trash-2"></i></button>';
-                                        }   
-                                        ?>
-                                        <?php if ($manager_id == $us || $level <= 2) {?>
-                                                <!-- <a class="btn btn-warning btn-sm" href="edittask_page.php?updatetask_id=<?php echo $row2['task_id']?>&project_id=<?=$row2['project_id']?>" class="btn btn-warning btn-sm"><i  data-feather="edit"></i></a> -->
-                                                <!-- <a class="btn btn-danger btn-sm" onclick="test();"><i  data-feather="edit"></i></a> -->
-                                                <!-- <a class="btn btn-danger btn-sm" href="deletetask.php?delete_id=<?php echo $row2['task_id']?>&project_id=<?=$row2['project_id']?>"><i data-feather="trash-2"></i></a>  -->
-                                                <!-- <button class="btn btn-danger btn-sm"  onclick="del_task('<?php echo $row2['task_id']?>','<?php echo $row2['project_id']?>')"><i data-feather="trash-2"></i></button>  -->
+                                            <a class="btn btn-bitbucket btn-sm" data-bs-toggle="modal" data-bs-target="#viewtaskmodal<?php echo $row2['task_id']?>"><i data-feather="zoom-in"></i></a>
 
-                                               
-                                        <?php } ?>
+                                            <?php
+                                            /* $member = array();
+                                            $stmtprojectuser = "SELECT * FROM project_list NATURAL JOIN user  WHERE project_id = $id";
+                                            $stmtprojectuser = $db->query($stmtprojectuser);
+                                            $stmtprojectuser->execute();  
+                                            while ($row = $stmtprojectuser->fetch(PDO::FETCH_ASSOC)){
+                                                $member[] = $row["user_id"];
+                                            } */
+                                                    /*  print_r ($member) ; */
+                                                
+                                                // if (in_array($us,$member) || ( $level <= 2 || $manager_id == $us ) AND $row2['status_task'] != 3 AND $row2['progress_task'] != 100  ) {
+                                                if ($row2['user_id'] == $us|| $level <= 2 || $manager_id == $us  AND $row2['status_task'] != 2 AND $row2['progress_task'] != 100  AND $status_1 != 4) {
+                                                    echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] .'&user_id='. $us .' " class="btn btn-success btn-sm"><i data-feather="share"></i></a>';  
+                                                }
+                                                else if( $row2['progress_task'] != 100 AND $row2['status_task'] == 2 ){
+                                                    echo '<button class="btn btn-danger btn-sm deletedetals-btn"  data-project_id="'.$row2['project_id'].'"  data-task_id="'.$row2['task_id'].'"  data-details_id="'.$stmt2['details_id'].'"><i data-feather="x"></i></button> '; 
+                                                    //echo $stmt2['details_id']; 
+                                                    
+                                                } 
+                                                    // echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] . '" class="btn btn-danger btn-sm"><i data-feather="x"></i></a>';
+                                                    // echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] . '" class="btn btn-success btn-sm disabled"><i data-feather="share"></i></a>'; 
+                                                    echo ' ';
+                                                if($manager_id == $us || $level <= 2 AND $status_1 != 4) {
+                                                    echo '<a class="btn btn-warning btn-sm" href="edittask_page.php?updatetask_id='.$row2['task_id'].'&project_id='.$row2['project_id'].'"><i data-feather="edit"></i></a>';
+                                                    echo ' ';
+                                                }if($numsenddetails == 0 AND $manager_id == $us || $level <= 2 AND $status_1 != 4){
+                                                    echo '<button class="btn btn-danger btn-sm delete-btn" data-project_id="'.$row2['project_id'].'" data-task_id="'.$row2['task_id'].'"><i data-feather="trash-2"></i></button>';
+                                                }   
+                                                ?>
+                                                <?php if ($manager_id == $us || $level <= 2) {?>
+                                                        <!-- <a class="btn btn-warning btn-sm" href="edittask_page.php?updatetask_id=<?php echo $row2['task_id']?>&project_id=<?=$row2['project_id']?>" class="btn btn-warning btn-sm"><i  data-feather="edit"></i></a> -->
+                                                        <!-- <a class="btn btn-danger btn-sm" onclick="test();"><i  data-feather="edit"></i></a> -->
+                                                        <!-- <a class="btn btn-danger btn-sm" href="deletetask.php?delete_id=<?php echo $row2['task_id']?>&project_id=<?=$row2['project_id']?>"><i data-feather="trash-2"></i></a>  -->
+                                                        <!-- <button class="btn btn-danger btn-sm"  onclick="del_task('<?php echo $row2['task_id']?>','<?php echo $row2['project_id']?>')"><i data-feather="trash-2"></i></button>  -->
 
-                                    </td>
-                                </tr>
-                               
-                                <?php include "viewtask_modal.php";?>
-                            <?php  } ?>
+                                                    
+                                                <?php } ?>
+
+                                            </td>
+                                        </tr>
+                                        <?php include "viewtask_modal.php";?>
+                                    <?php  } ?>
                                 </tbody>
-                                <?php include "addtask_model.php"?>
-                            </table>
+                            <?php include "addtask_model.php"?>
+                        </table>
+         
+                            </div>    
+                            
                         </div>
                     </div>
                 </div>
@@ -341,7 +340,53 @@
     $(document).ready(function () {
         $('#example').DataTable();
     });
+    
+    $(".delete-btn").click(function(e) {
+            var project_id = $(this).data('project_id');
+            var task_id  = $(this).data('task_id');
+            console.log(task_id);
+            e.preventDefault();
+            deleteConfirm(project_id, task_id);
+        })
 
+        function deleteConfirm(project_id,task_id) {
+            Swal.fire({
+                title: 'คุณต้องการลบงานใช่หรือไม่',
+                icon: 'error',
+                //text: "It will be deleted permanently!",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ใช่ต้องการลบ!',
+                cancelButtonText: 'กลับ',
+                showLoaderOnConfirm: true,
+               
+                preConfirm: function() {
+                    return new Promise(function(resolve) {
+                        $.ajax({
+                                url: 'proc.php',
+                                type: 'post',
+                                data: 'proc=' + 'deltask' + '&project_id=' + project_id + '&task_id=' + task_id ,
+                            })
+                            .done(function() {
+                                Swal.fire({
+                                    title: 'success',
+                                    text: 'ลบงานเรียบร้อยเเล้ว!',
+                                    icon: 'success',
+                                }).then(() => {
+                                    document.location.href = 'view_project.php?view_id='+ project_id;
+                                    
+                                    
+                                })
+                            })
+                            .fail(function() {
+                                Swal.fire('Oops...', 'Something went wrong with ajax !', 'error')
+                                window.location.reload();
+                            });
+                    });
+                },
+            });
+        }
     function del_task(id_task,project_id){
         $('#proc').val('deltask');
         $('#task_id').val(id_task);
@@ -371,6 +416,69 @@
         $('#project_id').val(project_id);
         $('#details').val(details_id);
     }
+    $(".deletedetals-btn").click(function(e) {
+            var project_id = $(this).data('project_id');
+            var task_id  = $(this).data('task_id');
+            var details_id  = $(this).data('details_id');
+            console.log(details_id);
+            e.preventDefault();
+            deleteConfirm(project_id, task_id,details_id);
+        })
+
+        function deleteConfirm(project_id,task_id,details_id) {
+            console.log(details_id);
+            Swal.fire({
+                
+                title: 'คุณต้องการยกเลิกงานใช่หรือไม่',
+                icon: 'error',
+                //text: "It will be deleted permanently!",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ใช่ต้องการยกเลิก!',
+                cancelButtonText: 'กลับ',
+                showLoaderOnConfirm: true,
+               
+                preConfirm: function() {
+                
+                    return new Promise(function(resolve) {
+               
+                        $.ajax({
+                            
+                                url: 'proc.php',
+                                type: 'post',
+                                data: 'proc=' + 'deldetails' + '&project_id=' + project_id + '&task_id=' + task_id + '&details=' + details_id ,
+                            })
+                            .done(function() {
+                                Swal.fire({
+                                    title: 'success',
+                                    text: 'ยกเลิกเรียบร้อยเเล้ว!',
+                                    icon: 'success',
+                                }).then(() => {
+                                    document.location.href = 'view_project.php?view_id='+ project_id;
+                                    
+                                    
+                                })
+                            })
+                            .fail(function() {
+                                Swal.fire('Oops...', 'Something went wrong with ajax !', 'error')
+                                window.location.reload();
+                            });
+                    });
+                },
+            });
+        }
+
+   /*  function deldetails(viewpro){
+        document.getElementById('addtask_btn1').style.display="none";
+        document.getElementById('addtask_btn2').style.display="block";
+    } */
+  
+        
+    
+    
+
+
      // function test(){
         //     var url = "proc.php";
         //     var data = {proc:'add_task',taskname:'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',

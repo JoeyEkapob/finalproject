@@ -5,34 +5,14 @@
          $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
         header('location:sign-in.php');
     }
-    if(isset($_POST['addjob'])){
-        $namejob = $_POST['namejob'];
-        $status = 1;
-        if (empty($namejob)) {
-            $_SESSION['error'] = 'กรุณากรอกชื่อประเภทงาน';
-           // header("location: addjobtype.php");
-
-        }else if (!isset($_SESSION['error'])) {
-            $stmtjob = $db->prepare("INSERT INTO job_type(name_jobtype,status) 
-                                VALUES(:namejob, :status)");
-            $stmtjob->bindParam(":namejob", $namejob);
-            $stmtjob->bindParam(":status", $status);
-            $stmtjob->execute();
-            $_SESSION['success'] = "สมัครสมาชิกเรียบร้อยแล้ว! ";
-            header("location: jobtype_list.php");
-        } else {
-            $_SESSION['error'] = "มีบางอย่างผิดพลาด";
-            header("location: jobtype_list.php");
-        } 
-    } 
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <?php include "head.php"?>
 <body>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css" 
 <?php include "sidebar.php"?>
-
+<?php include "funtion.php"?>
 <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
                     <?php 
@@ -50,7 +30,11 @@
                 </div>
             <?php } ?>
 
-<form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+<form action="proc.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+
+    <input type=hidden id="proc" name="proc" value="">
+    <input type=hidden id="id_jobtype" name="id_jobtype" value="">
+        
     <main class="content">
         <div class="col-lg-12">
             <div class="card card-outline card-success">
@@ -70,7 +54,7 @@
                         <div class="card-header">
                             <h5 class="card-title mb-0">ประเภทงาน</h5>
                         </div>
-                            <table class="table table-hover my-0">
+                            <table class="table table-hover my-0" id="example">
                                 <thead>
                                     <tr>
                                         <th class="text-center">ลำดับ</th>
@@ -95,7 +79,7 @@
                                                <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                       
                                                 <!-- <a href="edituser_page.php?update_id=<?php echo $row['id_jobtype']?>" class="btn btn-warning btn-sm">2</a>   --> 
                                                 <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลประเภทงาน" href="editjobtype_page.php?update_id=<?php echo $row['id_jobtype']?>"><i  data-feather="edit"></i></a>
-                                                <a class="btn btn-danger btn-sm" title="ลบข้อมูลประเภทงาน" href="deletejobtype.php?delete_id=<?php echo $row['id_jobtype']?>"><i data-feather="trash-2"></i></a>
+                                                <button class="btn btn-danger btn-sm deletejob-btn" title="ลบข้อมูลประเภทงาน" data-id_jobtype="<?php echo $row['id_jobtype']?>"><i data-feather="trash-2"></i></button>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -111,4 +95,64 @@
 
     </body>
 </html>
+<script>
+$(document).ready(function () {
+    $('#example').DataTable();
+});
+
+function addjob(){
+    $('#proc').val('addjob');
+}
+
+    $(".deletejob-btn").click(function(e) {
+            var id_jobtype = $(this).data('id_jobtype');
+            console.log(id_jobtype);
+            e.preventDefault();
+            deleteConfirm(id_jobtype);
+        })
+
+        function deleteConfirm(id_jobtype) {
+            console.log(id_jobtype);
+            Swal.fire({
+                
+                title: 'คุณต้องลบประเภทงานใช่หรือไม่',
+                icon: 'error',
+                //text: "It will be deleted permanently!",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ใช่ต้องการยกเลิก!',
+                cancelButtonText: 'กลับ',
+                showLoaderOnConfirm: true,
+               
+                preConfirm: function() {
+                
+                    return new Promise(function(resolve) {
+               
+                        $.ajax({
+                            
+                                url: 'proc.php',
+                                type: 'post',
+                                data: 'proc=' + 'deljob' + '&id_jobtype=' + id_jobtype ,
+                            })
+                            .done(function() {
+                                Swal.fire({
+                                    title: 'success',
+                                    text: 'ยกเลิกเรียบร้อยเเล้ว!',
+                                    icon: 'success',
+                                }).then(() => {
+                                    document.location.href = 'jobtype_list.php';
+                                    
+                                    
+                                })
+                            })
+                            .fail(function() {
+                                Swal.fire('Oops...', 'Something went wrong with ajax !', 'error')
+                                window.location.reload();
+                            });
+                    });
+                },
+            });
+        }
+</script>
 <?php include "footer.php"?>

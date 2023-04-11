@@ -31,7 +31,6 @@
                     ?>
                 </div>
             <?php } ?>
-
 <form action="proc.php" method="post" class="form-horizontal" enctype="multipart/form-data">
 
     <input type="hidden" id="proc" name="proc" value="">
@@ -62,84 +61,86 @@
                         <div class="card-header">
                             <h5 class="card-title mb-0">รายการโปรเจค</h5>
                         </div>
-                            <table class="table table-hover my-0" id="example" >
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">ลำดับ</th>
-                                        <th class="text-left">ชื่อโปรเจค</th>
-                                        <th class="text-left">ความคืบหน้า</th>
-                                        <th class="text-center">วันที่เริ่ม</th>
-                                        <th class="text-center">วันที่สิ้นสุด</th>
-                                        <th class="text-center">สถานะ</th>
-                                        <th class="text-center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                        $i = 1;
-                                        $where = "";    
-                                        if($row['level'] >= 3 ){
-                                            $where = " where manager_id = '{$_SESSION['user_login']}' ";   
-                                        }
-                                       /*  $numsql ="SELECT COUNT(task_id) as numtask, task_list.* FROM task_list natural JOIN project ";
-                                        $numqry = $db->query($numsql);
-                                        $numqry->execute(); */
-                                        
-                                      
-                                        $sql = "SELECT * FROM project  $where order by end_date,status_2  DESC ";
-                                        $qry = $db->query($sql);
-                                        $qry->execute();
-                                        while ($row = $qry->fetch(PDO::FETCH_ASSOC)){
-                                            $pro_id=$row['project_id'];
-                                            $stmt = $db->query("SELECT * FROM task_list WHERE project_id =  $pro_id");
-                                            $numtask = $stmt->rowCount();
-                                    ?>
-                                    
+                            <div class="table-responsive-xl">
+                                <table class="table table-hover" id="example">
+                                    <thead>
                                         <tr>
-                                            <td class="text-center"><?php echo $i++ ?></td>
-                                             <td>
-                                                <p><b><?php echo $row["name_project"]?></b>
-                                                <?php showstatpro2($row['status_2']);?></p>
-                                                <p class="truncate"><?php echo mb_substr($row['description'],0,20).'...';  ?></p>
-						                    </td>
-
-                                            <td class="">
-
-                                            <div class="progress ">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:<?php echo number_format($row['progress_project'],2) ?>%" ><?php  echo number_format($row['progress_project'],2) ?></div>
-                                            </div>
-
-                                            </td>
-
-                                         
-                                            <td class="text-center" ><?php echo ThDate($row['start_date']) ?></td>
-					                        <td class="text-center "><?php echo ThDate($row['end_date'])  ?></td>
-
+                                            <th class="id-col text-center">ลำดับ</th>
+                                            <th class="name-col">ชื่อโปรเจค</th>
+                                            <th class="progress-col text-center">ความคืบหน้า</th>
+                                            <th class="start-col text-center">วันที่เริ่ม</th>
+                                            <th class="end-col text-center ">วันที่สิ้นสุด</th>
+                                            <th class="status-col text-center ">สถานะ</th>
+                                            <th class="action-col text-center">Action</th>
                                             
-
-                                            <td class="text-center">
-                                                <?php showstatpro($row['status_1']);  ?>
-                                            </td>
-                                            <td class="text-center">                   
-                                               <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                      
-                                                <a class="btn btn-bitbucket btn-sm" href="view_project.php?view_id=<?php echo $row['project_id']?>"><i data-feather="zoom-in"></i></a>
-                                            
-                                                <a class="btn btn-warning btn-sm" href="editproject_page.php?update_id=<?php echo $row['project_id']?>"><i data-feather="edit"></i></a>
-                                            
-
-                                                <?php 
-                                                    if ($numtask == 0 || $row['status_1'] == 4) {
-                                                    echo '<button class="btn btn-danger btn-sm" onclick="deleteproject(\''. $row['project_id'] .'\')"><i data-feather="trash-2"></i></button>';
-                                                    } else {
-                                                    echo '<button class="btn btn-danger btn-sm disabled" onclick="deleteproject(\''. $row['project_id'] .'\')"><i data-feather="trash-2"></i></button>';
-                                                    }
-                                                    ?>
-                                            </td>
                                         </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                            $i = 1;
+                                            $where = "";    
+                                            if($row['level'] >= 3 ){
+                                                $where = " where manager_id = '{$_SESSION['user_login']}' ";   
+                                            }
+                                        /*  $numsql ="SELECT COUNT(task_id) as numtask, task_list.* FROM task_list natural JOIN project ";
+                                            $numqry = $db->query($numsql);
+                                            $numqry->execute(); */
+                                            
                                         
-                                    <?php } ?>
-                                </tbody>           
-                            </table>
+                                            $sql = "SELECT * FROM project  $where order by end_date,status_2  DESC ";
+                                            $qry = $db->query($sql);
+                                            $qry->execute();
+                                            while ($row = $qry->fetch(PDO::FETCH_ASSOC)){
+                                                $pro_id=$row['project_id'];
+                                                $stmt = $db->query("SELECT * FROM task_list WHERE project_id =  $pro_id");
+                                                $numtask = $stmt->rowCount();
+                                        ?>
+                                        
+                                            <tr>
+                                                <td class="id-col"><?php echo $i++ ?></td>
+                                                <td class="name-col">
+                                                    <p><b><?php echo $row["name_project"]?></b>
+                                                    <?php showstatpro2($row['status_2']);?></p>
+                                                    <p class="truncate"><?php echo mb_substr($row['description'],0,20).'...';  ?></p>
+                                                </td>
+
+                                                <td class="progress-col">
+                                                    <div class="progress">
+                                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:<?php echo number_format($row['progress_project'],2) ?>%" ><?php  echo number_format($row['progress_project'],2) ?></div>
+                                                    </div>
+                                                </td>
+
+                                            
+                                                <td class="start-col" ><?php echo ThDate($row['start_date']) ?></td>
+                                                <td class="end-col"><?php echo ThDate($row['end_date'])  ?></td>
+
+                                                
+
+                                                <td class="status-col">
+                                                    <?php showstatpro($row['status_1']);  ?>
+                                                </td>
+                                                <td class="action-col">                   
+                                                <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                      
+                                                    <a class="btn btn-bitbucket btn-sm" href="view_project.php?view_id=<?php echo $row['project_id']?>"><i data-feather="zoom-in"></i></a>
+                                                
+                                                    <a class="btn btn-warning btn-sm" href="editproject_page.php?update_id=<?php echo $row['project_id']?>"><i data-feather="edit"></i></a>
+                                                   
+
+                                                    <?php 
+                                                        if ($numtask == 0 || $row['status_1'] == 4) {
+                                                        echo '<button class="btn btn-danger btn-sm delete-btn"  data-project_id="'.$row['project_id'].'"><i data-feather="trash-2"></i></button>';
+
+                                                        } else {
+                                                        echo '<button class="btn btn-danger btn-sm disabled" onclick="deleteproject(\''. $row['project_id'] .'\')"><i data-feather="trash-2"></i></button>';
+                                                        }
+                                                        ?>
+                                                </td>
+                                            </tr>
+                                            
+                                        <?php } ?>
+                                    </tbody>           
+                                </table>
+                            </div>
                     </div>
                         
                   
@@ -153,10 +154,54 @@
 $(document).ready(function () {
     $('#example').DataTable();
 });
-function deleteproject(project_id){
+/* function deleteproject(project_id){
     $('#proc').val('deleteproject');
     $('#project_id').val(project_id);
 }
+ */
+        $(".delete-btn").click(function(e) {
+            var project_id = $(this).data('project_id');
+            console.log(project_id);
+            e.preventDefault();
+            deleteConfirm(project_id);
+        })
 
+        function deleteConfirm(project_id) {
+            Swal.fire({
+                title: 'คุณต้องการลบหัวข้องาน',
+                icon: 'error',
+                //text: "It will be deleted permanently!",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ใช่ต้องการลบ!',
+                cancelButtonText: 'กลับ',
+                showLoaderOnConfirm: true,
+                preConfirm: function() {
+                    return new Promise(function(resolve) {
+                        $.ajax({
+                                url: 'proc.php',
+                                type: 'post',
+                                data: 'proc=' + 'deleteproject' + '&project_id=' + project_id,
+                            })
+                            .done(function() {
+                                Swal.fire({
+                                    title: 'success',
+                                    text: 'ลบหัวข้องานเรียบร้อยเเล้ว!',
+                                    icon: 'success',
+                                }).then(() => {
+                                    document.location.href = 'project_list.php';
+                                    
+                                    
+                                })
+                            })
+                            .fail(function() {
+                                Swal.fire('Oops...', 'Something went wrong with ajax !', 'error')
+                                window.location.reload();
+                            });
+                    });
+                },
+            });
+        }
 </script>
 <?php include "footer.php"?>

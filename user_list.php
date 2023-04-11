@@ -55,8 +55,8 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-center">ID</th>
-                                                <th class="text-left">NAME</th>
-                                                <th class="text-left">Email</th>
+                                                <th class="text-left">ชื่อ-นามสกุล</th>
+                                                <th class="text-left">อีเมลล์</th>
                                                 <th class="text-left">ตำเเหน่ง</th>
                                                 <th class="text-center">Action</th>
                                             </tr>
@@ -72,20 +72,27 @@
                                             
                                             while ($row = $qry->fetch(PDO::FETCH_ASSOC)){
                                                 //extract($row);
+                                                $user_id = $row['user_id'];
+                                                $stmt = $db->query("SELECT * FROM project_list WHERE user_id =  $user_id");
+                                                $meproject = $stmt->rowCount();
+                                           
                                         ?>
-                                        
                                         <tr>
                                             <td class="text-center"><?php echo $i++ ?></td>
                                             <td class="text-left"><?php echo ucwords($row['name']) ?></td>
                                             <td class="text-left" ><?php echo $row['email'] ?></td>
                                             <td class="text-left" ><?php echo $row['position_name']?></td>
                                             <td class="text-center">  
-                                            <a class="" type="button" onclick="resetpass('<?php echo $row['user_id']?>')"> <h3> <i  data-feather="key"></i> </h3> </a>
+                                            <a  class="resetbtn" type="button"  data-user_id ="<?php echo $row['user_id']?>"> <h3> <i data-feather="key"></i> </h3> </a>
                             
                                              <a class="btn btn-bitbucket btn-sm view_data"  title="ดูรายละเอียด" data-bs-toggle="modal" data-bs-target="#viewusermodal<?php echo $row['user_id']?>" ><i data-feather="zoom-in"></i></a> 
                                                 <!--  <a class="btn btn-bitbucket btn-sm view_data"  id="<?php echo $row['user_id']?>" ><i data-feather="zoom-in"></i></a>        -->                                             
                                                 <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลสมาชิก" href="edituser_page.php?update_id=<?php echo $row['user_id']?>"><i  data-feather="edit"></i></a>
-                                                <a class="btn btn-danger btn-sm" title="ลบข้อมูลสมาชิก" href="deleteuser.php?delete_id=<?php echo $row['user_id']?>"><i data-feather="trash-2"></i></a>
+                                                <?php if($meproject == 0 OR $level == 1)  {?>
+                                                    <a class="btn btn-danger btn-sm deluserbtn" title="ลบข้อมูลสมาชิก" data-user_id ="<?php echo $row['user_id']?>"><i data-feather="trash-2"></i></a>
+                                                <?php   } else {?>
+                                                    <a class="btn btn-danger btn-sm deluserbtn disabled" title="ลบข้อมูลสมาชิก" data-user_id ="<?php echo $row['user_id']?>"><i data-feather="trash-2"></i></a>
+                                                    <?php } ?>
                                             </td>
                                         </tr>   
                                         <?php include "viewuser_modal.php"?>
@@ -109,10 +116,7 @@ $(document).ready(function () {
     $('#example').DataTable();
 });
 
-</script>
-<!-- // showpic -->
- <script>
-        function Preview(ele) {
+    function Preview(ele) {
         $('#img').attr('src', ele.value);
                 if (ele.files && ele.files[0]) {
                 var reader = new FileReader();
@@ -123,16 +127,103 @@ $(document).ready(function () {
             }
         }
         function adduser(){
-
             $('#proc').val('adduser');
         }
-        function resetpass(user_id){
+       /*  function resetpass(user_id){
             console.log('user_id');
             $('#proc').val('resetpass');
             $('#user_id').val(user_id);
             $('#userlist').submit();
+        } */
+        $(".resetbtn").click(function(e) {
+            var user_id = $(this).data('user_id');
+            console.log(user_id);
+            e.preventDefault();
+            resetbtn(user_id);
+        })
 
+        function resetbtn(user_id) {
+            Swal.fire({
+                title: 'คุณต้องการรีเซ็ตพาสเวิร์ดใช่หรือไม่',
+                icon: 'info',
+                //text: "It will be deleted permanently!",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ใช่ต้องการรีเซ็ตพาสเวิร์ด!',
+                cancelButtonText: 'กลับ',
+                showLoaderOnConfirm: true,
+               
+                preConfirm: function() {
+                    return new Promise(function(resolve) {
+                        $.ajax({
+                                url: 'proc.php',
+                                type: 'post',
+                                data: 'proc=' + 'resetpass' + '&user_id=' + user_id  ,
+                            })
+                            .done(function() {
+                                Swal.fire({
+                                    title: 'success',
+                                    text: 'รีเซ็ตพาสเวิร์ดเรียบร้อยเเล้ว!',
+                                    icon: 'success',
+                                }).then(() => {
+                                    document.location.href = 'user_list.php';
+                                    
+                                    
+                                })
+                            })
+                            .fail(function() {
+                                Swal.fire('Oops...', 'Something went wrong with ajax !', 'error')
+                                window.location.reload();
+                            });
+                    });
+                },
+            });
         }
-       
+        $(".deluserbtn").click(function(e) {
+            var user_id = $(this).data('user_id');
+            console.log(user_id);
+            e.preventDefault();
+            deluserbtn(user_id);
+        })
+
+        function deluserbtn(user_id) {
+            Swal.fire({
+                title: 'คุณต้องการลบสมาชิกใช่หรือไม่',
+                icon: 'error',
+                //text: "It will be deleted permanently!",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ใช่ต้องการลบสมาชิก!',
+                cancelButtonText: 'กลับ',
+                showLoaderOnConfirm: true,
+               
+                preConfirm: function() {
+                    return new Promise(function(resolve) {
+                        $.ajax({
+                                url: 'proc.php',
+                                type: 'post',
+                                data: 'proc=' + 'deluserbtn' + '&user_id=' + user_id  ,
+                            })
+                            .done(function() {
+                                Swal.fire({
+                                    title: 'success',
+                                    text: 'ลบสมาชิกเรียบร้อยเเล้ว!',
+                                    icon: 'success',
+                                }).then(() => {
+                                    document.location.href = 'user_list.php';
+                                    
+                                    
+                                })
+                            })
+                            .fail(function() {
+                                Swal.fire('Oops...', 'Something went wrong with ajax !', 'error')
+                                window.location.reload();
+                            });
+                    });
+                },
+            });
+        }
 </script> 
 <?php include "footer.php"?>

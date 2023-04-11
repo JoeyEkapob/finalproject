@@ -171,10 +171,10 @@
                                         <div class="mb-3">
                                         </div>
                                         <hr>
-										<div class="col-lg-12 text-right justify-content-center d-flex">
-											<button class="btn btn-primary" id="display_selected"  onclick="editpro('<?php echo $pro_id ?>');" >EDIT</button>
-											<a class="btn btn-secondary" href="project_list.php" type="button" >Cancel</a>
-										</div>
+										    <div class="col-lg-12 text-right justify-content-center d-flex">
+                                                <button class="btn btn-primary" id="display_selected"  onclick="editpro('<?php echo $pro_id ?>');" >เเก้ไข</button>
+                                                <a class="btn btn-secondary" href="project_list.php" type="button" >กลับ</a>
+										    </div>
                                        
 
                                     </div>

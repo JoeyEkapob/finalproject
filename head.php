@@ -12,6 +12,8 @@
 	<title>AdminKit Demo - Bootstrap 5 Admin Template</title>
 	
 	<link rel="stylesheet" href="css/multi_select.css"> 
+	<link rel="stylesheet" href="css/csstablesiza.css"> 
+
 	<!-- Bootstrap 5.2  -->
 	 <!-- <link rel="stylesheet" type="text/css" href="https://getbootstrap.com/docs/5.2/dist/css/bootstrap.min.css" /> -->
 	 <!-- Bootstrap 5.3  -->

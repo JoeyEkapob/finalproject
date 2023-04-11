@@ -2,7 +2,7 @@
     include 'connect.php';
 
     if(isset($_GET['delete_id'])){
-        try {
+
         $id=$_GET['delete_id'];
             /* echo $id;
             exit; */
@@ -19,9 +19,7 @@
     
             header("Location: user_list.php");
 
-    } catch(PDOException $e) {
-        $e->getMessage();
-    }
+
 }   
 
 

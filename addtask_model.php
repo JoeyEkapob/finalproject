@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel"> ADD TASK </h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel"> เพิ่มงาน </h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       
@@ -19,11 +19,11 @@
                     <div class="col-md-12">
                         <div class="mb-3">
                             <label for="" class="control-label">วันที่สั่ง</label>
-                            <input type="datetime-local" class="form-control " autocomplete="off" name="start_date" min="<?php //echo $start_date ?>" value="<?php echo $start_date ?>">
+                            <input type="datetime-local" class="form-control " autocomplete="off" name="start_date" min="<?php echo $date ?>" value="<?php echo $date ?>">
                     
-                        </div>
-                        
+                        </div> 
                     </div>
+
                     <div class="col-md-12">
                         <div class="mb-3">
                             <label for="" class="control-label">วันที่เสร็จ</label>
@@ -52,8 +52,7 @@
                                 <div class="form-group">
                                     <label for="" class="control-label">ไฟล์เเนบ</label>	
                                     <input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
-
-                                    <p class="small mb-0 mt-2"><b>Note:</b></p> 
+                                    <p class="small mb-0 mt-2"><b>รายละเอียด:รองรับไฟล์งาน .pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx </b></p> 
                                 </div>
                         </div>
                     </div>
@@ -65,8 +64,9 @@
                         </div>
                         <hr>
                         <div class="col-lg-12 text-right justify-content-center d-flex">
-                            <button class="btn btn-primary " name ="addtask_btn" onclick="add_task();">ADD</button>
-                            <button class="btn btn-secondary" type="button"  data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                            <button class="btn btn-primary " name ="addtask_btn" id="addtask_btn1" onclick="add_task();" >เพิ่มงาน</button>
+
+                            <button class="btn btn-secondary" type="button"  data-bs-dismiss="modal" aria-label="Close">กลับ</button>
                         </div>
                     </div>
       </div>

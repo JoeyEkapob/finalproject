@@ -1,9 +1,11 @@
-<?php include "head.php"?>
-<?php
+<?php 
+include "head.php";
+
+
             if (isset($_SESSION['user_login'])) {
                 $user_id = $_SESSION['user_login'];
              //echo $admin_id ;
-			 	$sql = "SELECT * FROM user AS u  natural JOIN position  WHERE u.user_id = $user_id ";
+			 	$sql = "SELECT *,concat(firstname,' ',lastname) as name  FROM user AS u  natural JOIN position  WHERE u.user_id = $user_id ";
 				$stmt = $db->prepare($sql);
                 $stmt->execute();
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -16,8 +18,6 @@
 			$level = $row['level'];
 			
 ?>
-<!--                 	<img src="img/avatars/2023-04-03U84124813.jpg" class="avatar rounded-circle rounded me-1" alt="" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
- -->
 <div class="wrapper">
 		<nav id="sidebar" class="sidebar js-sidebar">
 			<div class="sidebar-content js-simplebar">
@@ -307,20 +307,61 @@
               </a>
 
 							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                	<img src="img/avatars/<?php echo $row['avatar'] ?>" class="avatar rounded-circle rounded me-1" alt="" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
-              </a>
+								<?php  if($row['avatar'] !=""){?>
+                			<img src="img/avatars/<?php echo $row['avatar'] ?>" class="avatar rounded-circle rounded me-1" alt="" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
+							<?php }else{?>
+							<img src="img/avatars/09.jpg ?>" class="avatar rounded-circle rounded me-1" alt="" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
+								<?php }?>
+              				</a>
 							<div class="dropdown-menu dropdown-menu-end">
-								<a class="dropdown-item" href=""><i class="align-middle me-1" data-feather="user"></i> โปรไฟล์</a>
-								<a class="dropdown-item" href=""><i class="align-middle me-1" data-feather="key"></i> เปลียนรหัสผ่าน</a>
+								<a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#viewusermodal<?php echo $user_id?>"><i class="align-middle me-1" data-feather="user"></i> โปรไฟล์</a>
+								<a class="dropdown-item" href="edituser.php?user_id=<?php echo $row['user_id']?>" ><i class="align-middle me-1" data-feather="edit"></i> เเก้ไขโปรไฟล์</a>
+								<a class="dropdown-item" href="editnewpassuser.php"><i class="align-middle me-1" data-feather="key"></i> เปลียนรหัสผ่าน</a>
 
 								<!-- <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="pie-chart"></i> Analytics</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="index.html"><i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy</a>
 								<a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="help-circle"></i> Help Center</a> -->
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" onclick="alert('คุณต้องการออกจากระบบใช่ไหม')" href="logout.php">ออกจากระบบ</a>
+								<a class="dropdown-item logoutuser" >ออกจากระบบ</a>
 							</div>
+							<?php include 'viewuser_modal.php'?>
 						</li>
 					</ul>
 				</div>
 			</nav>
+<script> 
+
+$(".logoutuser").click(function() {
+    Swal.fire({
+        title: 'คุณต้องการออกจากระบบใช่หรือไม่',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่ต้องการออกจากระบบ!',
+        cancelButtonText: 'กลับ',
+        showLoaderOnConfirm: true,
+        preConfirm: function() {
+            return new Promise(function(resolve) {
+                resolve(
+                    $.ajax({
+                        url: 'logout.php',
+                        type: 'post',
+                        data: 'logout=' + 'true',
+                        success: function(response) {
+                            Swal.fire({
+                                title: 'เรียบร้อย',
+                                text: 'ออกจากระบบเรียบร้อยแล้ว!',
+                                icon: 'success',
+                            }).then(() => {
+                                document.location.href = 'logout.php';
+                            });
+                        }
+                    })
+                );
+            });
+        },
+    });
+});
+</script> 

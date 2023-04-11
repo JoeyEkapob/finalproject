@@ -1,0 +1,68 @@
+ @media screen and (max-width: 768px) { /* ใช้ได้กับหน้าจอขนาดเล็กกว่าหรือเท่ากับ 768px */
+  /* ซ่อนคอลัมน์ที่ไม่จำเป็น */
+.table th.start-col,
+.table th.end-col,
+.table th.progress-col,
+.table th.assign-col,
+.table th.status-col,
+.table td.start-col,
+.table td.end-col,
+.table td.progress-col,
+.table td.assign-col,
+.table td.status-col {
+    display: none;
+  }
+
+  /* ปรับขนาดคอลัมน์ที่เหลือ */
+.table th.id-col,
+.table th.name-col,
+.table td.id-col,
+.table td.name-col {
+    width:auto;
+  }
+}
+
+@media screen and (max-width: 1400px) { /* ใช้ได้กับหน้าจอขนาดเล็กกว่าหรือเท่ากับ 1350px */
+  /* ซ่อนคอลัมน์ที่ไม่จำเป็น */
+.table th.start-col,
+.table th.end-col,
+.table td.start-col,
+.table td.end-col {
+    display: none;
+  }
+
+  /* ปรับขนาดคอลัมน์ที่เหลือ */
+.table th.id-col,
+.table th.name-col,
+.table th.progress-col,
+.table th.assign-col,
+.table th.status-col,
+.table td.id-col,
+.table td.name-col,
+.table td.progress-col,
+.table td.assign-col,
+.table td.status-col {
+    width: auto;
+  }
+}
+.id-col {
+    text-align: center;
+  }
+.progress-col {
+    text-align: center;
+  }
+.assign-col {
+    text-align: center;
+  }
+.status-col{
+    text-align: center;
+  }
+.action-col{
+    text-align: center;
+  }
+.start-col{
+    text-align: center;
+  }
+.end-col{
+    text-align: center;
+  }

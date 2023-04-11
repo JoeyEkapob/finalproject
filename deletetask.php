@@ -3,7 +3,7 @@ session_start();
 include 'connect.php';
 
 if(isset($_GET['delete_id'])){
-    try {
+ 
     $pro_id=$_GET['project_id']; 
     $id=$_GET['delete_id'];
     
@@ -20,9 +20,6 @@ if(isset($_GET['delete_id'])){
     } 
     
         
-} catch(PDOException $e) {
-    $e->getMessage();
-}
 }   
 
 ?>

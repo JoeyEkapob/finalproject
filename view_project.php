@@ -81,9 +81,17 @@
                                                 <dl>
                                                     <dt><b class="border-bottom border-primary">ผู้สร้างโปรเจค</b></dt>
                                                     <dd> 
-                                                         <div class="d-flex align-items-center mt-1">
-                                                            <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $manager['avatar']?>" alt="Avatar" width="35"  height="35">
-                                                            <b><?php echo $manager['name'] ?> </b>
+                                                        <div class="d-flex align-items-center mt-1">
+                                                            
+                                                             <?php if($manager['avatar'] !=""){?>
+                                                                <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $manager['avatar']?>" alt="Avatar" width="35"  height="35">
+                                                                <b><?php echo $manager['name'] ?> </b>
+                                                            <?php }else{ ?>
+                                                                <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
+                                                                <b><?php echo $manager['name'] ?> </b>
+                                                                <?php } ?>
+                                                           
+                                                        
                                                         </div>
                                                     </dd>
                                                     <dt><b class="border-bottom border-primary">ไฟล์เเนบ</b></dt>
@@ -173,9 +181,13 @@
                                                                 $qry = $db->query($sql);
                                                                 $qry->execute();
                                                                 while ($row = $qry->fetch(PDO::FETCH_ASSOC)){  ?>  
-                                                                     
+                                                            <?php if($row['avatar'] !=""){?>
                                                                 <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $row['avatar']?>" alt="Avatar" width="35"  height="35">
                                                                 <b><?php  echo $row['firstname']." ".$row['lastname'] ?></b>
+                                                            <?php }else{?>
+                                                                <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
+                                                                <b><?php  echo $row['firstname']." ".$row['lastname'] ?></b>
+                                                                <?php }?>
                                                             <?php  }?>
                                                     </dd>
                                                 </dl> 
@@ -229,6 +241,7 @@
                                             $stmttasklist->execute();  
                                             while ($row2 = $stmttasklist->fetch(PDO::FETCH_ASSOC)){
                                                 $task_id = $row2['task_id'];
+                                             
                                                 $stmt = $db->query("SELECT * FROM details WHERE task_id =  $task_id ORDER BY details_id DESC ");
                                                 $stmt->execute();
                                                 $stmt2 = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -253,7 +266,7 @@
                                                 <?php echo thai_date_and_time($row2['end_date_task']); ?>
                                              
                                             </td>
-
+                                             
                                             <td class="progress-col">
                                                 <div class="progress ">
                                                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:<?php echo $row2['progress_task'] ?>%" ><?php echo $row2['progress_task'] ?></div>
@@ -284,14 +297,15 @@
                                                 $member[] = $row["user_id"];
                                             } */
                                                     /*  print_r ($member) ; */
-                                                
+                                                     
                                                 // if (in_array($us,$member) || ( $level <= 2 || $manager_id == $us ) AND $row2['status_task'] != 3 AND $row2['progress_task'] != 100  ) {
                                                 if ($row2['user_id'] == $us|| $level <= 2 || $manager_id == $us  AND $row2['status_task'] != 2 AND $row2['progress_task'] != 100  AND $status_1 != 4) {
-                                                    echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] .'&user_id='. $us .' " class="btn btn-success btn-sm"><i data-feather="share"></i></a>';  
+                                                    echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' .   $row2['project_id'] .'&user_id='. $us .' " class="btn btn-success btn-sm"><i data-feather="share"></i></a>';  
                                                 }
+                                             
                                                 else if( $row2['progress_task'] != 100 AND $row2['status_task'] == 2 ){
                                                     echo '<button class="btn btn-danger btn-sm deletedetals-btn"  data-project_id="'.$row2['project_id'].'"  data-task_id="'.$row2['task_id'].'"  data-details_id="'.$stmt2['details_id'].'"><i data-feather="x"></i></button> '; 
-                                                    //echo $stmt2['details_id']; 
+                                                    //echo $row2['project_id'];
                                                     
                                                 } 
                                                     // echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] . '" class="btn btn-danger btn-sm"><i data-feather="x"></i></a>';
@@ -341,15 +355,16 @@
         $('#example').DataTable();
     });
     
-    $(".delete-btn").click(function(e) {
+        $(".delete-btn").click(function(e) {
             var project_id = $(this).data('project_id');
             var task_id  = $(this).data('task_id');
-            console.log(task_id);
+           // console.log('dfgdfgdfgdf');
+
             e.preventDefault();
-            deleteConfirm(project_id, task_id);
+            deletetaskConfirm(project_id,task_id);
         })
 
-        function deleteConfirm(project_id,task_id) {
+        function deletetaskConfirm(project_id,task_id) {
             Swal.fire({
                 title: 'คุณต้องการลบงานใช่หรือไม่',
                 icon: 'error',

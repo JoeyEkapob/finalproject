@@ -1,9 +1,17 @@
 
 <?php
+
+header('Access-Control-Allow-Origin: *');
+
+header('Access-Control-Allow-Methods: GET, POST');
+
+header("Access-Control-Allow-Headers: X-Requested-With");
+
     session_start();
     include 'footer.php';
     require_once 'connect.php';
     include "funtion.php";
+    include 'notify.php';
     date_default_timezone_set('asia/bangkok');
     $date = date('Y-m-d');
     $url_return = "";
@@ -19,7 +27,7 @@
         $qry->execute();
         if($sendstatus == 1){
         while($row = $qry->fetch(PDO::FETCH_ASSOC)){ 
-    
+            
         $outp.=' 
         <div class="col-12  d-flex">
             <div class="card flex-fill">  
@@ -50,10 +58,15 @@
 
         $outp.=' <dt><b class="border-bottom border-primary">คนที่ส่งงาน</b></dt>
                     <dd> 
-                        <div class="d-flex align-items-center mt-1">
-                            <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/'. $profileusersendrow['avatar'].'" alt="Avatar" width="35"  height="35">
-                            <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>
-                        </div>
+                        <div class="d-flex align-items-center mt-1">';
+                if($profileusersendrow['avatar'] !=""){ 
+        $outp.='   <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/'. $profileusersendrow['avatar'].'" alt="Avatar" width="35"  height="35">
+                    <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
+                 }else{ 
+        $outp.='<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
+                    <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
+                } 
+        $outp.=' </div>
                     </dd>
                     <dt><b class="border-bottom border-primary">ไฟล์เเนบ</b></dt>'; /* */
  
@@ -107,10 +120,15 @@
         
                 $outp.=' <dt><b class="border-bottom border-primary">คนที่ตรวจงาน</b></dt>
                             <dd> 
-                                <div class="d-flex align-items-center mt-1">
-                                    <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/'. $profileusersendrow['avatar'].'" alt="Avatar" width="35"  height="35">
-                                    <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>
-                                </div>
+                                <div class="d-flex align-items-center mt-1">';
+                if($profileusersendrow['avatar'] !=""){ 
+                $outp.='   <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/'. $profileusersendrow['avatar'].'" alt="Avatar" width="35"  height="35">
+                            <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
+                            }else{ 
+                $outp.='<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
+                            <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
+                        } 
+                $outp.='</div>
                             </dd>
                             <dt><b class="border-bottom border-primary">ไฟล์เเนบ</b></dt>'; /* */
          
@@ -292,18 +310,7 @@
             $sMessage .= "คนที่สั่งงาน : ".$stmtuserrow['FullName']." \n";
            // showstatprotext2($status2);
             //echo  $sMessage;
-    
-            $chOne = curl_init(); 
-            curl_setopt( $chOne, CURLOPT_URL, "https://notify-api.line.me/api/notify"); 
-            curl_setopt( $chOne, CURLOPT_SSL_VERIFYHOST, 0); 
-            curl_setopt( $chOne, CURLOPT_SSL_VERIFYPEER, 0); 
-            curl_setopt( $chOne, CURLOPT_POST, 1); 
-            curl_setopt( $chOne, CURLOPT_POSTFIELDS, "message=".$sMessage); 
-            $headers = array( 'Content-type: application/x-www-form-urlencoded', 'Authorization: Bearer '.$sToken.'', );
-            curl_setopt($chOne, CURLOPT_HTTPHEADER, $headers); 
-            curl_setopt( $chOne, CURLOPT_RETURNTRANSFER, 1); 
-            $result = curl_exec( $chOne );   
-
+            sentNotify($sToken , $sMessage);
         }
         
         
@@ -732,27 +739,18 @@
                 $datauser = $db->prepare("SELECT line_token FROM user WHERE user_id = :userid");
                 $datauser->bindParam(":userid",$userid);
                 $datauser ->execute();
-                $datauserrow = $datauser->fetch(PDO::FETCH_ASSOC); 
-            
+                $datauserrow = $datauser->fetch(PDO::FETCH_ASSOC);
+
                 $sToken = $datauserrow['line_token'];
                 $sMessage = "มีการเพื่มโปรเจค \n";
-                $sMessage .= "ชื่อห้วงาน : ".$proname." \n";
-                $sMessage .= "ประเภทงาน : ".$stmtjobtyperow['name_jobtype']." \n";
-                $sMessage .= "วันที่สั่ง : ".ThDate($start_date)." \n";
-                $sMessage .= "วันที่สิ้นสุด : ".ThDate($end_date)." \n";
-                $sMessage .= "คนที่สั่งงาน : ".$stmtuserrow['FullName']." \n";
-        
-                $chOne = curl_init(); 
-                curl_setopt( $chOne, CURLOPT_URL, "https://notify-api.line.me/api/notify"); 
-                curl_setopt( $chOne, CURLOPT_SSL_VERIFYHOST, 0); 
-                curl_setopt( $chOne, CURLOPT_SSL_VERIFYPEER, 0); 
-                curl_setopt( $chOne, CURLOPT_POST, 1); 
-                curl_setopt( $chOne, CURLOPT_POSTFIELDS, "message=".$sMessage); 
-                $headers = array( 'Content-type: application/x-www-form-urlencoded', 'Authorization: Bearer '.$sToken.'', );
-                curl_setopt($chOne, CURLOPT_HTTPHEADER, $headers); 
-                curl_setopt( $chOne, CURLOPT_RETURNTRANSFER, 1); 
-                $result = curl_exec( $chOne );  
-                
+                $sMessage .= "ชื่อห้วงาน : " . $proname . " \n";
+                $sMessage .= "ประเภทงาน : " . $stmtjobtyperow['name_jobtype'] . " \n";
+                $sMessage .= "วันที่สั่ง : " . ThDate($start_date) . " \n";
+                $sMessage .= "วันที่สิ้นสุด : " . ThDate($end_date) . " \n";
+                $sMessage .= "คนที่สั่งงาน : " . $stmtuserrow['FullName'] . " \n";
+               // $sMessage .= "โทเคนนิ : " . $sToken . " \n";
+
+                sentNotify($sToken , $sMessage);
            }   
        }  
        if(!isset($_SESSION['error'])) {
@@ -769,7 +767,7 @@
            $inserstmtpro->bindParam(":id_job", $job);
            $inserstmtpro->bindParam(":progress_project", $progress_project);
            $inserstmtpro->execute(); 
-          // $lastId = $db->lastInsertId();
+          $lastId = $db->lastInsertId();
       
             foreach ($users_id as $id => $user_id){
              $inserstmtprolist= $db->prepare("INSERT INTO project_list(project_id,user_id) VALUES(:project_id,:user_id)");
@@ -786,7 +784,8 @@
                 $file_tmp = $files['tmp_name'][$i];
                 $file_dest = $file_name; 
                 $file_data = "img/file/file_project/";
-                move_uploaded_file($file_tmp,$file_data.$newname);
+                move_uploaded_file($file_tmp,$file_data.$newname);  
+
                 if (!empty(array_filter($_FILES['files']['name']))) {
                 $inserfile_item_porject = $db->prepare("INSERT INTO file_item_project(project_id,filename,newname_filepro) 
                 VALUES(:project_id,:filename,:newname_filepro)");
@@ -798,18 +797,18 @@
             }
 
  
-        $_SESSION['success'] = "เพิ่มโปรเจคเรียบร้อย! ";
-        echo "  <script>
+         $_SESSION['success'] = "เพิ่มโปรเจคเรียบร้อย! ";
+         echo "  <script>
                         $(document).ready(function() {
-                            Swal.fire({
-                                title: 'เพิ่มงานเรียบร้อย!',
-                                icon: 'success',
-                                timer: 5000,
-                                showConfirmButton: true
-                            });
-                        })
-                    </script>"; 
-           $url_return ="refresh:2;project_list.php";
+                           Swal.fire({
+                              title: 'เพิ่มงานเรียบร้อย!',
+                              icon: 'success',
+                              timer: 5000,
+                               showConfirmButton: true
+                          });
+                      })
+                 </script>"; 
+       $url_return ="refresh:2;project_list.php";
     
         }
        
@@ -1045,16 +1044,7 @@
             $sMessage .= "วันที่ส่ง : ".thai_date_and_time_short($senddate)." \n";
             $sMessage .= "คนที่ส่งงาน : ".$dataprojectrow['FullName']." \n";
         
-            $chOne = curl_init(); 
-            curl_setopt( $chOne, CURLOPT_URL, "https://notify-api.line.me/api/notify"); 
-            curl_setopt( $chOne, CURLOPT_SSL_VERIFYHOST, 0); 
-            curl_setopt( $chOne, CURLOPT_SSL_VERIFYPEER, 0); 
-            curl_setopt( $chOne, CURLOPT_POST, 1); 
-            curl_setopt( $chOne, CURLOPT_POSTFIELDS, "message=".$sMessage); 
-            $headers = array( 'Content-type: application/x-www-form-urlencoded', 'Authorization: Bearer '.$sToken.'', );
-            curl_setopt($chOne, CURLOPT_HTTPHEADER, $headers); 
-            curl_setopt( $chOne, CURLOPT_RETURNTRANSFER, 1); 
-            $result = curl_exec( $chOne ); 
+            sentNotify($sToken , $sMessage);
            //$url_return ="location:view_project.php?view_id=".$project_id;
      } else {
             $_SESSION['error'] = "กรุณากรอกข้อความ หรือ เเนบไฟล์ส่ง";
@@ -1135,14 +1125,25 @@
         $state_details = $_POST['state_details'];
         $progress = $_POST['progress'];
         $senddate = $_POST['senddate'];
-        $progress_task = $_POST['progress_task'];
+        $progress_task= $_POST['progress'];
         $commenttask = $_POST['text_comment'];
         $status_task = "3";
         $send_status = "2";
         $files = $_FILES['files'];
+       /*  echo $progress_task; */
+        if($progress_task == 0){
+            $_SESSION['error'] = "กรุณากรอกความคืบหน้างาน!!! ";
+            header("location:checktaskedit.php?details_id=$details_id&task_id=$task_id&project_id=$project_id");
+        }else if(empty( $commenttask )){
+            $_SESSION['error'] = "กรุณากรอกรายละเอียด!!! ";
+            header("location:checktaskedit.php?details_id=$details_id&task_id=$task_id&project_id=$project_id");
 
-      
+        }
+        
+
         $numfilesend =sizeof(array_filter($_FILES['files']['name']));
+
+        if(!isset($_SESSION['error'])) {
 
         $updatestatdetails = $db->prepare("UPDATE details SET state_details = :state_details, progress_details = :progress WHERE details_id = :details_id");
         $updatestatdetails->bindParam(":state_details", $state_details);
@@ -1224,18 +1225,10 @@
         $sMessage .= "วันที่ส่งการเเก้ไข : ".thai_date_and_time_short($senddate)." \n";
         $sMessage .= "คนตรวจงาน : ".$datauserrow['FullName']." \n";
 
-        $chOne = curl_init(); 
-        curl_setopt( $chOne, CURLOPT_URL, "https://notify-api.line.me/api/notify"); 
-        curl_setopt( $chOne, CURLOPT_SSL_VERIFYHOST, 0); 
-        curl_setopt( $chOne, CURLOPT_SSL_VERIFYPEER, 0); 
-        curl_setopt( $chOne, CURLOPT_POST, 1); 
-        curl_setopt( $chOne, CURLOPT_POSTFIELDS, "message=".$sMessage); 
-        $headers = array( 'Content-type: application/x-www-form-urlencoded', 'Authorization: Bearer '.$sToken.'', );
-        curl_setopt($chOne, CURLOPT_HTTPHEADER, $headers); 
-        curl_setopt( $chOne, CURLOPT_RETURNTRANSFER, 1); 
-        $result = curl_exec( $chOne );  
+        sentNotify($sToken, $sMessage);
             //$url_return ="location:checktask_list.php";
-
+        }
+    
     }
     else if($_POST['proc'] == 'adduser'){
       //  echo 234234234234;

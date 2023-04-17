@@ -53,9 +53,9 @@ session_start();
 								<div class="row">
 									<div class="text-center">
 										<?php if($avatar != ""){?>
-											<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $row['avatar']?>" alt="Avatar" width="200"  height="200">
+											<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $row['avatar']?>"  id="img"  alt="Avatar" width="200"  height="200">
 										<?php }else{ ?>
-											<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="200"  height="200">
+											<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg"  id="img"   alt="Avatar" width="200"  height="200">
 										<?php } ?>
                       				</div>
 									<div class="col-md-2">

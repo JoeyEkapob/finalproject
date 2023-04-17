@@ -8,7 +8,7 @@ session_start();
         $details_id = $_GET['details_id'];
         $taskid =  $_GET['task_id'];
         $project_id= $_GET['project_id'];
-        $progress_task= $_GET['progress_task'];
+       // $progress_task= $_GET['progress_task'];
 
         $stmttask = $db->prepare("SELECT *  ,concat(firstname,' ',lastname) as name  FROM details natural JOIN task_list natural JOIN project natural JOIN user  WHERE details_id = :details_id");
         $stmttask->bindParam(":details_id", $details_id);
@@ -23,6 +23,22 @@ session_start();
     <?php include 'head.php'?> 
     <body>
     <?php include "sidebar.php"?>
+    <?php if(isset($_SESSION['error'])) { ?>
+                <div class="alert alert-danger" role="alert">
+                    <?php 
+                        echo $_SESSION['error'];
+                        unset($_SESSION['error']);
+                    ?>
+                </div>
+            <?php } ?>
+            <?php if(isset($_SESSION['success'])) { ?>
+                <div class="alert alert-success" role="alert">
+                    <?php 
+                        echo $_SESSION['success'];
+                        unset($_SESSION['success']);
+                    ?>
+                </div>
+            <?php } ?>
     <input type="hidden" id="proc" name="proc" value="">
     <input type="hidden" id="task_id" name="task_id" value="">
     <input type="hidden" id="project_id" name="project_id" value="">
@@ -78,7 +94,7 @@ session_start();
                                         
                                             <label for="" class="control-label">ความคืบหน้า</label>
                                             <select class="form-select" aria-label="Default select example" name ="progress">
-                                                <option selected>กรุณากรอกความคืบหน้า</option>
+                                                <option value="0">กรุณากรอกความคืบหน้า</option>
                                                 <option value="10">10%</option>
                                                 <option value="20">20%</option>
                                                 <option value="30">30%</option>
@@ -110,7 +126,7 @@ session_start();
                         </div>
                         <hr>
                         <div class="col-lg-12 text-right justify-content-center d-flex">
-                            <button class="btn btn-primary " name ="edittask" onclick="send_edittask('<?php echo $taskid ?>','<?php echo $project_id?>','<?php echo $details_id?>','<?php echo $progress_task?>');">งานเเก้ไข</button>
+                            <button class="btn btn-primary " name ="edittask" onclick="send_edittask('<?php echo $taskid ?>','<?php echo $project_id?>','<?php echo $details_id?>');">งานเเก้ไข</button>
                             <a href="checktask_list.php" class="btn btn-secondary" type="button">กลับ</a>
                         </div>
                     </div>
@@ -129,7 +145,7 @@ session_start();
         $('#task_id').val(taskid);
         $('#project_id').val(project_id);
         $('#details_id').val(details_id);
-        $('#progress_task').val(progress_task);
+        //$('#progress_task').val(progress_task);
         $('#state_details').val('N');
         $('#senddate').val('<?php echo $date?>');
         

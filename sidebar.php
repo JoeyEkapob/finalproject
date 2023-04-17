@@ -307,11 +307,11 @@ include "head.php";
               </a>
 
 							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-								<?php  if($row['avatar'] !=""){?>
+							<?php if($row['avatar'] !=""){?>
                 			<img src="img/avatars/<?php echo $row['avatar'] ?>" class="avatar rounded-circle rounded me-1" alt="" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
 							<?php }else{?>
-							<img src="img/avatars/09.jpg ?>" class="avatar rounded-circle rounded me-1" alt="" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
-								<?php }?>
+						<img src="img/avatars/09.jpg" class="avatar rounded-circle rounded me-1" alt="" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
+ 							<?php }?>
               				</a>
 							<div class="dropdown-menu dropdown-menu-end">
 								<a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#viewusermodal<?php echo $user_id?>"><i class="align-middle me-1" data-feather="user"></i> โปรไฟล์</a>

@@ -1,6 +1,8 @@
 <?php
-$format="%d/%m/%Y %H:%M:%S";
-$strf=strftime($format);
-echo("$strf");
-print_r(strptime($strf,$format));
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+$mpdf = new \Mpdf\Mpdf();
+$mpdf->WriteHTML('<h1>Hello world!</h1>');
+$mpdf->Output();
 ?>

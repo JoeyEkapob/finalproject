@@ -130,11 +130,29 @@ include "head.php";
               <i class="align-middle" data-feather="list"></i> <span class="align-middle">รายการงาน</span>
             </a>
 					</li> -->
-					 <li class="sidebar-item">
+			<li class="sidebar-item">
+				<a data-bs-target="#report" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
+					<i class="align-middle" data-feather="clipboard"></i> 
+						<span class="align-middle">
+						รายงาน
+					</span>
+				</a>
+
+				<ul id="report" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
+					<li class="sidebar-item">
 						<a class="sidebar-link" href="report.php">
-              <i class="align-middle" data-feather="menu"></i> <span class="align-middle">รายงาน</span>
-            </a>
+						&nbsp;&nbsp;&nbsp;--> รายงานหัวข้องาน
+						</a>
 					</li>
+				</ul>
+				<ul id="report" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="reportuser.php">
+						&nbsp;&nbsp;&nbsp;--> รายงานสมาชิก
+						</a>
+					</li>
+				</ul>
+			</li>
 					<?php if($level != 5): ?>
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="checktask_list.php">
@@ -308,9 +326,9 @@ include "head.php";
 
 							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
 							<?php if($row['avatar'] !=""){?>
-                			<img src="img/avatars/<?php echo $row['avatar'] ?>" class="avatar rounded-circle rounded me-1" alt="" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
+                				<img src="img/avatars/<?php echo $row['avatar'] ?>" class="avatar rounded-circle rounded me-1" alt="" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
 							<?php }else{?>
-						<img src="img/avatars/09.jpg" class="avatar rounded-circle rounded me-1" alt="" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
+								<img src="img/avatars/09.jpg" class="avatar rounded-circle rounded me-1" alt="" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
  							<?php }?>
               				</a>
 							<div class="dropdown-menu dropdown-menu-end">

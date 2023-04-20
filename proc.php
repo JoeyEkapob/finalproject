@@ -1,14 +1,12 @@
-
 <?php
-
 header('Access-Control-Allow-Origin: *');
-
 header('Access-Control-Allow-Methods: GET, POST');
-
 header("Access-Control-Allow-Headers: X-Requested-With");
 
     session_start();
-    include 'footer.php';
+    
+    require_once 'head.php';
+    require_once 'footer.php';  
     require_once 'connect.php';
     include "funtion.php";
     include 'notify.php';
@@ -1231,7 +1229,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
     
     }
     else if($_POST['proc'] == 'adduser'){
-      //  echo 234234234234;
+         //  echo 234234234234;
        
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
@@ -1510,9 +1508,9 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             $check_email->bindParam(":user_id", $userid);
             $check_email->execute();
             $check_emailrow = $check_email->fetch(PDO::FETCH_ASSOC);
-            $check_email == $check_emailrow['email'];
+            //$check_email == $check_emailrow['email'];
             
-        if ($check_email == $email) {
+        if ($check_emailrow['email'] == $email) {
             $_SESSION['error'] = "มีอีเมลนี้อยู่ในระบบแล้ว ";
             $url_return ="location:edituser.php?user_id=".$userid."";    
 
@@ -1859,7 +1857,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             header("location: jobtype_list.php");
         } 
     }
+    
         header($url_return);
 
-    
 ?>

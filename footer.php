@@ -1,4 +1,5 @@
 
+<script src="js/tricks.js"></script> 
  <script src="js/app.js"></script> 
  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- // js bootstrap -->

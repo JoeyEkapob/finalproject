@@ -22,7 +22,17 @@
         }
     }
 
-    
+    function showstatprotext1($status){
+        if ($status == '1') {
+            return "รอดำเนินการ";
+        }else if($status== '2'){
+            return "เลยระยะเวลา";
+        }else if($status == '3'){
+            return "ปิดโปรเจค";
+                                           
+            }
+        }
+
     function showstatprotext2($status_2){
     if ($status_2 == '1') {
         return "งานปกติ";

@@ -193,6 +193,8 @@ $(document).ready(function(){
         method:"post",
         data:{proc:proc,detail_id:details_id,usersendid:usersendid,sendstatus:sendstatus},
         success:function(data){
+            console.log(data);
+
             $('#details').html(data);
             $('#datamodal').modal('show'); 
         }

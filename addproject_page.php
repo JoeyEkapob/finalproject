@@ -92,7 +92,7 @@
                                     </div>
 
                                     <div class="col-md-6">   
-                                    <div class="mb-4">
+                                        <div class="mb-4">
 											<label for="" class="control-labe">สถานะงาน</label>
 												 <select  name="status2"  id="status2" class="form-select"  >
                                                  
@@ -103,7 +103,7 @@
 												</select>  
                                            <?php// print_r ($result); ?>
 										</div>
-                                        </div>
+                                    </div>
 
 
 

@@ -5,17 +5,10 @@
          $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
         header('location:sign-in.php');
     }
-	 include "sidebar.php";
-	 
+	include "sidebar.php";
+ 	include "funtion.php";
 	$user_id=$_SESSION['user_login'];
 	$where ="";
-/* 	$stmt = "SELECT * FROM user natural join position WHERE user_id = $user_id";
-	$stmt = $db->prepare($stmt);
-	$stmt ->execute();
-	$stmt = $stmt->fetch(PDO::FETCH_ASSOC);
-
-	$level = $stmt['level']; */
-
 	$stmtusernum = "SELECT COUNT(user_id) as num FROM user  ";
 	$stmtusernum = $db->prepare($stmtusernum);
 	$stmtusernum ->execute();
@@ -53,7 +46,6 @@
 <html lang="en">
 <?php include "head.php"?>
 <body>
-	<?php include "funtion.php"?>
 	<?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
                     <?php 

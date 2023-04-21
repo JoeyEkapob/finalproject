@@ -4,22 +4,8 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1b95991a020ff619c70df34d576dd311
+class ComposerStaticInit0c60f58df4b7aadec391afbf45038919
 {
-    public static $prefixLengthsPsr4 = array (
-        'L' => 
-        array (
-            'LINE\\' => 5,
-        ),
-    );
-
-    public static $prefixDirsPsr4 = array (
-        'LINE\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/linecorp/line-bot-sdk/src',
-        ),
-    );
-
     public static $classMap = array (
         'CGIF' => __DIR__ . '/..' . '/mpdf/mpdf/classes/gif.php',
         'CGIFCOLORTABLE' => __DIR__ . '/..' . '/mpdf/mpdf/classes/gif.php',
@@ -59,9 +45,7 @@ class ComposerStaticInit1b95991a020ff619c70df34d576dd311
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1b95991a020ff619c70df34d576dd311::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1b95991a020ff619c70df34d576dd311::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit1b95991a020ff619c70df34d576dd311::$classMap;
+            $loader->classMap = ComposerStaticInit0c60f58df4b7aadec391afbf45038919::$classMap;
 
         }, null, ClassLoader::class);
     }

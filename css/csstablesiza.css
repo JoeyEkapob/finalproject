@@ -45,7 +45,8 @@
     width: auto;
   }
 }
-.id-col {
+
+ .id-col {
     text-align: center;
   }
 .progress-col {
@@ -65,4 +66,78 @@
   }
 .end-col{
     text-align: center;
+  } 
+
+  .table-bordered .id-col {
+    width: auto;
+    text-align: center;
+  }
+  
+  .table-bordered .namepro-col {
+    width: auto;
+    text-align: center;
+  }
+  
+  .table-bordered .jobtype-col {
+    width: auto;
+    text-align: center;
+  }
+  
+  .table-bordered .numtask-col {
+    width: auto;
+    text-align: center;
+  }
+  
+  .table-bordered .comptask-col {
+    width: auto;
+    text-align: center;
+  }
+  
+  .table-bordered .success-col {
+    width: auto;
+    text-align: center;
+  }
+  
+  .table-bordered .mannager-col {
+    width: auto;
+    text-align: center;
+  }
+  
+  .table-bordered .action-col {
+    width: auto;
+    text-align: center;
+  }
+
+  .project-image {
+    width: 200px;
+    height: 200px;
+    text-align: center;
+  }
+  .project-details {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .class1 {
+    text-align: right;
+    font-weight: bold;
+    width: 200px;
+  }
+  .class2 {
+    text-align: right;
+    font-weight: bold;
+    width: 100px;
+    padding: 5px;
+
+  }
+  
+  .class3 {
+    text-align: left;
+    width: 100px;
+  }
+  .class4 {
+    text-align: left;
+    width: 200px;
   }

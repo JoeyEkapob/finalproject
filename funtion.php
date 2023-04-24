@@ -59,6 +59,21 @@
         } 
     }
 
+    function showstattaskreport($statustask){
+        $stat1 = array("","รอดำเนินการ","ส่งเเล้ว","รอเเก้ไข","เลยเวลา","เสร็จสิ้น");
+        if($statustask =='1'){
+            return "รอดำเนินการ";
+        }elseif($statustask =='2'){
+            return "ส่งเเล้ว";
+        }elseif($statustask =='3'){
+            return "รอเเก้ไข";
+        }elseif($statustask =='4'){
+            return "เลยเวลา";
+        }elseif($statustask =='5'){
+            return "เสร็จสิ้น";
+        } 
+    }
+
     function ThDate($date2){
         if (empty($date2)){
             return "";

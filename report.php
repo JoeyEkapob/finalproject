@@ -5,7 +5,7 @@
          $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
         header('location:sign-in.php');
     }
-   
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +31,7 @@
                     ?>
                 </div>
             <?php } ?>
-<form action="proc2.php" method="post" id="userlist" class="form-horizontal" enctype="multipart/form-data">
+<form action="" method="post" id="userlist" class="form-horizontal" enctype="multipart/form-data">
                 <input type="hidden" id="proc" name="proc" value="">
             <main class="content">
                 <div class="card">
@@ -128,46 +128,52 @@
                             <div class="col-lg-12 text-right justify-content-center d-flex">
                                 <a class="btn btn-primary" onclick="searchreport()" >ค้นหา</a> 
                                 <a class="btn btn-secondary" href="" type="button" >ล้างค่า</a>
+                               
+            
                             </div>
                             <div class="mb-3">
                             </div>   
                             <hr>
-                            <table class='table table-hover'>
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            รหัสหัวข้องาน
-                                        </th>
-                                        <th>
-                                            ชื่อหัวข้องาน
-                                        </th>
-                                        <th>
-                                            ประเภทงาน
-                                        </th>
-                                        <th>
-                                            วันที่เริ่ม
-                                        </th>
-                                        <th>
-                                            วันที่สิ้นสุด
-                                        </th>
-                                        <th>         
-                                            สถานะงาน
-                                        </th>
-                                        <th>         
-                                            สถานะเร่งของงาน
-                                        </th>
-                                        <th>         
-                                            คนที่มอบหมาย
-                                        </th>
-                                        <th>         
-                                            Action
-                                        </th>
-                                    </tr>
-                                </thead>
-                            <tbody id="test">
-
-                            </tbody>
-                        </thead>
+                            <div class="d-flex flex-row-reverse">
+            	                    <button class="btn btn-flat  btn-danger" id="print" onclick="printContent('Receipt');"><i class="fa fa-print"></i> Print</button>
+                             </div>
+                            <div class="mb-3" id="Receipt">
+                                <table class='table m-0 table-bordered' >
+                                    <thead>
+                                        <tr>
+                                            <th class="id-col">
+                                                รหัสหัวข้องาน
+                                            </th>
+                                            <th  class="namepro-col" >
+                                                ชื่อหัวข้องาน
+                                            </th>
+                                            <th  class="jobtype-col" >
+                                                ประเภทงาน
+                                            </th>
+                                            <th  class="numtask-col">
+                                                จำนวนงาน
+                                            </th>
+                                            <th  class="comptask-col">
+                                                งานที่เสร็จ
+                                            </th>
+                                            <th  class="success-col">         
+                                                ความสำเร็จ
+                                            </th>
+                                            <!--  <th>         
+                                                สถานะเร่งของงาน
+                                            </th> -->
+                                             <th  class="mannager-col" >         
+                                                คนที่มอบหมาย
+                                            </th> 
+                                            <th  class="action-col" id='action'>         
+                                                Action
+                                            </th> 
+                                        </tr>
+                                    </thead>
+                                    <tbody id="test">
+                                    
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -179,7 +185,16 @@
 
 </html>
 <script>
-   
+
+    function printContent(el) {
+        var restorepage = $('body').html();
+        var printcontent = $('#Receipt').clone();
+        printcontent.find('#action').remove();
+        $('body').empty().html(printcontent);
+        window.print();
+        $('body').html(restorepage);
+    }
+
   function searchreport(){
     var proc = "searchreport"; 
     var nameproject = $('#nameproject').val();
@@ -207,16 +222,16 @@
                     } else {
                         for(var i=0; i<response.result.length; i++) {
                         html += `
+                        
                         <tr>
-                            <td>${response.result[i].project_id}</td>
-                            <td>${response.result[i].name_project}</td>
-                            <td>${response.result[i].name_jobtype}</td>
-                            <td>${ThDate(response.result[i].start_date)}</td>
-                            <td>${ThDate(response.result[i].end_date)}</td>
-                            <td>${showstatprotext1(response.result[i].status_1)}</td>
-                            <td>${showstatprotext2(response.result[i].status_2)}</td>
-                            <td>${response.result[i].firstname + ' ' + response.result[i].lastname}</td>
-                            <td><a class='btn btn-bitbucket btn-sm' href=''>รายละเอียด</a></td>
+                            <td class="id-col" >${response.result[i].project_id}</td>
+                            <td >${response.result[i].name_project}</td>
+                            <td >${response.result[i].name_jobtype}</td>
+                            <td class="numtask-col">${response.result[i].numtask}</td>
+                            <td class="comptask-col">${response.result[i].comptask}</td>
+                            <td class="success-col">${response.result[i]['progress_project'] + '%'}</td>
+                            <td class="mannager-col" > ${response.result[i].firstname + ' ' + response.result[i].lastname}</td>
+                            <td class="action-col"  id='action' ><a class='btn btn-bitbucket btn-sm' href='reportpro.php?projectid=${response.result[i].project_id}'>รายละเอียด</a></td>
                         </tr>
                         `;
                         }

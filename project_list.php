@@ -1,11 +1,12 @@
 <?php
-    session_start();
-    require_once 'connect.php';
-    if(!isset($_SESSION['user_login'])){
-         $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
-        header('location:sign-in.php');
+   session_start();
+   require_once 'connect.php';
+   if(!isset($_SESSION['user_login'])){
+        $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
+       header('location:sign-in.php');
+   }
         
-    }
+    
 
 ?>
 <!DOCTYPE html>

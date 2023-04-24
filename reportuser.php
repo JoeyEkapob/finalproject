@@ -30,7 +30,7 @@
                     ?>
                 </div>
             <?php } ?>
-    <form action="proc.php" method="post" id="userlist" class="form-horizontal" enctype="multipart/form-data">
+    <form action="proc2.php" method="post" id="userlist" class="form-horizontal" enctype="multipart/form-data">
 
         <main class="content">
                 <div class="card">
@@ -45,7 +45,7 @@
                                 <div class="mb-2">
                                     <label for="control-label" style="font-size: 14px;">ชื่อ</label>
                                         <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control" placeholder="ชิ่อ">
+                                            <input type="text" name="firstname" id ="firstname" class="form-control" placeholder="ชิ่อ">
                                         </div>
                                 </div>  
                             </div>      
@@ -54,54 +54,20 @@
                                 <div class="mb-2">
                                     <label for="control-label" style="font-size: 14px;">นามสกุล</label>
                                         <div class="input-group input-group-sm mb-2">
-                                            <input type="text" class="form-control" placeholder="Input">
+                                        <input type="text" name="lastname" id ="lastname" class="form-control" placeholder="นามสกุล">
                                         </div>
                                 </div>  
                             </div>
                         <div class="col-md-3">
                         </div>     
                         <div class="col-md-3">
-                        </div>                                
-                            <!-- <div class="col-md-3">
-                                <div class="mb-2">
-                                    <label for="control-label" style="font-size: 14px;">วันที่เริ่ม</label>
-                                        <div class="input-group input-group-sm mb-2">
-                                            <input type="date" class="form-control" placeholder="Input">
-                                        </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="mb-2">            
-                                    <label for="control-label" style="font-size: 14px;">วันที่สิ้นสุด</label>
-                                        <div class="input-group input-group-sm mb-2">
-                                            <input type="date" class="form-control" placeholder="Input">
-                                        </div>
-                                </div>
-                            </div>
-                        <div class="col-md-3">
-                        </div> 
-                        <div class="col-md-3">
-                        </div>          
-                            <div class="col-md-3">
-                                <div class="mb-2"> 
-                                    <label for="control-label" style="font-size: 14px;">สถานะงาน</label>
-                                        <div class="input-group input-group-sm mb-2">
-                                            <select  name="status1" class="form-select" >
-                                                <option value="1">รอดำเนินการ</option>
-                                                <option value="2">กำลังดำเนินการ</option>
-                                                <option value="3">เลยระยะเวลาที่กำหนด</option>
-                                                <option value="4">ปิดโปรเจค</option>
-                                            </select>  
-                                        </div>
-                                </div>
-                            </div>-->
-                               
+                        </div>                                  
                             <div class="col-md-3">
                                 <div class="mb-3">             
                                     <label for="control-label" style="font-size: 14px;">ตำเเหน่ง</label>
                                         <div class="input-group input-group-sm mb-2">
-                                            <select name="job" id="type" class="form-select"  >
+                                            <select name="role" id="role" class="form-select"  >
+                                            <option value="">กรุณาเลือกตำเเหน่ง</option>
                                                     <?php
                                                     $stmt = $db->query("SELECT * FROM position ");
                                                     $stmt->execute();
@@ -117,10 +83,52 @@
                             <div class="col-md-3"> 
                             </div>                         
                             <div class="col-lg-12 text-right justify-content-center d-flex">
-                                <button class="btn btn-primary" id="display_selected"  >ค้นหา </button> 
+                            <a class="btn btn-primary" onclick="searchreportuser()" >ค้นหา</a> 
                                 <a class="btn btn-secondary" href="" type="button" >ล้างค่า</a>
                             </div>
-                     
+                            <div class="mb-3">
+                            </div>   
+                            <hr>
+                            <div class="d-flex flex-row-reverse">
+            	                    <button class="btn btn-flat  btn-danger" id="print" onclick="printContent('Receipt');"><i class="fa fa-print"></i> Print</button>
+                             </div>
+                            <div class="mb-3" id="Receipt">
+                                <table class='table m-0 table-bordered' >
+                                    <thead>
+                                        <tr>
+                                            <th class="id-col">
+                                                ลำดับ
+                                            </th>
+                                            <th  class="namepro-col" >
+                                                ชื่อ-นามสกุล
+                                            </th>
+                                            <th  class="jobtype-col" >
+                                                ตำเเหน่ง
+                                            </th>
+                                            <th  class="numtask-col">
+                                                หัวข้องานที่สร้าง 
+                                            </th>
+                                            <th  class="comptask-col">
+                                                หัวข้องานที่ถูกสั่ง 
+                                            </th>
+                                            <th  class="success-col">         
+                                                จำนวนงาน
+                                            </th>
+                                            <!--  <th>         
+                                                สถานะเร่งของงาน
+                                            </th> -->
+                                             <th  class="mannager-col" >         
+                                                จำนวนครั้งที่ถูกสั่งเเก้
+                                            </th> 
+                                            <th  class="action-col" id='action'>         
+                                                Action
+                                            </th> 
+                                        </tr>
+                                    </thead>
+                                    <tbody id="test">
+                                    
+                                </table>
+                            </div>
                  
                          
                         </div>
@@ -133,5 +141,56 @@
     </body>
 
 </html>
-
+<script>
+        function printContent(el) {
+        var restorepage = $('body').html();
+        var printcontent = $('#Receipt').clone();
+        printcontent.find('#action').remove();
+        $('body').empty().html(printcontent);
+        window.print();
+        $('body').html(restorepage);
+    }
+function searchreportuser(){
+    var proc = "searchreportuser"; 
+    var firstname = $('#firstname').val();
+    var lastname = $('#lastname').val();
+    var role = $('#role').val();
+    $.ajax({
+        url:"proc2.php",
+        method:"post",
+        datatype: "json",
+        data:{proc:proc,firstname:firstname,lastname:lastname,role:role},
+        success:function(response){
+            var response = JSON.parse(response);
+            console.log(response)
+            var html = '';
+            if(response.result.length == 0){
+                    html += `
+                        <tr>
+                            <td colspan='9' style='text-align:center'>ไม่พอข้อมูล</td>
+                        </tr>
+                    `;
+                    $("#test").html(html)
+                    } else {
+                        for(var i=0; i<response.result.length; i++) {
+                        html += `
+                        
+                        <tr>
+                            <td class="id-col" >${i+1}</td>
+                            <td >${response.result[i].firstname + ' ' + response.result[i].lastname}</td>
+                            <td  >${response.result[i].position_name}</td>
+                            <td class="numtask-col">${response.result[i].nummannagerpro}</td>
+                            <td class="comptask-col">${response.result[i].numuserpro}</td>
+                            <td class="success-col">${response.result[i].numusertask}</td>
+                            <td class="mannager-col" > ${response.result[i].numdetails}</td>
+                            <td class="action-col"  id='action' ><a class='btn btn-bitbucket btn-sm' href='reportuserpro.php?userid=${response.result[i].user_id}'>รายละเอียด</a></td>
+                        </tr>
+                        `;
+                        }
+                    }
+                    $("#test").html(html) 
+        } 
+    })
+}
+ </script>
 <?php include "footer.php"?>

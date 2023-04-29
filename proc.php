@@ -232,18 +232,18 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                             $sql6 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_timetask = 2 AND status_task != 5 AND progress_task != 100");
                             $numtimede = $sql6->rowCount();
         $outp .= '                              <div class="containeruser">
-                                            <div class="item">หัวข้องานที่สร้าง</div>
-                                            <div class="item">หัวข้องานที่ถูกสั่ง</div>
-                                            <div class="item">งานทั้งหมด</div>
-                                            <div class="item">งานที่ยังไม่เสร็จ</div>
-                                            <div class="item">งานที่ล่าช้า</div>
+                                            <div class="itemuser1">หัวข้องานที่สร้าง</div>
+                                            <div class="itemuser1">หัวข้องานที่ถูกสั่ง</div>
+                                            <div class="itemuser1">งานทั้งหมด</div>
+                                            <div class="itemuser1">งานที่ยังไม่เสร็จ</div>
+                                            <div class="itemuser1">งานที่ล่าช้า</div>
                                         </div>
                                         <div class="containeruser">
-                                            <div class="item">'. $nummannagerpro .'</div>
-                                            <div class="item">'. $numuserpro .'</div>
-                                            <div class="item">'. $numusertask .'</div>
-                                            <div class="item">'. $numtaskonp .'</div>
-                                            <div class="item">'. $numtimede .'</div>
+                                            <div class="itemuser1">'. $nummannagerpro .'</div>
+                                            <div class="itemuser1">'. $numuserpro .'</div>
+                                            <div class="itemuser1">'. $numusertask .'</div>
+                                            <div class="itemuser1">'. $numtaskonp .'</div>
+                                            <div class="itemuser1">'. $numtimede .'</div>
                                         </div>
                                 </div> 
                             </div>

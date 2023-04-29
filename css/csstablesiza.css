@@ -141,3 +141,29 @@
     text-align: left;
     width: 200px;
   }
+
+.back-button {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+/*   background-color: #ccc;   */
+  border-radius: 70%;
+  text-align: center;
+  line-height: 10px;
+  font-size: 35px; 
+  color: #222e3c;
+  text-decoration: none;
+}
+.containeruser {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  text-align: center;
+}
+
+.item {
+  width: 25%;
+  padding: 10px;
+  border: 1px solid #ccc;
+}

@@ -5,8 +5,8 @@
         <h1 class="modal-title fs-5" id="exampleModalLabel"> รายละเอียด <?php echo ucwords($row['name']) ?></h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      
         <div class="modal-body">
+          
 						<div class="card">		
 							<div class="card-body">
 								<div class="row">
@@ -34,6 +34,10 @@
                                             <label for="" class="control-label"><b>ตำเเหน่ง :</b></label>
                                             <?php echo $row['position_name'] ?>
                                           </div>
+                                          <div class="mb-3">
+                                          <label for="" class="control-label"><b>ฝ่าย :</b></label>
+                                          <?php echo $row['idcard'] ?>
+                                      </div>
                                         </div> 
                                         
                                   <div class="col-md-5">
@@ -53,10 +57,40 @@
                                         <label for="" class="control-label"><b>เลขบัตรประชาชน :</b></label>
                                         <?php echo $row['idcard'] ?>
                                       </div>
+                                     
                                   </div> 
-                                  <div class="col-md-1">
+                                  <hr>
+                                  <div class="col-md-12">
+                                  
+
+
+                                  <?php   $sql2 = $db->query("SELECT manager_id FROM project WHERE manager_id =  $user_id"); 
+                                          $nummannagerpro = $sql2->rowCount(); 
+                                          $sql3 = $db->query("SELECT user_id FROM project_list where user_id = $user_id");
+                                          $numuserpro = $sql3->rowCount(); 
+                                          $sql4 = $db->query("SELECT user_id FROM task_list where user_id = $user_id ");
+                                          $numusertask = $sql4->rowCount(); 
+                                          $sql5 = $db->query("SELECT * FROM task_list  where user_id = $user_id  AND status_task != 5 AND progress_task != 100");
+                                          $numtaskonp = $sql5->rowCount(); 
+                                          $sql6 = $db->query("SELECT * FROM task_list  where user_id = $user_id  AND status_timetask = 2 AND status_task != 5 AND progress_task != 100");
+                                          $numtimede = $sql6->rowCount() ; 
+                                          ?>
+                                         <div class="containeruser">
+                                            <div class="item">หัวข้องานที่สร้าง</div>
+                                            <div class="item">หัวข้องานที่ถูกสั่ง</div>
+                                            <div class="item">งานทังหมด</div>
+                                            <div class="item">งานที่ยังไม่เสร็จ</div>
+                                            <div class="item">งานที่ล่าช้า</div>
+                                          </div>
+                                          <div class="containeruser">
+                                            <div class="item"><?php echo  $nummannagerpro ?></div>
+                                            <div class="item"><?php echo  $numuserpro ?></div>
+                                            <div class="item"><?php echo  $numusertask ?></div>
+                                            <div class="item"><?php echo  $numtaskonp   ?></div>
+                                            <div class="item"><?php echo $numtimede ?></div>
+                                          </div>
                                   </div> 
-                    
+                           
                         
                           
                 </div>

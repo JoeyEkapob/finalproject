@@ -30,7 +30,7 @@
                 </div>
             <?php } ?>
 
-<form action="proc.php" method="post" id="joblist" class="form-horizontal" enctype="multipart/form-data">
+<form action="proc.php" method="post" class="form-horizontal" enctype="multipart/form-data">
 
     <input type=hidden id="proc" name="proc" value="">
     <input type=hidden id="id_jobtype" name="id_jobtype" value="">
@@ -41,7 +41,7 @@
                 <div class="container-fluid p-0">
                     <div class="card-header">
                         <div class="d-flex flex-row-reverse bd-highligh">
-                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary" data-bs-toggle="modal" data-bs-target="#addjobtype" ><i class="fa fa-plus"></i> + เพิ่มประเภทงาน</a>
+                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary" data-bs-toggle="modal" data-bs-target="#addposition" ><i class="fa fa-plus"></i> + เพิ่มตำเเหน่ง</a>
                         </div>
                     </div>
                 </div>
@@ -52,13 +52,14 @@
                           
                     <div class="card flex-fill">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">ประเภทงาน</h5>
+                            <h5 class="card-title mb-0">ตำเเหน่ง</h5>
                         </div>
                             <table class="table table-hover my-0" id="example">
                                 <thead>
                                     <tr>
                                         <th class="text-center">ลำดับ</th>
-                                        <th class="text-left">ชื่อประเภทงาน</th>
+                                        <th class="text-left">ชื่อตำเเหน่ง</th>
+                                        <th class="text-left">ระดับ</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
@@ -66,7 +67,7 @@
                                     <?php
                                         $i = 1;
                                         
-                                        $sql = "SELECT * FROM job_type  WHERE status = 1";
+                                        $sql = "SELECT * FROM position WHERE position_status = 1 ";
                                         $qry = $db->query($sql);
                                         $qry->execute();
                                         while ($row = $qry->fetch(PDO::FETCH_ASSOC)){
@@ -74,12 +75,13 @@
                                     ?>
                                         <tr>
                                             <td class="text-center"><?php echo $i++ ?></td>
-                                            <td class="text-left"><?php echo $row['name_jobtype'] ?></td>
+                                            <td class="text-left"><?php echo $row['position_name'] ?></td>
+                                            <td class="text-left"><?php echo $row['level'] ?></td>
                                             <td class="text-center">                               
                                                <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                       
-                                                <!-- <a href="edituser_page.php?update_id=<?php echo $row['id_jobtype']?>" class="btn btn-warning btn-sm">2</a>   --> 
-                                                <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลประเภทงาน" href="editjobtype_page.php?update_id=<?php echo $row['id_jobtype']?>"><i  data-feather="edit"></i></a>
-                                                <button class="btn btn-danger btn-sm deletejob-btn" title="ลบข้อมูลประเภทงาน" data-id_jobtype="<?php echo $row['id_jobtype']?>"><i data-feather="trash-2"></i></button>
+                                                <!-- <a href="edituser_page.php?update_id=<?php echo $row['role_id']?>" class="btn btn-warning btn-sm">2</a>   --> 
+                                                <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลประเภทงาน" href="editposition.php?update_id=<?php echo $row['role_id']?>"><i  data-feather="edit"></i></a>
+                                                <button class="btn btn-danger btn-sm deleteposition-btn" title="ลบข้อมูลประเภทงาน" data-role_id="<?php echo $row['role_id']?>"><i data-feather="trash-2"></i></button>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -100,23 +102,19 @@ $(document).ready(function () {
     $('#example').DataTable();
 });
 
-function addjob(){
-    $('#proc').val('addjob');
-/*     $('#namejob').val();
-    $('#joblist').submit();*/
-    //console.log(proc); 
-
+function addposition(){
+    $('#proc').val('addposition');
 }
 
-    $(".deletejob-btn").click(function(e) {
-            var id_jobtype = $(this).data('id_jobtype');
-           // console.log(id_jobtype);
+    $(".deleteposition-btn").click(function(e) {
+            var role_id = $(this).data('role_id');
+            console.log(role_id);
             e.preventDefault();
-            deleteConfirm(id_jobtype);
+            deleteConfirm(role_id);
         })
 
-        function deleteConfirm(id_jobtype) {
-            //console.log(id_jobtype);
+        function deleteConfirm(role_id) {
+            console.log(role_id);
             Swal.fire({
                 
                 title: 'คุณต้องลบประเภทงานใช่หรือไม่',
@@ -137,7 +135,7 @@ function addjob(){
                             
                                 url: 'proc.php',
                                 type: 'post',
-                                data: 'proc=' + 'deljob' + '&id_jobtype=' + id_jobtype ,
+                                data: 'proc=' + 'delposition' + '&role_id=' + role_id ,
                             })
                             .done(function() {
                                 Swal.fire({
@@ -145,7 +143,7 @@ function addjob(){
                                     text: 'ยกเลิกเรียบร้อยเเล้ว!',
                                     icon: 'success',
                                 }).then(() => {
-                                    document.location.href = 'jobtype_list.php';
+                                    document.location.href = 'position_list.php';
                                     
                                     
                                 })

@@ -4,7 +4,7 @@ session_start();
  
  if (isset($_GET['update_id'])){
         $id = $_REQUEST['update_id'];
-        $select_stmt = $db->prepare('SELECT * FROM user  AS u  natural JOIN position  WHERE user_id = :id');
+        $select_stmt = $db->prepare('SELECT * FROM user  AS u  natural JOIN position natural JOIN department   WHERE user_id = :id');
         $select_stmt->bindParam(":id", $id);
         $select_stmt->execute();
         $row = $select_stmt->fetch(PDO::FETCH_ASSOC);
@@ -115,7 +115,17 @@ session_start();
 											<label for="control-label">เลขบัตรประชาชน</label>
 											<input  class="form-control" type="tel" id="idcard" name="idcard" placeholder="กรอกหมายเลขบัตรประชาชนของคุณ" value="<?php echo $idcard; ?>">
 										</div>
-
+										<?php if($status_user == 1){ ?>
+										<div class="form-check form-switch ">
+											<input class="form-check-input" type="checkbox" role="switch" id="switch" name="switch"  checked>
+											<label class="form-check-label" for="flexSwitchCheckChecked">สถานะการใช้งาน</label>
+										</div>
+										<?php }else{ ?>
+										<div class="form-check form-switch">
+											<input class="form-check-input" type="checkbox" role="switch" id="switch" name="switch">
+											<label class="form-check-label" for="flexSwitchCheckChecked">สถานะการใช้งาน</label>
+										</div>
+										<?php } ?>		
 										
 									</div>	
 									<div class="col-md-6">
@@ -128,24 +138,28 @@ session_start();
 											<label for="control-label">เบอร์โทรศัพท์</label>
 											<input  class="form-control" type="tel" id="phone" name="phone" placeholder="กรอกหมายเลขโทรศัพท์ของคุณ" value="<?php echo $tel; ?>">
 										</div>
-
+										<div class="mb-3">
+											<label for="" class="control-label">ฝ่าย</label>
+												<select name="department" id="department" class="form-select" value="">
+													<option value="<?php  echo $department_id; ?>" ><?php  echo $department_name; ?></option>
+													<?php
+													$stmt = $db->query("SELECT * FROM department");
+													$stmt->execute();
+													$result = $stmt->fetchAll();
+													foreach($result as $row) {
+													?>
+												 <option value="<?= $row['department_id'];?>"><?= $row['department_name'];?></option>
+                									<?php }?>
+												</select>
+										</div>
+									
 										<div class="mb-3">
 											<label for="" class="control-label">ไลน์โทเค็น</label>
 											<input type="text" name="tokenline" class="form-control" placeholder="กรอกไลน์โทเค็นของคุณ" value = "<?php echo $line_token ?>">
 											<p class="small mb-0 mt-2"><b>Note:</b>หากต้องการเเจ้งได้รับการเเจ้งตื่อนผ่านไลน์อนุญาตโปรดกรอกไลน์โทเค็นของคุณ</p> 
 										</div> 	
 								
-										<?php if($status_user == 1){ ?>
-										<div class="form-check form-switch ">
-											<input class="form-check-input" type="checkbox" role="switch" id="switch" name="switch"  checked>
-											<label class="form-check-label" for="flexSwitchCheckChecked">สถานะการใช้งาน</label>
-										</div>
-										<?php }else{ ?>
-										<div class="form-check form-switch">
-											<input class="form-check-input" type="checkbox" role="switch" id="switch" name="switch">
-											<label class="form-check-label" for="flexSwitchCheckChecked">สถานะการใช้งาน</label>
-										</div>
-										<?php } ?>		
+										
 									
 											<!--  <div class="mb-3">
 												<label class="control-label">Password</label>

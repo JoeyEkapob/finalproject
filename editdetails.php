@@ -49,6 +49,7 @@ session_start();
    <input type="hidden" id="file_details_id" name="file_details_id" value=""> 
 
 		<main class="content">
+        <a href="details_page.php?task_id=<?php echo $taskid ?>&project_id=<?php echo $project_id ?>" class="back-button">&lt;</a> 
 				<div class="container-fluid p-0">
 					<h1 class="h3 mb-3">เเก้ไขรายละเอียดงานที่ถูกส่งมา</h1>
 				</div>
@@ -111,20 +112,21 @@ session_start();
                                         </div>    
                                     </div>
 
-                                    <div class="col-md-6" >						
+                                    <div class="col-md-12" >						
                                         <div class="mb-3">
                                             <div class="form-group">
                                                 <label for="" class="control-label">ไฟล์เเนบ</label>	
-                                                <input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
+                                                <input id="input-b6b" name="files[]" type="file" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
+
+<!--                                                 <input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple> -->
                                                 <?php
                                                 $sql = "SELECT * FROM  file_item_details  WHERE details_id =  $details_id";
                                                         $qry = $db->query($sql);
                                                         $qry->execute();
                                                         while ($row = $qry->fetch(PDO::FETCH_ASSOC)) {  ?>
-                                                      <?php echo  $row['filename_details'] ?>
-                                                      <div>
-                                                         <a  onclick="delfileeditdetails('<?php echo $row['file_details_id'] ?>','<?php echo $project_id ?>','<?php echo $taskid?>','<?php echo $details_id ?>');"><i data-feather="trash-2"></i></a>
-                                                    </div>
+                                                      <div><?php echo  $row['filename_details'] ?>
+                                                      <a  onclick="delfileeditdetails('<?php echo $row['file_details_id'] ?>','<?php echo $project_id ?>','<?php echo $taskid?>','<?php echo $details_id ?>');"><i data-feather="trash-2"></i></a>  </div>
+                                                  
                                                 <?php } ?>
                                             </div>
                                         </div>
@@ -139,8 +141,8 @@ session_start();
                                     </div>
                                     <hr>
                                     <div class="col-lg-12 text-right justify-content-center d-flex">
-                                        <button class="btn btn-primary " name ="editdetails" onclick="editdetailss('<?php echo $taskid ?>','<?php echo $project_id ?>','<?php echo $details_id ?>');">edit</button>
-                                        <a href="details_page.php?task_id=<?php echo $taskid ?>&project_id=<?php echo $project_id ?>" class="btn btn-secondary" type="button">Cancel</a>
+                                        <button class="btn btn-primary " name ="editdetails" onclick="editdetailss('<?php echo $taskid ?>','<?php echo $project_id ?>','<?php echo $details_id ?>');">เเก้ไข</button>
+                                        <a href="details_page.php?task_id=<?php echo $taskid ?>&project_id=<?php echo $project_id ?>" class="btn btn-secondary" type="button">กลับ</a>
                                     </div>
 
                                     </div>
@@ -154,6 +156,14 @@ session_start();
     </body>
 </html>
 <script>
+    $(document).ready(function() {
+    $("#input-b6b").fileinput({
+        showUpload: false,
+        dropZoneEnabled: false,
+        maxFileCount: 10,
+        inputGroupClass: "input-group"
+    });
+});
      function editdetailss(taskid,project_id,details_id){
         $('#proc').val('editdetails');
         $('#task_id').val(taskid);

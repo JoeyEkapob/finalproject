@@ -95,7 +95,7 @@
                                     </td>
 
                                     <td>
-                                        <h5><b><?php echo $row2['name_tasklist']  ?></h5></b>
+                                        <h5><b><?php echo $row2['name_tasklist'] ?> </h5></b>
                                         
                                         <p class="truncate"><?php echo substr($row2['description_task'],0,100).'...';  ?></p>
                                     </td>

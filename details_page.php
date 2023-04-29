@@ -38,7 +38,6 @@
             <?php } ?>
 
 <form action="proc.php" method="post" class="form-horizontal" enctype="multipart/form-data">
-
     <main class="content">
     <?php if($level != 5 ): ?>
         <!-- div class="col-lg-12">
@@ -57,7 +56,7 @@
             </div>
         </div> -->
         <?php endif; ?>
-      
+        <a href="view_project.php?view_id=<?php echo $project_id; ?>" class="back-button">&lt;</a> 
             <div class="row">
                 <div class="col-12 col-lg-6">        
                     <div class="card flex-fill">
@@ -89,7 +88,7 @@
                                     </td>
 
                                     <td>
-                                        <h5><b><?php echo $sqldetailsuser2['name_project']  ?></h5></b>
+                                        <h5><b><?php echo $sqldetailsuser2['name_project']  ?> <?php echo showstatustime($sqldetailsuser2['status_timedetails']) ?> </b></h5>
 
                                     </td>
     
@@ -173,7 +172,7 @@
                     </div> 
               
                 </div>   
-                <?php require 'viewmodeldetails.php'?>
+                <?php require 'viewmodel.php'?>
         </main>
         
     </form>
@@ -193,7 +192,7 @@ $(document).ready(function(){
         method:"post",
         data:{proc:proc,detail_id:details_id,usersendid:usersendid,sendstatus:sendstatus},
         success:function(data){
-            console.log(data);
+           // console.log(data);
 
             $('#details').html(data);
             $('#datamodal').modal('show'); 

@@ -22,6 +22,15 @@
         }
     }
 
+    function showstatustime($statustime){
+    if ($statustime == '') {
+        return "";
+    }else if($statustime == '1'){
+        return "( เเจ้งเตือน )";
+    }else if($statustime == '2'){
+        return " <b style='color:red'> ( ล่าช้า ) </b>";
+        }
+    }    
     function showstatprotext1($status){
         if ($status == '1') {
             return "รอดำเนินการ";

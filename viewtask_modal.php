@@ -14,8 +14,8 @@
                                     <div class="col-md-6">
                                    
                                                 <dl>
-                                                    <dt><b class="border-bottom border-primary">ชื่องาน</b></dt>
-                                                    <dd><?php echo $row2['name_tasklist'] ?></dd>
+                                                    <dt><b class="border-bottom border-primary">ชื่องาน </b> <b><?php echo showstatustime($row2['status_timetask']) ?></b></dt>
+                                                    <dd><?php echo $row2['name_tasklist'] ?>  </dd>
 
                                                     <dt><b class="border-bottom border-primary">คำอธิบาย</b></dt>
                                                     <dd><?php echo trim($row2['description_task'])  ?></dd>
@@ -70,9 +70,14 @@
                                                     
                                                     <dt><b class="border-bottom border-primary">สมาชิก</b></dt>
                                                     <dd>
-
-                                                    <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $row2['avatar']?>" alt="Avatar" width="35"  height="35">
-                                                    <b><?php  echo $row2['firstname']." ".$row2['lastname'] ?></b>
+                                                    <?php if($row2['avatar'] !=""){?>
+                                                        <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $row2['avatar']?>" alt="Avatar" width="35"  height="35">
+                                                        <b><?php  echo $row2['firstname']." ".$row2['lastname'] ?></b>
+                                                    <?php }else{?>
+                                                        <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
+                                                        <b><?php  echo $row2['firstname']." ".$row2['lastname'] ?></b>
+                                                    <?php }?>
+                                                   
                                             
                                                     </dd>
                                                 </dl> 
@@ -88,6 +93,7 @@
                                                     while ($row2 = $qry->fetch(PDO::FETCH_ASSOC)) {  ?>
                                                 <div class="row">
                                                     <div class="col-sm">
+                                                        
                                                     <a href="img/file/file_task/<?php echo $row2['newname_filetask']; ?>" download="<?php echo $row2['filename_task']?>"><?php echo $row2['filename_task']?></a> 
                                                     
                                                     </div>

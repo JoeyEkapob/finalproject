@@ -51,7 +51,9 @@
                         <div class="mb-3">
                                 <div class="form-group">
                                     <label for="" class="control-label">ไฟล์เเนบ</label>	
-                                    <input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
+                                    <div class="file-loading"> 
+                                            <input id="input-b6b" name="files[]" type="file" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
+                                    </div>
                                     <p class="small mb-0 mt-2"><b>รายละเอียด:รองรับไฟล์งาน .pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx </b></p> 
                                 </div>
                         </div>

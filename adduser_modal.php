@@ -61,13 +61,27 @@
 												<input type="password" class="form-control" name="c_password">	
 											</div> 
 											<div class="mb-3">
-												<label for="control-label">เลขบัตรประชาชน</label>
-												<input  class="form-control" type="tel" id="idcard" name="idcard" placeholder="กรอกหมายเลขบัตรประชาชนของคุณ">
-											</div>
+												<label for="" class="control-label" >ฝ่าย</label>
+													<select name="department" id="department" class="form-select" >
+														<?php
+														$stmt = $db->query("SELECT * FROM department WHERE department_status = 1 ");
+														$stmt->execute();
+														$result = $stmt->fetchAll();
+														foreach($result as $row) {
+														?>
+													<option value="<?= $row['department_id'];?>"><?= $row['department_name'];?></option>
+														<?php } ?>
+													</select>
+											</div> 	
+											
 											
 
 										</div>
 										<div class="col-md-12">
+										<div class="mb-3">
+												<label for="control-label">เลขบัตรประชาชน</label>
+												<input  class="form-control" type="tel" id="idcard" name="idcard" placeholder="กรอกหมายเลขบัตรประชาชนของคุณ">
+											</div>
 											<div class="mb-3">
 												<div class="form-check form-switch">
 													<input class="form-check-input" type="checkbox" role="switch" id="switch" name="switch"  checked>

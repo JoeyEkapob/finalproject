@@ -16,76 +16,76 @@ header("Access-Control-Allow-Headers: X-Requested-With");
     $user_id=$_SESSION['user_login'];
 
     if($_POST['proc'] == 'viewdetails'){
-        $details_id = $_POST['detail_id'];
-        $usersendid = $_POST['usersendid'];
-        $sendstatus = $_POST['sendstatus'];
-        $outp ="";
-        $sql = "SELECT * FROM details NATURAL join user  NATURAL join task_list  NATURAL join project  where details_id = $details_id";
-        $qry = $db->query($sql);
-        $qry->execute();
-        if($sendstatus == 1){
-        while($row = $qry->fetch(PDO::FETCH_ASSOC)){ 
-            
-        $outp.=' 
-        <div class="col-12  d-flex">
-            <div class="card flex-fill">  
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-md-12">
+            $details_id = $_POST['detail_id'];
+            $usersendid = $_POST['usersendid'];
+            $sendstatus = $_POST['sendstatus'];
+            $outp ="";
+            $sql = "SELECT * FROM details NATURAL join user  NATURAL join task_list  NATURAL join project  where details_id = $details_id";
+            $qry = $db->query($sql);
+            $qry->execute();
+            if($sendstatus == 1){
+            while($row = $qry->fetch(PDO::FETCH_ASSOC)){ 
+                
+            $outp.=' 
+            <div class="col-12  d-flex">
+                <div class="card flex-fill">  
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-12">
 
-                            <dl>                                   
-                                <dt><b class="border-bottom border-primary">ชื่อโปรเจค</b></dt>
-                                <dd>'.$row['name_project'].'</dd>
+                                <dl>                                   
+                                    <dt><b class="border-bottom border-primary">ชื่อโปรเจค</b> '.  showstatustime($row['status_timedetails']) .' </dt>
+                                    <dd>'.$row['name_project'].'</dd>
 
-                                <dt><b class="border-bottom border-primary">ชื่องาน</b></dt>
-                                <dd>'.$row['name_tasklist'] .'</dd>
+                                    <dt><b class="border-bottom border-primary">ชื่องาน</b></dt>
+                                    <dd>'.$row['name_tasklist'] .'</dd>
 
-                                <dt><b class="border-bottom border-primary">วันเเละเวลาที่ส่งงาน</b></dt>
-                                <dd>'.thai_date_and_time($row['date_detalis']).'</dd>
+                                    <dt><b class="border-bottom border-primary">วันเเละเวลาที่ส่งงาน</b></dt>
+                                    <dd>'.thai_date_and_time($row['date_detalis']).'</dd>
 
-                                <dt><b class="border-bottom border-primary">รายละเอียด</b></dt>
-                                <dd>'.$row['comment'].'</dd>
-                            </dl>';
+                                    <dt><b class="border-bottom border-primary">รายละเอียด</b></dt>
+                                    <dd>'.$row['comment'].'</dd>
+                                </dl>';
 
-        }
-       
-        $profileusersendsql = "SELECT * FROM details NATURAL JOIN user WHERE user_id = $usersendid";
-        $profileusersendqry = $db->query($profileusersendsql);
-        $profileusersendqry->execute(); 
-        $profileusersendrow = $profileusersendqry->fetch(PDO::FETCH_ASSOC);
+            }
+        
+            $profileusersendsql = "SELECT * FROM details NATURAL JOIN user WHERE user_id = $usersendid";
+            $profileusersendqry = $db->query($profileusersendsql);
+            $profileusersendqry->execute(); 
+            $profileusersendrow = $profileusersendqry->fetch(PDO::FETCH_ASSOC);
 
-        $outp.=' <dt><b class="border-bottom border-primary">คนที่ส่งงาน</b></dt>
-                    <dd> 
-                        <div class="d-flex align-items-center mt-1">';
-                if($profileusersendrow['avatar'] !=""){ 
-        $outp.='   <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/'. $profileusersendrow['avatar'].'" alt="Avatar" width="35"  height="35">
-                    <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
-                 }else{ 
-        $outp.='<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
-                    <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
-                } 
-        $outp.=' </div>
-                    </dd>
-                    <dt><b class="border-bottom border-primary">ไฟล์เเนบ</b></dt>'; /* */
- 
-        $filedetailsql = "SELECT * FROM details  NATURAL JOIN file_item_details WHERE details_id = $details_id";
-        $filedetailqry = $db->query($filedetailsql);
-        $filedetailqry->execute();
-        while ($filedetailqryrow = $filedetailqry->fetch(PDO::FETCH_ASSOC)) { 
+            $outp.=' <dt><b class="border-bottom border-primary">คนที่ส่งงาน</b></dt>
+                        <dd> 
+                            <div class="d-flex align-items-center mt-1">';
+                    if($profileusersendrow['avatar'] !=""){ 
+            $outp.='   <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/'. $profileusersendrow['avatar'].'" alt="Avatar" width="35"  height="35">
+                        <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
+                    }else{ 
+            $outp.='<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
+                        <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
+                    } 
+            $outp.=' </div>
+                        </dd>
+                        <dt><b class="border-bottom border-primary">ไฟล์เเนบ</b></dt>'; /* */
+    
+            $filedetailsql = "SELECT * FROM details  NATURAL JOIN file_item_details WHERE details_id = $details_id";
+            $filedetailqry = $db->query($filedetailsql);
+            $filedetailqry->execute();
+            while ($filedetailqryrow = $filedetailqry->fetch(PDO::FETCH_ASSOC)) { 
 
-        $outp.=' <div class="row">
-                    <div class="col-sm">
-                        <a href="img/file/file_details/' . $filedetailqryrow['newname_filedetails'] . '" download="' . $filedetailqryrow['filename_details'] . '">' . $filedetailqryrow['filename_details'] . '</a> 
-                    </div>
-                        </div>
-                    </div>
+                $outp.=' <div class="row">
+                            <div class="col-sm">
+                                <a href="img/file/file_details/' . $filedetailqryrow['newname_filedetails'] . '" download="' . $filedetailqryrow['filename_details'] . '">' . $filedetailqryrow['filename_details'] . '</a> 
+                            </div>
+                        </div>';
+                                }  
+                $outp.= '</div>
                 </div> 
             </div>
-        </div>
-                '; 
+        </div>'; 
 
             
-              }  
+              
         }else if($sendstatus == 2){
             while($row = $qry->fetch(PDO::FETCH_ASSOC)){ 
     
@@ -97,7 +97,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                                     <div class="col-md-12">
                 
                                         <dl>                                   
-                                            <dt><b class="border-bottom border-primary">ชื่อโปรเจค</b></dt>
+                                            <dt><b class="border-bottom border-primary">ชื่อโปรเจค</b> '.  showstatustime($row['status_timedetails']) .'</dt>
                                             <dd>'.$row['name_project'].'</dd>
                         
                                             <dt><b class="border-bottom border-primary">ชื่องาน</b></dt>
@@ -139,28 +139,129 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                             <div class="col-sm">
                                 <a href="img/file/file_details/' . $filedetailqryrow['newname_filedetails'] . '" download="' . $filedetailqryrow['filename_details'] . '">' . $filedetailqryrow['filename_details'] . '</a> 
                             </div>
-                        </div> 
-                    </div>
+                        </div> ';
+                    }  
+
+                $outp.='</div>
                 </div>
             </div> 
         </div>
         </div>';  
                     
-                      }  
+                     
         }
         
          echo  $outp;
          exit;
     }
+    else if($_POST['proc'] == 'viewdatauser'){
+
+        $user_id = $_POST['userid'];
+
+        $outp = '';
+        $sql = "SELECT  * FROM user as u 
+        left join position as p on u.role_id = p.role_id  
+        left join department as d on u.department_id = d.department_id  
+        where user_id = $user_id";
+        $qry = $db->query($sql);
+        $qry->execute();
+        while($row = $qry->fetch(PDO::FETCH_ASSOC)){ 
+
+            $outp .= ' <div class="card">		
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="text-center">';
+        
+                                            if ($row['avatar'] != "") {
+                                                $outp .= '<img class="rounded-circle rounded me-5 mb-2" src="img/avatars/' . $row['avatar'] . '" alt="Avatar" width="200" height="200">';
+                                            } else {
+                                                $outp .= '<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="200" height="200">';
+                                            }
+        
+        $outp .= '                      </div>
+                                    </div>
+                    <div class="col-md-1"></div> 
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="" class="control-label"><b>ชื่อ :</b></label>
+                            ' . $row['firstname'] . '' . $row['lastname'] . ' 
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="control-label"><b>อีเมล :</b></label>
+                            ' . $row['email'] . '
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="control-label"><b>ตำเเหน่ง :</b></label>
+                            ' . $row['position_name'] . '
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="control-label"><b>ฝ่าย :</b></label>
+                            ' . $row['department_name'] . '
+                        </div>
+                    </div> 
+                    <div class="col-md-5">
+                        <div class="mb-3">
+                            <label for="" class="control-label"><b>สถานะ :</b></label>';
+                            if ($row['status_user'] == 1) {
+                                $outp .= 'เปิดใช้งาน';
+                            } else {
+                                $outp .= 'ปิดใช้งาน';
+                            }
+            $outp .= '  </div>
+                            <div class="mb-3">
+                                <label for="" class="control-label"><b>เบอร์ :</b></label>
+                                   '.$row['tel'] .'
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="control-label"><b>เลขบัตรประชาชน :</b></label>
+                                '. $row['idcard'] .'
+                            </div>
+                                
+                    </div> 
+                        <hr>';
+                            $outp .= '<div class="col-md-12">';
+                            $sql2 = $db->query("SELECT manager_id FROM project WHERE manager_id = $user_id"); 
+                            $nummannagerpro = $sql2->rowCount(); 
+                            $sql3 = $db->query("SELECT user_id FROM project_list WHERE user_id = $user_id");
+                            $numuserpro = $sql3->rowCount(); 
+                            $sql4 = $db->query("SELECT user_id FROM task_list WHERE user_id = $user_id ");
+                            $numusertask = $sql4->rowCount(); 
+                            $sql5 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_task != 5 AND progress_task != 100");
+                            $numtaskonp = $sql5->rowCount(); 
+                            $sql6 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_timetask = 2 AND status_task != 5 AND progress_task != 100");
+                            $numtimede = $sql6->rowCount();
+        $outp .= '                              <div class="containeruser">
+                                            <div class="item">หัวข้องานที่สร้าง</div>
+                                            <div class="item">หัวข้องานที่ถูกสั่ง</div>
+                                            <div class="item">งานทั้งหมด</div>
+                                            <div class="item">งานที่ยังไม่เสร็จ</div>
+                                            <div class="item">งานที่ล่าช้า</div>
+                                        </div>
+                                        <div class="containeruser">
+                                            <div class="item">'. $nummannagerpro .'</div>
+                                            <div class="item">'. $numuserpro .'</div>
+                                            <div class="item">'. $numusertask .'</div>
+                                            <div class="item">'. $numtaskonp .'</div>
+                                            <div class="item">'. $numtimede .'</div>
+                                        </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div> ';
+        }
+        echo $outp;
+        exit;
+   }
     else if($_POST['proc'] == 'editdetails'){
    
-       /*  $details_id = $_POST['detail_id'];
+         $details_id = $_POST['details_id'];
         $sql = "SELECT * FROM details natural join file_item_details  where details_id = $details_id";
         $qry = $db->query($sql);
         $qry->execute();
         while($row = $qry->fetch(PDO::FETCH_ASSOC)){;
         echo json_encode($row);
-        } */
+        } 
         $code ="ED";
         $details_id = $_POST['details_id'];
         $task_id = $_POST['task_id'];
@@ -232,7 +333,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 
 
 
-    }
+    } 
     else if($_POST['proc'] == 'add_task'){
 
         $pro_id= $_POST['pro_id'];
@@ -267,14 +368,28 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $taskname =$_POST['taskname'];
         $user=$_POST['user'];
         $textarea=$_POST['textarea'];
+
+        $start_timestamp = strtotime("$start_date");
+        $end_timestamp = strtotime("$end_date");
         
+        $time_diff = abs($end_timestamp - $start_timestamp) / 3600;
+
         $files = $_FILES['files'];
         $progress_task = 0;
+        $status_timetask = 0;
 
-           /*   echo strtotime($datestartproject).'__________'.strtotime($dateendproject).'__________'.strtotime($start_date).'__________'.strtotime($end_date);
-           exit; */
+        $chktask = "SELECT name_tasklist FROM task_list  where name_tasklist = '$taskname' AND project_id =  '$pro_id' ";
+        $chktask = $db->query($chktask);
+        $chktask->execute();
+        $chktaskrow2 = $chktask->fetch(PDO::FETCH_ASSOC);
+
+       
+
         if(empty($taskname)) {
             $_SESSION['error'] = 'กรุณากรอกชื่องาน';
+            $url_return = "location:view_project.php?view_id=".$pro_id;
+        }else if ($chktaskrow2){
+            $_SESSION['error'] = 'กรุณากรอกชื่องานใหม่เนื่องจากชื่องานซ้ำ';
             $url_return = "location:view_project.php?view_id=".$pro_id;
         }else if(empty($end_date)){
             $_SESSION['error'] = 'กรุณากรอกวันสิ้นสุดงาน';
@@ -283,11 +398,13 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             $_SESSION['error'] = 'วันที่เริ่มงานของงานไม่ถูกต้อง!!';
             $url_return = "location:view_project.php?view_id=".$pro_id;
             //strtotime($datestartproject) > strtotime($start_date) ||
-           
+        }else if ($time_diff < 3) {
+            $_SESSION['error'] = 'เวลาเริ่มต้นและเวลาสิ้นสุดต้องห่างกันอย่างน้อย 3 ชั่วโมง!!';
+            $url_return = "location:view_project.php?view_id=".$pro_id;
         }else if( strtotime($end_date) < strtotime($start_date) || strtotime($end_date) >  strtotime($dateendproject) ){
             $_SESSION['error'] = 'วันที่สิ้นสุดงานของคุณไม่อยู่ระหว่างระยะเวลาของหัวข้องานโปรดกรอกใหม่อีกครั้ง!!';
             $url_return = "location:view_project.php?view_id=".$pro_id;
-          
+          exit;
         } else {
             $stmtuser = "SELECT CONCAT(firstName, ' ', lastName) As FullName  FROM user where user_id = ".$manager_id."";
             $stmtuser = $db->prepare($stmtuser);
@@ -313,18 +430,18 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         
         
         if(!isset($_SESSION['error'])) {
-            $stmttask = $db->prepare("INSERT INTO task_list(task_id,name_tasklist, description_task,status_task, strat_date_task,end_date_task,project_id,user_id,progress_task) 
-            VALUES(:task_id,:taskname,:textarea,:status,:start_date,:end_date,:pro_id,:users_id,:progress_task)");
+            $stmttask = $db->prepare("INSERT INTO task_list(task_id,name_tasklist, description_task,status_task, strat_date_task,end_date_task,project_id,user_id,progress_task,status_timetask) 
+            VALUES(:task_id,:taskname,:textarea,:status,:start_date,:end_date,:pro_id,:users_id,:progress_task,:status_timetask)");
             $stmttask->bindParam(":task_id", $nextId);
             $stmttask->bindParam(":taskname", $taskname);
             $stmttask->bindParam(":textarea", $textarea);
             $stmttask->bindParam(":status", $stat);
             $stmttask->bindParam(":start_date", $start_date);
             $stmttask->bindParam(":end_date", $end_date);
-            // $stmttask->bindParam(":file_task",$file_task);
             $stmttask->bindParam(":pro_id", $pro_id);
             $stmttask->bindParam(":users_id",$user );
             $stmttask->bindParam(":progress_task",$progress_task );
+            $stmttask->bindParam(":status_timetask",$status_timetask);
             $stmttask->execute();   
             //$lastId = $db->lastInsertId(); 
             foreach ($files['name'] as $i => $file_name) {
@@ -471,11 +588,10 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         
     }
     else if($_POST['proc'] == 'delfilepro'){
-        
+  
         $file_item_project = $_POST['file_item_project'];
         $pro_id=$_POST['project_id']; 
       
-    
         $file_path = 'img/file/file_project/';
         $sql = "SELECT * from file_item_project  where file_item_project = $file_item_project ";
         $qry = $db->query($sql);
@@ -488,20 +604,20 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $stmt = $db->prepare("DELETE FROM file_item_project WHERE file_item_project = :file_item_project");
         $stmt->bindParam(":file_item_project", $file_item_project);
         $stmt->execute();
-
-        $_SESSION['success'] = "ลบไฟล์เรียบร้อยแล้ว!";
+       
+        /*  $_SESSION['success'] = "ลบไฟล์เรียบร้อยแล้ว!";  
             echo "
-            <script>
-            $(document).ready(function() {
-                Swal.fire({
-                    title: 'ลบไฟล์เรียบร้อยแล้ว!',
-                    icon: 'success',
-                    timer: 5000,
-                    showConfirmButton: true
-                });
-            })
-                </script>";
-        $url_return = "refresh:2;editproject_page.php?update_id=".$pro_id;
+                    <script>
+                $(document).ready(function() {
+                    Swal.fire({
+                        title: 'ลบไฟล์เรียบร้อยแล้ว!',
+                        icon: 'success',
+                        timer: 5000,
+                        showConfirmButton: true
+                    });
+                })
+                    </script>";  */
+       // $url_return = "refresh:2;editproject_page.php?update_id=".$pro_id;
     }
     else if($_POST['proc'] == 'delfiletask'){
         
@@ -524,7 +640,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $stmt->execute();
 
         $_SESSION['success'] = "ลบไฟล์เรียบร้อยแล้ว!";
-        echo "  <script>
+      /*   echo "  <script>
                     $(document).ready(function() {
                         Swal.fire({
                             title: 'ลบไฟล์เรียบร้อยแล้ว!',
@@ -533,51 +649,63 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                             showConfirmButton: true
                         });
                     })
-                </script>"; 
+                </script>";  */
         $url_return = "refresh:1.5;edittask_page.php?updatetask_id=".$taskid."&project_id=".$pro_id;
     
     }
     else if($_POST['proc'] == 'edittask'){
 
+        $taskid = $_POST['task_id'];
         $pro_id =$_POST['project_id'];
-        $sql = "SELECT * FROM project  where project_id = $pro_id";
+        $sql = "SELECT * FROM project as p  left join task_list as t on p.project_id = t.project_id where p.project_id = $pro_id AND t.task_id =  $taskid  ";
         $qry = $db->query($sql);
         $qry->execute();
         $row2 = $qry->fetch(PDO::FETCH_ASSOC);
-        
+    
         $datestartproject = $row2['start_date'];
         $dateendproject = $row2['end_date'];
-     
+        $dateendtask = $row2['strat_date_task'];
+        $olduser = $row2['user_id'];
       
         $taskid = $_POST['task_id'];
         $start_date = $_POST['start_date'];
         $end_date = $_POST['end_date'];
+
+      
         $taskname =$_POST['taskname'];
         $user=$_POST['user'];
+
+      /*   echo   $olduser.$user;
+         */
         $textarea=trim($_POST['textarea']);
         $stat = 1 ;
+
+        if (strtotime($dateendtask) < strtotime($end_date) - (60 * 60 * 24) || ($olduser != $user) ) {
+            $status_timetask = 0; 
+        }else{
+            $status_timetask = $_POST['status_timetask'];
+        }
+        echo $status_timetask;
+        
         $files = $_FILES['files'];
         
 
 
         if(empty($taskname)) {
             $_SESSION['error'] = 'กรุณากรอกชื่องาน';
-            $url_return = "location:view_project.php?view_id=".$pro_id;
+            $url_return = "location:edittask_page.php?updatetask_id=$pro_id&project_id=$taskid";
         }else if(empty($end_date)){
             $_SESSION['error'] = 'กรุณากรอกวันสิ้นสุดงาน';
             $url_return = "location:view_project.php?view_id=".$pro_id;
         }else if(strtotime($start_date) > strtotime($end_date) || strtotime($start_date) > strtotime($dateendproject)){
             $_SESSION['error'] = 'วันที่เริ่มงานของคุณไม่อยู่ระหว่างระยะเวลาของหัวข้องานโปรดกรอกใหม่อีกครั้ง!!!';
             $url_return = "location:view_project.php?view_id=".$pro_id;
-            //strtotime($datestartproject) > strtotime($start_date) ||
-            
-        }else if( strtotime($end_date) < strtotime($start_date) || strtotime($end_date) >  strtotime($dateendproject) ){
+        }else if( $end_date < $start_date ||$end_date >  $dateendproject){
             $_SESSION['error'] = 'วันที่สิ้นสุดงานของคุณไม่อยู่ระหว่างระยะเวลาของหัวข้องานโปรดกรอกใหม่อีกครั้ง!!';
             $url_return = "location:view_project.php?view_id=".$pro_id;
-            
         }else if (!isset($_SESSION['error'])) {
         
-            $updatestmttask = $db->prepare("UPDATE task_list SET name_tasklist=:taskname, description_task=:textarea, status_task=:status, strat_date_task=:start_date, end_date_task=:end_date,  user_id=:users_id WHERE task_id = :id ");
+            $updatestmttask = $db->prepare("UPDATE task_list SET name_tasklist=:taskname, description_task=:textarea, status_task=:status, strat_date_task=:start_date, end_date_task=:end_date,  user_id=:users_id,status_timetask=:status_timetask WHERE task_id = :id ");
             $updatestmttask->bindParam(":taskname", $taskname);
             $updatestmttask->bindParam(":textarea", $textarea);
             $updatestmttask->bindParam(":status", $stat);
@@ -586,6 +714,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             //$updatestmttask->bindParam(":file_task",$file_task);
             //$stmttask->bindParam(":pro_id", $project_id);
             $updatestmttask->bindParam(":users_id",$user);
+            $updatestmttask->bindParam(":status_timetask", $status_timetask);
             $updatestmttask->bindParam(":id", $taskid);
             $updatestmttask->execute();   
 
@@ -661,13 +790,15 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $code = "P";
         $yearMonth = substr(date("Y")+543, -2);
 
+       
 
-        $sql = "SELECT MAX(project_id) AS last_id FROM project";
+        $sql = "SELECT MAX(project_id) as last_id FROM project ";
         $qry = $db->query($sql);
         $qry->execute();
         $row = $qry->fetch(PDO::FETCH_ASSOC);
         $maxId = $row['last_id'];
 
+        
         if($maxId ==''){
 
             $maxId = 1;
@@ -679,7 +810,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 
         $status1 = 1;
         $manager_id=$_SESSION['user_login'];
-        $proname = $_POST['proname'];
+        $proname = trim($_POST['proname']);
         $start_date = $_POST['start_date'];
         $end_date = $_POST['end_date'];
         $description =trim($_POST['description']);
@@ -690,10 +821,10 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $users_id = explode(",", $users_id1); // เเล้วก็นำ string มาทำเป็น array หลาย id 
         $progress_project = 0;
         $files = $_FILES['files']; 
-  
+       
        //echo $users_id1;
       //  print_r($users_id);
-
+        
         
         //$type = strrchr($files['name'],".");                                      
         /*$type = strrchr($_FILES['files']['name'],".");
@@ -705,23 +836,29 @@ header("Access-Control-Allow-Headers: X-Requested-With");
        //echo $newname;
        //exit;
 
-       $stmtuser = "SELECT CONCAT(firstName, ' ', lastName) As FullName  FROM user where user_id = ".$manager_id."";
-       $stmtuser = $db->prepare($stmtuser);
-       $stmtuser ->execute();
-       $stmtuserrow = $stmtuser->fetch(PDO::FETCH_ASSOC);
+        $stmtuser = "SELECT CONCAT(firstName, ' ', lastName) As FullName  FROM user where user_id = ".$manager_id."";
+        $stmtuser = $db->prepare($stmtuser);
+        $stmtuser ->execute();
+        $stmtuserrow = $stmtuser->fetch(PDO::FETCH_ASSOC);
 
-       $stmtjobtype = "SELECT* FROM job_type where id_jobtype = ".$job."";
-       $stmtjobtype = $db->prepare($stmtjobtype);
-       $stmtjobtype ->execute();
-       $stmtjobtyperow = $stmtjobtype->fetch(PDO::FETCH_ASSOC);
+        $stmtjobtype = "SELECT * FROM job_type where id_jobtype = ".$job."";
+        $stmtjobtype = $db->prepare($stmtjobtype);
+        $stmtjobtype ->execute();
+        $stmtjobtyperow = $stmtjobtype->fetch(PDO::FETCH_ASSOC);
           // echo showstatpro2($status2);
-   
-
-       
+        $sql2 = "SELECT * FROM project  WHERE name_project = '$proname'";
+        $qry2 = $db->query($sql2);
+        $qry2->execute();
+        $row2 = $qry2->fetch(PDO::FETCH_ASSOC);
+        
         if (empty($proname)) {
-          $_SESSION['error'] = 'กรุณากรอกชื่อหัวข้องาน';
-          $url_return ="location:addproject_page.php";
-          //header("location:addproject_page.php");
+            $_SESSION['error'] = 'กรุณากรอกชื่อหัวข้องาน';
+            $url_return ="location:addproject_page.php";
+            //header("location:addproject_page.php");
+        }else  if ($row2 ) {
+            $_SESSION['error'] = 'หัวข้องานซั้ำกรุณากรอกชื่อหัวข้องานใหม่';
+            $url_return ="location:addproject_page.php";
+
        } else if (empty($start_date)) {
           $_SESSION['error'] ='กรุณากรอกวันที่เริ่ม';
           $url_return ="location:addproject_page.php";
@@ -878,7 +1015,12 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                 $file_tmp = $files['tmp_name'][$i];
                 $file_dest = $file_name; 
                 $file_data = "img/file/file_project/";
-                move_uploaded_file($file_tmp,$file_data.$newname);
+
+                $file_locate = "/var/www/html/final_project/" . $file_data;
+
+
+                // Move the uploaded file to the destination directory
+                move_uploaded_file($file_tmp, $file_data . $newname);
                 
                 $inserfile_item_porject = $db->prepare("INSERT INTO file_item_project(project_id,filename,newname_filepro) 
                 VALUES(:project_id,:filename,:newname_filepro)");
@@ -943,7 +1085,8 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         } 
     }
     else if($_POST['proc'] == 'sendtask'){
-       
+        
+        $status_timetask = $_POST['status_timetask'];
         $project_id= $_POST['project_id'];
         $taskid = $_POST['task_id'];
         $commenttask = trim($_POST['text_comment']);
@@ -960,93 +1103,120 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         
        $numfilesend =sizeof(array_filter($_FILES['files']['name']));
 
-    
+     
+        /*  if(empty($commenttask)){
+            $_SESSION['error'] = "กรุณากรอกรายละเอียด!!! ";
+            header("location:send_task.php?task_id=$taskid&project_id=$project_id&user_id=$user_id");
 
-       if ($numfilesend != "0" OR $commenttask != ""){ 
+            } */
 
-            $inserstmtdetails = $db->prepare("INSERT INTO details(project_id,task_id,comment,date_detalis,state_details,progress_details,usersenddetails,send_status) 
-                                                VALUES(:project_id,:task_id,:comment,:date_detalis,:state_details,:progress_details,:usersenddetails,:send_status)");
-            $inserstmtdetails->bindParam(":project_id",$project_id);
-            $inserstmtdetails->bindParam(":task_id", $taskid);
-            $inserstmtdetails->bindParam(":comment", $commenttask);
-            $inserstmtdetails->bindParam(":state_details", $state_details);
-            $inserstmtdetails->bindParam(":date_detalis",$senddate);
-            $inserstmtdetails->bindParam(":progress_details",$progress_task);
-            $inserstmtdetails->bindParam(":usersenddetails",$user_id);
-            $inserstmtdetails->bindParam(":send_status",$send_status);
-            $inserstmtdetails->execute(); 
-            $lastId = $db->lastInsertId(); 
+        if ($numfilesend != "0" OR $commenttask != ""){ 
 
-            $updatestattask = $db->prepare("UPDATE task_list SET status_task = :status_task WHERE task_id = :task_id");
-            $updatestattask->bindParam(":status_task",$status_task);
-            $updatestattask->bindParam(":task_id",$taskid);
-            $updatestattask->execute(); 
-       
-       
-            foreach ($files['name'] as $i => $file_name) {
-            $code = "ST";
-            $numrand = (mt_rand());
-            $type = strrchr($file_name,".");
-            $newname = $date.$code.$numrand.$type;
-            $file_tmp = $files['tmp_name'][$i];
-            $file_dest = $file_name; 
-            $file_data = "img/file/file_details/";
-            move_uploaded_file($file_tmp,$file_data.$newname);
-            if($numfilesend != "0" ){
-            $inserfile_item_details = $db->prepare("INSERT INTO file_item_details(project_id,task_id,filename_details,details_id,newname_filedetails) 
-            VALUES(:project_id,:task_id,:filename_details,:details_id,:newname_filedetails)");
-            $inserfile_item_details->bindParam(":project_id",$project_id);
-            $inserfile_item_details->bindParam(":task_id",$taskid);
-            $inserfile_item_details->bindParam(":filename_details",$file_name);
-            $inserfile_item_details->bindParam(":details_id",$lastId);
-            $inserfile_item_details->bindParam(":newname_filedetails",$newname);
-            $inserfile_item_details->execute();  
-            }
-       }
-            /* $dataproject = "SELECT name_project,manager_id FROM project where project_id = ".$project_id."";
-            $dataproject = $db->prepare($dataproject);
-            $dataproject ->execute();
-            $dataprojectrow = $dataproject->fetch(PDO::FETCH_ASSOC);
-            $manager_id = $dataprojectrow['manager_id']; */
-        
+                $dataproject = "SELECT name_tasklist ,name_project,manager_id,  CONCAT(firstName, ' ', lastName) As FullName ,user_id FROM  user natural join  task_list natural join project where task_id = ".$taskid."";
+                $dataproject = $db->prepare($dataproject);
+                $dataproject ->execute();
+                $dataprojectrow = $dataproject->fetch(PDO::FETCH_ASSOC);
+                $manager_id = $dataprojectrow['manager_id'];  
             
+                $datauser = $db->prepare("SELECT line_token  FROM user WHERE user_id = :userid");
+                $datauser ->bindParam(":userid",$manager_id);
+                $datauser ->execute();
+                $datauserrow = $datauser->fetch(PDO::FETCH_ASSOC);   
+            
+                $sToken = $datauserrow['line_token'];
+                $sMessage = "มีงานส่งมา \n";
+                $sMessage .= "ชื่อห้วงาน : ".$dataprojectrow['name_project']." \n";
+                $sMessage .= "ชื่องาน : ".$dataprojectrow['name_tasklist']." \n";
+                $sMessage .= "วันที่ส่ง : ".thai_date_and_time_short($senddate)." \n";
+                $sMessage .= "คนที่ส่งงาน : ".$dataprojectrow['FullName']." \n";
 
-           $_SESSION['success'] = "ส่งงานเรียบร้อยแล้ว! ";
-           echo "<script>
-                    $(document).ready(function() {
-                        Swal.fire({
-                            title: 'ส่งงานเรียบร้อยแล้ว!',
-                            icon: 'success',
-                            timer: 2000,
-                            showConfirmButton: true
-                        }).then(() => {
-                            document.location.href = 'view_project.php?view_id=".$project_id."';
-                        })
-                    });
+                sentNotify($sToken , $sMessage); 
+
+                $inserstmtdetails = $db->prepare("INSERT INTO details(project_id,task_id,comment,date_detalis,state_details,progress_details,usersenddetails,send_status,status_timedetails) 
+                                                    VALUES(:project_id,:task_id,:comment,:date_detalis,:state_details,:progress_details,:usersenddetails,:send_status,:status_timedetails)");
+                $inserstmtdetails->bindParam(":project_id",$project_id);
+                $inserstmtdetails->bindParam(":task_id", $taskid);
+                $inserstmtdetails->bindParam(":comment", $commenttask);
+                $inserstmtdetails->bindParam(":state_details", $state_details);
+                $inserstmtdetails->bindParam(":date_detalis",$senddate);
+                $inserstmtdetails->bindParam(":progress_details",$progress_task);
+                $inserstmtdetails->bindParam(":usersenddetails",$user_id);
+                $inserstmtdetails->bindParam(":send_status",$send_status);
+                $inserstmtdetails->bindParam(":status_timedetails",$status_timetask);
+                $inserstmtdetails->execute(); 
+                $lastId = $db->lastInsertId();  
+
+                $updatestattask = $db->prepare("UPDATE task_list SET status_task = :status_task WHERE task_id = :task_id");
+                $updatestattask->bindParam(":status_task",$status_task);
+                $updatestattask->bindParam(":task_id",$taskid);
+                $updatestattask->execute(); 
+        
+        
+                foreach ($files['name'] as $i => $file_name) {
+                    $code = "ST";
+                    $numrand = (mt_rand());
+                    $type = strrchr($file_name,".");
+                    $newname = $date.$code.$numrand.$type;
+                    $file_tmp = $files['tmp_name'][$i];
+                    $file_dest = $file_name; 
+                    $file_data = "img/file/file_details/";
+                    move_uploaded_file($file_tmp,$file_data.$newname);
+
+                    if($numfilesend != "0" ){
+                        $inserfile_item_details = $db->prepare("INSERT INTO file_item_details(project_id,task_id,filename_details,details_id,newname_filedetails) 
+                        VALUES(:project_id,:task_id,:filename_details,:details_id,:newname_filedetails)");
+                        $inserfile_item_details->bindParam(":project_id",$project_id);
+                        $inserfile_item_details->bindParam(":task_id",$taskid);
+                        $inserfile_item_details->bindParam(":filename_details",$file_name);
+                        $inserfile_item_details->bindParam(":details_id",$lastId);
+                        $inserfile_item_details->bindParam(":newname_filedetails",$newname);
+                        $inserfile_item_details->execute();  
+                    }
+                }
+            /*   */
+
+            echo "<script>
+                        $(document).ready(function() {
+                            Swal.fire({
+                                title: 'ส่งงานเรียบร้อยแล้ว!',
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: true
+                            }).then(() => {
+                                document.location.href = 'view_project.php?view_id=".$project_id."';
+                            })
+                        });
                 </script>";
-            $dataproject = "SELECT name_tasklist ,name_project,manager_id,  CONCAT(firstName, ' ', lastName) As FullName ,user_id FROM  user natural join  task_list natural join project where task_id = ".$taskid."";
-            $dataproject = $db->prepare($dataproject);
-            $dataproject ->execute();
-            $dataprojectrow = $dataproject->fetch(PDO::FETCH_ASSOC);
-            $manager_id = $dataprojectrow['manager_id'];  
-        
-            $datauser = $db->prepare("SELECT line_token  FROM user WHERE user_id = :userid");
-            $datauser ->bindParam(":userid",$manager_id);
-            $datauser ->execute();
-            $datauserrow = $datauser->fetch(PDO::FETCH_ASSOC);   
-        
-            $sToken = $datauserrow['line_token'];
-            $sMessage = "มีงานส่งมา \n";
-            $sMessage .= "ชื่อห้วงาน : ".$dataprojectrow['name_project']." \n";
-            $sMessage .= "ชื่องาน : ".$dataprojectrow['name_tasklist']." \n";
-            $sMessage .= "วันที่ส่ง : ".thai_date_and_time_short($senddate)." \n";
-            $sMessage .= "คนที่ส่งงาน : ".$dataprojectrow['FullName']." \n";
-        
-            sentNotify($sToken , $sMessage);
-           //$url_return ="location:view_project.php?view_id=".$project_id;
+                /* $dataproject = "SELECT name_project,manager_id FROM project where project_id = ".$project_id."";
+                $dataproject = $db->prepare($dataproject);
+                $dataproject ->execute();
+                $dataprojectrow = $dataproject->fetch(PDO::FETCH_ASSOC);
+                $manager_id = $dataprojectrow['manager_id']; */
+            
+                
+        /* 
+            $_SESSION['success'] = "ส่งงานเรียบร้อยแล้ว! "; */
+
+
+                
+            //$url_return ="location:view_project.php?view_id=".$project_id;
+        /*    echo "<script>
+            $(document).ready(function() {
+                Swal.fire({
+                    title: 'ส่งงานเรียบร้อยแล้ว!',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: true
+                }).then(() => {
+                    document.location.href = 'view_project.php?view_id=".$project_id."';
+                })
+            });
+        </script>";  */
+
+
      } else {
             $_SESSION['error'] = "กรุณากรอกข้อความ หรือ เเนบไฟล์ส่ง";
-            $url_return ="location:send_task.php?task_id=".$taskid."&project_id=".$project_id."&user_id=".$user_id;
+            $url_return ="location:send_task.php?task_id=".$taskid."&project_id=".$project_id."&user_id=".$user_id."&statustimetask=".$status_timetask; 
            }
     
         
@@ -1117,7 +1287,6 @@ header("Access-Control-Allow-Headers: X-Requested-With");
     else if($_POST['proc'] == 'send_edittask'){
 
         $details_id = $_POST['details_id'];
-        
         $task_id = $_POST['task_id'];
         $project_id = $_POST['project_id'];
         $state_details = $_POST['state_details'];
@@ -1125,6 +1294,10 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $senddate = $_POST['senddate'];
         $progress_task= $_POST['progress'];
         $commenttask = $_POST['text_comment'];
+        $status_timedetails = $_POST['status_timedetails'];
+
+      
+       
         $status_task = "3";
         $send_status = "2";
         $files = $_FILES['files'];
@@ -1143,54 +1316,77 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 
         if(!isset($_SESSION['error'])) {
 
-        $updatestatdetails = $db->prepare("UPDATE details SET state_details = :state_details, progress_details = :progress WHERE details_id = :details_id");
-        $updatestatdetails->bindParam(":state_details", $state_details);
-        $updatestatdetails->bindParam(":progress", $progress_task);
-        $updatestatdetails->bindParam(":details_id", $details_id);
-        $updatestatdetails->execute(); 
- 
-        $inserstmtdetails = $db->prepare("INSERT INTO details(project_id,task_id,comment,date_detalis,state_details,progress_details,usersenddetails,send_status) 
-        VALUES(:project_id,:task_id,:comment,:date_detalis,:state_details,:progress,:usersenddetails,:send_status)");
-        $inserstmtdetails->bindParam(":project_id",$project_id);
-        $inserstmtdetails->bindParam(":task_id", $task_id);
-        $inserstmtdetails->bindParam(":comment", $commenttask);
-        $inserstmtdetails->bindParam(":date_detalis",$senddate);
-        $inserstmtdetails->bindParam(":state_details",$state_details);
-        $inserstmtdetails->bindParam(":progress",$progress);
-        $inserstmtdetails->bindParam(":usersenddetails",$user_id);
-        $inserstmtdetails->bindParam(":send_status",$send_status);
-        $inserstmtdetails->execute();
-        $lastId = $db->lastInsertId(); 
+            $dataproject = "SELECT line_token ,name_project,name_tasklist, user_id FROM project natural join  task_list  natural join user where task_id = ".$task_id."";
+            $dataproject = $db->prepare($dataproject);
+            $dataproject ->execute();
+            $dataprojectrow = $dataproject->fetch(PDO::FETCH_ASSOC);
+     
+            $datauser = $db->prepare("SELECT CONCAT(firstName, ' ', lastName) As FullName , line_token FROM user WHERE user_id = :userid");
+            $datauser->bindParam(":userid",$user_id);
+            $datauser ->execute();
+            $datauserrow = $datauser->fetch(PDO::FETCH_ASSOC); 
+     
+     
+            $sToken = $dataprojectrow['line_token'];
+            $sMessage = "มีงานต้องเเก้ไข \n";
+            $sMessage .= "ชื่อห้วงาน : ".$dataprojectrow['name_project']." \n";
+            $sMessage .= "ชื่องาน : ".$dataprojectrow['name_tasklist']." \n";
+            $sMessage .= "วันที่ส่งการเเก้ไข : ".thai_date_and_time_short($senddate)." \n";
+            $sMessage .= "คนตรวจงาน : ".$datauserrow['FullName']." \n";
+     
+            sentNotify($sToken, $sMessage);
+     
+
+            $updatestatdetails = $db->prepare("UPDATE details SET state_details = :state_details, progress_details = :progress WHERE details_id = :details_id");
+            $updatestatdetails->bindParam(":state_details", $state_details);
+            $updatestatdetails->bindParam(":progress", $progress_task);
+            $updatestatdetails->bindParam(":details_id", $details_id);
+            $updatestatdetails->execute(); 
+    
+            $inserstmtdetails = $db->prepare("INSERT INTO details(project_id,task_id,comment,date_detalis,state_details,progress_details,usersenddetails,send_status,status_timedetails) 
+            VALUES(:project_id,:task_id,:comment,:date_detalis,:state_details,:progress,:usersenddetails,:send_status,:status_timedetails)");
+            $inserstmtdetails->bindParam(":project_id",$project_id);
+            $inserstmtdetails->bindParam(":task_id", $task_id);
+            $inserstmtdetails->bindParam(":comment", $commenttask);
+            $inserstmtdetails->bindParam(":date_detalis",$senddate);
+            $inserstmtdetails->bindParam(":state_details",$state_details);
+            $inserstmtdetails->bindParam(":progress",$progress);
+            $inserstmtdetails->bindParam(":usersenddetails",$user_id);
+            $inserstmtdetails->bindParam(":send_status",$send_status);
+            $inserstmtdetails->bindParam(":status_timedetails",$status_timedetails);
+            $inserstmtdetails->execute();
+            $lastId = $db->lastInsertId();  
+
+        
+            $updatestattask = $db->prepare("UPDATE task_list SET status_task = :status_task ,progress_task = :progress WHERE task_id = :task_id");
+            $updatestattask->bindParam(":status_task",$status_task);
+            $updatestattask->bindParam(":progress",$progress);
+            $updatestattask->bindParam(":task_id",$task_id);
+            $updatestattask->execute(); 
+
+        
+            foreach ($files['name'] as $i => $file_name) {
+                $code = "D";
+                $numrand = (mt_rand());
+                $type = strrchr($file_name,".");
+                $newname = $date.$code.$numrand.$type;
+                $file_tmp = $files['tmp_name'][$i];
+                $file_dest = $file_name; 
+                $file_data = "img/file/file_details/";
+                move_uploaded_file($file_tmp,$file_data.$newname);
+                if($numfilesend != "0" ){
+                $inserfile_item_details = $db->prepare("INSERT INTO file_item_details(project_id,task_id,filename_details,details_id,newname_filedetails) 
+                VALUES(:project_id,:task_id,:filename_details,:details_id,:newname_filedetails)");
+                $inserfile_item_details->bindParam(":project_id",$project_id);
+                $inserfile_item_details->bindParam(":task_id",$task_id);
+                $inserfile_item_details->bindParam(":filename_details",$file_name);
+                $inserfile_item_details->bindParam(":details_id",$lastId);
+                $inserfile_item_details->bindParam(":newname_filedetails",$newname);
+                $inserfile_item_details->execute();  
+                }
+        }
 
       
-        $updatestattask = $db->prepare("UPDATE task_list SET status_task = :status_task ,progress_task = :progress WHERE task_id = :task_id");
-        $updatestattask->bindParam(":status_task",$status_task);
-        $updatestattask->bindParam(":progress",$progress);
-        $updatestattask->bindParam(":task_id",$task_id);
-        $updatestattask->execute(); 
-
-       
-        foreach ($files['name'] as $i => $file_name) {
-            $code = "D";
-            $numrand = (mt_rand());
-            $type = strrchr($file_name,".");
-            $newname = $date.$code.$numrand.$type;
-            $file_tmp = $files['tmp_name'][$i];
-            $file_dest = $file_name; 
-            $file_data = "img/file/file_details/";
-            move_uploaded_file($file_tmp,$file_data.$newname);
-            if($numfilesend != "0" ){
-            $inserfile_item_details = $db->prepare("INSERT INTO file_item_details(project_id,task_id,filename_details,details_id,newname_filedetails) 
-            VALUES(:project_id,:task_id,:filename_details,:details_id,:newname_filedetails)");
-            $inserfile_item_details->bindParam(":project_id",$project_id);
-            $inserfile_item_details->bindParam(":task_id",$task_id);
-            $inserfile_item_details->bindParam(":filename_details",$file_name);
-            $inserfile_item_details->bindParam(":details_id",$lastId);
-            $inserfile_item_details->bindParam(":newname_filedetails",$newname);
-            $inserfile_item_details->execute();  
-            }
-       }
-
             $_SESSION['success'] = "ส่งงานกลับเเก้ไขเรียบร้อยแล้ว!!! ";
             echo "<script>
             $(document).ready(function() {
@@ -1205,31 +1401,12 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             });
         </script>";
 
-        $dataproject = "SELECT line_token ,name_project,name_tasklist, user_id FROM project natural join  task_list  natural join user where task_id = ".$task_id."";
-        $dataproject = $db->prepare($dataproject);
-        $dataproject ->execute();
-        $dataprojectrow = $dataproject->fetch(PDO::FETCH_ASSOC);
-
-        $datauser = $db->prepare("SELECT CONCAT(firstName, ' ', lastName) As FullName , line_token FROM user WHERE user_id = :userid");
-        $datauser->bindParam(":userid",$user_id);
-        $datauser ->execute();
-        $datauserrow = $datauser->fetch(PDO::FETCH_ASSOC); 
-
-
-        $sToken = $dataprojectrow['line_token'];
-        $sMessage = "มีงานต้องเเก้ไข \n";
-        $sMessage .= "ชื่อห้วงาน : ".$dataprojectrow['name_project']." \n";
-        $sMessage .= "ชื่องาน : ".$dataprojectrow['name_tasklist']." \n";
-        $sMessage .= "วันที่ส่งการเเก้ไข : ".thai_date_and_time_short($senddate)." \n";
-        $sMessage .= "คนตรวจงาน : ".$datauserrow['FullName']." \n";
-
-        sentNotify($sToken, $sMessage);
+       
             //$url_return ="location:checktask_list.php";
         }
     
     }
     else if($_POST['proc'] == 'adduser'){
-         //  echo 234234234234;
        
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
@@ -1241,6 +1418,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $switch = $_POST['switch'];
         $tokenline = $_POST['tokenline'];
         $phone = $_POST['phone'];
+        $department = $_POST['department'];
         $idcard = trim($_POST['idcard']);
         if($switch == "on"){
             $switch = 1;
@@ -1309,8 +1487,8 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                             $url_return ="location:user_list.php";
                         } else if (!isset($_SESSION['error'])) {
                             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-                            $stmt = $db->prepare("INSERT INTO user(firstname, lastname, email, password, role_id,avatar,status_user,tel,line_token,idcard) 
-                                                    VALUES(:firstname, :lastname, :email, :password, :role_id,:avatar,:status_user,:tel,:line_token,:idcard)");
+                            $stmt = $db->prepare("INSERT INTO user(firstname, lastname, email, password, role_id,avatar,status_user,tel,line_token,idcard,department_id) 
+                                                    VALUES(:firstname, :lastname, :email, :password, :role_id,:avatar,:status_user,:tel,:line_token,:idcard,:department_id)");
                             $stmt->bindParam(":firstname", $firstname);
                             $stmt->bindParam(":lastname", $lastname);
                             $stmt->bindParam(":email", $email);
@@ -1321,6 +1499,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                             $stmt->bindParam(":tel", $phone);
                             $stmt->bindParam(":line_token",$tokenline);
                             $stmt->bindParam(":idcard",$idcard);
+                            $stmt->bindParam(":department_id",$department);
                             $stmt->execute();
                             $_SESSION['success'] = "สมัครสมาชิกเรียบร้อยแล้ว! ";
                             echo "<script>
@@ -1351,6 +1530,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $phone = $_POST['phone'];
         $tokenline = $_POST['tokenline'];
         $switch = $_POST['switch'];
+        $department = $_POST['department'];
         $idcard = trim($_POST['idcard']);
         
         if($switch == "on"){
@@ -1399,7 +1579,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             $url_return ="location:edituser_page.php?update_id=".$userid."";    
 
         }else if($file['name'] == "" AND !isset($_SESSION['error'])){
-            $update_stmt = $db->prepare('UPDATE user SET firstname = :firstname ,lastname = :lastname ,email =:email , role_id = :role_id,status_user = :status_user ,tel = :tel ,line_token = :line_token, idcard = :idcard  WHERE user_id = :id');
+            $update_stmt = $db->prepare('UPDATE user SET firstname = :firstname ,lastname = :lastname ,email =:email , role_id = :role_id,status_user = :status_user ,tel = :tel ,line_token = :line_token, idcard = :idcard ,department_id = :department WHERE user_id = :id');
             $update_stmt->bindParam(':firstname', $firstname);
             $update_stmt->bindParam(":lastname", $lastname);
             $update_stmt->bindParam(":email", $email);
@@ -1409,6 +1589,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             $update_stmt->bindParam(":tel", $phone);
             $update_stmt->bindParam(":line_token", $tokenline);
             $update_stmt->bindParam(":idcard", $idcard);
+            $update_stmt->bindParam(":department", $department);
             $update_stmt->bindParam(':id', $userid);
             $update_stmt->execute();
 
@@ -1428,7 +1609,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             //$url_return ="location:edituser_page.php?update_id=".$userid."";    
 
         }else if($file['name'] != "" AND !isset($_SESSION['error'])){  
-            $update_stmt = $db->prepare('UPDATE user SET firstname = :firstname ,lastname = :lastname ,email =:email , role_id = :role_id ,avatar = :avatar, status_user = :status_user ,tel = :tel ,line_token = :line_token ,idcard = :idcard WHERE user_id = :id');
+            $update_stmt = $db->prepare('UPDATE user SET firstname = :firstname ,lastname = :lastname ,email =:email , role_id = :role_id ,avatar = :avatar, status_user = :status_user ,tel = :tel ,line_token = :line_token ,idcard = :idcard,department_id = :department  WHERE user_id = :id');
             $update_stmt->bindParam(':firstname', $firstname);
             $update_stmt->bindParam(":lastname", $lastname);
             $update_stmt->bindParam(":email", $email);
@@ -1438,6 +1619,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             $update_stmt->bindParam(":tel", $phone);
             $update_stmt->bindParam(":line_token", $tokenline);
             $update_stmt->bindParam(":idcard", $idcard);
+            $update_stmt->bindParam(":department", $department);
             $update_stmt->bindParam(':id', $userid);
             $update_stmt->execute();
 
@@ -1589,7 +1771,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             $_SESSION['error'] = '<center>กรุณากรอกรหัสผ่าน</center>';
             $url_return ="location:sign-in.php";    
         } else {
-                $check_data = $db->prepare("SELECT * FROM user WHERE email = :uemail");
+                $check_data = $db->prepare("SELECT email,status_user,user_id,idcard,password FROM user WHERE email = :uemail");
                 $check_data->bindParam(":uemail", $email);
                 $check_data->execute();
                 $row = $check_data->fetch(PDO::FETCH_ASSOC);
@@ -1599,7 +1781,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                     if ($email == $row['email'] ){
                         if ($row['status_user'] == 1 ){
                             if(password_verify($password ,$row['password'])){
-                                if($password == $row['tel']){
+                                if($password == $row['idcard']){
                                     $_SESSION['user_login'] = $row['user_id'];
                                     $_SESSION['error'] = '<center>กรุณาตั้งค่ารหัสผ่านใหม่</center>';
                                     $url_return ="location:editnewpass.php";
@@ -1768,16 +1950,32 @@ header("Access-Control-Allow-Headers: X-Requested-With");
     else if($_POST['proc'] == 'addjob'){
         
         $namejob = $_POST['namejob'];
+       /*  $idjob = $_POST['idjob']; */
         $status = 1;
+
+        $sql = "SELECT * FROM job_type WHERE name_jobtype = '$namejob' AND status = 1 ";
+        $sql = $db->query($sql);
+        $sql->execute();
+        $row = $sql->fetch(PDO::FETCH_ASSOC);
+        
         if (empty($namejob)) {
             $_SESSION['error'] = 'กรุณากรอกชื่อประเภทงาน';
-            $url_return ="location: addjobtype.php";
+            $url_return ="location: jobtype_list.php";
+        }else if ($row) {
+            $_SESSION['error'] = 'กรุณากรอกชื่อประเภทงานวซ้ำกรุณากรอกใหม่';
+            $url_return ="location: jobtype_list.php";
         }else if (!isset($_SESSION['error'])) {
             $stmtjob = $db->prepare("INSERT INTO job_type(name_jobtype,status) 
                                 VALUES(:namejob, :status)");
             $stmtjob->bindParam(":namejob", $namejob);
             $stmtjob->bindParam(":status", $status);
             $stmtjob->execute();
+
+      /*   if (isset($idjob)) {
+            $_SESSION['success'] = "เพิ่มประเภทงานเรียบร้อยเเล้ว! ";
+            header("location:addproject_page.php");
+            exit;
+        } */
             $_SESSION['success'] = "เพิ่มประเภทงานเรียบร้อยเเล้ว! ";
             echo "<script>
                     $(document).ready(function() {
@@ -1801,11 +1999,18 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $namejob = $_POST['namejob'];
         $id_jobtype = $_POST['id_jobtype'];
         $status = 1;
-    
+ 
+        $sql = "SELECT * FROM job_type WHERE name_jobtype = '$namejob' AND id_jobtype !=  '$id_jobtype ' ";
+        $sql = $db->query($sql);
+        $sql->execute();
+        $row = $sql->fetch(PDO::FETCH_ASSOC);
+   
         if (empty($namejob)) {
             $_SESSION['error'] = 'กรุณากรอกชื่อประเภทงาน';
-            $url_return ="location: addjobtype.php";
-    
+            $url_return ="location: editjobtype_page.php?update_id=$id_jobtype";
+        }else if (!$row){
+            $_SESSION['error'] = 'กรุณากรอกชื่อประเภทงานใหม่เนื่องจากมีชื่อซ้ำเเล้ว';
+            $url_return ="location: editjobtype_page.php?update_id=$id_jobtype";
         }else if (!isset($_SESSION['error'])) {
             $update_stmtjob = $db->prepare('UPDATE job_type SET name_jobtype = :namejob WHERE id_jobtype = :id');
             $update_stmtjob->bindParam(':namejob', $namejob);
@@ -1815,7 +2020,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             echo "<script>
             $(document).ready(function() {
                 Swal.fire({
-                    title: 'เเก้ไขเประเภทงานเรียบร้อย!',
+                    title: 'เเก้ไขประเภทงานเรียบร้อย!',
                     icon: 'success',
                     timer: 2000,
                     showConfirmButton: true
@@ -1852,6 +2057,234 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                 })
             });
         </script>";
+        } else {
+            $_SESSION['error'] = "มีบางอย่างผิดพลาด";
+            header("location: jobtype_list.php");
+        } 
+    }
+    else if($_POST['proc'] == 'adddepartment'){
+        
+        $namedepartmant = $_POST['namedepartmant'];
+        $status = 1;
+
+        $sql = "SELECT * FROM department WHERE department_name = '$namedepartmant' AND department_status = 1 ";
+        $sql = $db->query($sql);
+        $sql->execute();
+        $row = $sql->fetch(PDO::FETCH_ASSOC);
+      /*   var_dump($row );
+        exit; */
+        if (empty($namedepartmant)) {
+            $_SESSION['error'] = 'กรุณากรอกชื่อฝ่าย';
+            $url_return ="location: departmant_list.php";
+        }else if($row) {
+            $_SESSION['error'] = 'กรุณากรอกชื่อฝ่ายซ้ำกรุณากรอกใหม่';
+            $url_return ="location: departmant_list.php";
+        }else if (!isset($_SESSION['error'])) {
+            $stmtjob = $db->prepare("INSERT INTO department(department_name,department_status) 
+                                VALUES(:departmentmant, :departmentstatus)");
+            $stmtjob->bindParam(":departmentmant", $namedepartmant);
+            $stmtjob->bindParam(":departmentstatus", $status);
+            $stmtjob->execute();
+
+        
+            $_SESSION['success'] = "เพิ่มฝ่ายงานเรียบร้อยเเล้ว! ";
+            echo "<script>
+                    $(document).ready(function() {
+                        Swal.fire({
+                            title: 'เพิ่มฝ่ายงานเรียบร้อยเเล้ว!',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: true
+                        }).then(() => {
+                            document.location.href = 'departmant_list.php';
+                        })
+                    });
+                </script>";
+        } else {
+            $_SESSION['error'] = "มีบางอย่างผิดพลาด";
+            $url_return ="location: departmant_list.php";
+        } 
+    }
+    else if($_POST['proc'] == 'editdepartmant'){
+
+        $namedepartmant = $_POST['namedepartmant'];
+        $department_id = $_POST['department_id'];
+        $status = 1;
+
+        $sql = "SELECT * FROM department WHERE department_name = '$namedepartmant' AND department_id !=  '$department_id 'AND department_status = 1 ";
+        $sql = $db->query($sql);
+        $sql->execute();
+        $row = $sql->fetch(PDO::FETCH_ASSOC);
+
+        if (empty($namedepartmant)) {
+            $_SESSION['error'] = 'กรุณากรอกชื่อฝ่ายงาน';
+            $url_return ="location: editdepartment.php?update_id=$department_id";
+        }else if ($row){
+            $_SESSION['error'] = 'กรุณากรอกชื่อฝ่ายงานใหม่เนื่องจากมีชื่อซ้ำเเล้ว';
+            $url_return ="location: editdepartment.php?update_id=$department_id";
+        }else if (!isset($_SESSION['error'])) {
+            $update_stmtjob = $db->prepare('UPDATE department SET department_name = :namedepartmant WHERE department_id = :department_id');
+            $update_stmtjob->bindParam(':namedepartmant', $namedepartmant);
+            $update_stmtjob->bindParam(':department_id', $department_id);
+            $update_stmtjob->execute();
+            $_SESSION['success'] = "เเก้ไขเประเภทงานเรียบร้อย! ";
+            echo "<script>
+            $(document).ready(function() {
+                Swal.fire({
+                    title: 'เเก้ไขฝ่ายงานเรียบร้อย!',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: true
+                }).then(() => {
+                    document.location.href = 'departmant_list.php';
+                })
+            });
+        </script>";
+        } else {
+            $_SESSION['error'] = "มีบางอย่างผิดพลาด";
+            $url_return ="location: jobtype_list.php";
+        } 
+    }
+    else if($_POST['proc'] == 'deldepartment'){
+
+        $status = 0;
+        $department_id=$_POST['department_id'];
+
+            if(isset($department_id)){
+            $delete_stmtjob = $db->prepare('UPDATE department SET department_status = :status WHERE department_id = :id');
+            $delete_stmtjob->bindParam(':status', $status);
+            $delete_stmtjob->bindParam(':id', $department_id);
+            $delete_stmtjob->execute();
+            $_SESSION['success'] = "ลบฝ่ายงานเรียบร้อยแล้ว! ";
+            echo "<script>
+            $(document).ready(function() {
+                Swal.fire({
+                    title: 'ลบฝ่ายงานเรียบร้อยแล้ว!',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: true
+                }).then(() => {
+                    document.location.href = 'department_list.php';
+                })
+            });
+        </script>";
+        } else {
+            $_SESSION['error'] = "มีบางอย่างผิดพลาด";
+            header("location: jobtype_list.php");
+        } 
+    }
+    else if($_POST['proc'] == 'addposition'){
+        
+        $nameposition = $_POST['nameposition'];
+        $level = $_POST['level'];
+        $status = 1;
+
+        $sql = "SELECT * FROM position WHERE position_name = '$nameposition' AND position_status = 1 ";
+        $sql = $db->query($sql);
+        $sql->execute();
+        $row = $sql->fetch(PDO::FETCH_ASSOC);
+    
+        
+        if (empty($nameposition)) {
+            $_SESSION['error'] = 'กรุณากรอกชื่อตำเเหน่ง';
+            $url_return ="location: position_list.php";
+        }else if ($row) { 
+            $_SESSION['error'] = 'กรุณากรอกชื่อตำเเหน่งซ้ำกรุณากรอกอีกครั้ง';
+            $url_return ="location: position_list.php";
+        }else if (!isset($_SESSION['error'])) { 
+            $stmtjob = $db->prepare("INSERT INTO `position` (`position_name`, `level`, `position_status`) 
+                        VALUES (:position_name, :level, :position_status)");
+            $stmtjob->bindParam(":position_name", $nameposition);
+            $stmtjob->bindParam(":level", $level);
+            $stmtjob->bindParam(":position_status", $status);
+            $stmtjob->execute();
+
+            $_SESSION['success'] = "เพิ่มตำเเหน่งเรียบร้อยเเล้ว! ";
+            echo "<script>
+                    $(document).ready(function() {
+                        Swal.fire({
+                            title: 'เพิ่มตำเเหน่งเรียบร้อยเเล้ว!',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: true
+                        }).then(() => {
+                            document.location.href = 'position_list.php';
+                        })
+                    });
+                </script>";
+        } else {
+            $_SESSION['error'] = "มีบางอย่างผิดพลาด";
+            $url_return ="location: position_list.php";
+        } 
+    } 
+    else if($_POST['proc'] == 'editposition'){
+
+        $nameposition = trim($_POST['nameposition']);
+        $role_id = $_POST['role_id'];
+        $level = $_POST['level'];
+        $status = 1;
+ 
+        $sql = "SELECT * FROM position WHERE position_name = '$nameposition' AND role_id !=  '$role_id 'AND position_status = 1 ";
+        $sql = $db->query($sql);
+        $sql->execute();
+        $row = $sql->fetch(PDO::FETCH_ASSOC);
+   
+        if (empty($nameposition)) {
+            $_SESSION['error'] = 'กรุณากรอกชื่อตำเเหน่ง';
+            $url_return ="location: editposition.php?update_id=$role_id ";
+        }else if ($row){
+            $_SESSION['error'] = 'กรุณากรอกชื่อตำเเหน่งใหม่เนื่องจากมีชื่อซ้ำเเล้ว';
+            $url_return ="location: editposition.php?update_id=$role_id ";
+        }else if (!isset($_SESSION['error'])) {
+            
+            $update_stmtjob1 = $db->prepare('UPDATE position SET position_name = :name , level =:level WHERE role_id = :id');
+            $update_stmtjob1->bindParam(':name', $nameposition);
+            $update_stmtjob1->bindParam(':level', $level);
+            $update_stmtjob1->bindParam(':id', $role_id);
+            $update_stmtjob1->execute();
+        
+            $_SESSION['success'] = "เเก้ไขชื่อตำเเหน่งเรียบร้อย! ";
+          echo "<script>
+            $(document).ready(function() {
+                Swal.fire({
+                    title: 'เเก้ไขชื่อตำเเหน่งเรียบร้อย!',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: true
+                }).then(() => {
+                    document.location.href = 'position_list.php';
+                })
+            });
+        </script>"; 
+        } else {
+            $_SESSION['error'] = "มีบางอย่างผิดพลาด";
+            $url_return ="location: position_list.php";
+        } 
+    }
+    else if($_POST['proc'] == 'delposition'){
+
+        $status = 2;
+        $role_id=$_POST['role_id'];
+
+            if(isset($role_id)){
+            $delete_stmtjob = $db->prepare('UPDATE position SET position_status = :status WHERE role_id = :id');
+            $delete_stmtjob->bindParam(':status', $status);
+            $delete_stmtjob->bindParam(':id', $role_id);
+            $delete_stmtjob->execute();
+
+           $_SESSION['success'] = "ลบชื่อตำเเหน่งเรียบร้อยแล้ว! ";
+            echo "<script>
+            $(document).ready(function() {
+                Swal.fire({
+                    title: 'ลบชื่อตำเเหน่งเรียบร้อยแล้ว!',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: true
+                }).then(() => {
+                    document.location.href = 'jobtype_list.php';
+                })
+            });
+        </script>"; 
         } else {
             $_SESSION['error'] = "มีบางอย่างผิดพลาด";
             header("location: jobtype_list.php");

@@ -136,9 +136,8 @@
 												 <select  name="status1" class="form-select"  >
                                                  <option value="<?php  echo $row2['status_1']; ?>" ><?php   showstatpro($row2['status_1']); ?></option>	
               	                                    <option value="1">รอดำเนินการ</option>
-                                                    <option value="2">กำลังดำเนินการ</option>
-                                                    <option value="3">เลยระยะเวลาที่กำหนด</option>
-                                                    <option value="4">ปิดโปรเจค</option>
+                                                    <option value="2">เลยระยะเวลาที่กำหนด</option>
+                                                    <option value="3">ปิดโปรเจค</option>
 												</select>  
                                            <?php// print_r ($result); ?>
 										</div>
@@ -149,15 +148,19 @@
                                     <div class="mb-3">
 											<div class="form-group">
                                                 <label for="" class="control-label">ไฟล์เเนบ</label>	
-                                                    <input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
+                                                <div class="file-loading"> 
+                                                        <input id="input-b6b" name="files[]" type="file" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
+                                                    </div>
+                                                    <!-- <input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple> -->
+                                                    
                                                     <?php 
                                                         $sql = "SELECT * FROM  file_item_project  WHERE project_id = $pro_id";
                                                         $qry = $db->query($sql);
                                                         $qry->execute();
                                                         while ($row = $qry->fetch(PDO::FETCH_ASSOC)) {  ?>
-                                                        <?php echo $row['filename']?> 
+                                                      <div>  <?php echo $row['filename']?>    
                                                         <a  onclick="delfilepro('<?php echo $row['project_id'] ?>','<?php echo $row['file_item_project']?>');"><i data-feather="trash-2"></i></a>
-                                            </div>
+                                                        </div>
                                         <?php } ?>
 									</div>
                                 </div>
@@ -175,7 +178,6 @@
                                                 <button class="btn btn-primary" id="display_selected"  onclick="editpro('<?php echo $pro_id ?>');" >เเก้ไข</button>
                                                 <a class="btn btn-secondary" href="project_list.php" type="button" >กลับ</a>
 										    </div>
-                                       
 
                                     </div>
                                 </div> 	
@@ -188,16 +190,34 @@
 </html>
 <?php include "footer.php"?>
 <script> 
+$(document).ready(function() {
+    $("#input-b6b").fileinput({
+        showUpload: false,
+        dropZoneEnabled: false,
+        maxFileCount: 10,
+        inputGroupClass: "input-group"
+    });
+});
 $(document).ready(function(){
     var data=[];
     var items = [];
     
       <?php
-      $employees = $db->query("SELECT *, concat(firstname,' ',lastname) as name From user natural join position where  level >  $level ORDER by level asc");
+      $sql = $db->query("SELECT level,u.department_id FROM user as u  NATURAL JOIN position as p  WHERE user_id =  $row2[manager_id]" );
+      $sql->execute();
+      $sql2 = $sql->fetch(PDO::FETCH_ASSOC);
+      $department_id = $sql2['department_id'];
+      $level2 = $sql2['level'];
+
+       $where ="where  level >  $level2 ORDER by level asc  ";
+      if($level2 > 2){
+        $where = "where  level >  $level2  and d.department_id =  $department_id    ORDER by level asc";
+      } 
+      $employees = $db->query("SELECT *, concat(firstname,' ',lastname) as name From user as u natural join position as p  natural join department as d $where");
       $employees->execute();
       $result = $employees->fetchAll();
       foreach($result as $row) {?>
-        items.push({value:<?php echo $row['user_id'];?>,text:'<?php echo $row['name'];?><?php echo " ( ";?><?php echo $row['position_name'];?><?php echo " ) ";?>'});
+         items.push({value:<?php echo $row['user_id'];?>,text:'<?php echo $row['name'];?><?php echo " ( ";?><?php echo $row['position_name'].' '. $row['department_name']?><?php echo " ) ";?>'});
     <?php  } ?>
     <?php  
       $id = $_REQUEST['update_id'];
@@ -225,11 +245,49 @@ $(document).ready(function(){
         $('#proc').val('editpro');
         $('#project_id').val(pro_id);
     }
-    function delfilepro(project_id,file_item_project){
+  /*   function delfilepro(project_id,file_item_project){
         $('#proc').val('delfilepro');
         $('#file_item_project').val(file_item_project);
         $('#project_id').val(project_id);
         $('#formeditpro').submit();
         
-    }
+    } */
+    function delfilepro(project_id,file_item_project) {
+            Swal.fire({
+                title: 'คุณต้องการลบไฟล์งานใช่หรือไม่',
+                icon: 'error',
+                //text: "It will be deleted permanently!",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ใช่ต้องการลบ!',
+                cancelButtonText: 'กลับ',
+                showLoaderOnConfirm: true,
+               
+                preConfirm: function() {
+                    return new Promise(function(resolve) {
+                        $.ajax({
+                                url: 'proc.php',
+                                type: 'post',
+                                data: 'proc=' + 'delfilepro' + '&project_id=' + project_id + '&file_item_project=' + file_item_project ,
+                            })
+                            .done(function() {
+                                Swal.fire({
+                                    title: 'success',
+                                    text: 'ลบงานเรียบร้อยเเล้ว!',
+                                    icon: 'success',
+                                }).then(() => {
+                                    document.location.href = 'editproject_page.php?update_id='+ project_id;
+                                    
+                                    
+                                })
+                            })
+                            .fail(function() {
+                                Swal.fire('Oops...', 'Something went wrong with ajax !', 'error')
+                                window.location.reload();
+                            });
+                    });
+                },
+            });
+        }
 </script>

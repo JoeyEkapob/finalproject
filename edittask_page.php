@@ -40,6 +40,7 @@ session_start();
     <input type="hidden" id="proc" name="proc" value="">
     <input type="hidden" id="task_id" name="task_id" value="">
     <input type="hidden" id="project_id" name="project_id" value="">
+    <input type="hidden" id="status_timetask" name="status_timetask" value="">
     <input type="hidden" id="file_item_task" name="file_item_task" value="">
 		<main class="content">
 				<div class="container-fluid p-0">
@@ -91,7 +92,10 @@ session_start();
                         <div class="mb-3">
                                 <div class="form-group">
                                     <label for="" class="control-label">ไฟล์เเนบ</label>	
-                                    <input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png" multiple>
+                                    <div class="file-loading"> 
+                                            <input id="input-b6b" name="files[]" type="file" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
+                                    </div>
+                                    <p class="small mb-0 mt-2"><b>รายละเอียด:รองรับไฟล์งาน .pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx </b></p> 
                                     <?php 
                                                     $sql = "SELECT * FROM  file_item_task  WHERE task_id = $taskid";
                                                     $qry = $db->query($sql);
@@ -104,7 +108,6 @@ session_start();
                                 </div>
                                 <?php } ?>
                         </div>
-                    </div>
                     <div class="justify-content-center">
                             <label for="exampleFormControlTextarea1" class="form-label">รายละเอียด</label>
                             <textarea class="form-control" id="exampleFormControlTextarea1" rows="7" name="textarea"><?php echo trim($stmttaskrrow['description_task']);?></textarea>
@@ -114,8 +117,8 @@ session_start();
                         </div>
                         <hr>
                         <div class="col-lg-12 text-right justify-content-center d-flex">
-                            <button class="btn btn-primary " name ="edittask" onclick="edit_task('<?php echo $taskid ?>','<?php echo $project_id?>');">Edit</button>
-                            <a href="view_project.php?view_id=<?php echo $project_id?>" class="btn btn-secondary" type="button"  >Cancel</a>
+                            <button class="btn btn-primary " name ="edittask" onclick="edit_task('<?php echo $taskid ?>','<?php echo $project_id?>','<?php echo $stmttaskrrow['status_timetask'] ?>');">เเก้ไข</button>
+                            <a href="view_project.php?view_id=<?php echo $project_id?>" class="btn btn-secondary" type="button"  >กลับ</a>
                         </div>
                     </div>
 								</div>
@@ -128,10 +131,20 @@ session_start();
     </body>
 </html>
 <script>
-     function edit_task(taskid,project_id){
+    $(document).ready(function() {
+    $("#input-b6b").fileinput({
+        showUpload: false,
+        dropZoneEnabled: false,
+        maxFileCount: 10,
+        inputGroupClass: "input-group"
+    });
+});
+     function edit_task(taskid,project_id,status_timetask){
         $('#proc').val('edittask');
         $('#task_id').val(taskid);
         $('#project_id').val(project_id);
+        $('#status_timetask').val(status_timetask);
+        console.log(status_timetask);
     }
     function delfiletask(file_item_task,taskid,project_id){
         $('#proc').val('delfiletask');

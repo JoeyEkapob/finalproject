@@ -13,7 +13,7 @@
                                  <div class="row">
                                     <div class="col-md-6">
                                                 <dl>
-                                                    <dt><b class="border-bottom border-primary">ชื่องาน</b></dt>
+                                                    <dt><b class="border-bottom border-primary"> ชื่องาน </b> <?php echo showstatustime($row['status_timetask']) ?></b></dt>
                                                     <dd><?php echo $row['name_tasklist'] ?></dd>
 
                                                     <dt><b class="border-bottom border-primary">คำอธิบาย</b></dt>
@@ -37,8 +37,14 @@
                                                         </dt>
                                                         <dd> 
                                                             <div class="d-flex align-items-center mt-1">
+                                                            <?php if($row['avatar'] !=""){?>
                                                                 <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $manager['avatar']?>" alt="Avatar" width="35"  height="35">
                                                                 <b><?php echo $manager['name'] ?> </b>
+                                                            <?php }else{ ?>
+                                                                <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
+                                                                <b><?php echo $manager['name'] ?> </b>
+                                                            <?php } ?>
+                                                                
                                                             </div>  
                                                         </dd>
                                                 </dl> 
@@ -65,9 +71,14 @@
                                                     
                                                     <dt><b class="border-bottom border-primary">ผู้ส่งงาน</b></dt>
                                                     <dd>
-
-                                                    <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $row['avatar']?>" alt="Avatar" width="35"  height="35">
-                                                    <b><?php  echo $row['firstname']." ".$row['lastname'] ?></b>
+                                                    <?php if($row['avatar'] !=""){?>
+                                                        <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $row['avatar']?>" alt="Avatar" width="35"  height="35">
+                                                        <b><?php  echo $row['firstname']." ".$row['lastname'] ?></b>
+                                                    <?php }else{ ?>
+                                                        <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
+                                                        <b><?php  echo $row['firstname']." ".$row['lastname'] ?></b>
+                                                    <?php } ?>
+                                                   
                                             
                                                     </dd>
                                                 </dl> 

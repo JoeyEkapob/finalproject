@@ -58,6 +58,7 @@
                                                 <th class="text-left">ชื่อ-นามสกุล</th>
                                                 <th class="text-left">อีเมลล์</th>
                                                 <th class="text-left">ตำเเหน่ง</th>
+                                                <th class="text-left">ฝ่าย</th>
                                                 <th class="text-center">Action</th>
                                             </tr>
                                         </thead>
@@ -66,7 +67,7 @@
                                         <?php
                                             $i = 1;
                                             //$type = array('',"Admin","คณบดี","รองคณบดีฝ่ายวิชาการ","ผู้ชวยรองรองคณบดีฝ่ายวิชาการ","หัวหน้าหน่วย","หัวสาขา","เจ้าหน้าที่");
-                                            $sql = "SELECT *,concat(firstname,' ',lastname) as name FROM user natural join position order by concat(firstname,' ',lastname) asc ";
+                                            $sql = "SELECT *,concat(firstname,' ',lastname) as name FROM user natural join position natural join department  order by concat(firstname,' ',lastname) asc ";
                                             $qry = $db->query($sql);
                                             $qry->execute();
                                             
@@ -82,6 +83,7 @@
                                             <td class="text-left"><?php echo ucwords($row['name']) ?></td>
                                             <td class="text-left" ><?php echo $row['email'] ?></td>
                                             <td class="text-left" ><?php echo $row['position_name']?></td>
+                                            <td class="text-left" ><?php echo $row['department_name']?></td>
                                             <td class="text-center">  
                                             <a  class="resetbtn" type="button"  data-user_id ="<?php echo $row['user_id']?>"> <h3> <i data-feather="key"></i> </h3> </a>
                             

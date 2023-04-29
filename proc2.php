@@ -108,11 +108,11 @@
         if ($numuser > 0) {
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
-            $sql2 = $db->query("SELECT * FROM project WHERE manager_id =  $user_id"); 
+            $sql2 = $db->query("SELECT manager_id FROM project WHERE manager_id =  $user_id"); 
             $nummannagerpro = $sql2->rowCount(); 
-            $sql3 = $db->query("SELECT * FROM project_list where user_id = $user_id");
+            $sql3 = $db->query("SELECT user_id FROM project_list where user_id = $user_id");
             $numuserpro = $sql3->rowCount(); 
-            $sql4 = $db->query("SELECT * FROM task_list where user_id = $user_id ");
+            $sql4 = $db->query("SELECT user_id FROM task_list where user_id = $user_id ");
             $numusertask = $sql4->rowCount(); 
             $sql5 = $db->query("SELECT * FROM details as d  left join task_list as t ON d.task_id = t.task_id  where user_id = $user_id  AND send_status = 2");
             $numdetails= $sql5->rowCount(); 

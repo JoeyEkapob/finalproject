@@ -8,8 +8,9 @@ session_start();
         $details_id = $_GET['details_id'];
         $taskid =  $_GET['task_id'];
         $project_id= $_GET['project_id'];
-       // $progress_task= $_GET['progress_task'];
-
+        $status_timedetails = $_GET['statustimetask'];
+    
+     
         $stmttask = $db->prepare("SELECT *  ,concat(firstname,' ',lastname) as name  FROM details natural JOIN task_list natural JOIN project natural JOIN user  WHERE details_id = :details_id");
         $stmttask->bindParam(":details_id", $details_id);
         $stmttask->execute();
@@ -38,14 +39,14 @@ session_start();
                         unset($_SESSION['success']);
                     ?>
                 </div>
-            <?php } ?>
+            <?php }  ?>
     <input type="hidden" id="proc" name="proc" value="">
     <input type="hidden" id="task_id" name="task_id" value="">
     <input type="hidden" id="project_id" name="project_id" value="">
     <input type="hidden" id="details_id" name="details_id" value="">
     <input type="hidden" id="senddate" name="senddate" value=" ">
    <input type="hidden" id="state_details" name="state_details" value=""> 
-   <input type="hidden" id="progress_task" name="progress_task" value=""> 
+   <input type="hidden" id="status_timedetails" name="status_timedetails" value=""> 
    
 		<main class="content">
 				<div class="container-fluid p-0">
@@ -59,7 +60,7 @@ session_start();
                                         <div class="mb-3">
                                             <label for="" class="control-label">ชื่อหัวข้องาน</label>
                                             <input type="text" name="taskname" class="form-control" value="<?php echo $stmttaskrrow['name_project']?> " disabled>
-                                        
+                                    
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -109,11 +110,12 @@ session_start();
                                         </div>    
                                     </div>
 
-                                    <div class="col-md-6" >						
+                                    <div class="col-md-12" >						
                                         <div class="mb-3">
                                             <div class="form-group">
-                                                <label for="" class="control-label">ไฟล์เเนบ</label>	
-                                                <input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
+                                                <label for="" class="control-label">ไฟล์เเนบ</label>
+                                                <input id="input-b6b" name="files[]" type="file" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>	
+                                                <!-- <input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple> -->
                                                 <p class="small mb-0 mt-2"><b>รายละเอียด :</b>สามารถเเนบไฟล์ .pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx </p> 
                                             </div>
                                         </div>    
@@ -122,11 +124,13 @@ session_start();
                                         <label for="exampleFormControlTextarea1" class="form-label">รายละเอียด</label>
                                         <textarea class="form-control" name="text_comment" id="exampleFormControlTextarea1" rows="7" ></textarea>
                                     </div>
+                                    
                         <div class="mb-3">
                         </div>
                         <hr>
+                      
                         <div class="col-lg-12 text-right justify-content-center d-flex">
-                            <button class="btn btn-primary " name ="edittask" onclick="send_edittask('<?php echo $taskid ?>','<?php echo $project_id?>','<?php echo $details_id?>');">งานเเก้ไข</button>
+                            <button class="btn btn-primary " name ="edittask" onclick="send_edittask('<?php echo $taskid ?>','<?php echo $project_id?>','<?php echo $details_id?>','<?php echo $status_timedetails?>');">งานเเก้ไข</button>
                             <a href="checktask_list.php" class="btn btn-secondary" type="button">กลับ</a>
                         </div>
                     </div>
@@ -140,14 +144,23 @@ session_start();
     </body>
 </html>
 <script>
-     function send_edittask(taskid,project_id,details_id,progress_task){
+    $(document).ready(function() {
+    $("#input-b6b").fileinput({
+        showUpload: false,
+        dropZoneEnabled: false,
+        maxFileCount: 10,
+        inputGroupClass: "input-group"
+    });
+});
+     function send_edittask(taskid,project_id,details_id,status_timedetails){
         $('#proc').val('send_edittask');
         $('#task_id').val(taskid);
         $('#project_id').val(project_id);
         $('#details_id').val(details_id);
-        //$('#progress_task').val(progress_task);
+        $('#status_timedetails').val(status_timedetails);
         $('#state_details').val('N');
         $('#senddate').val('<?php echo $date?>');
+        //console.log(status_timedetails);
         
     }
    

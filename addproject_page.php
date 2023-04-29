@@ -36,10 +36,15 @@
     <form action="proc.php" method="post" class="form-horizontal" enctype="multipart/form-data">
 
         <input type="hidden" id="proc" name="proc" value="">
+        <input type="hidden" id="files" name="files[]" value="">
+        <input type="hidden" id="idjob" name="idjob" value="">
 
                 <main class="content"> 
                 <div class="container-fluid p-0">
 					<h1 class="h3 mb-3">หัวข้องาน</h1>
+                         <div class="d-flex flex-row-reverse bd-highligh">
+                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary" data-bs-toggle="modal" data-bs-target="#addModal1" ><i class="fa fa-plus"></i> + เพิ่มประเภทงาน</a>
+                        </div>
 				</div>
                     <div class="row">
 						<div class="card">		
@@ -84,7 +89,7 @@
                                     
                                     <div class="col-md-6">
 										<div class="mb-4">
-											<label for="" class="control-label">สมาชิกทีมโครงการ</label>
+											<label for="" class="control-label">สมาชิก</label>
                                             <input type="text" class="form-control" name="users_id"  id="user_id" data-access_multi_select="true" placeholder="กรุณาใส่สมาชิก">
                                             
                                                
@@ -111,9 +116,13 @@
                                     <div class="mb-3">
 											<div class="form-group">
 												<label for="" class="control-label">ไฟล์เเนบ</label>	
-                                                <input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
+<!--                                                 <input type="file" id="myFile"  class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple >
+ -->                                               <div class="file-loading"> 
+                                                        <input id="input-b6b" name="files[]" type="file" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
+                                                    </div>
 												<p class="small mb-0 mt-2"><b>Note:</b></p> 
 											</div>
+                                            <ul id="fileList"></ul>
                                     </div>
                                    
 
@@ -130,8 +139,8 @@
 											<button class="btn btn-primary"  id="display_selected"  onclick="addpro();">เพิ่มหัวข้องาน</button>
 											<a href="project_list.php" class="btn btn-secondary"  type="button" >กลับ</a>
 										</div>
-                                       
-
+                                      
+                                        <?php include 'addjobtype_model.php'?>
                                     </div>
                                 </div> 	
 							</div>
@@ -143,16 +152,38 @@
 </html>
 <?php include "footer.php"?>
 <script>
+$(document).ready(function() {
+    $("#input-b6b").fileinput({
+        showUpload: false,
+        dropZoneEnabled: false,
+        maxFileCount: 10,
+        inputGroupClass: "input-group"
+    });
+});
+function addjob(idjob){
+    $('#proc').val('addjob');
+    $('#idjob').val(1);
+}
+function addpro(){
+        $('#proc').val('addpro');
+       
+  }
+
+
 $(document).ready(function(){
     var data=[];
     var items = [];
     
       <?php
-      $employees = $db->query("SELECT *, concat(firstname,' ',lastname) as name From user natural join position where  level>  $level ORDER by level asc");
+      $where ="where  level >  $level ORDER by level asc  ";
+      if($level > 2){
+        $where = "where  level >  $level  and d.department_id =  $department_id    ORDER by level asc";
+      }
+      $employees = $db->query("SELECT *, concat(firstname,' ',lastname) as name From user as u natural join position as p  natural join department as d  $where");
       $employees->execute();
       $result = $employees->fetchAll();
       foreach($result as $row) {?>
-        items.push({value:<?php echo $row['user_id'];?>,text:'<?php echo $row['name'];?><?php echo " ( ";?><?php echo $row['position_name'];?><?php echo " ) ";?>'});
+        items.push({value:<?php echo $row['user_id'];?>,text:'<?php echo $row['name'];?><?php echo " ( ";?><?php echo $row['position_name'].' '. $row['department_name']?><?php echo " ) ";?>'});
     <?php  } ?>
  
         var select = $('[data-access_multi_select="true"]').check_multi_select({
@@ -167,13 +198,9 @@ $(document).ready(function(){
             //console.log($('#user_id').val());
         });
     });
+   
+    //console.log(selectedFiles);
 
-  
-
-    function addpro(){
-        $('#proc').val('addpro');
-        
-        //console.log('#addpro');
-    }
+   
 </script>
 

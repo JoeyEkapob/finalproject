@@ -9,6 +9,7 @@ session_start();
         $taskid =  $_REQUEST['task_id'];
         $project_id= $_REQUEST['project_id'];
         $user_id= $_REQUEST['user_id'];
+        $status_timetask = $_REQUEST['statustimetask'];
 
         $stmttask = $db->prepare("SELECT *  ,concat(firstname,' ',lastname) as name  FROM task_list natural JOIN user  WHERE task_id = :id");
         $stmttask->bindParam(":id", $taskid);
@@ -22,7 +23,9 @@ session_start();
     <form action="proc.php" method="post" class="form-horizontal" enctype="multipart/form-data">
     <?php include 'head.php'?> 
     <body>
+        
     <?php include "sidebar.php"?>
+    <?php include "funtion.php"?>
     <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
                     <?php 
@@ -39,6 +42,7 @@ session_start();
                     ?>
                 </div>
             <?php } ?>
+            
     <input type="hidden" id="proc" name="proc" value="">
     <input type="hidden" id="task_id" name="task_id" value="">
     <input type="hidden" id="project_id" name="project_id" value="">
@@ -46,9 +50,12 @@ session_start();
     <input type="hidden" id="state_details" name="state_details" value=" ">
     <input type="hidden" id="progress_task" name="progress_task" value=" ">
     <input type="hidden" id="user_id" name="user_id" value=" ">
+    <input type="hidden" id="status_timetask" name="status_timetask" value=" ">
   
 		<main class="content">
+            <a href="view_project.php?view_id=<?php echo $project_id; ?>" class="back-button">&lt;</a> 
 				<div class="container-fluid p-0">
+                    
 					<h1 class="h3 mb-3">ส่งงาน</h1>
 				</div>
 					<div class="row">
@@ -56,9 +63,10 @@ session_start();
 							<div class="card-body">
 								<div class="row">
                                 <div class="col-md-12">
+                                    
                         <div class="mb-3">
-                            <label for="" class="control-label">ชื่องาน</label>
-                            <input type="text" name="taskname" class="form-control" value="<?php echo $stmttaskrrow['name_tasklist']?> " disabled>
+                            <label for="" class="control-label">ชื่องาน <b><?php echo showstatustime($status_timetask); ?></b></label>
+                            <input type="text" name="taskname" class="form-control" value="<?php echo $stmttaskrrow['name_tasklist']?> "  disabled> 
                         
                         </div>
                     </div>
@@ -83,7 +91,9 @@ session_start();
                         <div class="mb-3">
                                 <div class="form-group">
                                     <label for="" class="control-label">ไฟล์เเนบ</label>	
-                                    <input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
+                                    <div class="file-loading"> 
+                                            <input id="input-b6b" name="files[]" type="file" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
+                                    </div>
                                     <p class="small mb-0 mt-2"><b>รายละเอียด:รองรับไฟล์งาน .pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx </b></p> 
                                 </div>
                     </div>
@@ -96,7 +106,7 @@ session_start();
                         </div>
                         <hr>
                         <div class="col-lg-12 text-right justify-content-center d-flex">
-                            <button class="btn btn-primary " name ="edittask" onclick="send_task('<?php echo $taskid ?>','<?php echo $project_id?>','<?php echo $stmttaskrrow['progress_task'] ?>','<?php echo $user_id ?>');">ส่งงาน</button>
+                            <button class="btn btn-primary " name ="edittask" onclick="send_task('<?php echo $taskid ?>','<?php echo $project_id?>','<?php echo $stmttaskrrow['progress_task'] ?>','<?php echo $user_id ?>','<?php echo $status_timetask ?>');">ส่งงาน</button>
                             <a href="view_project.php?view_id=<?php echo $project_id?>" class="btn btn-secondary" type="button"  >กลับ</a>
                         </div>
                     </div>
@@ -110,12 +120,21 @@ session_start();
     </body>
 </html>
 <script>
-     function send_task(taskid,project_id,progress_task,user_id){
+    $(document).ready(function() {
+    $("#input-b6b").fileinput({
+        showUpload: false,
+        dropZoneEnabled: false,
+        maxFileCount: 10,
+        inputGroupClass: "input-group"
+    });
+});
+     function send_task(taskid,project_id,progress_task,user_id,status_timetask){
         $('#proc').val('sendtask');
         $('#task_id').val(taskid);
         $('#project_id').val(project_id);
         $('#progress_task').val(progress_task);
         $('#user_id').val(user_id);
+        $('#status_timetask').val(status_timetask);
         $('#state_details').val('Y');
         $('#senddate').val('<?php echo $date?>');
         

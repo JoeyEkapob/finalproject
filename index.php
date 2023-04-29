@@ -8,27 +8,46 @@
 	include "sidebar.php";
  	include "funtion.php";
 	$user_id=$_SESSION['user_login'];
+	/* echo $user_id; */
 	$where ="";
 	$stmtusernum = "SELECT COUNT(user_id) as num FROM user  ";
 	$stmtusernum = $db->prepare($stmtusernum);
 	$stmtusernum ->execute();
 	$stmtusernum = $stmtusernum->fetchColumn();
+/* 	echo $stmtusernum ; */
+
+	 if($level >= 2){
+		$where = "   where user_id  = $user_id ";
+	 }
+	$stmtprojectnumuser = "SELECT COUNT(project_id) as num1 FROM project_list   $where";
+	$stmtprojectnumuser = $db->prepare($stmtprojectnumuser);
+	$stmtprojectnumuser ->execute();
+	$stmtprojectnumuser = $stmtprojectnumuser->fetchColumn();
+
+	if($level >= 2){
+		$where = "   where manager_id = $user_id ";
+	 }
+	$stmtprojectnummanager = "SELECT COUNT(project_id) as num1 FROM project   $where";
+	$stmtprojectnummanager = $db->prepare($stmtprojectnummanager);
+	$stmtprojectnummanager ->execute();
+	$stmtprojectnummanager = $stmtprojectnummanager->fetchColumn();
 
 
 	if($level >= 2){
-		$where = "   natural join project_list WHERE user_id = $user_id ";
-	}
-
-	$stmtprojectnum = "SELECT COUNT(project_id) as num1 FROM project   $where";
-	$stmtprojectnum = $db->prepare($stmtprojectnum);
-	$stmtprojectnum ->execute();
-	$stmtprojectnum = $stmtprojectnum->fetchColumn();
-	
-	$stmttasknum = "SELECT COUNT(project_id) as num2 FROM task_list $where  ";
+		$where = "   where user_id = $user_id    ";
+	 }
+	$stmttasknum = "SELECT COUNT(project_id) as num2 FROM task_list  $where ";
 	$stmttasknum = $db->prepare($stmttasknum);
 	$stmttasknum ->execute();
-	$stmttasknum = $stmttasknum->fetchColumn();
+	$stmttasknum = $stmttasknum->fetchColumn(); 
 
+	if($level >= 2){
+		$where = "  and user_id = $user_id  ";
+	 }
+	$stmttaskpnum = "SELECT COUNT(project_id) as num2 FROM task_list  where progress_task != 100 OR status_task = 5 $where ";
+	$stmttaskpnum = $db->prepare($stmttaskpnum);
+	$stmttaskpnum ->execute();
+	$stmttaskpnum = $stmttaskpnum->fetchColumn();   
 	$state_details = "";
 	if($level >= 2){
 	$stmtdetails = "SELECT COUNT(details_id) as num3 FROM details WHERE state_details = 'Y'  ";
@@ -45,7 +64,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php include "head.php"?>
-<body>
+<body> 
+
 	<?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
                     <?php 
@@ -64,7 +84,7 @@
             <?php } ?>		
 			<main class="content">
 				<div class="container-fluid p-0">
-				
+
 					<!-- <h1 class="h3 mb-3"><strong>Analytics</strong> Dashboard</h1> -->
 					
 					<div class="row">
@@ -95,6 +115,30 @@
 											</div>
 										</div>
 									<?php endif ?>
+									<?php if ($level > 2): ?>
+										<div class="col-sm-3">
+												<div class="card">
+													<div class="card-body">
+														<div class="row">
+															<div class="col mt-0">
+																<h5 class="card-title">งานค้าง</h5>
+															</div>
+
+															<div class="col-auto">
+																<div class="stat text-primary">
+																	<i class="align-middle" data-feather="list"></i>
+																</div>
+															</div>
+														</div>
+														<h1 class="mt-1 mb-3"><?php echo $stmttaskpnum ?></h1>
+														<div class="mb-0">
+															<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
+															<span class="text-muted">งานค้างทั้งหมด</span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<?php endif ?>
 											<div class="col-sm-3">
 												<div class="card">
 													<div class="card-body">
@@ -117,12 +161,13 @@
 													</div>
 												</div>
 											</div>
+										<?php if ($level > 2): ?>
 										<div class="col-sm-3">
 											<div class="card">
 												<div class="card-body">
 													<div class="row">
 														<div class="col mt-0">
-															<h5 class="card-title">หัวข้องาน</h5>
+															<h5 class="card-title">หัวข้องานที่ได้รับ</h5>
 														</div>
 
 														<div class="col-auto">
@@ -131,10 +176,33 @@
 															</div>
 														</div>
 													</div>
-													<h1 class="mt-1 mb-3"><?php echo $stmtprojectnum ?></h1>
+													<h1 class="mt-1 mb-3"><?php echo $stmtprojectnumuser ?></h1>
 													<div class="mb-0">
 														<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
-														<span class="text-muted">หัวข้องานทั้งหมด</span>
+														<span class="text-muted">หัวข้องานที่ได้รับมอบหมายทั้งหมด</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<?php endif ?>
+										<div class="col-sm-3">
+											<div class="card">
+												<div class="card-body">
+													<div class="row">
+														<div class="col mt-0">
+															<h5 class="card-title">หัวข้องานที่สร้าง</h5>
+														</div>
+
+														<div class="col-auto">
+															<div class="stat text-primary">
+																<i class="align-middle" data-feather="layers"></i>
+															</div>
+														</div>
+													</div>
+													<h1 class="mt-1 mb-3"><?php echo $stmtprojectnummanager ?></h1>
+													<div class="mb-0">
+														<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
+														<span class="text-muted">หัวข้องานที่สร้างทั้งหมด</span>
 													</div>
 												</div>
 											</div>
@@ -254,6 +322,7 @@
 								</div>
 									<?php
 										$i = 1;
+									/* 	echo $level; */
 										if($level >=2 ){
 											$where = "  natural join project_list where user_id  = $user_id ";   
 										}else {

@@ -57,9 +57,9 @@
     <input type="hidden" id="project_id" name="project_id" value="">
     <input type="hidden" id="file_item_project" name="file_item_project" value="">
     <input type="hidden" id="details" name="details" value="">
-
+   
     <main class="content">
-                 
+    <a href="project_list.php" class="back-button">&lt;</a> 
                     <div class="col-12  d-flex">
                          <div class="card flex-fill">  
                              <div class="card-header">
@@ -186,7 +186,7 @@
                                                                 <b><?php  echo $row['firstname']." ".$row['lastname'] ?></b>
                                                             <?php }else{?>
                                                                 <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
-                                                                <b><?php  echo $row['firstname']." ".$row['lastname'] ?></b>
+                                                                <a class="viewuserdata" data-userid="<?php echo $row['user_id'] ?>" ><b><?php  echo $row['firstname']." ".$row['lastname'] ?></b></a>
                                                                 <?php }?>
                                                             <?php  }?>
                                                     </dd>
@@ -199,13 +199,13 @@
                             </div>
                         </div>
                     </div> 
-        
+                    <?php require 'viewmodel.php'?>
                 <div class="row">
                     <div class="col-sm-12 ">
                         <div class="card flex-fill">
                             <div class="card-header">
                                 <?php  
-                                        if ($manager_id == $us || $level <= 2 AND $status_1 != 4)  {?>
+                                        if ($manager_id == $us || $level <= 2 AND $status_1 != 3)  {?>
                                 <div class="d-flex flex-row-reverse">
                                     <a class="btn btn-block btn-sm btn-default btn-flat border-primary"  type="button" id="new_task" data-bs-toggle="modal" data-bs-target="#addModal1"> <i class="fa fa-plus"></i>  + Add task</a>
                                 </div>
@@ -253,7 +253,7 @@
                                             </td>
 
                                             <td class="name-col">
-                                                <h5><b><?php echo $row2['name_tasklist']  ?></h5></b>
+                                                <h5><b><?php echo $row2['name_tasklist']  ?>  <?php echo showstatustime($row2['status_timetask']) ?></h5></b>
                                                 <p class="truncate"><?php echo mb_substr($row2['description_task'],0,20).'...';  ?></p>
                                             </td>
 
@@ -299,8 +299,8 @@
                                                     /*  print_r ($member) ; */
                                                      
                                                 // if (in_array($us,$member) || ( $level <= 2 || $manager_id == $us ) AND $row2['status_task'] != 3 AND $row2['progress_task'] != 100  ) {
-                                                if ($row2['user_id'] == $us|| $level <= 2 || $manager_id == $us  AND $row2['status_task'] != 2 AND $row2['progress_task'] != 100  AND $status_1 != 4) {
-                                                    echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' .   $row2['project_id'] .'&user_id='. $us .' " class="btn btn-success btn-sm"><i data-feather="share"></i></a>';  
+                                                if ($row2['user_id'] == $us || $level <= 2 || $manager_id == $us  AND $row2['status_task'] != 5 AND $row2['progress_task'] != 100  AND $status_1 != 3) {
+                                                    echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' .   $row2['project_id'] .'&user_id='. $us .'&statustimetask='. $row2['status_timetask'].'" class="btn btn-success btn-sm"><i data-feather="share"></i></a>';  
                                                 }
                                              
                                                 else if( $row2['progress_task'] != 100 AND $row2['status_task'] == 2 ){
@@ -311,10 +311,10 @@
                                                     // echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] . '" class="btn btn-danger btn-sm"><i data-feather="x"></i></a>';
                                                     // echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] . '" class="btn btn-success btn-sm disabled"><i data-feather="share"></i></a>'; 
                                                     echo ' ';
-                                                if($manager_id == $us || $level <= 2 AND $status_1 != 4) {
+                                                if($manager_id == $us || $level <= 2 AND $status_1 != 3 AND $row2['progress_task'] != 100 AND $row2['status_task'] != 5) {
                                                     echo '<a class="btn btn-warning btn-sm" href="edittask_page.php?updatetask_id='.$row2['task_id'].'&project_id='.$row2['project_id'].'"><i data-feather="edit"></i></a>';
                                                     echo ' ';
-                                                }if($numsenddetails == 0 AND $manager_id == $us || $level <= 2 AND $status_1 != 4){
+                                                }if($numsenddetails == 0 AND $manager_id == $us || $level <= 2 AND $status_1 != 3){
                                                     echo '<button class="btn btn-danger btn-sm delete-btn" data-project_id="'.$row2['project_id'].'" data-task_id="'.$row2['task_id'].'"><i data-feather="trash-2"></i></button>';
                                                 }   
                                                 ?>
@@ -350,7 +350,34 @@
 
 <?php include "footer.php"?>
 <script>
-     
+    $(document).ready(function(){
+  $('.viewuserdata').click(function(){
+    var proc = 'viewdatauser';
+    var userid=$(this).data("userid");
+ /*    var usersendid=$(this).data("send");
+    var sendstatus=$(this).data("status"); */
+    console.log(userid);
+    $.ajax({
+        url:"proc.php",
+        method:"post",
+        data:{proc:proc,userid:userid},
+        success:function(data){
+           // console.log(data);
+
+            $('#datauser').html(data);
+            $('#datausermodal').modal('show'); 
+        }
+    })
+  });
+});
+     $(document).ready(function() {
+    $("#input-b6b").fileinput({
+        showUpload: false,
+        dropZoneEnabled: false,
+        maxFileCount: 10,
+        inputGroupClass: "input-group"
+    });
+});
     $(document).ready(function () {
         $('#example').DataTable();
     });

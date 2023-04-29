@@ -26,8 +26,10 @@
 	<!-- data table -->
 	 <script src="https://code.jquery.com/jquery-3.5.1.js"></script> 
 	
-	
-
+<!-- input flie -->
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.min.css" crossorigin="anonymous">
+ <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+  
 	<link href="css/app.css" rel="stylesheet">
 	
 </head>

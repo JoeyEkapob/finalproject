@@ -99,11 +99,12 @@ function deselectAll(id) {
                     '<div class="item">' +
                     '   <div class="custom-control custom-checkbox">' +
                     '       <input type="checkbox" class="custom-control-input" id="' + selectId + '-chbx-' + item['value'] + '" ' + (settings.defaults.includes(item['value']) ? 'checked' : '') + '>' +
-                    '       <label class="custom-control-label ' + selectId + '-chbx-' + item['value'] + '" for="' + selectId + '-chbx-' + item['value'] + '">' + item['text'] + '</label>' +
                     '   </div>' +
+                    '       <label class="custom-control-label ' + selectId + '-chbx-' + item['value'] + '" for="' + selectId + '-chbx-' + item['value'] + '">' + item['text'] + '</label>' +
+                    '       <span style="float:right; clear:both; display:block;">' + item['html'] + '</span>'+
                     '</div>'
                 );
-
+            
                 if (settings.defaults.includes(item['value'])) {
                     // Selected Items
                     selectedItems.append(

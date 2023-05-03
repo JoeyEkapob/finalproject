@@ -23,7 +23,7 @@
                                                     <dd>
                                                         <div class="mb-3">     
                                                         </div>
-                                                            <div class="progress" style="height: 20px;width:250px;" >
+                                                            <div class="progress" style="height: 20px;width:200px;" >
                                                                 <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:<?php echo $row['progress_task'] ?>%"><?php echo $row['progress_task'] ?></div>
                                                             </div>
                                                        

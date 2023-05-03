@@ -13,7 +13,6 @@
 ?> 
 <!DOCTYPE html>
 <html lang="en">
-        <?php include "head.php"?>
     <body>
         <?php include "sidebar.php"?>
         <?php if(isset($_SESSION['error'])) { ?>
@@ -89,7 +88,7 @@
                                     
                                     <div class="col-md-6">
 										<div class="mb-4">
-											<label for="" class="control-label">สมาชิก</label>
+											<label for="" class="control-label">ผู้รับมอบหมาย</label>
                                             <input type="text" class="form-control" name="users_id"  id="user_id" data-access_multi_select="true" placeholder="กรุณาใส่สมาชิก">
                                             
                                                
@@ -120,7 +119,7 @@
  -->                                               <div class="file-loading"> 
                                                         <input id="input-b6b" name="files[]" type="file" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
                                                     </div>
-												<p class="small mb-0 mt-2"><b>Note:</b></p> 
+												<p class="small mb-0 mt-2"><b>รายละเอียด:</b>รองรับไฟล์งาน .pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx <b>ขนาดไฟล์ห้ามเกิน: 20 MB</b></p> 
 											</div>
                                             <ul id="fileList"></ul>
                                     </div>
@@ -171,9 +170,9 @@ function addpro(){
 
 
 $(document).ready(function(){
-    var data=[];
+   /*  var data=[]; */
     var items = [];
-    
+   console.log(items); 
       <?php
       $where ="where  level >  $level ORDER by level asc  ";
       if($level > 2){
@@ -183,7 +182,12 @@ $(document).ready(function(){
       $employees->execute();
       $result = $employees->fetchAll();
       foreach($result as $row) {?>
-        items.push({value:<?php echo $row['user_id'];?>,text:'<?php echo $row['name'];?><?php echo " ( ";?><?php echo $row['position_name'].' '. $row['department_name']?><?php echo " ) ";?>'});
+        items.push({ 
+        value: <?php echo $row['user_id'];?>,
+        text: '<?php echo $row['name'];?><?php echo " ( ";?><?php echo $row['position_name'].' '. $row['department_name']?><?php echo " ) ";?>',
+        html: '<button class="btn btn-primary btn-sm viewuserdata" data-userid="<?php echo $row['user_id']; ?>">ดูรายระเอียด</button>'
+
+    });
     <?php  } ?>
  
         var select = $('[data-access_multi_select="true"]').check_multi_select({
@@ -194,12 +198,31 @@ $(document).ready(function(){
         // Display the selected Values
         $('#display_selected').click(function () {
             $('#user_id').val(select.check_multi_select('fetch_country'));
-            //alert(select.check_multi_select('fetch_country'))
-            //console.log($('#user_id').val());
+           /*  alert(select.check_multi_select('fetch_country'))
+            console.log($('#user_id').val()); */
         });
     });
-   
-    //console.log(selectedFiles);
+$(document).ready(function(){
+  $('.viewuserdata').click(function(){
+    var proc = 'viewdatauser';
+    var userid=$(this).data("userid");
+ /*    var usersendid=$(this).data("send");
+    var sendstatus=$(this).data("status"); */
+    console.log(userid);
+    $.ajax({
+        url:"proc.php",
+        method:"post",
+        data:{proc:proc,userid:userid},
+        success:function(data){
+           // console.log(data);
+
+            $('#datauser').html(data);
+            $('#datausermodal').modal('show'); 
+        }
+    })
+  });
+});
+    
 
    
 </script>

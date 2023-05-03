@@ -116,7 +116,7 @@ session_start();
                                                 <label for="" class="control-label">ไฟล์เเนบ</label>
                                                 <input id="input-b6b" name="files[]" type="file" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>	
                                                 <!-- <input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple> -->
-                                                <p class="small mb-0 mt-2"><b>รายละเอียด :</b>สามารถเเนบไฟล์ .pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx </p> 
+                                                <p class="small mb-0 mt-2"><b>รายละเอียด:</b>รองรับไฟล์งาน .pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx <b>ขนาดไฟล์ห้ามเกิน: 20 MB</b></p> 
                                             </div>
                                         </div>    
                                     </div>

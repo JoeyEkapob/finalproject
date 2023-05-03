@@ -7,7 +7,7 @@
       </div>
       
         <div class="modal-body">
-        <div class="col-12  d-flex">
+            <div class="col-12  d-flex">
                          <div class="card flex-fill">  
                              <div class="card-header">
                                  <div class="row">
@@ -24,7 +24,7 @@
                                                     <dd>
                                                         <div class="mb-3">     
                                                         </div>
-                                                            <div class="progress" style="height: 20px;width:250px;" >
+                                                            <div class="progress" style="height: 20px;width:200px;" >
                                                                 <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:<?php echo $row2['progress_task'] ?>%" ><?php echo $row2['progress_task'] ?></div>
                                                             </div>
                                                        
@@ -103,7 +103,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div> 			
+            </div> 			
                    
         </div>
 

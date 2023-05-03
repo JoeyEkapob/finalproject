@@ -299,11 +299,11 @@
                                                     /*  print_r ($member) ; */
                                                      
                                                 // if (in_array($us,$member) || ( $level <= 2 || $manager_id == $us ) AND $row2['status_task'] != 3 AND $row2['progress_task'] != 100  ) {
-                                                if ($row2['user_id'] == $us || $level <= 2 || $manager_id == $us  AND $row2['status_task'] != 5 AND $row2['progress_task'] != 100  AND $status_1 != 3) {
+                                                if ($row2['user_id'] == $us   || $level <= 2   || $manager_id == $us   AND $row2['status_task'] != 5 AND $row2['progress_task'] != 100  AND $status_1 != 3 AND $row2['status_task'] != 2 ) {
                                                     echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' .   $row2['project_id'] .'&user_id='. $us .'&statustimetask='. $row2['status_timetask'].'" class="btn btn-success btn-sm"><i data-feather="share"></i></a>';  
                                                 }
                                              
-                                                else if( $row2['progress_task'] != 100 AND $row2['status_task'] == 2 ){
+                                                else if($row2['progress_task'] != 100 AND $row2['status_task'] = 2  AND $status_1 != 3 ){
                                                     echo '<button class="btn btn-danger btn-sm deletedetals-btn"  data-project_id="'.$row2['project_id'].'"  data-task_id="'.$row2['task_id'].'"  data-details_id="'.$stmt2['details_id'].'"><i data-feather="x"></i></button> '; 
                                                     //echo $row2['project_id'];
                                                     
@@ -334,7 +334,6 @@
                                 </tbody>
                             <?php include "addtask_model.php"?>
                         </table>
-         
                             </div>    
                             
                         </div>

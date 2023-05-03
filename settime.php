@@ -1,6 +1,6 @@
 <?php
 
-header('Content-Type: application/json'); 
+//header('Content-Type: application/json'); 
 include 'notify.php';
 include 'connect.php';
 require_once 'funtion.php';
@@ -8,18 +8,18 @@ require_once 'funtion.php';
 $current_time = time();
 $formatted_time = date('Y-m-d H:i:s', $current_time);
 /* echo $current_time .' '.  $formatted_time ; */
- $chktimetask = "SELECT t.task_id, t.end_date_task, u.user_id, u.line_token, p.name_project, t.name_tasklist, p.manager_id,  CONCAT(u2.firstname, ' ', u2.lastname) AS manager_name ,t.status_task ,t.progress_task 
+ $chktimetask = "SELECT t.task_id, t.end_date_task, u.user_id, u.line_token, p.name_project, t.name_tasklist, p.manager_id,  p.status_1, CONCAT(u2.firstname, ' ', u2.lastname) AS manager_name ,t.status_task ,t.progress_task 
                 FROM task_list AS t 
                 LEFT JOIN project AS p ON t.project_id = p.project_id 
                 LEFT JOIN user AS u ON t.user_id = u.user_id 
                 LEFT JOIN user AS u2 ON p.manager_id = u2.user_id
-                WHERE TIMESTAMPDIFF(HOUR, NOW(), end_date_task) <= 24 AND status_timetask = 0  AND  t.status_task != 5 AND t.progress_task != 100  ";
+                WHERE TIMESTAMPDIFF(HOUR, NOW(), end_date_task) <= 24 AND status_timetask = 0  AND  t.status_task != 5 AND t.progress_task != 100   AND p.status_1 != 3 ";
     $chktimetask = $db->query($chktimetask);
     $chktimetask->execute();  
     while ($row2 = $chktimetask->fetch(PDO::FETCH_ASSOC)){
 
         print_r($row2); 
-    $task_id = $row2['task_id'];
+  /*   $task_id = $row2['task_id'];
         $update_stmt = $db->prepare("UPDATE task_list SET status_timetask = 1 WHERE task_id = :task_id");
         $update_stmt->bindParam(':task_id', $task_id);
         $update_stmt->execute();
@@ -32,10 +32,17 @@ $formatted_time = date('Y-m-d H:i:s', $current_time);
        $sMessage .= "คนที่สั่งงาน : ".$row2['manager_name']." \n";
    
        sentNotify($sToken , $sMessage); 
-
+ */
     }  
     
-    $chktimetaskend ="UPDATE task_list SET status_timetask = 2  WHERE end_date_task < NOW()  AND status_timetask != 2   AND  status_task != 5 AND progress_task != 100  " ;
+    $chktimetaskend ="UPDATE task_list as t 
+    LEFT JOIN project as p on t.project_id = p.project_id
+    SET status_timetask = 2 
+    WHERE end_date_task < NOW() 
+    AND status_timetask != 2 
+    AND status_task != 5 
+    AND progress_task != 100 
+    AND p.status_1 != 3 " ;
     $chktimetaskend = $db->query($chktimetaskend);
     $chktimetaskend->execute();  
   

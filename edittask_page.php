@@ -95,7 +95,8 @@ session_start();
                                     <div class="file-loading"> 
                                             <input id="input-b6b" name="files[]" type="file" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
                                     </div>
-                                    <p class="small mb-0 mt-2"><b>รายละเอียด:รองรับไฟล์งาน .pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx </b></p> 
+                                    <p class="small mb-0 mt-2"><b>รายละเอียด:</b>รองรับไฟล์งาน .pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx <b>ขนาดไฟล์ห้ามเกิน: 20 MB</b></p> 
+
                                     <?php 
                                                     $sql = "SELECT * FROM  file_item_task  WHERE task_id = $taskid";
                                                     $qry = $db->query($sql);
@@ -146,12 +147,51 @@ session_start();
         $('#status_timetask').val(status_timetask);
         console.log(status_timetask);
     }
-    function delfiletask(file_item_task,taskid,project_id){
+  /*   function delfiletask(file_item_task,taskid,project_id){
         $('#proc').val('delfiletask');
         $('#task_id').val(taskid);
         $('#file_item_task').val(file_item_task);
         $('#project_id').val(project_id);
         $('#formedittask').submit();
-    }
+    } */
+
+    function delfiletask(file_item_task,taskid,project_id) {
+            Swal.fire({
+                title: 'คุณต้องการลบไฟล์งานใช่หรือไม่',
+                icon: 'error',
+                //text: "It will be deleted permanently!",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ใช่ต้องการลบ!',
+                cancelButtonText: 'กลับ',
+                showLoaderOnConfirm: true,
+               
+                preConfirm: function() {
+                    return new Promise(function(resolve) {
+                        $.ajax({
+                                url: 'proc.php',
+                                type: 'post',
+                                data: 'proc=' + 'delfiletask' + '&project_id=' + project_id + '&taskid=' + taskid + '&file_item_task=' + file_item_task ,
+                            })
+                            .done(function() {
+                                Swal.fire({
+                                    title: 'success',
+                                    text: 'ลบงานเรียบร้อยเเล้ว!',
+                                    icon: 'success',
+                                }).then(() => {
+                                    document.location.href = 'edittask_page.php?updatetask_id='+ taskid + '&project_id=' + project_id;
+                                    
+                                    
+                                })
+                            })
+                            .fail(function() {
+                                Swal.fire('Oops...', 'Something went wrong with ajax !', 'error')
+                                window.location.reload();
+                            });
+                    });
+                },
+            });
+        }
 </script>
 <?php include "footer.php"?>

@@ -181,5 +181,45 @@ session_start();
 
         
     }
+    function delfileeditdetails(file_details_id,taskid,project_id,details_id) {
+            Swal.fire({
+                title: 'คุณต้องการลบไฟล์งานใช่หรือไม่',
+                icon: 'error',
+                //text: "It will be deleted permanently!",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ใช่ต้องการลบ!',
+                cancelButtonText: 'กลับ',
+                showLoaderOnConfirm: true,
+               
+                preConfirm: function() {
+                    return new Promise(function(resolve) {
+                        $.ajax({
+                                url: 'proc.php',
+                                type: 'post',
+                                data: 'proc=' + 'delfileeditdetails' + '&details_id=' + details_id + '&task_id=' + taskid + '&project_id=' + project_id + '&file_details_id=' + file_details_id ,
+                    
+                            })
+                            .done(function() {
+                                Swal.fire({
+                                    title: 'success',
+                                    text: 'ลบงานเรียบร้อยเเล้ว!',
+                                    icon: 'success',
+                                }).then(() => {
+                                    document.location.href = 'editdetails.php?details_id='+ details_id + '&task_id=' + taskid + '&project_id=' + project_id ;
+            
+                                    
+                                    
+                                })
+                            })
+                            .fail(function() {
+                                Swal.fire('Oops...', 'Something went wrong with ajax !', 'error')
+                                window.location.reload();
+                            });
+                    });
+                },
+            });
+        }
 </script>
 <?php include "footer.php"?>

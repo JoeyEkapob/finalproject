@@ -53,60 +53,57 @@
                                     </div>
                                     <table class="table table-hover table-responsive" id="example">
                                         <thead>
-                                            <tr>
-                                                <th class="text-center">ID</th>
-                                                <th class="text-left">ชื่อ-นามสกุล</th>
-                                                <th class="text-left">อีเมลล์</th>
-                                                <th class="text-left">ตำเเหน่ง</th>
-                                                <th class="text-left">ฝ่าย</th>
-                                                <th class="text-center">Action</th>
-                                            </tr>
+                                                <tr>
+                                                    <th class="text-center">ID</th>
+                                                    <th class="text-left">ชื่อ-นามสกุล</th>
+                                                    <th class="text-left">อีเมลล์</th>
+                                                    <th class="text-left">ตำเเหน่ง</th>
+                                                    <th class="text-left">ฝ่าย</th>
+                                                    <th class="text-center">Action</th>
+                                                </tr>
                                         </thead>
                                         <tbody>
-                                       
-                                        <?php
-                                            $i = 1;
-                                            //$type = array('',"Admin","คณบดี","รองคณบดีฝ่ายวิชาการ","ผู้ชวยรองรองคณบดีฝ่ายวิชาการ","หัวหน้าหน่วย","หัวสาขา","เจ้าหน้าที่");
-                                            $sql = "SELECT *,concat(firstname,' ',lastname) as name FROM user natural join position natural join department  order by concat(firstname,' ',lastname) asc ";
-                                            $qry = $db->query($sql);
-                                            $qry->execute();
+                                        
+                                            <?php
+                                                $i = 1;
+                                                //$type = array('',"Admin","คณบดี","รองคณบดีฝ่ายวิชาการ","ผู้ชวยรองรองคณบดีฝ่ายวิชาการ","หัวหน้าหน่วย","หัวสาขา","เจ้าหน้าที่");
+                                                $sql = "SELECT *,concat(firstname,' ',lastname) as name FROM user natural join position natural join department  order by concat(firstname,' ',lastname) asc ";
+                                                $qry = $db->query($sql);
+                                                $qry->execute();
+                                                
+                                                while ($row = $qry->fetch(PDO::FETCH_ASSOC)){
+                                                    //extract($row);
+                                                    $user_id = $row['user_id'];
+                                                    $stmt = $db->query("SELECT * FROM project_list WHERE user_id =  $user_id");
+                                                    $meproject = $stmt->rowCount();
                                             
-                                            while ($row = $qry->fetch(PDO::FETCH_ASSOC)){
-                                                //extract($row);
-                                                $user_id = $row['user_id'];
-                                                $stmt = $db->query("SELECT * FROM project_list WHERE user_id =  $user_id");
-                                                $meproject = $stmt->rowCount();
-                                           
-                                        ?>
-                                        <tr>
-                                            <td class="text-center"><?php echo $i++ ?></td>
-                                            <td class="text-left"><?php echo ucwords($row['name']) ?></td>
-                                            <td class="text-left" ><?php echo $row['email'] ?></td>
-                                            <td class="text-left" ><?php echo $row['position_name']?></td>
-                                            <td class="text-left" ><?php echo $row['department_name']?></td>
-                                            <td class="text-center">  
-                                            <a  class="resetbtn" type="button"  data-user_id ="<?php echo $row['user_id']?>"> <h3> <i data-feather="key"></i> </h3> </a>
-                            
-                                             <a class="btn btn-bitbucket btn-sm view_data"  title="ดูรายละเอียด" data-bs-toggle="modal" data-bs-target="#viewusermodal<?php echo $row['user_id']?>" ><i data-feather="zoom-in"></i></a> 
-                                                <!--  <a class="btn btn-bitbucket btn-sm view_data"  id="<?php echo $row['user_id']?>" ><i data-feather="zoom-in"></i></a>        -->                                             
-                                                <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลสมาชิก" href="edituser_page.php?update_id=<?php echo $row['user_id']?>"><i  data-feather="edit"></i></a>
-                                                <?php if($meproject == 0 OR $level == 1)  {?>
-                                                    <a class="btn btn-danger btn-sm deluserbtn" title="ลบข้อมูลสมาชิก" data-user_id ="<?php echo $row['user_id']?>"><i data-feather="trash-2"></i></a>
-                                                <?php   } else {?>
-                                                    <a class="btn btn-danger btn-sm deluserbtn disabled" title="ลบข้อมูลสมาชิก" data-user_id ="<?php echo $row['user_id']?>"><i data-feather="trash-2"></i></a>
-                                                    <?php } ?>
-                                            </td>
-                                        </tr>   
-                                        <?php include "viewuser_modal.php"?>
-                                            <?php } ?>
-                                     </tbody>   
-                                     <?php include "adduser_modal.php"?> 
-                                 </table>
-                                 
-                                 
+                                            ?>
+                                            <tr>
+                                                <td class="text-center"><?php echo $i++ ?></td>
+                                                <td class="text-left"><?php echo ucwords($row['name']) ?></td>
+                                                <td class="text-left" ><?php echo $row['email'] ?></td>
+                                                <td class="text-left" ><?php echo $row['position_name']?></td>
+                                                <td class="text-left" ><?php echo $row['department_name']?></td>
+                                                <td class="text-center">  
+                                                <a  class="resetbtn" type="button"  data-user_id ="<?php echo $row['user_id']?>"> <h3> <i data-feather="key"></i> </h3> </a>
+                                
+                                                <a class="btn btn-bitbucket btn-sm viewuserdata"  title="ดูรายละเอียด" data-userid="<?php echo $row['user_id']?>" ><i data-feather="zoom-in"></i></a> 
+                                                    <!--  <a class="btn btn-bitbucket btn-sm view_data"  id="<?php echo $row['user_id']?>" ><i data-feather="zoom-in"></i></a>        -->                                             
+                                                    <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลสมาชิก" href="edituser_page.php?update_id=<?php echo $row['user_id']?>"><i  data-feather="edit"></i></a>
+                                                    <?php if($meproject == 0 OR $level == 1)  {?>
+                                                        <a class="btn btn-danger btn-sm deluserbtn" title="ลบข้อมูลสมาชิก" data-user_id ="<?php echo $row['user_id']?>"><i data-feather="trash-2"></i></a>
+                                                    <?php   } else {?>
+                                                        <a class="btn btn-danger btn-sm deluserbtn disabled" title="ลบข้อมูลสมาชิก" data-user_id ="<?php echo $row['user_id']?>"><i data-feather="trash-2"></i></a>
+                                                        <?php } ?>
+                                                </td>
+                                            </tr>   
+                                                <?php } ?>
+                                        </tbody>   
+                                        <?php include "adduser_modal.php"?> 
+                                    </table>
                                 </div>
                             
-                            <?php //include "viewuser_modal.php"?>
+                        <?php require 'viewmodel.php'?>
         </main>
         
     </form>
@@ -116,6 +113,27 @@
 <script>
 $(document).ready(function () {
     $('#example').DataTable();
+});
+
+$(document).ready(function(){
+  $('.viewuserdata').click(function(){
+    var proc = 'viewdatauser';
+    var userid=$(this).data("userid");
+ /*    var usersendid=$(this).data("send");
+    var sendstatus=$(this).data("status"); */
+    console.log(userid);
+    $.ajax({
+        url:"proc.php",
+        method:"post",
+        data:{proc:proc,userid:userid},
+        success:function(data){
+           // console.log(data);
+
+            $('#datauser').html(data);
+            $('#datausermodal').modal('show'); 
+        }
+    })
+  });
 });
 
     function Preview(ele) {

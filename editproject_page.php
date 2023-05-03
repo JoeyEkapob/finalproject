@@ -132,17 +132,33 @@
                                     </div>   
                                     <div class="col-md-6">   
                                         <div class="mb-4">
-											<label for="" class="control-label">สถานะงาน</label>
-												 <select  name="status1" class="form-select"  >
-                                                 <option value="<?php  echo $row2['status_1']; ?>" ><?php   showstatpro($row2['status_1']); ?></option>	
+											<!-- <label for="" class="control-label">สถานะงาน</label> -->
+                                             <?php if($row2['status_1'] == 1){ ?>
+										<div class="form-check form-switch ">
+											<input class="form-check-input" type="checkbox" role="switch" id="status1" name="status1" onclick="closeproject('<?php echo $pro_id ?>')" checked>
+											<label class="form-check-label" for="flexSwitchCheckChecked">สถานะการหัวข้องาน</label>
+										</div>
+										<?php }else{ ?>
+										<div class="form-check form-switch">
+											<input class="form-check-input" type="checkbox" role="switch" id="status1" name="status1" onclick="openproject('<?php echo $pro_id ?>')" >
+											<label class="form-check-label" for="flexSwitchCheckChecked">สถานะการหัวข้องาน</label>
+										</div>
+										<?php } ?>	 
+                                             <!-- <div class="mb-3">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="status1" name="status1"  checked>
+                                                        <label class="form-check-label" for="flexSwitchCheckChecked">สถานะงาน</label>
+                                                    </div>	
+                                                </div>	 --> 
+												<!-- <select  name="status1" class="form-select"  >
+                                                    <option value="<?php  echo $row2['status_1']; ?>" ><?php   showstatpro($row2['status_1']); ?></option>	
               	                                    <option value="1">รอดำเนินการ</option>
-                                                    <option value="2">เลยระยะเวลาที่กำหนด</option>
-                                                    <option value="3">ปิดโปรเจค</option>
-												</select>  
+                                                    <option value="3" >ปิดโปรเจค</option>
+												</select>   -->
                                            <?php// print_r ($result); ?>
 										</div>
                                     </div>                 
-
+                                    
 
 
                                     <div class="mb-3">
@@ -151,6 +167,8 @@
                                                 <div class="file-loading"> 
                                                         <input id="input-b6b" name="files[]" type="file" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
                                                     </div>
+                                                    <p class="small mb-0 mt-2"><b>รายละเอียด:</b>รองรับไฟล์งาน .pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx <b>ขนาดไฟล์ห้ามเกิน: 20 MB</b></p> 
+
                                                     <!-- <input type="file" name="files[]" class="form-control streched-link" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple> -->
                                                     
                                                     <?php 
@@ -217,7 +235,12 @@ $(document).ready(function(){
       $employees->execute();
       $result = $employees->fetchAll();
       foreach($result as $row) {?>
-         items.push({value:<?php echo $row['user_id'];?>,text:'<?php echo $row['name'];?><?php echo " ( ";?><?php echo $row['position_name'].' '. $row['department_name']?><?php echo " ) ";?>'});
+          items.push({ 
+        value: <?php echo $row['user_id'];?>,
+        text: '<?php echo $row['name'];?><?php echo " ( ";?><?php echo $row['position_name'].' '. $row['department_name']?><?php echo " ) ";?>',
+        html: '<button class="btn btn-primary btn-sm viewuserdata" data-userid="<?php echo $row['user_id']; ?>">ดูรายระเอียด</button>'
+
+    });
     <?php  } ?>
     <?php  
       $id = $_REQUEST['update_id'];
@@ -236,10 +259,31 @@ $(document).ready(function(){
         });
         $('#display_selected').click(function () {
             $('#user_id').val(select.check_multi_select('fetch_country'));
-            //alert(select.check_multi_select('fetch_country'))
-            console.log($('#user_id').val());
+          /*   alert(select.check_multi_select('fetch_country'))
+            console.log($('#user_id').val()); */
         });
     });
+
+    $(document).ready(function(){
+  $('.viewuserdata').click(function(){
+    var proc = 'viewdatauser';
+    var userid=$(this).data("userid");
+ /*    var usersendid=$(this).data("send");
+    var sendstatus=$(this).data("status"); */
+    console.log(userid);
+    $.ajax({
+        url:"proc.php",
+        method:"post",
+        data:{proc:proc,userid:userid},
+        success:function(data){
+           // console.log(data);
+
+            $('#datauser').html(data);
+            $('#datausermodal').modal('show'); 
+        }
+    })
+  });
+});
 
     function editpro(pro_id){
         $('#proc').val('editpro');
@@ -290,4 +334,91 @@ $(document).ready(function(){
                 },
             });
         }
+        function closeproject(project_id) {
+                Swal.fire({
+                title: 'คุณต้องการปิดหัวข้องานใช่หรือไม่',
+                icon: 'error',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ใช่ต้องการปิด!',
+                cancelButtonText: 'กลับ',
+                showLoaderOnConfirm: true,
+                preConfirm: function() {
+                    return new Promise(function(resolve) {
+                        $.ajax({
+                            url: 'proc2.php',
+                            type: 'post',
+                            data: 'proc=' + 'closeproject' + '&project_id=' + project_id ,
+                        })
+                        .done(function() {
+                            Swal.fire({
+                                title: 'success',
+                                text: 'ปิดหัวข้องานเเล้ว!',
+                                icon: 'success',
+                            }).then(() => {
+                                document.location.href = 'editproject_page.php?update_id='+ project_id;
+                            })
+                        })
+                        .fail(function() {
+                            Swal.fire('Oops...', 'Something went wrong with ajax !', 'error')
+                            window.location.reload();
+                        });
+                    });
+                },
+                }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.cancel) {
+                window.location.reload();
+            }
+        });
+    }
+    function openproject(project_id) {
+            Swal.fire({
+            title: 'คุณต้องการเปิดหัวข้องานใช่หรือไม่',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ใช่ต้องการปิด!',
+            cancelButtonText: 'กลับ',
+            showLoaderOnConfirm: true,
+            preConfirm: function() {
+                return new Promise(function(resolve) {
+                    $.ajax({
+                        url: 'proc2.php',
+                        type: 'post',
+                        data: 'proc=' + 'openproject' + '&project_id=' + project_id ,
+                    })
+                    .done(function(response) {
+                        console.log(response);
+                        if (response != 1) {
+                            Swal.fire({
+                                title: 'เปิดหัวข้องานเรียบร้อยเเล้ว!',
+                                text: '',
+                                icon: 'success',
+                            }).then(() => {
+                                 document.location.href = 'view_project.php?view_id='+ project_id; 
+                            })
+                        } else {
+                            Swal.fire({
+                                title: 'เวลาของหัวข้อนี้ได้หมดลงเเล้วไม่สามารถเปิดหัวข้องานได้!',
+                                text: '',
+                                icon: 'error',
+                            }).then(() => {
+                                window.location.reload();
+                            })  
+                        }
+                    })
+                    .fail(function() {
+                        Swal.fire('Oops...', 'Something went wrong with ajax !', 'error')
+                        window.location.reload();
+                    });
+                });
+            },
+            }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.cancel) {
+            window.location.reload();
+        }
+    });
+    }
 </script>

@@ -58,10 +58,33 @@
                                         </div>
                                 </div>  
                             </div>
+                            <div class="col-md-3">
+                            </div>     
+                            <div class="col-md-3">
+                            </div>                                
+                                <div class="col-md-3">
+                                    <div class="mb-2">
+                                        <label for="control-label" style="font-size: 14px;">วันที่เริ่ม</label>
+                                            <div class="input-group input-group-sm mb-2">
+                                                <input type="date" class="form-control" name="startdate" id="startdate">
+                                            </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="mb-2">            
+                                        <label for="control-label" style="font-size: 14px;">วันที่สิ้นสุด</label>
+                                            <div class="input-group input-group-sm mb-2">
+                                                <input type="date" class="form-control" name="enddate" id="enddate">
+                                            </div>
+                                    </div>
+                                </div>
+                        <div class="col-md-3">
+                        </div>
                         <div class="col-md-3">
                         </div>     
-                        <div class="col-md-3">
-                        </div>                                  
+                                    
+                                      
                             <div class="col-md-3">
                                 <div class="mb-3">             
                                     <label for="control-label" style="font-size: 14px;">ตำเเหน่ง</label>
@@ -69,7 +92,7 @@
                                             <select name="role" id="role" class="form-select"  >
                                             <option value="">กรุณาเลือกตำเเหน่ง</option>
                                                     <?php
-                                                    $stmt = $db->query("SELECT * FROM position ");
+                                                    $stmt = $db->query("SELECT * FROM position WHERE position_status = 1 ");
                                                     $stmt->execute();
                                                     $result = $stmt->fetchAll();
                                                     foreach($result as $row) {
@@ -114,11 +137,11 @@
                                             <th  class="success-col">         
                                                 จำนวนงาน
                                             </th>
-                                            <!--  <th>         
-                                                สถานะเร่งของงาน
-                                            </th> -->
+                                             <th class="success-col">         
+                                               งานที่ล่าช้า
+                                            </th> 
                                              <th  class="mannager-col" >         
-                                                จำนวนครั้งที่ถูกสั่งเเก้
+                                                ครั้งที่ถูกสั่งเเก้
                                             </th> 
                                             <th  class="action-col" id='action'>         
                                                 Action
@@ -142,26 +165,29 @@
 
 </html>
 <script>
-        function printContent(el) {
+        /* function printContent(el) {
         var restorepage = $('body').html();
         var printcontent = $('#Receipt').clone();
         printcontent.find('#action').remove();
         $('body').empty().html(printcontent);
         window.print();
         $('body').html(restorepage);
-    }
+    } */
 function searchreportuser(){
     var proc = "searchreportuser"; 
     var firstname = $('#firstname').val();
     var lastname = $('#lastname').val();
+    var startdate = $('#startdate').val();
+    var enddate = $('#enddate').val();
     var role = $('#role').val();
     $.ajax({
         url:"proc2.php",
         method:"post",
         datatype: "json",
-        data:{proc:proc,firstname:firstname,lastname:lastname,role:role},
+        data:{proc:proc,firstname:firstname,lastname:lastname,startdate:startdate,enddate:enddate,role:role},
         success:function(response){
-            var response = JSON.parse(response);
+            console.log(response)
+         var response = JSON.parse(response); 
             console.log(response)
             var html = '';
             if(response.result.length == 0){
@@ -181,7 +207,8 @@ function searchreportuser(){
                             <td  >${response.result[i].position_name}</td>
                             <td class="numtask-col">${response.result[i].nummannagerpro}</td>
                             <td class="comptask-col">${response.result[i].numuserpro}</td>
-                            <td class="success-col">${response.result[i].numusertask}</td>
+                            <td class="mannager-col" > ${response.result[i].numusertask}</td>
+                            <td class="success-col">${response.result[i].numdela}</td>
                             <td class="mannager-col" > ${response.result[i].numdetails}</td>
                             <td class="action-col"  id='action' ><a class='btn btn-bitbucket btn-sm' href='reportuserpro.php?userid=${response.result[i].user_id}'>รายละเอียด</a></td>
                         </tr>

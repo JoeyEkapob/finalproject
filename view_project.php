@@ -50,7 +50,7 @@
                 </div>
             <?php } ?>
 <!-- form action="addtask.php" method="post" class="form-horizontal" enctype="multipart/form-data" -->
-<form action="proc.php" method="post" id="viewpro" class="form-horizontal" enctype="multipart/form-data">
+<form action="proc.php" method="post" id="viewpro" class="form-horizontal" enctype="multipart/form-data" >
 
     <input type="hidden" id="proc" name="proc" value="">
     <input type="hidden" id="task_id" name="task_id" value="">

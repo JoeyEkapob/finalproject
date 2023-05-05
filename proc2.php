@@ -89,6 +89,8 @@ else if($_POST['proc'] == 'searchreportuser'){
     $firstname = $_POST["firstname"];
     $lastname = $_POST["lastname"];
     $role = $_POST["role"];
+    $startdate =  $_POST["startdate"];
+    $enddate = $_POST["enddate"];
 
 
     $sql = "SELECT * FROM user as u
@@ -108,8 +110,42 @@ else if($_POST['proc'] == 'searchreportuser'){
     $numuser= $stmt->rowCount();
     if ($numuser > 0) {
     while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
         extract($row);
-        $sql2 = $db->query("SELECT manager_id FROM project WHERE manager_id =  $user_id"); 
+
+        $sql2 = "SELECT manager_id FROM project WHERE manager_id =  '$user_id'";
+        $sql3 = "SELECT user_id FROM project_list as pl left join project as p ON pl.project_id  =  p.project_id where user_id = '$user_id'";
+        $sql4 = "SELECT user_id FROM task_list where user_id = '$user_id' ";
+    $sql5 = "SELECT * FROM details as d  left join task_list as t ON d.task_id = t.task_id  where user_id = '$user_id'  AND send_status ='2'";
+        $sql6 = "SELECT * FROM task_list  where user_id = '$user_id ' AND status_timetask = '2'";  
+        if (!empty($startdate)) {
+            $sql2 .= "AND start_date >= '$startdate' ";
+            $sql3 .= "AND start_date >= '$startdate' ";
+            $sql4 .= "AND strat_date_task >= '$startdate' ";
+            $sql5 .= "AND t.strat_date_task >= '$startdate' ";
+            $sql6 .= "AND strat_date_task >= '$startdate' ";
+        }
+        if (!empty($enddate)) {
+            $sql2 .= "AND end_date <= '$enddate' ";
+            $sql3 .= "AND end_date <= '$enddate' ";
+            $sql4 .= "AND end_date_task <= '$enddate' ";
+          /*   $sql5 .= "AND end_date_task <= '$enddate' ";
+            $sql6 .= "AND end_date_task <= '$enddate' ";  */
+        }
+       
+        $sql2 = $db->query($sql2); 
+        $nummannagerpro = $sql2->rowCount(); 
+        $sql3 = $db->query($sql3); 
+        $numuserpro = $sql3->rowCount(); 
+        $sql4 = $db->query($sql4); 
+        $numusertask = $sql4->rowCount(); 
+        $sql5 = $db->query($sql5); 
+        $numdetails= $sql5->rowCount(); 
+        $sql6 = $db->query($sql6); 
+        $numdela = $sql6->rowCount();   
+
+        /* echo  $nummannagerpro.$numuserpro. $numusertask.  $numdetails. $numdela; */
+        /* $sql2 = $db->query("SELECT manager_id FROM project WHERE manager_id =  $user_id");
         $nummannagerpro = $sql2->rowCount(); 
         $sql3 = $db->query("SELECT user_id FROM project_list where user_id = $user_id");
         $numuserpro = $sql3->rowCount(); 
@@ -117,24 +153,31 @@ else if($_POST['proc'] == 'searchreportuser'){
         $numusertask = $sql4->rowCount(); 
         $sql5 = $db->query("SELECT * FROM details as d  left join task_list as t ON d.task_id = t.task_id  where user_id = $user_id  AND send_status = 2");
         $numdetails= $sql5->rowCount(); 
-        array_push($row, $nummannagerpro,$numuserpro,$numusertask, $numdetails);
+        $sql6 = $db->query("SELECT * FROM task_list  where user_id = $user_id  AND status_timetask = 2");
+        $numdela = $sql6->rowCount();   */
+
+        array_push($row, $nummannagerpro  ,$numuserpro,$numusertask , $numdetails,$numdela  );
         $row['nummannagerpro'] =  $row['0']; 
         $row['numuserpro'] =  $row['1']; 
         $row['numusertask'] =  $row['2']; 
-        $row['numdetails'] =  $row['3']; 
-        unset($row['0'],$row['1'],$row['2'],$row['3']);
+       $row['numdetails'] =  $row['3']; 
+        $row['numdela'] =  $row['4'];   
+        unset($row['0'] ,$row['1'],$row['2'] ,$row['3'],$row['4']);
     
 
 
         array_push($item_arr['result'], $row);    
-        /* print_r($item_arr['result']); 
-    */ }
-        echo json_encode($item_arr);
+         //print_r($item_arr['result']); 
+     }
+      echo json_encode($item_arr);
         http_response_code(200);  
     
 
+    }else{
+        echo json_encode($item_arr);
     }
 }
+
 else if($_POST['proc'] == 'closeproject'){
 
     $status = 3;
@@ -165,6 +208,7 @@ else if($_POST['proc'] == 'closeproject'){
         header("location: editproject_page.php?update_id=$project_id");
     } 
 }
+
  else if($_POST['proc'] == 'openproject'){ 
 
     

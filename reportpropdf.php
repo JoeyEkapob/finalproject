@@ -17,6 +17,9 @@ if($_POST['proc'] == 'report'){
     $status2 = $_POST["status2"];
 
     /*     $username = $db->query("SELECT CONCAT(FirstName, ' ', LastName) As fullName FROM user WHERE project_id =  ".$array['project_id']." "); */
+    $numtask = $db->query("SELECT task_id FROM task_list ");
+    $numtask = $numtask->rowCount(); 
+
 
     $sql = "SELECT * FROM project as p 
     LEFT JOIN job_type as j ON p.id_jobtype = j.id_jobtype 
@@ -41,7 +44,9 @@ if($_POST['proc'] == 'report'){
         $sql .= "AND status_2 = '$status2' ";
     }
 
-
+    $stmt = $db->query($sql);
+    $stmt->execute();
+    $stmtrow = $stmt->rowCount();  
     class PDF extends FPDF {
     // Page header
         function Header() {
@@ -85,69 +90,29 @@ if($_POST['proc'] == 'report'){
     $pdf->Image('pic/LOGORMUTK.png', 86, 2, 40);
     $pdf->Cell(193,70,iconv('UTF-8','cp874','รายงาน'),0,0,"C");
     
-   
-    if (!empty($start_date)) {
-    $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,0,"");
-    $pdf->Cell(50,15,iconv('UTF-8','cp874','ตั้งเเต่วันที่ : '. thai_date_short(strtotime($start_date)) ),0,0,"");
-    }else{
-        $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,0,"");
-        $pdf->Cell(50,15,iconv('UTF-8','cp874','ตั้งเเต่วันที่ : - ' ),0,0,"");
-    }
-    if (!empty($end_date)) {
-    $pdf->Cell(50,15,iconv('UTF-8','cp874','จนถึงวันที่ : '. thai_date_short(strtotime($end_date)) ),0,0,"L");
-    $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,1,"");  
-    }else{
-        $pdf->Cell(50,15,iconv('UTF-8','cp874','จนถึงวันที่ : - '),0,0,"L");
-        $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,1,"");  
-    }
- 
-   /*  if (!empty($status1)) {
-        $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,0,""); 
-    $pdf->Cell(50,13,iconv('UTF-8','cp874','สถานะงาน : '. showstatprotext1($status1) ),0,0,"");
-    }else{
-        $pdf->Cell(50,13,iconv('UTF-8','cp874','สถานะงาน :  - ' ),0,0,"");
-    }
-
-    $pdf->Cell(50,13,iconv('UTF-8','cp874','การเร่งของงาน : '. showstatprotext2($status2) ),0,0,"");
-    $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,1,"");  */
-
     
-    /* if (!empty($start_date)) {
+    $pdf->Ln(35);
+ if (!empty($start_date)) {
         $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,0,"");
         $pdf->Cell(50,15,iconv('UTF-8','cp874','ตั้งเเต่วันที่ : '. thai_date_short(strtotime($start_date)) ),0,0,"");
-        
-    }
-    if (!empty($end_date)) {
-       
+    }else{ 
+        $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,0,"");
+        $pdf->Cell(50,15,iconv('UTF-8','cp874','ตั้งเเต่วันที่ : - ' ),0,0,""); 
+    } 
+   if (!empty($end_date)) {
         $pdf->Cell(50,15,iconv('UTF-8','cp874','จนถึงวันที่ : '. thai_date_short(strtotime($end_date)) ),0,0,"L");
         $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,1,"");  
- 
-      
-    }
-    if (!empty($status1)) {
-        $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,0,""); 
-        $pdf->Cell(50,13,iconv('UTF-8','cp874','สถานะงาน : '. showstatprotext1($status1) ),0,0,"");
-    }
-    if (!empty($status2)) {
-    
-        $pdf->Cell(50,13,iconv('UTF-8','cp874','การเร่งของงาน : '. showstatprotext2($status2) ),0,0,"");
-        $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,1,""); 
-    
+    }else{ 
+        $pdf->Cell(50,15,iconv('UTF-8','cp874','จนถึงวันที่ : - '),0,0,"L");
+        $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,1,"");   
     } 
- */
-    /*   $pdf->SetY(50);  */
+
+    $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,0,"");
+    $pdf->Cell(50,15,iconv('UTF-8','cp874','จำนวนหัวข้องาน : '.$stmtrow ),0,0,"");
+    $pdf->Cell(50,15,iconv('UTF-8','cp874','จำนวนงานทั้งหมด : '.$numtask),0,0,"L");
+    $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,1,"");  
     $pdf->Ln();
-    /* $pdf->SetFont('THSarabun','',14); */
-    
-    $pdf->Cell(70,1,iconv('UTF-8','cp874','หัวข้องานทั้งหมด :'),0,0,"R");
-    $pdf->Cell(65,8,iconv('UTF-8','cp874',' '),0,0,"L");
-    /*  $pdf->Cell(30,8,iconv('UTF-8','cp874','เเก้ไขทั้งหมด :'),0,0,"R");
-    $pdf->Cell(65,8,iconv('UTF-8','cp874','' ),0,1,"L");
-    $pdf->Cell(30,8,iconv('UTF-8','cp874','ส่ง (ล่าช้า) :'),0,0,"R");
-    $pdf->Cell(65,8,iconv('UTF-8','cp874', ''),0,0,"L");
-     */
-    $pdf->Ln();
-    /* $pdf->SetFillColor(100,0,0); */
+
     $pdf->setDrawColor(100,100,100); 
     $pdf->SetFont('THSarabunb','B',14); 
     $pdf->Cell(22,8,iconv('UTF-8','cp874','รหัสหัวข้องาน'),1,0,"C");
@@ -156,15 +121,13 @@ if($_POST['proc'] == 'report'){
     $pdf->Cell(50,8,iconv('UTF-8','cp874','วันที่เรื่ม - วันที่สิ้นสุด'),1,0,"C");
     $pdf->Cell(20,8,iconv('UTF-8','cp874','สถานะ'),1,0,"C");
     $pdf->Cell(25,8,iconv('UTF-8','cp874','คนที่มอบหมาย'),1,0,"C");
+    
     $pdf->Ln();
 
 
 
 
-    $stmt = $db->query($sql);
-    $stmt->execute();
     $pdf->SetFont('THSarabun','',14); 
-    $stmtrow = $stmt->rowCount();  
         if($stmtrow > 0){
             while($array = $stmt->fetch(PDO::FETCH_ASSOC)){
 

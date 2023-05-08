@@ -30,8 +30,8 @@
                     ?>
                 </div>
             <?php } ?>
-    <form action="proc2.php" method="post" id="userlist" class="form-horizontal" enctype="multipart/form-data">
-
+    <form action="reportpropdf.php" method="post" id="userlist" class="form-horizontal" enctype="multipart/form-data"  target="_blank">
+    <input type="hidden" id="proc" name="proc" value="">
         <main class="content">
                 <div class="card">
                     <div class="card-header">
@@ -106,14 +106,15 @@
                             <div class="col-md-3"> 
                             </div>                         
                             <div class="col-lg-12 text-right justify-content-center d-flex">
-                            <a class="btn btn-primary" onclick="searchreportuser()" >ค้นหา</a> 
+                            <a class="btn btn-primary" onclick="searchreportuser('<?php echo 1 ?>')" >ค้นหา</a> 
                                 <a class="btn btn-secondary" href="" type="button" >ล้างค่า</a>
                             </div>
                             <div class="mb-3">
                             </div>   
                             <hr>
                             <div class="d-flex flex-row-reverse">
-            	                    <button class="btn btn-flat  btn-danger" id="print" onclick="printContent('Receipt');"><i class="fa fa-print"></i> Print</button>
+            	                  <!--   <button class="btn btn-flat  btn-danger" id="print" onclick="printContent('Receipt');"><i class="fa fa-print"></i> Print</button> -->
+                                  <button class="btn btn-flat  btn-danger" id="print" onclick="report()"  ><i class="fa fa-print"></i> Print</button>
                              </div>
                             <div class="mb-3" id="Receipt">
                                 <table class='table m-0 table-bordered' >
@@ -173,23 +174,33 @@
         window.print();
         $('body').html(restorepage);
     } */
-function searchreportuser(){
+
+    function report() {
+     $('#proc').val('reportuser');
+     console.log(proc);
+    } 
+
+function searchreportuser(page){
     var proc = "searchreportuser"; 
     var firstname = $('#firstname').val();
     var lastname = $('#lastname').val();
     var startdate = $('#startdate').val();
     var enddate = $('#enddate').val();
     var role = $('#role').val();
+    var page = page;
     $.ajax({
         url:"proc2.php",
         method:"post",
         datatype: "json",
         data:{proc:proc,firstname:firstname,lastname:lastname,startdate:startdate,enddate:enddate,role:role},
         success:function(response){
-            console.log(response)
+          /*   console.log(response) */
          var response = JSON.parse(response); 
-            console.log(response)
+            console.log(page)
             var html = '';
+            var rowsPerPage = 10; // กำหนดจำนวนแถวต่อหน้า
+            var totalRows = response.result.length;
+            var totalPages = Math.ceil(totalRows / rowsPerPage); // คำนวณหาจำนวนหน้าทั้งหมด
             if(response.result.length == 0){
                     html += `
                         <tr>
@@ -198,7 +209,7 @@ function searchreportuser(){
                     `;
                     $("#test").html(html)
                     } else {
-                        for(var i=0; i<response.result.length; i++) {
+                        for (var i = (page - 1) * 10; i < response.result.length && i < page * 10; i++) {
                         html += `
                         
                         <tr>
@@ -214,6 +225,47 @@ function searchreportuser(){
                         </tr>
                         `;
                         }
+                        if (totalPages > 1) {
+                            html += `
+                                <tr>
+                                    <td colspan="9" style="text-align:center;">
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination">`;
+                            if (page > 1) {
+                                html += `
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" onclick="searchreportuser(${page - 1})">&laquo;</a>
+                                        </li>
+                                        `;
+                            }
+                            for (var i = 1; i <= totalPages; i++) {
+                            if (i == page) {
+                            html += `
+                                <li class="page-item active">
+                                    <a class="page-link" href="#" onclick="searchreportuser(${i})">${i}</a>
+                                </li>
+                            `;
+                            } else {
+                            html += `
+                                <li class="page-item">
+                                    <a class="page-link" href="#" onclick="searchreportuser(${i})">${i}</a>
+                                </li>
+                            `;
+                            }
+                        }
+                        if (page < totalPages) {
+                            html += `
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="searchreportuser(${page + 1})">&raquo;</a>
+                                    </li>`;
+                        }
+                        html += `
+                                </ul>
+                                </nav>
+                            </td>
+                            </tr>
+                        `;
+                    }
                     }
                     $("#test").html(html) 
         } 

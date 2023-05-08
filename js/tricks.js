@@ -50,3 +50,22 @@
         }
 
     }
+
+const dayTH = [null,'อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
+const monthTH = [null,'มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+const monthTH_brev = [null,'ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+
+function thaiDateFullMonth(time) {
+  const thaiDate = new Date(time);
+  const day = thaiDate.getDate();
+  const month = monthTH[thaiDate.getMonth() + 1];
+  const year = thaiDate.getFullYear() + 543;
+  return `${day} ${month} ${year}`;
+}
+function thai_date_short(time) {
+    const thai_date_return = new Date(time);
+    const date = thai_date_return.getDate();
+    const month = monthTH_brev[thai_date_return.getMonth() + 1];
+    const year = thai_date_return.getFullYear() + 543;
+    return `${date} ${month} ${year}`;
+    }

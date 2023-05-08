@@ -129,8 +129,8 @@ else if($_POST['proc'] == 'searchreportuser'){
             $sql2 .= "AND end_date <= '$enddate' ";
             $sql3 .= "AND end_date <= '$enddate' ";
             $sql4 .= "AND end_date_task <= '$enddate' ";
-          /*   $sql5 .= "AND end_date_task <= '$enddate' ";
-            $sql6 .= "AND end_date_task <= '$enddate' ";  */
+            $sql5 .= "AND end_date_task <= '$enddate' ";
+            $sql6 .= "AND end_date_task <= '$enddate' "; 
         }
        
         $sql2 = $db->query($sql2); 

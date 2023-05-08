@@ -31,6 +31,16 @@
         return " <b style='color:red'> ( ล่าช้า ) </b>";
         }
     }    
+
+    function showstatustimepdf($statustime){
+        if ($statustime == '') {
+            return "";
+        }else if($statustime == '1'){
+            return "( เเจ้งเตือน )";
+        }else if($statustime == '2'){
+            return " (ล่าช้า)";
+            }
+        }   
     function showstatprotext1($status){
         if ($status == '1') {
             return "รอดำเนินการ";
@@ -80,6 +90,13 @@
             return "เลยเวลา";
         }elseif($statustask =='5'){
             return "เสร็จสิ้น";
+        } 
+    }
+    function showstatdetail($statusdetail){
+        if($statusdetail =='Y'){
+            return "รอตรวจ";
+        }elseif($statusdetail =='N'){
+            return "ตรวจเเล้ว";
         } 
     }
 

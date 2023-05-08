@@ -99,9 +99,9 @@ session_start();
 										<div class="mb-3">
 											<label for="" class="control-label">ตำเเหน่ง</label>
 												<select name="role" id="role" class="form-select" value="">
-													<option value="<?php  echo $row['role_id']; ?>" ><?php  echo $position_name; ?></option>
+													<option value="<?php  echo $role_id; ?>" ><?php  echo $position_name; ?></option>
 													<?php
-													$stmt = $db->query("SELECT * FROM position");
+													$stmt = $db->query("SELECT * FROM position WHERE position_status = 1");
 													$stmt->execute();
 													$result = $stmt->fetchAll();
 													foreach($result as $row) {

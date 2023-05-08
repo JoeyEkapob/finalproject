@@ -134,7 +134,7 @@
                             <hr>
                             <div class="d-flex flex-row-reverse">
             	                   <!--  <button class="btn btn-flat  btn-danger" id="print" onclick="printContent('Receipt');"><i class="fa fa-print"></i> Print</button> -->
-                                   <button class="btn btn-flat  btn-danger" id="print"  ><i class="fa fa-print"></i> Print</button>
+                                   <button class="btn btn-flat  btn-danger" onclick="report()"  ><i class="fa fa-print"></i>PDF</button>
                              </div>
                             <div class="mb-3" id="Receipt">
                                 <table class='table m-0 table-bordered' >
@@ -150,13 +150,13 @@
                                                 ประเภทงาน
                                             </th>
                                             <th  class="numtask-col">
-                                                จำนวนงาน
+                                                วันที่เริ่ม -  วันที่สิ้นสุด
                                             </th>
-                                            <th  class="comptask-col">
-                                                งานที่เสร็จ
-                                            </th>
+                                            <!-- <th  class="comptask-col">
+                                                วันที่สิ้นสุด
+                                            </th> -->
                                             <th  class="success-col">         
-                                                ความสำเร็จ
+                                                สถานะ
                                             </th>
                                             <!--  <th>         
                                                 สถานะเร่งของงาน
@@ -188,15 +188,11 @@
 </html>
 <script>
 
-  /*   function printContent(el) {
-        var restorepage = $('body').html();
-        var printcontent = $('#Receipt').clone();
-        printcontent.find('#action').remove();
-        $('body').empty().html(printcontent);
-        window.print();
-        $('body').html(restorepage);
-    } */
-
+   function report() {
+     $('#proc').val('report');
+     console.log(proc);
+    } 
+   
   function searchreport(page){
     var proc = "searchreport"; 
     var nameproject = $('#nameproject').val();
@@ -234,9 +230,8 @@
                             <td class="id-col">${response.result[i].project_id}</td>
                             <td>${response.result[i].name_project}</td>
                             <td>${response.result[i].name_jobtype}</td>
-                            <td class="numtask-col">${response.result[i].numtask}</td>
-                            <td class="comptask-col">${response.result[i].comptask}</td>
-                            <td class="success-col">${response.result[i]['progress_project'] + '%'}</td>
+                            <td class="numtask-col">${thai_date_short(response.result[i].start_date)} - ${thai_date_short(response.result[i]['end_date'])}</td>
+                            <td class="comptask-col">${showstatprotext1(response.result[i].status_1)} (${showstatprotext2(response.result[i].status_2)})</td>
                             <td class="mannager-col">${response.result[i].firstname + ' ' + response.result[i].lastname}</td>
                             <td class="action-col" id='action'><a class='btn btn-bitbucket btn-sm' href='reportpro.php?projectid=${response.result[i].project_id}'>รายละเอียด</a></td>
                             </tr>

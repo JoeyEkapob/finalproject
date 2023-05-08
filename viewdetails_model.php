@@ -37,7 +37,7 @@
                                                         </dt>
                                                         <dd> 
                                                             <div class="d-flex align-items-center mt-1">
-                                                            <?php if($row['avatar'] !=""){?>
+                                                            <?php if($manager['avatar'] !=""){?>
                                                                 <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $manager['avatar']?>" alt="Avatar" width="35"  height="35">
                                                                 <b><?php echo $manager['name'] ?> </b>
                                                             <?php }else{ ?>

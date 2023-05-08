@@ -160,7 +160,7 @@
                                                         <br>
                                                             <div class="col-md-3">
                                                                 <div class="progress ">
-                                                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:<?php echo $progress_project ?>%"><?php  echo $progress_project   ?>%</div>
+                                                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:<?php echo  $totalprogress2 ?>%"><?php  echo $totalprogress2  ?>%</div>
                                                                 </div>
                                                             </div>
                                                     
@@ -177,18 +177,26 @@
                                                     <dt><b class="border-bottom border-primary">สมาชิก</b></dt>
                                                     <dd>
                                                         <?php 
+                                                                $num = 1;
                                                                 $sql = "SELECT * FROM project_list  natural join user  where project_id = $id ";
                                                                 $qry = $db->query($sql);
                                                                 $qry->execute();
+                                                                $numuser= $qry->rowCount();
                                                                 while ($row = $qry->fetch(PDO::FETCH_ASSOC)){  ?>  
                                                             <?php if($row['avatar'] !=""){?>
                                                                 <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $row['avatar']?>" alt="Avatar" width="35"  height="35">
-                                                                <b><?php  echo $row['firstname']." ".$row['lastname'] ?></b>
+                                                                <a class="viewuserdata" data-userid="<?php echo $row['user_id'] ?>" ><b><?php  echo $row['firstname']." ".$row['lastname'] ?></b></a>
+                                                                <?php  if($num++ % 3 == 0){
+                                                                   echo "<br>";
+                                                                } ?>
                                                             <?php }else{?>
                                                                 <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
                                                                 <a class="viewuserdata" data-userid="<?php echo $row['user_id'] ?>" ><b><?php  echo $row['firstname']." ".$row['lastname'] ?></b></a>
+                                                                <?php  if($num++ % 3 == 0){
+                                                                   echo "<br>";
+                                                                } ?>
                                                                 <?php }?>
-                                                            <?php  }?>
+                                                            <?php  } ?>
                                                     </dd>
                                                 </dl> 
                                                 

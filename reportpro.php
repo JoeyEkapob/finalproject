@@ -10,7 +10,10 @@
     $us=$_SESSION['user_login'];
     $id = $_GET['projectid'];
 
-    $userid = $_GET['userid'];
+    if(isset($_GET['userid'])){
+        $userid = $_GET['userid'];
+    }
+ 
 /* echo $userid ;
 exit; */
     $select_project = $db->prepare("SELECT * FROM project  natural JOIN job_type  WHERE project_id = :id");

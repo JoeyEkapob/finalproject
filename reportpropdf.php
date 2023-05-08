@@ -647,3 +647,145 @@ else if($_POST['proc']== 'reportuser'){
     ob_end_flush();
     
 }
+else if($_POST['proc']== 'reportuserpro'){
+
+    $id = $_POST['userid'];
+
+    $stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","ส่งเรียบร้อยเเล้ว","รอการเเก้ไข","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
+    $stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
+    
+    $select_project = $db->prepare("SELECT * FROM user as u left join position as p on u.role_id = p.role_id  WHERE user_id = :id");
+    $select_project->bindParam(":id", $id);
+    $select_project->execute();
+    $row = $select_project->fetch(PDO::FETCH_ASSOC);
+    extract($row);
+
+    $sql2 = $db->query("SELECT * FROM project WHERE manager_id =  $user_id"); 
+    $nummannagerpro = $sql2->rowCount(); 
+    $sql3 = $db->query("SELECT * FROM project_list where user_id = $user_id");
+    $numuserpro = $sql3->rowCount(); 
+    $sql4 = $db->query("SELECT * FROM task_list where user_id = $user_id ");
+    $numusertask = $sql4->rowCount(); 
+    $sql5 = $db->query("SELECT * FROM details as d  left join task_list as t ON d.task_id = t.task_id  where user_id = $user_id  AND send_status = 2");
+    $numdetails= $sql5->rowCount(); 
+
+    class PDF extends FPDF {
+        // Page header
+            function Header() {
+        /*       global $title;
+                $this->AddFont('THSarabun','','THSarabun.php');
+                $this->SetFont('THSarabun','',16); 
+                // Move to the right
+                // Title
+                $this->Image('pic/LOGORMUTK.png',86,2,40);
+                $this->Ln(30);
+                $this->Cell(0,10,iconv('UTF-8','cp874',$title),2,1,'C');
+                // Line break
+                $this->Ln(15);  */
+             
+            }
+         
+            // Page footer
+            function Footer() {
+                // Position at 1.5 cm from bottom
+                $this->SetY(-15);
+                // Arial italic 8
+                $this->SetFont('THSarabun','',12);
+                // Page number
+                $this->Cell(0,10,iconv('UTF-8','cp874','หน้า').$this->PageNo().'/{nb}',0,0,'C');
+            }
+        }
+
+    $pdf = new PDF();
+    $title = "รายงาน";
+    $pdf->SetTitle($title,true); // ให้แสดง title ไทย
+    $pdf->AliasNbPages();
+    $pdf->AddPage();
+    $pdf->AddFont('THSarabunb','B','THSarabun Bold.php');
+    $pdf->AddFont('THSarabun','','THSarabun.php');
+    $pdf->SetFont('THSarabunb','B',14); 
+    $pdf->Image('pic/LOGORMUTK.png', 86, 2, 40);
+
+    $pdf->Ln(35);
+    $pdf->Cell(30,8,iconv('UTF-8','cp874','ชื่อ-นามสกุล :'),0,0,"R");
+    $pdf->Cell(65,8,iconv('UTF-8','cp874',$firstname.' '.$lastname),0,0,"L");
+    $pdf->Cell(30,8,iconv('UTF-8','cp874','ตำเเหน่ง :'),0,0,"R");
+    $pdf->Cell(65,8,iconv('UTF-8','cp874', $position_name),0,1,"L");
+    $pdf->Cell(30,8,iconv('UTF-8','cp874','หัวข้องานที่สร้าง :'),0,0,"R");
+    $pdf->Cell(65,8,iconv('UTF-8','cp874', $nummannagerpro),0,0,"L");
+    $pdf->Cell(30,8,iconv('UTF-8','cp874','หัวข้องานที่ถูกสั่ง :'),0,0,"R");
+    $pdf->Cell(65,8,iconv('UTF-8','cp874',$numuserpro),0,1,"L");
+    $pdf->Cell(30,8,iconv('UTF-8','cp874','จำนวนงาน :'),0,0,"R");
+    $pdf->Cell(65,8,iconv('UTF-8','cp874',$numusertask ),0,0,"L");
+    $pdf->Cell(30,8,iconv('UTF-8','cp874','จำนวนครั้งที่ถูกสั่งเเก้ :'),0,0,"R");
+    $pdf->Cell(65,8,iconv('UTF-8','cp874',$numdetails),0,1,"L");
+    
+
+   
+
+    $pdf->Ln();
+
+
+    $pdf->setDrawColor(100,100,100); 
+    $pdf->SetFont('THSarabunb','B',14); 
+    $pdf->Cell(22,8,iconv('UTF-8','cp874','รหัสหัวข้องาน'),1,0,"C");
+    $pdf->Cell(40,8,iconv('UTF-8','cp874','ชื่อหัวงาน'),1,0,"C");
+    $pdf->Cell(42,8,iconv('UTF-8','cp874','วันที่เรื่ม - วันที่สิ้นสุด'),1,0,"C");
+    $pdf->Cell(18,8,iconv('UTF-8','cp874','ความสำเร็จ'),1,0,"C");
+    $pdf->Cell(35,8,iconv('UTF-8','cp874','สถานะ'),1,0,"C"); 
+    $pdf->Cell(35,8,iconv('UTF-8','cp874','มอบหมาย'),1,0,"C");
+  /*   $pdf->Cell(25,8,iconv('UTF-8','cp874','สถานะ'),1,0,"C"); */
+    $pdf->Ln();
+ 
+    
+    $i = 1;
+                                            
+    $stmttasklist = "SELECT *
+    FROM project_list 
+    NATURAL JOIN project 
+    NATURAL JOIN job_type 
+    NATURAL JOIN user 
+
+    WHERE user_id = $id";
+    $stmttasklist = $db->query($stmttasklist);
+    $stmttasklist->execute();  
+    $pdf->SetFont('THSarabun','',14); 
+    $stmttasklistrow = $stmttasklist->rowCount();  
+        if($stmttasklistrow > 0){
+            while($stmttasklistrow2 = $stmttasklist->fetch(PDO::FETCH_ASSOC)){
+
+        /*    $sql2 = $db->query("SELECT * FROM task_list WHERE project_id =  ".$array['project_id']." ");
+            $numtask = $sql2->rowCount(); 
+            $comptask = $db->query("SELECT * FROM task_list where project_id =".$array['project_id']."  and status_task = 5");
+            $comptask2 = $comptask->rowCount();  */
+            
+        $pdf->Cell(22,10,iconv('UTF-8','cp874',$stmttasklistrow2['project_id']),1,0,"C");
+        $pdf->Cell(40,10,iconv('UTF-8','cp874',$stmttasklistrow2['name_project']),1,0,"c");
+        $pdf->Cell(42, 10, iconv('UTF-8', 'cp874', thai_date_short(strtotime($stmttasklistrow2['start_date']))) . ' - ' . iconv('UTF-8', 'cp874', thai_date_short(strtotime($stmttasklistrow2['end_date']))), 1, 0, "C");
+        $pdf->Cell(18,10,iconv('UTF-8','cp874', $stmttasklistrow2['progress_project'].' '.'%'),1,0,"C"); 
+       /*  $pdf->Cell(25,10,iconv('UTF-8','cp874',  $comptask2),1,0,"C");  */
+        $pdf->Cell(35,10,iconv('UTF-8','cp874',showstatprotext1($stmttasklistrow2['status_1'])) .iconv('UTF-8','cp874',' ('.showstatprotext2($stmttasklistrow2['status_2']).' )') , 1, 0, "C");
+        $pdf->Cell(35,10,iconv('UTF-8','cp874',$stmttasklistrow2['firstname'].' '.$stmttasklistrow2['lastname']),1,0,"c"); 
+      /*   $pdf->Cell(25,10,iconv('UTF-8','cp874',showstattaskreport($stmttasklistrow2['status_task'])) .iconv('UTF-8','cp874',showstatustimepdf($stmttasklistrow2['status_timetask'])) , 1, 1, "C"); */
+      $pdf->Ln(); 
+            } 
+       /*  /*  $pdf->Ln();  */
+        } else{
+
+            $pdf->Cell(192,10,iconv('UTF-8','cp874','ไม่พอข้อมูล'),1,1,"C");
+        }
+
+        $nameuser ="SELECT concat(firstname,' ',lastname) as name From user WHERE user_id = $us";
+        $nameuser = $db->query($nameuser);
+        $nameuser->execute();  
+        $nameuser = $nameuser->fetch(PDO::FETCH_ASSOC);
+
+    $pdf->SetFont('THSarabun','',10); 
+    $pdf->Cell(193,8,iconv('UTF-8','cp874','ผู้พิมพ์ '.$nameuser['name']),0,1,"R");
+    $pdf->Cell(193,3,iconv('UTF-8','cp874','วันที่พิมพ์ '.ThDate($date).''),0,0,"R");
+
+        $pdf->SetY(50);
+        $pdf->Output();
+        ob_end_flush();
+
+}

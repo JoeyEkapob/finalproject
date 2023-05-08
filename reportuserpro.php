@@ -43,11 +43,15 @@
 <body>
 <?php include "sidebar.php"?>
 <?php include "funtion.php"?>
-<form action="proc.php" method="post" id="viewpro" class="form-horizontal" enctype="multipart/form-data">
-
+<form action="reportpropdf.php" method="post" id="viewpro" class="form-horizontal" enctype="multipart/form-data" target="_black">
+<input type="hidden" id="proc" name="proc" value="">
+<input type="hidden" id="userid" name="userid" value="">
     <main class="content">
+    <div>
+        <a href="reportuser.php" class="back-button">&lt;</a>
+    </div>
     <div class="d-flex flex-row-reverse" >
-        <button class="btn btn-flat  btn-danger" id="print" onclick="printContent('Receipt');"><i class="fa fa-print"></i> Print</button>
+        <button class="btn btn-flat  btn-danger" id="print" onclick="reportuserpro('<?php echo $id  ?>');"><i class="fa fa-print"></i> Print</button>
     </div>
         <div id ="Receipt" >
             <div class="col-12  d-flex" >
@@ -58,32 +62,30 @@
                             <div class="project-image">
                                     <img src="pic/LOGORMUTK.png" class="project-image">
                             </div>
+                            <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-4 d-flex flex-row-reverse"><b>ชื่อ-นามสกุล : </b></div>
+                                        <div class="col-md-2 col-sm-8 "><?php echo $firstname.' '.$lastname ?></div>
+                                        <div class="col-md-2 col-sm-4 d-flex justify-content-end"><b>ตำเเหน่ง : </b></div>
+                                        <div class="col-md-3 col-sm-8"><?php echo $position_name ?></div>
+                                    </div>
 
-                            <table >
-                                <tr>
-                                    <td class ="class1" >ชื่อ-นามสกุล : </td>
-                                    <td class ="class3" ><?php echo $firstname.' '.$lastname ?></td>
-                                    <td class ="class2" >ตำเเหน่ง : </td>
-                                    <td class ="class4" ><?php echo $position_name ?></td>
-                                </tr>
-                              
-                                <tr>
-                                    <td class ="class1" >หัวข้องานที่สร้าง : </td>
-                                    <td class ="class3" ><?php echo $nummannagerpro  ?></td>
-                                    <td class ="class2" >หัวข้องานที่ถูกสั่ง : </td>
-                                    <td class ="class4" ><?php  echo $numuserpro ?></td>
-                                </tr>
-                               
-                            
-                                <tr>
-                                    <td class ="class1" >จำนวนงาน : </td>
-                                    <td class ="class3" ><?php echo  $numusertask   ?></td>
-                                    <td class ="class2" >จำนวนครั้งที่ถูกสั่งเเก้ :</td>
-                                    <td class ="class4" ><?php echo $numdetails ?></td>
-                                </tr>
-                                
-                                </tr>
-                            </table>
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-4 d-flex flex-row-reverse"><b>หัวข้องานที่สร้าง : </b></div>
+                                        <div class="col-md-2 col-sm-8"><?php echo $nummannagerpro  ?></div>
+                                        <div class="col-md-2 col-sm-4 d-flex flex-row-reverse"><b>หัวข้องานที่ถูกสั่ง : </b></div>
+                                        <div class="col-md-3 col-sm-8"><?php  echo $numuserpro ?></div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-4 d-flex flex-row-reverse"><b>จำนวนงาน : </b></div>
+                                        <div class="col-md-2 col-sm-8"><?php echo  $numusertask   ?></div>
+                                        <div class="col-md-2 col-sm-4 d-flex flex-row-reverse"><b>จำนวนครั้งที่ถูกสั่งเเก้ :</b></div>
+                                        <div class="col-md-3 col-sm-8"><?php echo $numdetails ?></div>
+                                    </div>
+
+                                </div>
+                        
                                 
                     </div>
                 </div>
@@ -112,13 +114,13 @@
                                                 ประเภทงาน
                                             </th>
                                             <th  class="numtask-col">
-                                                จำนวนงาน
+                                                วันที่เริ่ม -  วันที่สิ้นสุด
                                             </th>
-                                            <th  class="comptask-col">
-                                                งานที่เสร็จ
-                                            </th>
+                                            <!-- <th  class="comptask-col">
+                                                วันที่สิ้นสุด
+                                            </th> -->
                                             <th  class="success-col">         
-                                                ความสำเร็จ
+                                                สถานะ
                                             </th>
                                             <!--  <th>         
                                                 สถานะเร่งของงาน
@@ -167,22 +169,19 @@
                                             </td>
 
                                             <td class=" numtask-col" >
-                                            <?php echo  $numtask ?>
+                                            <?php echo  thai_date_short(strtotime($row2['start_date'])).' - '. thai_date_short(strtotime($row2['end_date']))  ?>
                                             </td>
                                              
                                             <td  class="numtask-col " >
-                                            <?php echo $comptask2 ?>
+                                            <?php echo showstatprotext1($row2['status_1']).' ('.showstatprotext2($row2['status_2']).')' ?>
                                             </td>
 
-                                            <td class="mannager-col">
-                                            <?php echo $row2['progress_project']; ?>
-                                            </td>
 
                                             <td class="mannager-col">
                                             <?php echo $row2['firstname'].' '.$row2['lastname']; ?>
                                             </td>
                                             <td class="action-col" id='action'>
-                                           <a class='btn btn-bitbucket btn-sm' href='reportpro.php?projectid=<?php echo  $row2['project_id']?>'>รายละเอียด</a>
+                                           <a class='btn btn-bitbucket btn-sm' href='reportpro.php?projectid=<?php echo  $row2['project_id']?>&userid=<?php echo $id ?>'>รายละเอียด</a>
                                             </td>
                                          
                                         </tr>
@@ -204,14 +203,20 @@
     </body>
 </html>
 <script>
+    function reportuserpro(id){
+        $('#proc').val('reportuserpro');
+        $('#userid').val(id);
+        
+        console.log(userid);
+    }
 
-function printContent(el) {
+/* function printContent(el) {
         var restorepage = $('body').html();
         var printcontent = $('#Receipt').clone();
         printcontent.find('#action').remove();
         $('body').empty().html(printcontent);
         window.print();
         $('body').html(restorepage);
-    }
+    } */
  </script>
 <?php include "footer.php"?>

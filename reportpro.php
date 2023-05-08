@@ -10,7 +10,9 @@
     $us=$_SESSION['user_login'];
     $id = $_GET['projectid'];
 
-    
+    $userid = $_GET['userid'];
+/* echo $userid ;
+exit; */
     $select_project = $db->prepare("SELECT * FROM project  natural JOIN job_type  WHERE project_id = :id");
     $select_project->bindParam(":id", $id);
     $select_project->execute();
@@ -41,7 +43,11 @@
     <input type="hidden" id="proc" name="proc" value="">
     <input type="hidden" id="projectid" name="projectid" value="">
     <div>
+        <?php if(isset($userid)){?>
+        <a href="reportuserpro.php?userid=<?php echo $userid?>" class="back-button">&lt;</a>
+        <?php }else{ ?>
         <a href="report.php" class="back-button">&lt;</a>
+         <?php } ?>    
     </div>
     <div class="col-12 d-flex flex-row-reverse" >
         <button class="btn btn-flat  btn-danger" id="print" onclick="report('<?php echo  $id ?>');"><i class="fa fa-print"></i>PDF</button>

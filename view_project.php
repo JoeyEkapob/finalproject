@@ -422,6 +422,8 @@
                                     title: 'success',
                                     text: 'ลบงานเรียบร้อยเเล้ว!',
                                     icon: 'success',
+                                    confirmButtonText: 'ตกลง!',
+
                                 }).then(() => {
                                     document.location.href = 'view_project.php?view_id='+ project_id;
                                     
@@ -503,6 +505,7 @@
                                     title: 'success',
                                     text: 'ยกเลิกเรียบร้อยเเล้ว!',
                                     icon: 'success',
+                                    confirmButtonText: 'ตกลง!',
                                 }).then(() => {
                                     document.location.href = 'view_project.php?view_id='+ project_id;
                                     

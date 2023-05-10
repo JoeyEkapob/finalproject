@@ -29,7 +29,7 @@
 												<label for="" class="control-label" >ตำเเหน่ง</label>
 													<select name="role" id="role" class="form-select" >
 														<?php
-														$stmt = $db->query("SELECT * FROM position");
+														$stmt = $db->query("SELECT * FROM position WHERE position_status = 1 ");
 														$stmt->execute();
 														$result = $stmt->fetchAll();
 														foreach($result as $row) {

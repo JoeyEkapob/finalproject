@@ -101,8 +101,8 @@
                                                 <b><?php echo $row['name_tasklist']?>  <?php echo showstatustime($row['status_timetask']) ?></b>
                                             </td>
 
-                                            <td class="start-col " ><?php echo ThDate($row['strat_date_task']); ?></td>
-					                        <td class="end-col " ><?php echo ThDate($row['date_detalis']) ?></td>
+                                            <td class="start-col " ><?php echo thai_date_and_time_short($row['strat_date_task']); ?></td>
+					                        <td class="end-col " ><?php echo thai_date_and_time_short($row['date_detalis']) ?></td>
 
                                             
 

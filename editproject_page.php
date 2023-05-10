@@ -5,7 +5,11 @@
          $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
         header('location:sign-in.php');
     }
-
+    if (isset($_SERVER['HTTP_REFERER'])) {
+        $previousPage = $_SERVER['HTTP_REFERER'];
+      } else {
+        $previousPage = "#";
+      }
 
     if (isset($_GET['update_id'])){
             $pro_id = $_REQUEST['update_id'];
@@ -23,7 +27,7 @@
 ?> 
 <!DOCTYPE html>
 <html lang="en">
-        <?php include "head.php"?>
+     
     <body>
         <?php include "sidebar.php"?>
         <?php include "funtion.php" ?>
@@ -62,6 +66,7 @@
         
                 <main class="content"> 
                 <div class="container-fluid p-0">
+                <a href="<?php echo $previousPage; ?>" class="back-button">&lt;</a> 
 					<h1 class="h3 mb-3">เเก้ไขโปรเจค</h1>
 				</div>
                     <div class="row">
@@ -302,8 +307,8 @@ $(document).ready(function(){
                 icon: 'error',
                 //text: "It will be deleted permanently!",
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
                 confirmButtonText: 'ใช่ต้องการลบ!',
                 cancelButtonText: 'กลับ',
                 showLoaderOnConfirm: true,
@@ -320,6 +325,7 @@ $(document).ready(function(){
                                     title: 'success',
                                     text: 'ลบงานเรียบร้อยเเล้ว!',
                                     icon: 'success',
+                                    confirmButtonText: 'ตกลง!',
                                 }).then(() => {
                                     document.location.href = 'editproject_page.php?update_id='+ project_id;
                                     
@@ -339,8 +345,8 @@ $(document).ready(function(){
                 title: 'คุณต้องการปิดหัวข้องานใช่หรือไม่',
                 icon: 'error',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
                 confirmButtonText: 'ใช่ต้องการปิด!',
                 cancelButtonText: 'กลับ',
                 showLoaderOnConfirm: true,
@@ -356,6 +362,7 @@ $(document).ready(function(){
                                 title: 'success',
                                 text: 'ปิดหัวข้องานเเล้ว!',
                                 icon: 'success',
+                                confirmButtonText: 'ตกลง!',
                             }).then(() => {
                                 document.location.href = 'editproject_page.php?update_id='+ project_id;
                             })
@@ -377,8 +384,8 @@ $(document).ready(function(){
             title: 'คุณต้องการเปิดหัวข้องานใช่หรือไม่',
             icon: 'info',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
             confirmButtonText: 'ใช่ต้องการปิด!',
             cancelButtonText: 'กลับ',
             showLoaderOnConfirm: true,
@@ -396,6 +403,7 @@ $(document).ready(function(){
                                 title: 'เปิดหัวข้องานเรียบร้อยเเล้ว!',
                                 text: '',
                                 icon: 'success',
+                                confirmButtonText: 'ตกลง!',
                             }).then(() => {
                                  document.location.href = 'view_project.php?view_id='+ project_id; 
                             })
@@ -404,6 +412,7 @@ $(document).ready(function(){
                                 title: 'เวลาของหัวข้อนี้ได้หมดลงเเล้วไม่สามารถเปิดหัวข้องานได้!',
                                 text: '',
                                 icon: 'error',
+                                confirmButtonText: 'ตกลง!',
                             }).then(() => {
                                 window.location.reload();
                             })  

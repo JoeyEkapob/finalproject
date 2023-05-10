@@ -26,7 +26,7 @@
                      </div>   
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">กลับ</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">กลับ</button>
                     </div>
             </div>
         </div>

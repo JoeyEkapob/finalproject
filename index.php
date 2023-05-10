@@ -5,8 +5,9 @@
          $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
         header('location:sign-in.php');
     }
-	include "sidebar.php";
  	include "funtion.php";
+	include "sidebar.php";
+
 	$user_id=$_SESSION['user_login'];
 	/* echo $user_id; */
 	$where ="";
@@ -17,9 +18,9 @@
 /* 	echo $stmtusernum ; */
 
 	 if($level >= 2){
-		$where = "   where user_id  = $user_id ";
+		$where = "   and user_id  = $user_id ";
 	 }
-	$stmtprojectnumuser = "SELECT COUNT(project_id) as num1 FROM project_list   $where";
+	$stmtprojectnumuser = "SELECT COUNT(pl.project_id) as num1 FROM project_list as pl  left join  project as p on pl.project_id = p.project_id WHERE  status_1 !=3  $where";
 	$stmtprojectnumuser = $db->prepare($stmtprojectnumuser);
 	$stmtprojectnumuser ->execute();
 	$stmtprojectnumuser = $stmtprojectnumuser->fetchColumn();
@@ -34,9 +35,9 @@
 
 
 	if($level >= 2){
-		$where = "   where user_id = $user_id    ";
+		$where = "   and user_id = $user_id    ";
 	 }
-	$stmttasknum = "SELECT COUNT(project_id) as num2 FROM task_list  $where ";
+	$stmttasknum = "SELECT COUNT(task_id) as num2 FROM task_list as t left join project as p on t.project_id = p.project_id WHERE  status_1 !=3 AND  progress_task != 100 AND status_task != 5 $where ";
 	$stmttasknum = $db->prepare($stmttasknum);
 	$stmttasknum ->execute();
 	$stmttasknum = $stmttasknum->fetchColumn(); 
@@ -44,19 +45,23 @@
 	if($level >= 2){
 		$where = "  and user_id = $user_id  ";
 	 }
-	$stmttaskpnum = "SELECT COUNT(project_id) as num2 FROM task_list  where progress_task != 100 OR status_task = 5 $where ";
+
+	$stmttaskpnum = "SELECT COUNT(task_id) FROM task_list as t left join project as p on t.project_id = p.project_id  where p.status_1 !=3 AND t.progress_task != 100 AND t.status_task != 5 AND status_timetask = 2 $where ";
 	$stmttaskpnum = $db->prepare($stmttaskpnum);
 	$stmttaskpnum ->execute();
-	$stmttaskpnum = $stmttaskpnum->fetchColumn();   
-	$state_details = "";
+ 	$stmttaskpnum = $stmttaskpnum->fetchColumn(); 
+
+
 	if($level >= 2){
-	$stmtdetails = "SELECT COUNT(details_id) as num3 FROM details WHERE state_details = 'Y'  ";
-	}else{
-	$stmtdetails = "SELECT COUNT(details_id) as num3 FROM details WHERE state_details = 'Y' AND  usersenddetails = $user_id ";
-	}
+		$where = "and  p.manager_id = $user_id "; 
+	} 
+	
+	$stmtdetails = "SELECT COUNT(details_id)  FROM details as d left join project as p on p.project_id = d.project_id WHERE state_details = 'Y' $where ";
 	$stmtdetails = $db->prepare($stmtdetails);
 	$stmtdetails ->execute();
 	$stmtdetails = $stmtdetails->fetchColumn();
+/* 
+	print_r($stmtdetails); */
 	//extract($row);
 	//print_r ($num_rows); 
 ?>
@@ -232,7 +237,7 @@
 										<?php endif; ?>
 									</div>
 								</div>
-							</div>
+						<!-- 	</div> -->
 						</div>
 					</div>
 						<!-- <div class="col-xl-6 col-xxl-7">
@@ -425,4 +430,7 @@
 </body>
 
 </html>
+<script> 
+
+</script> 
 <?php include "footer.php"?>

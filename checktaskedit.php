@@ -3,6 +3,16 @@ session_start();
  include 'connect.php';
  date_default_timezone_set('asia/bangkok');
  $date = date ("Y-m-d H:i");
+ if(!isset($_SESSION['user_login'])){
+    $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
+   header('location:sign-in.php');
+}
+
+ if (isset($_SERVER['HTTP_REFERER'])) {
+    $previousPage = $_SERVER['HTTP_REFERER'];
+  } else {
+    $previousPage = "#";
+  }
  if (isset($_GET['details_id'])){
    
         $details_id = $_GET['details_id'];
@@ -21,7 +31,6 @@ session_start();
 <!DOCTYPE html>
 <html lang="en">
     <form action="proc.php" method="post" class="form-horizontal" enctype="multipart/form-data">
-    <?php include 'head.php'?> 
     <body>
     <?php include "sidebar.php"?>
     <?php if(isset($_SESSION['error'])) { ?>
@@ -49,6 +58,7 @@ session_start();
    <input type="hidden" id="status_timedetails" name="status_timedetails" value=""> 
    
 		<main class="content">
+        <a href="<?php echo $previousPage; ?>" class="back-button">&lt;</a> 
 				<div class="container-fluid p-0">
 					<h1 class="h3 mb-3">ส่งงานกลับเเก้</h1>
 				</div>

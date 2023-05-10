@@ -18,8 +18,8 @@ $formatted_time = date('Y-m-d H:i:s', $current_time);
     $chktimetask->execute();  
     while ($row2 = $chktimetask->fetch(PDO::FETCH_ASSOC)){
 
-        print_r($row2); 
-  /*   $task_id = $row2['task_id'];
+       /*  print_r($row2);  */
+    $task_id = $row2['task_id'];
         $update_stmt = $db->prepare("UPDATE task_list SET status_timetask = 1 WHERE task_id = :task_id");
         $update_stmt->bindParam(':task_id', $task_id);
         $update_stmt->execute();
@@ -32,7 +32,7 @@ $formatted_time = date('Y-m-d H:i:s', $current_time);
        $sMessage .= "คนที่สั่งงาน : ".$row2['manager_name']." \n";
    
        sentNotify($sToken , $sMessage); 
- */
+
     }  
     
     $chktimetaskend ="UPDATE task_list as t 

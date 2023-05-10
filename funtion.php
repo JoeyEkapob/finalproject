@@ -100,6 +100,18 @@
         } 
     }
 
+    function showtdetailtext($detail){
+        if($detail =='1'){
+            return "ลากิจ";
+        }elseif($detail =='2'){
+            return "ลาป่วย";
+        } elseif($detail =='3'){
+            return "ติดงานราชการด่วน";
+        } elseif($detail =='4'){
+            return "แก้ไขงาน";
+        } 
+    }
+
     function ThDate($date2){
         if (empty($date2)){
             return "";
@@ -119,7 +131,7 @@
     $years = date("Y",strtotime($date2))+543; // ค่า ค.ศ.บวก 543 ทำให้เป็น ค.ศ.
     $time = " เวลา ".date("H:i",strtotime($date2));
 
-    return "วัน$ThDay[$week] ที่ $day $ThMonth[$months] $years";
+    return "วัน$ThDay[$week] ที่ $day $ThMonth[$months] $years  ";
     }
   
     $dayTH = [null,'อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];

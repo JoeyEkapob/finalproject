@@ -14,6 +14,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <body>
+        <?php include 'head.php'?>
         <?php include "sidebar.php"?>
         <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
@@ -170,7 +171,7 @@ function addpro(){
 
 
 $(document).ready(function(){
-   /*  var data=[]; */
+    var data=[]; 
     var items = [];
    console.log(items); 
       <?php
@@ -185,7 +186,7 @@ $(document).ready(function(){
         items.push({ 
         value: <?php echo $row['user_id'];?>,
         text: '<?php echo $row['name'];?><?php echo " ( ";?><?php echo $row['position_name'].' '. $row['department_name']?><?php echo " ) ";?>',
-        html: '<button class="btn btn-primary btn-sm viewuserdata" data-userid="<?php echo $row['user_id']; ?>">ดูรายระเอียด</button>'
+        html: '<button class="btn btn-primary btn-sm viewuser_data" data-userid="<?php echo $row['user_id']; ?>">ดูรายระเอียด</button>'
 
     });
     <?php  } ?>
@@ -198,19 +199,18 @@ $(document).ready(function(){
         // Display the selected Values
         $('#display_selected').click(function () {
             $('#user_id').val(select.check_multi_select('fetch_country'));
-           /*  alert(select.check_multi_select('fetch_country'))
-            console.log($('#user_id').val()); */
+            alert(select.check_multi_select('fetch_country'))
+            console.log($('#user_id').val()); 
         });
     });
 $(document).ready(function(){
-  $('.viewuserdata').click(function(){
+  $('.viewuser_data').click(function(){
     var proc = 'viewdatauser';
     var userid=$(this).data("userid");
- /*    var usersendid=$(this).data("send");
-    var sendstatus=$(this).data("status"); */
+
     console.log(userid);
     $.ajax({
-        url:"proc.php",
+        url:"proc2.php",
         method:"post",
         data:{proc:proc,userid:userid},
         success:function(data){

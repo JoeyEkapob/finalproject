@@ -1,6 +1,15 @@
 <?php 
 session_start();
 require_once 'connect.php';
+if(!isset($_SESSION['user_login'])){
+    $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
+   header('location:sign-in.php');
+}
+if (isset($_SERVER['HTTP_REFERER'])) {
+    $previousPage = $_SERVER['HTTP_REFERER'];
+  } else {
+    $previousPage = "#";
+  }
 ?>
 
 <!DOCTYPE html>
@@ -13,10 +22,13 @@ require_once 'connect.php';
 <body>
 <?php include "sidebar.php"?>
 <?php include "funtion.php"?>
-	<main class="d-flex w-100">
+
+	<main class="content">
+    <a href="<?php echo $previousPage; ?>" class="back-button">&lt;</a> 
 		<div class="container d-flex flex-column">
 			<div class="row vh-30">
 				<div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-80">
+                    
 					<div class="d-table-cell align-middle">
 
 						<div class="text-center mt-4">

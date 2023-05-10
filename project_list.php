@@ -173,8 +173,8 @@ $(document).ready(function () {
                 icon: 'error',
                 //text: "It will be deleted permanently!",
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
                 confirmButtonText: 'ใช่ต้องการลบ!',
                 cancelButtonText: 'กลับ',
                 showLoaderOnConfirm: true,
@@ -190,6 +190,7 @@ $(document).ready(function () {
                                     title: 'success',
                                     text: 'ลบหัวข้องานเรียบร้อยเเล้ว!',
                                     icon: 'success',
+                                    confirmButtonText: 'ตกลง!',
                                 }).then(() => {
                                     document.location.href = 'project_list.php';
                                     

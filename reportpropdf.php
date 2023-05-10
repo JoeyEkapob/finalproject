@@ -7,6 +7,17 @@
     $date = date ("Y-m-d");
     $us=$_SESSION['user_login'];
 
+    $nameuser ="SELECT concat(firstname,' ',lastname) as name , u.role_id ,u.user_id  ,p.role_id , p.level ,d.department_id From user as u 
+    left join position as p on u.role_id = p.role_id 
+    left join department as d on d.department_id = u.department_id 
+    WHERE user_id = $us";
+    $nameuser = $db->query($nameuser);
+    $nameuser->execute();  
+    $nameuser = $nameuser->fetch(PDO::FETCH_ASSOC);
+  
+    $level = $nameuser['level'];
+    $department =$nameuser['department_id'];
+
 if($_POST['proc'] == 'report'){
 
     $nameproject = $_POST["nameproject"];
@@ -17,14 +28,47 @@ if($_POST['proc'] == 'report'){
     $status2 = $_POST["status2"];
 
     /*     $username = $db->query("SELECT CONCAT(FirstName, ' ', LastName) As fullName FROM user WHERE project_id =  ".$array['project_id']." "); */
-    $numtask = $db->query("SELECT task_id FROM task_list ");
+    $where = '';
+    if ($level > 2) {
+        $where .= "AND $level <= po.level AND d.department_id = $department ";
+    } 
+    if (!empty($nameproject)) {
+        $where .= "AND name_project LIKE '%$nameproject%' ";
+    }
+    if (!empty($job)) {
+        $where .= "AND p.id_jobtype = '$job' ";
+    }
+    if (!empty($start_date)) {
+        $where .= "AND start_date >= '$start_date' ";
+    }
+    if (!empty($end_date)) {
+        $where .= "AND end_date <= '$end_date' ";
+    }
+    if (!empty($status1)) {
+        $where .= "AND status_1 = '$status1' ";
+    }
+    if (!empty($status2)) {
+        $where .= "AND status_2 = '$status2' ";
+    }
+    $numtask = $db->query("SELECT task_id FROM task_list as t 
+    left join project as p on t.project_id = p.project_id  
+    left join job_type as j on p.id_jobtype = j.id_jobtype 
+    LEFT JOIN user as u ON p.manager_id = u.user_id
+    LEFT JOIN position as po ON po.role_id  = u.role_id
+    LEFT JOIN department as d ON d.department_id  = u.department_id
+    WHERE 1=1 $where  ");
     $numtask = $numtask->rowCount(); 
 
 
     $sql = "SELECT * FROM project as p 
     LEFT JOIN job_type as j ON p.id_jobtype = j.id_jobtype 
     LEFT JOIN user as u ON p.manager_id = u.user_id
+    LEFT JOIN position as po ON po.role_id  = u.role_id
+    LEFT JOIN department as d ON d.department_id  = u.department_id
     WHERE 1=1 ";
+    if ($level > 2) {
+        $sql .= "AND $level <= po.level AND d.department_id = $department ";
+    } 
     if (!empty($nameproject)) {
         $sql .= "AND name_project LIKE '%$nameproject%' ";
     }
@@ -118,9 +162,9 @@ if($_POST['proc'] == 'report'){
     $pdf->Cell(22,8,iconv('UTF-8','cp874','รหัสหัวข้องาน'),1,0,"C");
     $pdf->Cell(40,8,iconv('UTF-8','cp874','ชื่อหัวข้องาน'),1,0,"C");
     $pdf->Cell(35,8,iconv('UTF-8','cp874','ประเภทงาน'),1,0,"C");
-    $pdf->Cell(50,8,iconv('UTF-8','cp874','วันที่เรื่ม - วันที่สิ้นสุด'),1,0,"C");
+    $pdf->Cell(45,8,iconv('UTF-8','cp874','วันที่เรื่ม - วันที่สิ้นสุด'),1,0,"C");
     $pdf->Cell(20,8,iconv('UTF-8','cp874','สถานะ'),1,0,"C");
-    $pdf->Cell(25,8,iconv('UTF-8','cp874','คนที่มอบหมาย'),1,0,"C");
+    $pdf->Cell(30,8,iconv('UTF-8','cp874','คนที่มอบหมาย'),1,0,"C");
     
     $pdf->Ln();
 
@@ -139,12 +183,12 @@ if($_POST['proc'] == 'report'){
             $pdf->Cell(22,10,iconv('UTF-8','cp874',$array['project_id']),1,0,"C");
             $pdf->Cell(40,10,iconv('UTF-8','cp874',$array['name_project']),1,0,"c");
             $pdf->Cell(35,10,iconv('UTF-8','cp874',$array['name_jobtype']),1,0,"c");
-            $pdf->Cell(50, 10, iconv('UTF-8', 'cp874', thai_date_short(strtotime($array['start_date']))) . ' - ' . iconv('UTF-8', 'cp874', thai_date_short(strtotime($array['end_date']))), 1, 0, "C");
+            $pdf->Cell(45, 10, iconv('UTF-8', 'cp874', thai_date_short(strtotime($array['start_date']))) . ' - ' . iconv('UTF-8', 'cp874', thai_date_short(strtotime($array['end_date']))), 1, 0, "C");
         /*  $pdf->Cell(17,10,iconv('UTF-8','cp874',showstatprotext1($array['status_1'])). ' - '.iconv('UTF-8','cp874',showstatprotext1($array['status_1'])),1,0,"C"); */
             $pdf->Cell(20,10,iconv('UTF-8','cp874',showstatprotext1($array['status_1']))/* .'('.iconv('UTF-8','cp874',showstatprotext2($array['status_2'])).')' */, 1, 0, "C");
     /* 
             $pdf->Cell(17,10,iconv('UTF-8','cp874',$array['progress_project'].' '.'%'),1,0,"C"); */
-        $pdf->Cell(25,10,iconv('UTF-8','cp874',$array['firstname'].' '.$array['lastname']),1,1,"c"); 
+        $pdf->Cell(30,10,iconv('UTF-8','cp874',$array['firstname'].' '.$array['lastname']),1,1,"c"); 
         /*    $pdf->Cell(25,10,iconv('UTF-8','cp874','sdfsdfsdfsdfsdfsdfsdf'),1,1,"c"); */
 
             } 
@@ -154,10 +198,6 @@ if($_POST['proc'] == 'report'){
             $pdf->Cell(192,10,iconv('UTF-8','cp874','ไม่พอข้อมูล'),1,1,"C");
         }
         
-        $nameuser ="SELECT concat(firstname,' ',lastname) as name From user WHERE user_id = $us";
-        $nameuser = $db->query($nameuser);
-        $nameuser->execute();  
-        $nameuser = $nameuser->fetch(PDO::FETCH_ASSOC);
 
     $pdf->SetFont('THSarabun','',10); 
     $pdf->Cell(193,8,iconv('UTF-8','cp874','ผู้พิมพ์ '.$nameuser['name']),0,1,"R");
@@ -419,10 +459,11 @@ else if($_POST['proc']== 'reporttaskdetails'){
     $pdf->setDrawColor(100,100,100); 
     $pdf->SetFont('THSarabunb','B',14); 
     $pdf->Cell(22,8,iconv('UTF-8','cp874','ครั้งที่'),1,0,"C");
-    $pdf->Cell(60,8,iconv('UTF-8','cp874','ชื่องาน'),1,0,"C");
-    $pdf->Cell(50,8,iconv('UTF-8','cp874','วันที่ส่ง'),1,0,"C");
-    $pdf->Cell(25,8,iconv('UTF-8','cp874','ความคืบหน้า'),1,0,"C");
-    $pdf->Cell(35,8,iconv('UTF-8','cp874','สถานะ'),1,0,"C");
+    $pdf->Cell(50,8,iconv('UTF-8','cp874','ชื่องาน'),1,0,"C");
+    $pdf->Cell(45,8,iconv('UTF-8','cp874','วันที่ส่ง'),1,0,"C");
+    $pdf->Cell(23,8,iconv('UTF-8','cp874','ความคืบหน้า'),1,0,"C");
+    $pdf->Cell(27,8,iconv('UTF-8','cp874','สถานะ'),1,0,"C");
+    $pdf->Cell(25,8,iconv('UTF-8','cp874','หมายเหตุ'),1,0,"C");
     $pdf->Ln();
 
 
@@ -439,10 +480,11 @@ else if($_POST['proc']== 'reporttaskdetails'){
     while ($sqldetailsuser2 = $sqldetailsuser->fetch(PDO::FETCH_ASSOC)) {
 
         $pdf->Cell(22,10,iconv('UTF-8','cp874',$i++),1,0,"C");
-        $pdf->Cell(60,10,iconv('UTF-8','cp874',$sqldetailsuser2['name_tasklist']),1,0,"c");
-        $pdf->Cell(50, 10, iconv('UTF-8', 'cp874',thai_date_and_time_short($sqldetailsuser2['date_detalis'])), 1, 0, "C");
-        $pdf->Cell(25,10,iconv('UTF-8','cp874',$sqldetailsuser2['progress_task'].' '.'%'),1,0,"C"); 
-        $pdf->Cell(35,10,iconv('UTF-8','cp874',showstatdetail($sqldetailsuser2['state_details'])) .iconv('UTF-8','cp874',showstatustimepdf($sqldetailsuser2['status_timedetails'])) , 1, 1, "C"); 
+        $pdf->Cell(50,10,iconv('UTF-8','cp874',$sqldetailsuser2['name_tasklist']),1,0,"c");
+        $pdf->Cell(45, 10, iconv('UTF-8', 'cp874',thai_date_and_time_short($sqldetailsuser2['date_detalis'])), 1, 0, "C");
+        $pdf->Cell(23,10,iconv('UTF-8','cp874',$sqldetailsuser2['progress_task'].' '.'%'),1,0,"C"); 
+        $pdf->Cell(27,10,iconv('UTF-8','cp874',showstatdetail($sqldetailsuser2['state_details'])) .iconv('UTF-8','cp874',showstatustimepdf($sqldetailsuser2['status_timedetails'])) , 1,0, "C"); 
+        $pdf->Cell(25,10,iconv('UTF-8','cp874',showtdetailtext($sqldetailsuser2['detail'])),1,1,"C"); 
        
     }
     }else{
@@ -486,7 +528,6 @@ else if($_POST['proc']== 'reportuser'){
     $stmt = $db->query($sql);
     $stmt->execute();
     $numuser= $stmt->rowCount();
-    $rowrole = $stmt->fetch(PDO::FETCH_ASSOC);
     class PDF extends FPDF {
         // Page header
             function Header() {
@@ -546,8 +587,12 @@ else if($_POST['proc']== 'reportuser'){
             $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,1,"");  
         }
         if (!empty($role)) {
+                $nameposition = "SELECT * FROM position WHERE role_id = $role";
+                $nameposition = $db->query($nameposition);
+                $nameposition->execute();
+                $nameposition = $nameposition->fetch(PDO::FETCH_ASSOC);
                 $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,0,"");
-                $pdf->Cell(50,15,iconv('UTF-8','cp874','ตำเเหน่ง : '. $rowrole['position_name'] ),0,0,"");
+                $pdf->Cell(50,15,iconv('UTF-8','cp874','ตำเเหน่ง : '. $nameposition['position_name'] ),0,0,"");
             }else{
                 $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,0,"");
                 $pdf->Cell(50,15,iconv('UTF-8','cp874','ตำเเหน่ง : - ' ),0,0,"");
@@ -576,9 +621,9 @@ else if($_POST['proc']== 'reportuser'){
         $pdf->Cell(25,8,iconv('UTF-8','cp874','หัวข้องานที่ถูกสั่ง'),1,0,"C");
         $pdf->Cell(20,8,iconv('UTF-8','cp874','จำนวนงาน'),1,0,"C");
         $pdf->Cell(20,8,iconv('UTF-8','cp874','งานที่ล่าช้า'),1,0,"C");
-        $pdf->Cell(22,8,iconv('UTF-8','cp874','ครั้งที่ถูกสั่งเเก้'),1,1,"C");
+        $pdf->Cell(22,8,iconv('UTF-8','cp874','ครั้งที่ถูกสั่งเเก้'),1,0,"C");
      
-     
+        $pdf->Ln();
         $i = 1;
         $pdf->SetFont('THSarabun','',14); 
         if ($numuser > 0) {

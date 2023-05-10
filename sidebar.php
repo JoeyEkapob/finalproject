@@ -141,6 +141,7 @@ include "head.php";
 						</a>
 					</li>
 				</ul>
+				<?php if($level < 2): ?>
 				<ul id="report" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="reportuser.php">
@@ -148,6 +149,7 @@ include "head.php";
 						</a>
 					</li>
 				</ul>
+				<?php endif; ?>
 			</li>
 					<?php if($level != 5): ?>
 					<li class="sidebar-item">
@@ -322,11 +324,12 @@ include "head.php";
 							</div>
 						</li> -->
 
-						<li class="nav-item dropdown">
+					<!-- 	 <li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
                 <i class="align-middle" data-feather="settings"></i>
-              </a>
-
+              </a>  
+			  </li> -->
+					
 							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
 							<?php if($row['avatar'] !=""){?>
                 				<img src="img/avatars/<?php echo $row['avatar'] ?>" class="avatar rounded-circle rounded me-1" alt="" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
@@ -347,27 +350,24 @@ include "head.php";
 								<a class="dropdown-item logoutuser" >ออกจากระบบ</a>
 							</div>
 							<?php include 'viewmodel.php'?>
-						</li>
 					</ul>
 				</div>
 			</nav>
-<script> 
-   $(document).ready(function(){
+			<script> 
+  $(document).ready(function(){
   $('.viewuserdata').click(function(){
     var proc = 'viewdatauser';
     var userid=$(this).data("userid");
- /*    var usersendid=$(this).data("send");
-    var sendstatus=$(this).data("status"); */
-    console.log(userid);
+  /*   console.log(userid); */
     $.ajax({
-        url:"proc.php",
+        url:"proc2.php",
         method:"post",
         data:{proc:proc,userid:userid},
         success:function(data){
-           // console.log(data);
+        /*    console.log(data); */
 
-            $('#datauser').html(data);
-            $('#datausermodal').modal('show'); 
+           $('#datauser').html(data);
+            $('#datausermodal').modal('show');  
         }
     })
   });
@@ -377,8 +377,8 @@ $(".logoutuser").click(function() {
         title: 'คุณต้องการออกจากระบบใช่หรือไม่',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
         confirmButtonText: 'ใช่ต้องการออกจากระบบ!',
         cancelButtonText: 'กลับ',
         showLoaderOnConfirm: true,
@@ -394,6 +394,7 @@ $(".logoutuser").click(function() {
                                 title: 'เรียบร้อย',
                                 text: 'ออกจากระบบเรียบร้อยแล้ว!',
                                 icon: 'success',
+								confirmButtonText:'ตกลง',
                             }).then(() => {
                                 document.location.href = 'logout.php';
                             });
@@ -403,5 +404,5 @@ $(".logoutuser").click(function() {
             });
         },
     });
-});
+}); 
 </script> 

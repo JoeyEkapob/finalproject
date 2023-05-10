@@ -5,6 +5,12 @@
          $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
         header('location:sign-in.php');
     }
+    if (isset($_SERVER['HTTP_REFERER'])) {
+        $previousPage = $_SERVER['HTTP_REFERER'];
+      } else {
+        $previousPage = "#";
+      }
+     
     date_default_timezone_set('asia/bangkok');
     $date = date ("Y-m-d H:i");
     $us=$_SESSION['user_login'];
@@ -59,7 +65,7 @@
     <input type="hidden" id="details" name="details" value="">
    
     <main class="content">
-    <a href="project_list.php" class="back-button">&lt;</a> 
+    <a href="<?php echo $previousPage; ?>" class="back-button">&lt;</a> 
                     <div class="col-12  d-flex">
                          <div class="card flex-fill">  
                              <div class="card-header">
@@ -290,10 +296,11 @@
                                             </td>
                                             
                                             <td class="action-col">
-                                        
+
+                                            <?php  if ($row2['user_id'] == $us   || $level <= 2   || $manager_id == $us ) { ?>
                                             <a class="btn btn-google btn-sm" href="details_page.php?task_id=<?php echo $row2['task_id']?>&project_id=<?php echo $row2['project_id']?>"><i data-feather="message-square"></i></a>   
                                             <!-- <a class="btn btn-google btn-sm" data-bs-toggle="modal" data-bs-target="#viewdetailsmodal<?php echo $row2['details_id']?>"><i data-feather="message-square"></i></a> -->
-
+                                                <?php } ?>
                                             <a class="btn btn-bitbucket btn-sm" data-bs-toggle="modal" data-bs-target="#viewtaskmodal<?php echo $row2['task_id']?>"><i data-feather="zoom-in"></i></a>
 
                                             <?php
@@ -311,7 +318,7 @@
                                                     echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' .   $row2['project_id'] .'&user_id='. $us .'&statustimetask='. $row2['status_timetask'].'" class="btn btn-success btn-sm"><i data-feather="share"></i></a>';  
                                                 }
                                              
-                                                else if($row2['progress_task'] != 100 AND $row2['status_task'] = 2  AND $status_1 != 3 ){
+                                                else if($row2['user_id'] == $us   || $level <= 2   || $manager_id == $us   AND $row2['progress_task'] != 100 AND $row2['status_task'] = 2  AND $status_1 != 3 ){
                                                     echo '<button class="btn btn-danger btn-sm deletedetals-btn"  data-project_id="'.$row2['project_id'].'"  data-task_id="'.$row2['task_id'].'"  data-details_id="'.$stmt2['details_id'].'"><i data-feather="x"></i></button> '; 
                                                     //echo $row2['project_id'];
                                                     
@@ -365,7 +372,7 @@
     var sendstatus=$(this).data("status"); */
     console.log(userid);
     $.ajax({
-        url:"proc.php",
+        url:"proc2.php",
         method:"post",
         data:{proc:proc,userid:userid},
         success:function(data){

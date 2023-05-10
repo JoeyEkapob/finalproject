@@ -2,7 +2,15 @@
 session_start();
  include 'connect.php';
  $targetDir = "img/avatars/";
- 
+ if(!isset($_SESSION['user_login'])){
+	$_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
+   header('location:sign-in.php');
+}
+if (isset($_SERVER['HTTP_REFERER'])) {
+    $previousPage = $_SERVER['HTTP_REFERER'];
+  } else {
+    $previousPage = "#";
+  }
  if (isset($_GET['user_id'])){
         $id = $_REQUEST['user_id'];
         $select_stmt = $db->prepare('SELECT * FROM user  AS u  natural JOIN position  WHERE user_id = :id');
@@ -11,11 +19,9 @@ session_start();
         $row = $select_stmt->fetch(PDO::FETCH_ASSOC);
         extract($row);
 		//echo $tel;
- 
+
 }   
 //echo $avatar; 
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,6 +49,7 @@ session_start();
 		<input type= hidden id="userid" name="userid" value="">
 		
 		<main class="content">
+		<a href="<?php echo $previousPage; ?>" class="back-button">&lt;</a> 
 				<div class="container-fluid p-0">
 					<h1 class="h3 mb-3">เเก้ไขสมาชิก</h1>
 				</div>
@@ -160,7 +167,8 @@ session_start();
 		$('#proc').val('edituser');
 		 $('#userid').val(id);
 		//console.log(id) 
-	}function Preview(ele) {
+	}
+	function Preview(ele) {
         $('#img').attr('src', ele.value);
                 if (ele.files && ele.files[0]) {
                 var reader = new FileReader();

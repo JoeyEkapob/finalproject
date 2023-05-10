@@ -86,9 +86,9 @@
 
                                     <div class="row">
                                         <div class="col-md-3 col-sm-4 d-flex flex-row-reverse"><b>วันที่เริ่ม :</b></div>
-                                        <div class="col-md-3 col-sm-8"><?php echo  ThDate($strat_date_task) ?></div>
+                                        <div class="col-md-3 col-sm-8"><?php echo  thai_date_and_time_short($strat_date_task) ?></div>
                                         <div class="col-md-2 col-sm-4 d-flex flex-row-reverse"><b>วันที่สิ้นสุด :</b></div>
-                                        <div class="col-md-3 col-sm-8"><?php echo ThDate($end_date_task) ?></div>
+                                        <div class="col-md-3 col-sm-8"><?php echo thai_date_and_time_short($end_date_task) ?></div>
                                     </div>
 
                                   
@@ -136,7 +136,7 @@
                                             <th class=" namepro-col">วันที่ส่ง</th>
                                             <th class="comptask-col" >ความคืบหน้า</th>
                                             <th class="action-col">สถานะ</th>
-                                         
+                                            <th class="action-col">หมายเหตุ</th>
                                         </tr>
                                     </thead>
                                 <tbody>
@@ -185,9 +185,9 @@
                                             <?php echo showstatdetail($sqldetailsuser2['state_details']).showstatustimepdf($sqldetailsuser2['status_timedetails']) ?>
                                             </td>
 
-                                           <!--  <td class="action-col">
-                                                    <?php  echo  showstattaskreport($row2['status_task']);?>
-                                            </td> -->
+                                           <td class="action-col">
+                                                    <?php  echo  showtdetailtext($sqldetailsuser2['detail']);?>
+                                            </td> 
                                          
                                          
                                         </tr>

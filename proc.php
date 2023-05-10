@@ -15,245 +15,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
     $url_return = "";
     $user_id=$_SESSION['user_login'];
 
-    if($_POST['proc'] == 'viewdetails'){
-            $details_id = $_POST['detail_id'];
-            $usersendid = $_POST['usersendid'];
-            $sendstatus = $_POST['sendstatus'];
-            $outp ="";
-            $sql = "SELECT * FROM details NATURAL join user  NATURAL join task_list  NATURAL join project  where details_id = $details_id";
-            $qry = $db->query($sql);
-            $qry->execute();
-            if($sendstatus == 1){
-            while($row = $qry->fetch(PDO::FETCH_ASSOC)){ 
-                
-            $outp.=' 
-            <div class="col-12  d-flex">
-                <div class="card flex-fill">  
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-12">
-
-                                <dl>                                   
-                                    <dt><b class="border-bottom border-primary">ชื่อโปรเจค</b> '.  showstatustime($row['status_timedetails']) .' </dt>
-                                    <dd>'.$row['name_project'].'</dd>
-
-                                    <dt><b class="border-bottom border-primary">ชื่องาน</b></dt>
-                                    <dd>'.$row['name_tasklist'] .'</dd>
-
-                                    <dt><b class="border-bottom border-primary">วันเเละเวลาที่ส่งงาน</b></dt>
-                                    <dd>'.thai_date_and_time($row['date_detalis']).'</dd>
-
-                                    <dt><b class="border-bottom border-primary">รายละเอียด</b></dt>
-                                    <dd>'.$row['comment'].'</dd>
-                                </dl>';
-
-            }
-        
-            $profileusersendsql = "SELECT * FROM details NATURAL JOIN user WHERE user_id = $usersendid";
-            $profileusersendqry = $db->query($profileusersendsql);
-            $profileusersendqry->execute(); 
-            $profileusersendrow = $profileusersendqry->fetch(PDO::FETCH_ASSOC);
-
-            $outp.=' <dt><b class="border-bottom border-primary">คนที่ส่งงาน</b></dt>
-                        <dd> 
-                            <div class="d-flex align-items-center mt-1">';
-                    if($profileusersendrow['avatar'] !=""){ 
-            $outp.='   <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/'. $profileusersendrow['avatar'].'" alt="Avatar" width="35"  height="35">
-                        <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
-                    }else{ 
-            $outp.='<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
-                        <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
-                    } 
-            $outp.=' </div>
-                        </dd>
-                        <dt><b class="border-bottom border-primary">ไฟล์เเนบ</b></dt>'; /* */
-    
-            $filedetailsql = "SELECT * FROM details  NATURAL JOIN file_item_details WHERE details_id = $details_id";
-            $filedetailqry = $db->query($filedetailsql);
-            $filedetailqry->execute();
-            while ($filedetailqryrow = $filedetailqry->fetch(PDO::FETCH_ASSOC)) { 
-
-                $outp.=' <div class="row">
-                            <div class="col-sm">
-                                <a href="img/file/file_details/' . $filedetailqryrow['newname_filedetails'] . '" download="' . $filedetailqryrow['filename_details'] . '">' . $filedetailqryrow['filename_details'] . '</a> 
-                            </div>
-                        </div>';
-                                }  
-                $outp.= '</div>
-                </div> 
-            </div>
-        </div>'; 
-
-            
-              
-        }else if($sendstatus == 2){
-            while($row = $qry->fetch(PDO::FETCH_ASSOC)){ 
-    
-                $outp.='
-                    <div class="col-12  d-flex">
-                        <div class="card flex-fill">  
-                            <div class="card-header">
-                                <div class="row">
-                                    <div class="col-md-12">
-                
-                                        <dl>                                   
-                                            <dt><b class="border-bottom border-primary">ชื่อโปรเจค</b> '.  showstatustime($row['status_timedetails']) .'</dt>
-                                            <dd>'.$row['name_project'].'</dd>
-                        
-                                            <dt><b class="border-bottom border-primary">ชื่องาน</b></dt>
-                                            <dd>'.$row['name_tasklist'] .'</dd>
-                        
-                                            <dt><b class="border-bottom border-primary">วันเเละเวลาที่งานส่งกลับเเก้</b></dt>
-                                            <dd>'.thai_date_and_time($row['date_detalis']).'</dd>
-                        
-                                            <dt><b class="border-bottom border-primary">รายละเอียด</b></dt>
-                                            <dd>'.$row['comment'].'</dd>
-                                        </dl>';
-                }
-               
-                $profileusersendsql = "SELECT * FROM details NATURAL JOIN user WHERE user_id = $usersendid";
-                $profileusersendqry = $db->query($profileusersendsql);
-                $profileusersendqry->execute(); 
-                $profileusersendrow = $profileusersendqry->fetch(PDO::FETCH_ASSOC);
-        
-                $outp.=' <dt><b class="border-bottom border-primary">คนที่ตรวจงาน</b></dt>
-                            <dd> 
-                                <div class="d-flex align-items-center mt-1">';
-                if($profileusersendrow['avatar'] !=""){ 
-                $outp.='   <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/'. $profileusersendrow['avatar'].'" alt="Avatar" width="35"  height="35">
-                            <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
-                            }else{ 
-                $outp.='<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
-                            <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
-                        } 
-                $outp.='</div>
-                            </dd>
-                            <dt><b class="border-bottom border-primary">ไฟล์เเนบ</b></dt>'; /* */
-         
-                $filedetailsql = "SELECT * FROM details  NATURAL JOIN file_item_details WHERE details_id = $details_id";
-                $filedetailqry = $db->query($filedetailsql);
-                $filedetailqry->execute();
-                while ($filedetailqryrow = $filedetailqry->fetch(PDO::FETCH_ASSOC)) { 
-        
-                $outp.=' <div class="row">
-                            <div class="col-sm">
-                                <a href="img/file/file_details/' . $filedetailqryrow['newname_filedetails'] . '" download="' . $filedetailqryrow['filename_details'] . '">' . $filedetailqryrow['filename_details'] . '</a> 
-                            </div>
-                        </div> ';
-                    }  
-
-                $outp.='</div>
-                </div>
-            </div> 
-        </div>
-        </div>';  
-                    
-                     
-        }
-        
-         echo  $outp;
-         exit;
-    }
-    else if($_POST['proc'] == 'viewdatauser'){
-
-        $user_id = $_POST['userid'];
-
-        $outp = '';
-        $sql = "SELECT  * FROM user as u 
-        left join position as p on u.role_id = p.role_id  
-        left join department as d on u.department_id = d.department_id  
-        where user_id = $user_id";
-        $qry = $db->query($sql);
-        $qry->execute();
-        while($row = $qry->fetch(PDO::FETCH_ASSOC)){ 
-
-            $outp .= ' <div class="card">		
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="text-center">';
-        
-                                            if ($row['avatar'] != "") {
-                                                $outp .= '<img class="rounded-circle rounded me-5 mb-2" src="img/avatars/' . $row['avatar'] . '" alt="Avatar" width="200" height="200">';
-                                            } else {
-                                                $outp .= '<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="200" height="200">';
-                                            }
-        
-        $outp .= '                      </div>
-                                    </div>
-                    <div class="col-md-1"></div> 
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="" class="control-label"><b>ชื่อ :</b></label>
-                            ' . $row['firstname'] . '' . $row['lastname'] . ' 
-                        </div>
-                        <div class="mb-3">
-                            <label for="" class="control-label"><b>อีเมล :</b></label>
-                            ' . $row['email'] . '
-                        </div>
-                        <div class="mb-3">
-                            <label for="" class="control-label"><b>ตำเเหน่ง :</b></label>
-                            ' . $row['position_name'] . '
-                        </div>
-                        <div class="mb-3">
-                            <label for="" class="control-label"><b>ฝ่าย :</b></label>
-                            ' . $row['department_name'] . '
-                        </div>
-                    </div> 
-                    <div class="col-md-5">
-                        <div class="mb-3">
-                            <label for="" class="control-label"><b>สถานะ :</b></label>';
-                            if ($row['status_user'] == 1) {
-                                $outp .= 'เปิดใช้งาน';
-                            } else {
-                                $outp .= 'ปิดใช้งาน';
-                            }
-            $outp .= '  </div>
-                            <div class="mb-3">
-                                <label for="" class="control-label"><b>เบอร์ :</b></label>
-                                   '.$row['tel'] .'
-                            </div>
-                            <div class="mb-3">
-                                <label for="" class="control-label"><b>เลขบัตรประชาชน :</b></label>
-                                '. $row['idcard'] .'
-                            </div>
-                                
-                    </div> 
-                        <hr>';
-                            $outp .= '<div class="col-md-12">';
-                            $sql2 = $db->query("SELECT manager_id FROM project WHERE manager_id = $user_id"); 
-                            $nummannagerpro = $sql2->rowCount(); 
-                            $sql3 = $db->query("SELECT user_id FROM project_list WHERE user_id = $user_id");
-                            $numuserpro = $sql3->rowCount(); 
-                            $sql4 = $db->query("SELECT user_id FROM task_list WHERE user_id = $user_id ");
-                            $numusertask = $sql4->rowCount(); 
-                            $sql5 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_task != 5 AND progress_task != 100");
-                            $numtaskonp = $sql5->rowCount(); 
-                            $sql6 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_timetask = 2 AND status_task != 5 AND progress_task != 100");
-                            $numtimede = $sql6->rowCount();
-        $outp .= '                              <div class="containeruser">
-                                            <div class="itemuser1">หัวข้องานที่สร้าง</div>
-                                            <div class="itemuser1">หัวข้องานที่ถูกสั่ง</div>
-                                            <div class="itemuser1">งานทั้งหมด</div>
-                                            <div class="itemuser1">งานที่ยังไม่เสร็จ</div>
-                                            <div class="itemuser1">งานที่ล่าช้า</div>
-                                        </div>
-                                        <div class="containeruser">
-                                            <div class="itemuser1">'. $nummannagerpro .'</div>
-                                            <div class="itemuser1">'. $numuserpro .'</div>
-                                            <div class="itemuser1">'. $numusertask .'</div>
-                                            <div class="itemuser1">'. $numtaskonp .'</div>
-                                            <div class="itemuser1">'. $numtimede .'</div>
-                                        </div>
-                                </div> 
-                            </div>
-                        </div>
-                    </div> ';
-        }
-        echo $outp;
-        exit;
-   }
-    else if($_POST['proc'] == 'editdetails'){
+    if($_POST['proc'] == 'editdetails'){
    
          $details_id = $_POST['details_id'];
         $sql = "SELECT * FROM details natural join file_item_details  where details_id = $details_id";
@@ -955,7 +717,10 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $files = $_FILES['files'];
         $max_file_size = 20971520; 
 
-
+        if (empty($users_id1)) {
+            $_SESSION['error'] = 'กรุณากรอกชื่อสมาชิก';
+            $url_return ="location:editproject_page.php?update_id=$proid";
+        }
         if(isset($files['size'])){
             foreach ($files['size'] as $i => $file_size) {
                 if ($file_size >  $max_file_size) {
@@ -973,8 +738,20 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             $user[] = $row['user_id'];
         }
         
+        $sql2 = "SELECT user_id FROM task_list WHERE project_id = $proid";
+        $qry2 = $db->query($sql2);
+        while($row2 = $qry2->fetch(PDO::FETCH_ASSOC)){
+            $usertask[] = $row2['user_id'];
+        }
+     
         $diff = array_diff($users_id, $user);
-
+        $diff2 = array_diff($usertask, $users_id);
+        if(!empty($diff2)){
+            $_SESSION['error'] = 'ไม่สามารถเเก้ไขสมาชิกได้เนื่องจากมีงานที่ต้องทำอยู่ในหัวข้องาน';
+            $url_return ="location:editproject_page.php?update_id=$proid";
+        }
+        /* print_r($diff2);
+        exit; */
         /*  print_r($diff); */
 
         if(!empty($diff)){
@@ -1020,8 +797,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             ,status_2=:status_2,id_jobtype=:id_jobtype WHERE project_id =:id');
             $update_stmtpro->bindParam(":name_project", $proname);
             $update_stmtpro->bindParam(":description", $description);
-/*             $update_stmtpro->bindParam(":status_1", $status1);
- */            $update_stmtpro->bindParam(":start_date", $start_date);
+            $update_stmtpro->bindParam(":start_date", $start_date);
             $update_stmtpro->bindParam(":end_date", $end_date);
             //$update_stmtjob->bindParam(":file_project",$file_project);
             //$update_stmtjob->bindParam(":manager_id", $manager_id);
@@ -1129,7 +905,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
     }
     else if($_POST['proc'] == 'sendtask'){
         
-        $status_timetask = $_POST['status_timetask'];
+        $status_timetask = $_POST['status_timetask']; 
         $project_id= $_POST['project_id'];
         $taskid = $_POST['task_id'];
         $commenttask = trim($_POST['text_comment']);
@@ -1140,10 +916,26 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $status_task = "2";
         $send_status = "1";
         $max_file_size = 20971520; 
+        $detail = "0";
+        
+         if($status_timetask == 2){
+            $detail = $_POST['detail'];
+        } 
+
+        if($status_timetask == 2 ){
+            if(empty($detail)){
+                $_SESSION['error'] = 'กรุณากรอกเหตุการส่งการล่าช้า';
+                $url_return ="location:send_task.php?task_id=$taskid&project_id=$project_id&user_id=$user_id&statustimetask=$status_timetask";
+            }
+        }
+        /* echo  $status_timetask ; */
+  
+
+      
+
 
         $files = $_FILES['files']; 
-
-       
+        
         
        $numfilesend =sizeof(array_filter($_FILES['files']['name']));
             if(isset($files['size'])){
@@ -1181,8 +973,8 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 
                     sentNotify($sToken , $sMessage); 
 
-                    $inserstmtdetails = $db->prepare("INSERT INTO details(project_id,task_id,comment,date_detalis,state_details,progress_details,usersenddetails,send_status,status_timedetails) 
-                                                        VALUES(:project_id,:task_id,:comment,:date_detalis,:state_details,:progress_details,:usersenddetails,:send_status,:status_timedetails)");
+                    $inserstmtdetails = $db->prepare("INSERT INTO details(project_id,task_id,comment,date_detalis,state_details,progress_details,usersenddetails,send_status,status_timedetails,detail) 
+                                                        VALUES(:project_id,:task_id,:comment,:date_detalis,:state_details,:progress_details,:usersenddetails,:send_status,:status_timedetails,:detail)");
                     $inserstmtdetails->bindParam(":project_id",$project_id);
                     $inserstmtdetails->bindParam(":task_id", $taskid);
                     $inserstmtdetails->bindParam(":comment", $commenttask);
@@ -1192,6 +984,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                     $inserstmtdetails->bindParam(":usersenddetails",$user_id);
                     $inserstmtdetails->bindParam(":send_status",$send_status);
                     $inserstmtdetails->bindParam(":status_timedetails",$status_timetask);
+                    $inserstmtdetails->bindParam(":detail",$detail);
                     $inserstmtdetails->execute(); 
                     $lastId = $db->lastInsertId();  
 

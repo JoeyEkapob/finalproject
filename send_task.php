@@ -94,10 +94,32 @@ session_start();
                                     <div class="file-loading"> 
                                             <input id="input-b6b" name="files[]" type="file" accept=".pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx" multiple>
                                     </div>
+
                                     <p class="small mb-0 mt-2"><b>รายละเอียด:</b>รองรับไฟล์งาน .pdf, .jpg, .jpeg, .png, .docx, .pptx, .xlsx <b>ขนาดไฟล์ห้ามเกิน: 20 MB</b></p> 
 
                                 </div>
+                        </div>   
+                    </div>   
+                       
+                    <div class="col-md-6">                                    
                     </div>
+
+                    <?php if($stmttaskrrow['status_timetask'] == 2){?>
+                    <div class="col-md-6">   
+                        <div class="mb-3">
+                            <label for="" class="control-labe">เหตุผลที่ส่งงานล่าช้า</label>
+                                    <select  name="detail"  id="detail" class="form-select"  >
+                                    <option value="">กรุณาเลือกเหตุผล</option>
+                                    <option value="1">ลากิจ</option>
+                                    <option value="2">ลาป่วย</option>
+                                    <option value="3">ติดงานราชการด่วน</option>
+                                    <option value="4">แก้ไขงาน</option>
+                                </select>  
+                          
+                        </div>
+                    </div>
+                    <?php } ?>
+                    <div class="col-md-12" >            
                     <div class="justify-content-center">
                             <label for="exampleFormControlTextarea1" class="form-label">รายละเอียด</label>
                             <textarea class="form-control" name="text_comment" id="exampleFormControlTextarea1" rows="7"></textarea>

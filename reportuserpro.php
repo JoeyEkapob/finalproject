@@ -1,6 +1,7 @@
 <?php
     session_start();
     require_once 'connect.php';
+    /* require_once 'funtion.php'; */
     if(!isset($_SESSION['user_login'])){
          $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
         header('location:sign-in.php');
@@ -9,6 +10,15 @@
     $date = date ("Y-m-d H:i");
     $us=$_SESSION['user_login'];
     $id = $_GET['userid'];
+    $startdate = "";
+    $enddate ="";
+    if(isset($_GET['startdate'])){
+        $startdate = $_GET['startdate'];
+    }
+    if(isset($_GET['enddate'])){
+    $enddate = $_GET['enddate'];
+    }
+
     $targetDir = "img/avatars/";
     $stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","ส่งเรียบร้อยเเล้ว","รอการเเก้ไข","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
     $stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
@@ -19,15 +29,42 @@
     $row = $select_project->fetch(PDO::FETCH_ASSOC);
     extract($row);
 
-    $sql2 = $db->query("SELECT * FROM project WHERE manager_id =  $user_id"); 
+    
+    $sql2 = "SELECT manager_id FROM project WHERE manager_id =  '$user_id'";
+    $sql3 = "SELECT user_id FROM project_list as pl left join project as p ON pl.project_id  =  p.project_id where user_id = '$user_id'";
+    $sql4 = "SELECT user_id FROM task_list where user_id = '$user_id' ";
+    $sql5 = "SELECT * FROM details as d  left join task_list as t ON d.task_id = t.task_id  where user_id = '$user_id'  AND send_status ='2'";
+    $sql6 = "SELECT * FROM task_list  where user_id = '$user_id ' AND status_timetask = '2'";  
+    $stmttasklist = "SELECT * FROM project_list  NATURAL JOIN project  NATURAL JOIN job_type   NATURAL JOIN user  WHERE user_id = $id ";
+    
+    if (!empty($startdate)) {
+        $sql2 .= "AND start_date >= '$startdate' ";
+        $sql3 .= "AND start_date >= '$startdate' ";
+        $sql4 .= "AND strat_date_task >= '$startdate' ";
+        $sql5 .= "AND t.strat_date_task >= '$startdate' ";
+        $sql6 .= "AND strat_date_task >= '$startdate' ";
+        $stmttasklist .= " AND start_date >= '$startdate' ";
+
+    }
+    if (!empty($enddate)) {
+        $sql2 .= "AND end_date <= '$enddate' ";
+        $sql3 .= "AND end_date <= '$enddate' ";
+        $sql4 .= "AND end_date_task <= '$enddate' ";
+        $sql5 .= "AND end_date_task <= '$enddate' ";
+        $sql6 .= "AND end_date_task <= '$enddate' "; 
+        $stmttasklist .= " AND end_date <= '$enddate' "; 
+    }
+   
+    $sql2 = $db->query($sql2); 
     $nummannagerpro = $sql2->rowCount(); 
-    $sql3 = $db->query("SELECT * FROM project_list where user_id = $user_id");
+    $sql3 = $db->query($sql3); 
     $numuserpro = $sql3->rowCount(); 
-    $sql4 = $db->query("SELECT * FROM task_list where user_id = $user_id ");
+    $sql4 = $db->query($sql4); 
     $numusertask = $sql4->rowCount(); 
-    $sql5 = $db->query("SELECT * FROM details as d  left join task_list as t ON d.task_id = t.task_id  where user_id = $user_id  AND send_status = 2");
+    $sql5 = $db->query($sql5); 
     $numdetails= $sql5->rowCount(); 
-  
+    $sql6 = $db->query($sql6); 
+    $numdela = $sql6->rowCount();   
    /*  $numtask = $db->query("SELECT * FROM task_list where project_id = $id ");
     $numtask = $numtask->rowCount();  */
 
@@ -83,7 +120,11 @@
                                         <div class="col-md-2 col-sm-4 d-flex flex-row-reverse"><b>จำนวนครั้งที่ถูกสั่งเเก้ :</b></div>
                                         <div class="col-md-3 col-sm-8"><?php echo $numdetails ?></div>
                                     </div>
-
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-4 d-flex flex-row-reverse"><b>งานที่ล่าช้า : </b></div>
+                                        <div class="col-md-2 col-sm-8 "><?php echo $numdela ?></div>
+                                        
+                                    </div>
                                 </div>
                         
                                 
@@ -99,7 +140,25 @@
                                 <div class="d-flex justify-content-start">
                                     <h5 class="card-title mb-0">รายการหัวข้องาน</h5>
                                 </div>
-                           
+                               
+                                <div class="row">
+                                <?php if(!empty($startdate)){ ?>
+                                    <div class="col-md-4 col-sm-4 d-flex flex-row-reverse"><b>วันที่เริ่ม : </b></div>
+                                    <div class="col-md-2 col-sm-8"><?php echo thai_date_short(strtotime($startdate))   ?></div>
+                                <?php }else{?>
+                                    <div class="col-md-4 col-sm-4 d-flex flex-row-reverse"><b>วันที่เริ่ม : </b></div>
+                                    <div class="col-md-2 col-sm-8"><?php echo "-";   ?></div>
+                                <?php } ?>
+                                <?php if(!empty($enddate)){ ?>
+                                        <div class="col-md-2 col-sm-4 d-flex flex-row-reverse"><b>วันที่สิ้นสุด :</b></div>
+                                        <div class="col-md-3 col-sm-8"><?php echo thai_date_short(strtotime($enddate)) ?></div>
+                                <?php }else{?>  
+                                    <div class="col-md-2 col-sm-4 d-flex flex-row-reverse"><b>วันที่สิ้นสุด :</b></div>
+                                    <div class="col-md-3 col-sm-8"><?php echo "-" ?></div>
+                                <?php } ?>  
+
+                                    </div>
+                                    <br>
                             <div class="table-responsive-xl">
                                 <table class="table m-0 table-bordered" >
                                     <thead>
@@ -134,17 +193,10 @@
                                         </tr>
                                     </thead>
                                 <tbody>
-  
+                                    
                                         <?php
                                             $i = 1;
-                                            
-                                            $stmttasklist = "SELECT *
-                                            FROM project_list 
-                                            NATURAL JOIN project 
-                                            NATURAL JOIN job_type 
-                                            NATURAL JOIN user 
-                                      
-                                            WHERE user_id = $id";
+
                                             $stmttasklist = $db->query($stmttasklist);
                                             $stmttasklist->execute();  
                                             while ($row2 = $stmttasklist->fetch(PDO::FETCH_ASSOC)){
@@ -153,7 +205,6 @@
                                                  $numtask = $sql2->rowCount(); 
                                                  $comptask = $db->query("SELECT * FROM task_list where project_id = $project_id  and status_task = 5");
                                                  $comptask2 = $comptask->rowCount(); 
-                                             
                                                     ?>
                                         <tr>
                                             <td class="id-col">
@@ -181,7 +232,7 @@
                                             <?php echo $row2['firstname'].' '.$row2['lastname']; ?>
                                             </td>
                                             <td class="action-col" id='action'>
-                                           <a class='btn btn-bitbucket btn-sm' href='reportpro.php?projectid=<?php echo  $row2['project_id']?>&userid=<?php echo $id ?>'>รายละเอียด</a>
+                                           <a class='btn btn-bitbucket btn-sm' href='reportpro.php?projectid=<?php echo  $row2['project_id']?>&userid=<?php echo $id ?>&startdate=<?php echo  $startdate ?>&enddate=<?php echo $enddate ?>'>รายละเอียด</a>
                                             </td>
                                          
                                         </tr>

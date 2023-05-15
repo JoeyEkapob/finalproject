@@ -79,7 +79,7 @@
                                         $i = 1;
                                         $where = "";    
                                         if($level >= 3 ){
-                                            $where = "natural join project_list where user_id  = '{$_SESSION['user_login']}'"  ;
+                                            $where = "natural join project_list where user_id  = '{$_SESSION['user_login']}' AND status_1 = 1"  ;
                                             
                                         }
                                         $sql = "SELECT * FROM project  $where order by end_date,status_2  DESC ";

@@ -141,7 +141,7 @@ include "head.php";
 						</a>
 					</li>
 				</ul>
-				<?php if($level < 2): ?>
+			
 				<ul id="report" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="reportuser.php">
@@ -149,7 +149,7 @@ include "head.php";
 						</a>
 					</li>
 				</ul>
-				<?php endif; ?>
+			
 			</li>
 					<?php if($level != 5): ?>
 					<li class="sidebar-item">

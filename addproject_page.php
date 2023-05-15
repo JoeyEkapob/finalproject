@@ -16,6 +16,7 @@
     <body>
         <?php include 'head.php'?>
         <?php include "sidebar.php"?>
+        <?php include "funtion.php"?>
         <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
                     <?php 
@@ -185,7 +186,7 @@ $(document).ready(function(){
       foreach($result as $row) {?>
         items.push({ 
         value: <?php echo $row['user_id'];?>,
-        text: '<?php echo $row['name'];?><?php echo " ( ";?><?php echo $row['position_name'].' '. $row['department_name']?><?php echo " ) ";?>',
+        text: '<?php  echo showshortname($row['shortname_id']) ?><?php echo $row['name'];?><?php echo " ( ";?><?php echo $row['position_name'].' '. $row['department_name']?><?php echo " ) ";?>',
         html: '<button class="btn btn-primary btn-sm viewuser_data" data-userid="<?php echo $row['user_id']; ?>">ดูรายระเอียด</button>'
 
     });
@@ -199,8 +200,8 @@ $(document).ready(function(){
         // Display the selected Values
         $('#display_selected').click(function () {
             $('#user_id').val(select.check_multi_select('fetch_country'));
-            alert(select.check_multi_select('fetch_country'))
-            console.log($('#user_id').val()); 
+          /*   alert(select.check_multi_select('fetch_country'))
+            console.log($('#user_id').val());  */
         });
     });
 $(document).ready(function(){

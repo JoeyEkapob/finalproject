@@ -13,7 +13,7 @@ $formatted_time = date('Y-m-d H:i:s', $current_time);
                 LEFT JOIN project AS p ON t.project_id = p.project_id 
                 LEFT JOIN user AS u ON t.user_id = u.user_id 
                 LEFT JOIN user AS u2 ON p.manager_id = u2.user_id
-                WHERE TIMESTAMPDIFF(HOUR, NOW(), end_date_task) <= 24 AND status_timetask = 0  AND  t.status_task != 5 AND t.progress_task != 100   AND p.status_1 != 3 ";
+                WHERE TIMESTAMPDIFF(HOUR, NOW(), end_date_task) <= 24 AND status_timetask = 0  AND status_task2 != 1 AND  t.status_task != 5 AND t.progress_task != 100   AND p.status_1 != 3 ";
     $chktimetask = $db->query($chktimetask);
     $chktimetask->execute();  
     while ($row2 = $chktimetask->fetch(PDO::FETCH_ASSOC)){
@@ -40,6 +40,7 @@ $formatted_time = date('Y-m-d H:i:s', $current_time);
     SET status_timetask = 2 
     WHERE end_date_task < NOW() 
     AND status_timetask != 2 
+    AND status_task2 != 1
     AND status_task != 5 
     AND progress_task != 100 
     AND p.status_1 != 3 " ;

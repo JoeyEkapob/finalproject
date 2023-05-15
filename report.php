@@ -59,7 +59,7 @@
                                                 <select name="job" id="job" class="form-select">
                                                     <option value="">กรุณาเลือกประเภทงาน</option>
                                                         <?php
-                                                        $stmt = $db->query("SELECT * FROM job_type WHERE status = 1");
+                                                        $stmt = $db->query("SELECT * FROM job_type WHERE status = 1 ");
                                                         $stmt->execute();
                                                         $result = $stmt->fetchAll();
                                                         foreach($result as $row) {
@@ -109,7 +109,7 @@
                                 </div>
                                 
                                 <div class="col-md-3">
-                                    <div class="mb-3">             
+                                    <div class="mb-2">             
                                         <label for="control-label" style="font-size: 14px;">การเร่งของงาน</label>
                                             <div class="input-group input-group-sm mb-2">
                                                 <select  name="status2"  id="status2" class="form-select"  > 
@@ -121,6 +121,49 @@
                                             </div>
                                     </div>
                                 </div>
+                                <div class="col-md-3">
+                                </div> 
+                                <div class="col-md-3">
+                                </div> 
+                                <?php if($level <= 2): ?>
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label for="" class="control-label" >ฝ่าย</label>
+                                            <div class="input-group input-group-sm mb-2">
+                                                <select name="department" id="department" class="form-select" >
+                                                    <?php
+                                                    $stmt = $db->query("SELECT * FROM department WHERE department_status = 1 ");
+                                                    $stmt->execute();
+                                                    $result = $stmt->fetchAll();
+                                                    foreach($result as $row) {
+                                                    ?>
+                                                <option value="<?= $row['department_id'];?>"><?= $row['department_name'];?></option>
+                                                    <?php } ?>
+                                                </select>
+                                                </div>
+                                        </div>
+                                    </div>    
+                                 
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+												<label for="" class="control-label" >ตำเเหน่ง</label>
+                                                <div class="input-group input-group-sm mb-2">
+                                                 
+													<select name="role" id="role" class="form-select" >
+                                                    <option value="0">ทั้งหมด</option>
+														<?php
+														$stmt = $db->query("SELECT * FROM position WHERE position_status = 1 AND role_id >= 2");
+														$stmt->execute();
+														$result = $stmt->fetchAll();
+														foreach($result as $row) {
+														?>
+													<option value="<?= $row['role_id'];?>"><?= $row['position_name'];?></option>
+														<?php } ?>
+													</select>
+                                                    </div>
+											</div>
+                                            </div>
+                                        <?php endif; ?>
                             <div class="col-md-3">
                             </div>                         
                             <div class="col-lg-12 text-right justify-content-center d-flex">
@@ -201,21 +244,24 @@
     var enddate = $('#enddate').val();
     var status1 = $('#status1').val();
     var status2 = $('#status2').val();
+    var department = $('#department').val();
+    var role = $('#role').val();
     var page = page;
     
-    console.log(page)
+  /*   console.log(page) */
     $.ajax({
         url:"proc2.php",
         method:"post",
         datatype: "json",
-        data:{proc:proc,nameproject:nameproject,job:job,startdate:startdate,enddate:enddate,status1:status1,status2:status2},
+        data:{proc:proc,nameproject:nameproject,job:job,startdate:startdate,enddate:enddate,status1:status1,status2:status2,department:department,role:role},
         success:function(response){
+            console.log(response)
             var response = JSON.parse(response);
             var html = '';
             var rowsPerPage = 10; // กำหนดจำนวนแถวต่อหน้า
             var totalRows = response.result.length;
             var totalPages = Math.ceil(totalRows / rowsPerPage); // คำนวณหาจำนวนหน้าทั้งหมด
-            console.log(response)
+          /*   console.log(response) */
             if(response.result.length == 0){
                     html += `
                         <tr>

@@ -65,7 +65,7 @@
     <input type="hidden" id="details" name="details" value="">
    
     <main class="content">
-    <a href="<?php echo $previousPage; ?>" class="back-button">&lt;</a> 
+    <a href="project_list.php" class="back-button">&lt;</a> 
                     <div class="col-12  d-flex">
                          <div class="card flex-fill">  
                              <div class="card-header">
@@ -91,10 +91,10 @@
                                                             
                                                              <?php if($manager['avatar'] !=""){?>
                                                                 <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $manager['avatar']?>" alt="Avatar" width="35"  height="35">
-                                                                <b><?php echo $manager['name'] ?> </b>
+                                                                <b><?php echo showshortname($manager['shortname_id']).' '.$manager['name'] ?> </b>
                                                             <?php }else{ ?>
                                                                 <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
-                                                                <b><?php echo $manager['name'] ?> </b>
+                                                                <b><?php echo showshortname($manager['shortname_id']).' '.$manager['name'] ?> </b>
                                                                 <?php } ?>
                                                            
                                                         
@@ -141,7 +141,7 @@
                                                             <?php
                                                             $progressproject = array();
 
-                                                            $sqlprogressproject = "SELECT * FROM project NATURAL JOIN task_list WHERE project_id = $id";
+                                                            $sqlprogressproject = "SELECT * FROM project NATURAL JOIN task_list WHERE project_id = $id AND status_task2 != 1";
                                                             $qryprogressproject = $db->query($sqlprogressproject);
                                                             $qryprogressproject->execute();
                                                             while ($progressprojectrow = $qryprogressproject->fetch(PDO::FETCH_ASSOC)) {  
@@ -190,14 +190,15 @@
                                                                 $numuser= $qry->rowCount();
                                                                 while ($row = $qry->fetch(PDO::FETCH_ASSOC)){  ?>  
                                                             <?php if($row['avatar'] !=""){?>
+
                                                                 <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $row['avatar']?>" alt="Avatar" width="35"  height="35">
-                                                                <a class="viewuserdata" data-userid="<?php echo $row['user_id'] ?>" ><b><?php  echo $row['firstname']." ".$row['lastname'] ?></b></a>
+                                                                <a class="viewuserdata" data-userid="<?php echo $row['user_id'] ?>" ><b><?php echo showshortname($row['shortname_id']).' '. $row['firstname']." ".$row['lastname'] ?></b></a>
                                                                 <?php  if($num++ % 3 == 0){
                                                                    echo "<br>";
                                                                 } ?>
                                                             <?php }else{?>
                                                                 <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
-                                                                <a class="viewuserdata" data-userid="<?php echo $row['user_id'] ?>" ><b><?php  echo $row['firstname']." ".$row['lastname'] ?></b></a>
+                                                                <a class="viewuserdata" data-userid="<?php echo $row['user_id'] ?>" ><b><?php echo showshortname($row['shortname_id']).' '. $row['firstname']." ".$row['lastname'] ?></b></a>
                                                                 <?php  if($num++ % 3 == 0){
                                                                    echo "<br>";
                                                                 } ?>
@@ -221,7 +222,7 @@
                                 <?php  
                                         if ($manager_id == $us || $level <= 2 AND $status_1 != 3)  {?>
                                 <div class="d-flex flex-row-reverse">
-                                    <a class="btn btn-block btn-sm btn-default btn-flat border-primary"  type="button" id="new_task" data-bs-toggle="modal" data-bs-target="#addModal1"> <i class="fa fa-plus"></i>  + Add task</a>
+                                    <a class="btn btn-block btn-sm btn-default btn-flat border-primary"  type="button" id="new_task" data-bs-toggle="modal" data-bs-target="#addModal1"> <i class="fa fa-plus"></i>  + เพิ่มงาน</a>
                                 </div>
                                 <?php  } ?>
                                 <div class="d-flex justify-content-start">
@@ -288,15 +289,21 @@
                                             </td>
 
                                             <td class="assign-col" >
-                                                    <?php  echo $row2['firstname']." ".$row2['lastname'] ?>  
+                                                    <?php  echo  showshortname($row2['shortname_id'])." ".$row2['firstname']." ".$row2['lastname'] ?>  
                                             </td>
 
                                             <td class="status-col" >
-                                                    <?php   showstattask($row2['status_task']);?>
+                                               <?php  if($row2['status_task2']== 1){
+                                                     echo showstattask2($row2['status_task2']);
+                                               }else{
+                                                   echo showstattask($row2['status_task']);
+                                               }
+                                                    ?>
                                             </td>
                                             
-                                            <td class="action-col">
 
+                                            <td class="action-col">
+                                		                                  
                                             <?php  if ($row2['user_id'] == $us   || $level <= 2   || $manager_id == $us ) { ?>
                                             <a class="btn btn-google btn-sm" href="details_page.php?task_id=<?php echo $row2['task_id']?>&project_id=<?php echo $row2['project_id']?>"><i data-feather="message-square"></i></a>   
                                             <!-- <a class="btn btn-google btn-sm" data-bs-toggle="modal" data-bs-target="#viewdetailsmodal<?php echo $row2['details_id']?>"><i data-feather="message-square"></i></a> -->
@@ -314,11 +321,11 @@
                                                     /*  print_r ($member) ; */
                                                      
                                                 // if (in_array($us,$member) || ( $level <= 2 || $manager_id == $us ) AND $row2['status_task'] != 3 AND $row2['progress_task'] != 100  ) {
-                                                if ($row2['user_id'] == $us   || $level <= 2   || $manager_id == $us   AND $row2['status_task'] != 5 AND $row2['progress_task'] != 100  AND $status_1 != 3 AND $row2['status_task'] != 2 ) {
+                                                if ($row2['user_id'] == $us   || $level <= 2   || $manager_id == $us   AND $row2['status_task'] != 5 AND $row2['progress_task'] != 100  AND $status_1 != 3 AND $row2['status_task'] != 2 AND $row2['status_task2'] != 1 ) {
                                                     echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' .   $row2['project_id'] .'&user_id='. $us .'&statustimetask='. $row2['status_timetask'].'" class="btn btn-success btn-sm"><i data-feather="share"></i></a>';  
                                                 }
                                              
-                                                else if($row2['user_id'] == $us   || $level <= 2   || $manager_id == $us   AND $row2['progress_task'] != 100 AND $row2['status_task'] = 2  AND $status_1 != 3 ){
+                                                else if($row2['user_id'] == $us   || $level <= 2   || $manager_id == $us   AND $row2['progress_task'] != 100 AND $row2['status_task'] = 2  AND $status_1 != 3 AND $row2['status_task2'] != 1){
                                                     echo '<button class="btn btn-danger btn-sm deletedetals-btn"  data-project_id="'.$row2['project_id'].'"  data-task_id="'.$row2['task_id'].'"  data-details_id="'.$stmt2['details_id'].'"><i data-feather="x"></i></button> '; 
                                                     //echo $row2['project_id'];
                                                     
@@ -326,10 +333,10 @@
                                                     // echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] . '" class="btn btn-danger btn-sm"><i data-feather="x"></i></a>';
                                                     // echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] . '" class="btn btn-success btn-sm disabled"><i data-feather="share"></i></a>'; 
                                                     echo ' ';
-                                                if($manager_id == $us || $level <= 2 AND $status_1 != 3 AND $row2['progress_task'] != 100 AND $row2['status_task'] != 5) {
+                                                if($manager_id == $us || $level <= 2 AND $status_1 != 3 AND $row2['progress_task'] != 100 AND $row2['status_task'] != 5 ) {
                                                     echo '<a class="btn btn-warning btn-sm" href="edittask_page.php?updatetask_id='.$row2['task_id'].'&project_id='.$row2['project_id'].'"><i data-feather="edit"></i></a>';
                                                     echo ' ';
-                                                }if($numsenddetails == 0 AND $manager_id == $us || $level <= 2 AND $status_1 != 3){
+                                                }if($numsenddetails == 0 AND $manager_id == $us || $level <= 2 AND $status_1 != 3 AND $row2['status_task2'] != 1){
                                                     echo '<button class="btn btn-danger btn-sm delete-btn" data-project_id="'.$row2['project_id'].'" data-task_id="'.$row2['task_id'].'"><i data-feather="trash-2"></i></button>';
                                                 }   
                                                 ?>

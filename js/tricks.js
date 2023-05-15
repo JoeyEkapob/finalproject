@@ -51,6 +51,30 @@
 
     }
 
+    function showshortname(shortname){
+        if(shortname =='1'){
+            return "นาย";
+        }else if(shortname =='2'){
+            return "นางสาว";
+        } else if(shortname =='9'){
+            return "นาง";
+        } else if(shortname =='3'){
+            return "ดร.";
+        } else if(shortname =='4'){
+        return "ผศ.";
+        } else if(shortname =='5'){
+            return "รศ.";
+        } else if(shortname =='6'){
+            return "ศ.";
+        } else if(shortname =='7'){
+            return "ผศ.ดร.";
+        } else if(shortname =='8'){
+            return "ศ.ดร."; 
+        }else if(shortname =='10'){
+            return "อาจารย์"; 
+        }
+    }
+
 const dayTH = [null,'อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์']; 
 const monthTH = [null,'มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
 const monthTH_brev = [null,'ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];

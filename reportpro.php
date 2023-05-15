@@ -13,7 +13,14 @@
     if(isset($_GET['userid'])){
         $userid = $_GET['userid'];
     }
- 
+    $startdate = "";
+    $enddate ="";
+    if(isset($_GET['startdate'])){
+        $startdate = $_GET['startdate'];
+    }
+    if(isset($_GET['enddate'])){
+    $enddate = $_GET['enddate'];
+    }
 /* echo $userid ;
 exit; */
     $select_project = $db->prepare("SELECT * FROM project  natural JOIN job_type  WHERE project_id = :id");
@@ -27,6 +34,9 @@ exit; */
 
     $stmt2 = $db->query("SELECT * FROM task_list WHERE project_id =  $id AND status_timetask = 2   ");
     $numchktime = $stmt2->rowCount();
+
+    $stmt3 = $db->query("SELECT * FROM task_list WHERE project_id =  $id AND status_task2 = 1   ");
+    $numtaskerror= $stmt3->rowCount();
 
     $manager = $db->query("SELECT *,concat(firstname,' ',lastname) as name FROM user where user_id = $manager_id");
     $manager = $manager->fetch(PDO::FETCH_ASSOC);
@@ -47,7 +57,7 @@ exit; */
     <input type="hidden" id="projectid" name="projectid" value="">
     <div>
         <?php if(isset($userid)){?>
-        <a href="reportuserpro.php?userid=<?php echo $userid?>" class="back-button">&lt;</a>
+        <a href="reportuserpro.php?userid=<?php echo $userid?>&startdate=<?php echo  $startdate ?>&enddate=<?php echo $enddate ?>" class="back-button">&lt;</a>
         <?php }else{ ?>
         <a href="report.php" class="back-button">&lt;</a>
          <?php } ?>    
@@ -139,6 +149,10 @@ exit; */
                                         <div class="col-md-2 col-sm-4 d-flex flex-row-reverse"><b>จำนวนงานที่ล่าช้า :</b></div>
                                         <div class="col-md-3 col-sm-8"><?php echo $numchktime ?></div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-3 col-sm-4 d-flex flex-row-reverse"><b>จำนวนงานที่ยกเลิก :</b></div>
+                                    <div class="col-md-3 col-sm-8"><?php echo $numtaskerror  ?></div>
+                                </div>
                                 <br>
                             <div class="table-responsive-xl">
                                 <table class="table m-0 table-bordered">
@@ -178,7 +192,7 @@ exit; */
                                             <?php echo $row2['task_id']  ?>
                                             </td>
 
-                                            <td class="numtask-col">
+                                            <td class="nametask-col">
                                                 <?php echo $row2['name_tasklist']  ?>
                                             </td>
 
@@ -195,7 +209,13 @@ exit; */
                                             </td>
 
                                             <td class="action-col">
-                                                    <?php  echo  showstattaskreport($row2['status_task']);?>
+                                                    <?php if($row2['status_task2'] == 1){
+                                                        echo showstattask2pdf($row2['status_task2']).' '.showstatustimepdf($row2['status_timetask']);
+                                                    }else{
+                                                        echo  showstattaskreport($row2['status_task']).' '.showstatustimepdf($row2['status_timetask']);
+                                                    }
+
+                                                  ?>
                                             </td>
                                             <td class="action-col" id='action'>
                                                 <a class='btn btn-bitbucket btn-sm' href='reporttaskdetails.php?taskid=<?php echo $row2['task_id']?>&projectid=<?php echo $id ?>'>รายละเอียด</a>
@@ -244,55 +264,3 @@ function searchreport(){
 }
  </script>
 <?php include "footer.php"?>
-<!--  <table class="project-details">
-                                <tr>
-                                    <td class ="class1" ><b>รหัสหัวข้องาน  :</b></td>
-                                    <td class ="class3" ><?php echo $project_id ?></td>
-                                    <td class ="class2" ><b>ชื่อโปรเจค :</b></td>
-                                    <td class ="class4" ><?php echo $name_project ?></td>
-                                </tr>
-                              
-                                <tr>
-                                    <td class ="class1" ><b>ประเภทงาน : </b></td>
-                                    <td class ="class3" ><?php echo $name_jobtype ?></td>
-                                    <td class ="class2" ><b>ผู้สร้างโปรเจค :</b></td>
-                                    <td class ="class4" ><?php echo $manager['name'] ?></td>
-                                </tr>
-                               
-                            
-                                <tr>
-                                    <td class ="class1" ><b>วันที่เริ่ม : </b></td>
-                                    <td class ="class3" ><?php echo  ThDate($start_date) ?></td>
-                                    <td class ="class2" ><b>วันที่สิ้นสุด :</b></td>
-                                    <td class ="class4" ><?php echo ThDate($end_date) ?></td>
-                                </tr>
-                                <tr>
-                                    <td class ="class1" ><b>ความคืบหน้า : </b></td>
-                                    <td class ="class3" ><?php echo $progress_project ?> %</td>
-                                    <td class ="class2" ><b>จำนวนงานในหัวข้องาน :</b></td>
-                                    <td class ="class4" ><?php echo $numtask ?></td>
-                                </tr>
-                                <tr>
-                                <td class ="class1"  ><b>สมาชิก : </b></td>
-                                <td>  <?php 
-                                    $sql = "SELECT * FROM project_list  natural join user  where project_id = $id ";
-                                    $qry = $db->query($sql);
-                                    $qry->execute();
-                                    $numpsuer = $qry->rowcount();
-                                    $i = 0;
-                                    while ($row = $qry->fetch(PDO::FETCH_ASSOC)){  ?>  
-                                                
-                                   <?php 
-                                    echo  $row['firstname']." ".$row['lastname'];
-                                    /* if (++$i != $numpsuer) {
-                                        echo ' , ';
-                                    }if($i == 3){
-                                        echo ' <br>';
-                                    } */
-                                   
-                                   ?>
-                                    <?php }?></td>
-                                <td>  
-                                </tr>
-                            </table> -->
-                          

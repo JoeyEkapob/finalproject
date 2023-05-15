@@ -37,7 +37,7 @@
 	if($level >= 2){
 		$where = "   and user_id = $user_id    ";
 	 }
-	$stmttasknum = "SELECT COUNT(task_id) as num2 FROM task_list as t left join project as p on t.project_id = p.project_id WHERE  status_1 !=3 AND  progress_task != 100 AND status_task != 5 $where ";
+	$stmttasknum = "SELECT COUNT(task_id) as num2 FROM task_list as t left join project as p on t.project_id = p.project_id WHERE  status_1 !=3 AND  progress_task != 100 AND status_task != 5 AND status_task2 != 1 $where ";
 	$stmttasknum = $db->prepare($stmttasknum);
 	$stmttasknum ->execute();
 	$stmttasknum = $stmttasknum->fetchColumn(); 
@@ -46,7 +46,7 @@
 		$where = "  and user_id = $user_id  ";
 	 }
 
-	$stmttaskpnum = "SELECT COUNT(task_id) FROM task_list as t left join project as p on t.project_id = p.project_id  where p.status_1 !=3 AND t.progress_task != 100 AND t.status_task != 5 AND status_timetask = 2 $where ";
+	$stmttaskpnum = "SELECT COUNT(task_id) FROM task_list as t left join project as p on t.project_id = p.project_id  where p.status_1 !=3 AND t.progress_task != 100 AND t.status_task != 5 AND status_timetask = 2  AND status_task2 != 1 $where ";
 	$stmttaskpnum = $db->prepare($stmttaskpnum);
 	$stmttaskpnum ->execute();
  	$stmttaskpnum = $stmttaskpnum->fetchColumn(); 
@@ -318,7 +318,7 @@
 						</div> -->
 					</div>
 
-					<div class="row">
+				
 						<div class="col-12">
 							<div class="card flex-fill">
 								
@@ -329,11 +329,8 @@
 										$i = 1;
 									/* 	echo $level; */
 										if($level >=2 ){
-											$where = "  natural join project_list where user_id  = $user_id ";   
-										}else {
-											
+											$where = "  natural join project_list where user_id  = $user_id AND status_1 = 1";   
 										}
-
 										$stmtshowproject = "SELECT * FROM project  $where ORDER BY  end_date,status_2  DESC LIMIT 5;";
 										$stmtshowproject = $db->query($stmtshowproject);
 										$stmtshowproject->execute();
@@ -390,7 +387,7 @@
 					</div>
 				</div>
 
-				</div>
+		
 			</main>
 
 			<!-- <footer class="footer">

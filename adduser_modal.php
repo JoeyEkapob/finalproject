@@ -10,11 +10,37 @@
 						<div class="card">		
 							<div class="card-body">
 								<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-2">
+											<div class="mb-3">
+												<label for="" class="control-label" >คำนำหน้า</label>
+													<select name="shortname" id="shortname" class="form-select"  >
+														<option value="1">นาย</option>
+														<option value="9">นาง</option>
+														<option value="2">นางสาว</option>
+														<option value="3">ดร.</option>
+														<option value="4">ผศ</option>
+														<option value="5">รศ</option>
+														<option value="6">ศ</option>
+														<option value="7">ผศ.ดร</option>
+														<option value="8">ศ.ดร</option>
+														<option value="10">อาจารย์</option>
+													</select>
+											</div>
+										</div>
+										<div class="col-md-5">
 											<div class="mb-3">
 												<label for="" class="control-label">ชื่อจริง</label>
 												<input type="text" name="firstname" class="form-control " placeholder="กรอกชื่อของคุณ" >
 											</div>
+										</div>
+										<div class="col-md-5">
+											<div class="mb-3">
+												<label for="" class="control-label">นามสกุล</label>
+												<input type="text" name="lastname" class="form-control" placeholder="กรอกนามสกุลของคุณ">
+											</div>
+										</div>
+						
+										<div class="col-md-6">
 											<div class="mb-3">
 												<label class="control-label">อีเมล</label>
 												<input type="email" class="form-control " name="email" placeholder="กรอกอีเมลของคุณ">
@@ -40,10 +66,7 @@
 											</div> 					
 										</div>	
 										<div class="col-md-6">
-											<div class="mb-3">
-												<label for="" class="control-label">นามสกุล</label>
-												<input type="text" name="lastname" class="form-control" placeholder="กรอกนามสกุลของคุณ">
-											</div>
+											
 											<!-- <div class="mb-3">
 												<label for="control-label">Phone</label>
 												<input  class="form-control" type="tel" id="phone" name="phone" placeholder="กรอกหมายเลขโทรศัพท์ของคุณ">

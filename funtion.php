@@ -29,6 +29,8 @@
         return "( เเจ้งเตือน )";
     }else if($statustime == '2'){
         return " <b style='color:red'> ( ล่าช้า ) </b>";
+    }else if($statustime == '3'){
+        return " <b style='color:red'> ( ยกเลิกงาน ) </b>";
         }
     }    
 
@@ -39,8 +41,10 @@
             return "( เเจ้งเตือน )";
         }else if($statustime == '2'){
             return " (ล่าช้า)";
-            }
-        }   
+        }else if($statustime == '3'){
+                return " (ยกเลิกงาน)";
+        }
+    }   
     function showstatprotext1($status){
         if ($status == '1') {
             return "รอดำเนินการ";
@@ -51,6 +55,17 @@
                                            
             }
         }
+
+    function showstattask2($status){
+        if ($status == '1') {
+            return "<span class='badge bg-danger'> ยกเลิกงาน </span>";
+        }
+    }
+    function showstattask2pdf($status){
+        if ($status == '1') {
+            return "ยกเลิกงาน";
+        }
+    }
 
     function showstatprotext2($status_2){
     if ($status_2 == '1') {
@@ -111,6 +126,31 @@
             return "แก้ไขงาน";
         } 
     }
+
+    function showshortname($shortname){
+        if($shortname =='1'){
+            return "นาย";
+        }elseif($shortname =='2'){
+            return "นางสาว";
+        } elseif($shortname =='9'){
+            return "นาง";
+        } elseif($shortname =='3'){
+            return "ดร.";
+        } elseif($shortname =='4'){
+        return "ผศ.";
+        } elseif($shortname =='5'){
+            return "รศ.";
+        } elseif($shortname =='6'){
+            return "ศ.";
+        } elseif($shortname =='7'){
+            return "ผศ.ดร.";
+        } elseif($shortname =='8'){
+            return "ศ.ดร."; 
+        }elseif($shortname =='10'){
+            return "อาจารย์"; 
+        }
+    }
+
 
     function ThDate($date2){
         if (empty($date2)){

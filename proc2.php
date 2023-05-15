@@ -32,8 +32,16 @@ if($_POST['proc'] == 'searchreport'){
     $end_date = $_POST["enddate"];
     $status1 = $_POST["status1"];
     $status2 = $_POST["status2"];
+   /*  $role = $_POST["role"]; */
 
-
+    if(isset($_POST["department"])){
+        $department = $_POST["department"];
+    }
+    if(isset($_POST["role"])){
+        $role = $_POST["role"];
+    }
+/*     echo $department;
+exit; */
 
     $sql = "SELECT * FROM project as p 
     LEFT JOIN job_type as j ON p.id_jobtype = j.id_jobtype 
@@ -44,6 +52,12 @@ if($_POST['proc'] == 'searchreport'){
     if ($level > 2) {
         $sql .= "AND $level <= po.level AND d.department_id = $department ";
     } 
+    if(!empty($department)){
+        $sql .= "AND d.department_id = $department ";
+    }
+    if(!empty($role)){
+        $sql .= "AND po.role_id = $role ";
+    }
     if (!empty($nameproject)) {
         $sql .= "AND name_project LIKE '%$nameproject%' ";
     }
@@ -139,8 +153,9 @@ else if($_POST['proc'] == 'searchreportuser'){
         $sql2 = "SELECT manager_id FROM project WHERE manager_id =  '$user_id'";
         $sql3 = "SELECT user_id FROM project_list as pl left join project as p ON pl.project_id  =  p.project_id where user_id = '$user_id'";
         $sql4 = "SELECT user_id FROM task_list where user_id = '$user_id' ";
-    $sql5 = "SELECT * FROM details as d  left join task_list as t ON d.task_id = t.task_id  where user_id = '$user_id'  AND send_status ='2'";
+        $sql5 = "SELECT * FROM details as d  left join task_list as t ON d.task_id = t.task_id  where user_id = '$user_id'  AND send_status ='2'";
         $sql6 = "SELECT * FROM task_list  where user_id = '$user_id ' AND status_timetask = '2'";  
+        
         if (!empty($startdate)) {
             $sql2 .= "AND start_date >= '$startdate' ";
             $sql3 .= "AND start_date >= '$startdate' ";
@@ -289,7 +304,7 @@ else if($_POST['proc'] == 'closeproject'){
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="" class="control-label"><b>ชื่อ :</b></label>
-                        ' . $row['firstname'] . '' . $row['lastname'] . ' 
+                        ' .showshortname($row['shortname_id']) .' '. $row['firstname'] . ' ' . $row['lastname'] . ' 
                     </div>
                     <div class="mb-3">
                         <label for="" class="control-label"><b>อีเมล :</b></label>
@@ -382,6 +397,9 @@ else if($_POST['proc'] == 'viewdetails'){
                             <dt><b class="border-bottom border-primary">ชื่องาน</b></dt>
                             <dd>'.$row['name_tasklist'] .'</dd>
 
+                            <dt><b class="border-bottom border-primary">วันที่สิ้นสุดงาน</b></dt>
+                            <dd>'.thai_date_and_time($row['end_date_task']).'</dd>
+
                             <dt><b class="border-bottom border-primary">วันเเละเวลาที่ส่งงาน</b></dt>
                             <dd>'.thai_date_and_time($row['date_detalis']).'</dd>
 
@@ -406,10 +424,10 @@ else if($_POST['proc'] == 'viewdetails'){
                     <div class="d-flex align-items-center mt-1">';
             if($profileusersendrow['avatar'] !=""){ 
     $outp.='   <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/'. $profileusersendrow['avatar'].'" alt="Avatar" width="35"  height="35">
-                <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
+                <b>'.showshortname($profileusersendrow['shortname_id']).' '.  $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
             }else{ 
     $outp.='<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
-                <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
+                <b>'.showshortname($profileusersendrow['shortname_id']).' '.  $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
             } 
     $outp.=' </div>
                 </dd>
@@ -433,7 +451,7 @@ else if($_POST['proc'] == 'viewdetails'){
 
     
       
-}else if($sendstatus == 2){
+    }else if($sendstatus == 2){
     while($row = $qry->fetch(PDO::FETCH_ASSOC)){ 
 
         $outp.='
@@ -449,6 +467,11 @@ else if($_POST['proc'] == 'viewdetails'){
                 
                                     <dt><b class="border-bottom border-primary">ชื่องาน</b></dt>
                                     <dd>'.$row['name_tasklist'] .'</dd>
+
+                                    
+                                    <dt><b class="border-bottom border-primary">วันที่สิ้นสุดงาน</b></dt>
+                                    <dd>'.thai_date_and_time($row['end_date_task']).'</dd>
+
                 
                                     <dt><b class="border-bottom border-primary">วันเเละเวลาที่งานส่งกลับเเก้</b></dt>
                                     <dd>'.thai_date_and_time($row['date_detalis']).'</dd>
@@ -468,10 +491,10 @@ else if($_POST['proc'] == 'viewdetails'){
                         <div class="d-flex align-items-center mt-1">';
         if($profileusersendrow['avatar'] !=""){ 
         $outp.='   <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/'. $profileusersendrow['avatar'].'" alt="Avatar" width="35"  height="35">
-                    <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
+                        <b>'.showshortname($profileusersendrow['shortname_id']).' '.  $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
                     }else{ 
         $outp.='<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
-                    <b>'. $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
+                        <b>'.showshortname($profileusersendrow['shortname_id']).' '.  $profileusersendrow['firstname']  .' '.$profileusersendrow['lastname'].'</b>';
                 } 
         $outp.='</div>
                     </dd>
@@ -492,14 +515,72 @@ else if($_POST['proc'] == 'viewdetails'){
         $outp.='</div>
         </div>
     </div> 
-</div>
-</div>';  
+        </div>
+        </div>';  
             
              
-}
+    }
 
- echo  $outp;
+    echo  $outp;
  exit;
 }
+else if($_POST['proc'] == 'opentask'){ 
 
+    
+    $status = 0;
+    $project_id = $_POST['project_id'];
+    $taskid = $_POST['taskid'];
+    
+     $chktask = "SELECT end_date_task FROM task_list WHERE task_id = $taskid ";
+     $chktask = $db->query($chktask);
+     $chktaskrow = $chktask->fetch(PDO::FETCH_ASSOC);
+
+     /* if (strtotime($chktaskrow['end_date_task']) > strtotime($date)) {
+         $_SESSION['error'] = "เวลาของงานนี้ได้หมดลงเเล้วไม่สามารถเปิดหัวข้องานเเล้ว";
+         echo 1;
+        /*  header("location: editproject_page.php?update_id=$project_id"); 
+     } 
+    else  */if(!isset($_SESSION['error'])){
+         $updatestatuspro = $db->prepare('UPDATE task_list SET status_task2 = :status WHERE task_id = :task_id');
+         $updatestatuspro->bindParam(':status', $status);
+         $updatestatuspro->bindParam(':task_id', $taskid);
+         $updatestatuspro->execute();
+ 
+         $_SESSION['success'] = "เปิดงานเรียบร้อยแล้ว! ";
+     } else {
+         $_SESSION['error'] = "มีบางอย่างผิดพลาด";
+         header("location: edittask_page.php?updatetask_id=$taskid&project_id=$project_id");
+         exit; // จบการทำงาน
+     } 
+} 
+else if($_POST['proc'] == 'closetask'){
+
+    $status = 1;
+    $project_id=$_POST['project_id'];
+    $taskid = $_POST['taskid'];
+
+        if(isset($project_id)){
+        $updatestatuspro = $db->prepare('UPDATE task_list SET status_task2 = :status WHERE task_id = :task_id');
+        $updatestatuspro->bindParam(':status', $status);
+        $updatestatuspro->bindParam(':task_id', $taskid);
+        $updatestatuspro->execute();
+
+       $_SESSION['success'] = "ปิดงานเรียบร้อยแล้ว! ";
+      /*   echo "<script>
+                    $(document).ready(function() {
+                        Swal.fire({
+                            title: 'ปิดหัวข้องานเรียบร้อยแล้ว!',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: true
+                        }).then(() => {
+                            document.location.href = 'editproject_page.php?update_id=$project_id';
+                        })
+                    });
+            </script>";  */
+    } else {
+        $_SESSION['error'] = "มีบางอย่างผิดพลาด";
+        header("location: edittask_page.php?updatetask_id=$taskid&project_id=$project_id");
+    } 
+}
     ?>

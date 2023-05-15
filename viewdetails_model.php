@@ -39,10 +39,10 @@
                                                             <div class="d-flex align-items-center mt-1">
                                                             <?php if($manager['avatar'] !=""){?>
                                                                 <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $manager['avatar']?>" alt="Avatar" width="35"  height="35">
-                                                                <b><?php echo $manager['name'] ?> </b>
+                                                                <b><?php echo showshortname($manager['shortname_id']).' '.$manager['name'] ?> </b>
                                                             <?php }else{ ?>
                                                                 <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
-                                                                <b><?php echo $manager['name'] ?> </b>
+                                                                <b><?php echo showshortname($manager['shortname_id']).' '.$manager['name'] ?> </b>
                                                             <?php } ?>
                                                                 
                                                             </div>  
@@ -73,10 +73,10 @@
                                                     <dd>
                                                     <?php if($row['avatar'] !=""){?>
                                                         <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $row['avatar']?>" alt="Avatar" width="35"  height="35">
-                                                        <b><?php  echo $row['firstname']." ".$row['lastname'] ?></b>
+                                                        <b><?php  echo showshortname($row['shortname_id']).' '.$row['firstname']." ".$row['lastname'] ?></b>
                                                     <?php }else{ ?>
                                                         <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
-                                                        <b><?php  echo $row['firstname']." ".$row['lastname'] ?></b>
+                                                        <b><?php  echo showshortname($row['shortname_id']).' '.$row['firstname']." ".$row['lastname'] ?></b>
                                                     <?php } ?>
                                                    
                                             

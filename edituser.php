@@ -29,6 +29,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 <?php include 'head.php'?> 
 <body>
 <?php include "sidebar.php"?>
+<?php include "funtion.php"?>
 <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
                     <?php 
@@ -79,24 +80,38 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 									<div class="col-md-2">
 								
 									</div>
-									<!-- <div class="col-md-12">
-										<div class="col-md-6">
-											<div class="mb-3">
-												<div class="form-group">
-													<label for="" class="control-label">รูปภาพ</label>	
-													<input type="hidden" id="" name="fileup" value="<?php echo $avatar; ?>">
-													<input type="file" name="file" class="form-control streched-link " accept="image/gif, image/jpeg, image/png"  value="<?php echo $avatar;?>">
-													<p class="small mb-0 mt-2"><b>Note:</b>อนุญาตให้อัปโหลดเฉพาะไฟล์ JPG, JPEG, PNG </p> 
-												</div>
-											</div>
+									<div class="col-md-2">
+										<div class="mb-3">
+											<label for="" class="control-label" >คำนำหน้า</label>
+												<select name="shortname" id="shortname" class="form-select"  >
+													<option value="<?php echo $shortname_id ?>"><?php echo showshortname($shortname_id) ?></option>
+													<option value="1">นาย</option>
+													<option value="9">นาง</option>
+													<option value="2">นางสาว</option>
+													<option value="3">ดร.</option>
+													<option value="4">ผศ</option>
+													<option value="5">รศ</option>
+													<option value="6">ศ</option>
+													<option value="7">ผศ.ดร</option>
+													<option value="8">ศ.ดร</option>
+													<option value="10">อาจารย์</option>
+												</select>
 										</div>
-									</div> -->
-									<div class="col-md-6">
+									</div>
+									<div class="col-md-5">
 										<div class="mb-3">
 											<label for="" class="control-label">ชื่อ</label>
 											<input type="hidden" id="custId" name="id" value="<?php echo $id; ?>">
 											<input type="text" name="firstname" class="form-control form-control"  required  value="<?php echo $firstname; ?>">
 										</div>
+									</div>
+									<div class="col-md-5">
+										<div class="mb-3">
+											<label for="" class="control-label">นามสกุล</label>
+											<input type="text" name="lastname" class="form-control form-control"  required value="<?php echo $lastname; ?>">
+										</div>
+									</div>
+									<div class="col-md-6">
 										<div class="mb-3">
 												<label class="control-label">อีเมล</label>
 												<input type="email" class="form-control form-control" name="email" required  value="<?php echo $email; ?>">
@@ -111,10 +126,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 										
 									</div>	
 									<div class="col-md-6">
-										<div class="mb-3">
-											<label for="" class="control-label">นามสกุล</label>
-											<input type="text" name="lastname" class="form-control form-control"  required value="<?php echo $lastname; ?>">
-										</div>
+										
 										
 										<div class="mb-3">
 											<label for="control-label">เบอร์โทรศัพท์</label>

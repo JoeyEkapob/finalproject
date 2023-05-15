@@ -214,14 +214,14 @@ function searchreportuser(page){
                         
                         <tr>
                             <td class="id-col" >${i+1}</td>
-                            <td >${response.result[i].firstname + ' ' + response.result[i].lastname}</td>
+                            <td >${showshortname(response.result[i].shortname_id) + ' ' + response.result[i].firstname + ' ' + response.result[i].lastname}</td>
                             <td  >${response.result[i].position_name}</td>
                             <td class="numtask-col">${response.result[i].nummannagerpro}</td>
                             <td class="comptask-col">${response.result[i].numuserpro}</td>
                             <td class="mannager-col" > ${response.result[i].numusertask}</td>
                             <td class="success-col">${response.result[i].numdela}</td>
                             <td class="mannager-col" > ${response.result[i].numdetails}</td>
-                            <td class="action-col"  id='action' ><a class='btn btn-bitbucket btn-sm' href='reportuserpro.php?userid=${response.result[i].user_id}'>รายละเอียด</a></td>
+                            <td class="action-col"  id='action' ><a class='btn btn-bitbucket btn-sm' href='reportuserpro.php?userid=${response.result[i].user_id}&startdate=${startdate}&enddate=${enddate}'>รายละเอียด</a></td>
                         </tr>
                         `;
                         }

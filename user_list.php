@@ -13,6 +13,7 @@
 <body>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css"  
 <?php include "sidebar.php"?>
+<?php include "funtion.php"?>
 
 <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
@@ -41,7 +42,7 @@
                     <div class="container-fluid p-0">
                         <div class="card-header">
                             <div class="d-flex flex-row-reverse bd-highligh">
-                                <a class="btn btn-block btn-sm btn-default btn-flat border-primary" data-bs-toggle="modal" data-bs-target="#adduserModal" ><i class="fa fa-plus"></i>  + Add New User</a>
+                                <a class="btn btn-block btn-sm btn-default btn-flat border-primary" data-bs-toggle="modal" data-bs-target="#adduserModal" ><i class="fa fa-plus"></i> + เพิ่มสมาชิก</a>
                             </div>
                         </div>
                     </div>
@@ -57,8 +58,8 @@
                                                     <th class="text-center">ID</th>
                                                     <th class="text-left">ชื่อ-นามสกุล</th>
                                                     <th class="text-left">อีเมลล์</th>
-                                                    <th class="text-left">ตำเเหน่ง</th>
-                                                    <th class="text-left">ฝ่าย</th>
+                                                    <th class="text-center">ตำเเหน่ง</th>
+                                                    <th class="text-center">ฝ่าย</th>
                                                     <th class="text-center">Action</th>
                                                 </tr>
                                         </thead>
@@ -80,11 +81,12 @@
                                             ?>
                                             <tr>
                                                 <td class="text-center"><?php echo $i++ ?></td>
-                                                <td class="text-left"><?php echo ucwords($row['name']) ?></td>
+                                                <td class="text-left"><?php echo showshortname($row['shortname_id']).' '.$row['name'] ?></td>
                                                 <td class="text-left" ><?php echo $row['email'] ?></td>
-                                                <td class="text-left" ><?php echo $row['position_name']?></td>
-                                                <td class="text-left" ><?php echo $row['department_name']?></td>
-                                                <td class="text-center">  
+                                                <td class="text-center" ><?php echo $row['position_name']?></td>
+                                                <td class="text-center"><?php echo $row['department_name']?></td>
+                                                <td class="text-center">
+
                                                 <a  class="resetbtn" type="button"  data-user_id ="<?php echo $row['user_id']?>"> <h3> <i data-feather="key"></i> </h3> </a>
                                 
                                                 <a class="btn btn-bitbucket btn-sm viewuserdata"  title="ดูรายละเอียด" data-userid="<?php echo $row['user_id']?>" ><i data-feather="zoom-in"></i></a> 
@@ -123,7 +125,7 @@ $(document).ready(function(){
     var sendstatus=$(this).data("status"); */
     console.log(userid);
     $.ajax({
-        url:"proc.php",
+        url:"proc2.php",
         method:"post",
         data:{proc:proc,userid:userid},
         success:function(data){

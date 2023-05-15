@@ -139,6 +139,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $files = $_FILES['files'];
         $progress_task = 0;
         $status_timetask = 0;
+        $status_task2 = 0;
 
         $chktask = "SELECT name_tasklist FROM task_list  where name_tasklist = '$taskname' AND project_id =  '$pro_id' ";
         $chktask = $db->query($chktask);
@@ -192,8 +193,8 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         
         
         if(!isset($_SESSION['error'])) {
-            $stmttask = $db->prepare("INSERT INTO task_list(task_id,name_tasklist, description_task,status_task, strat_date_task,end_date_task,project_id,user_id,progress_task,status_timetask) 
-            VALUES(:task_id,:taskname,:textarea,:status,:start_date,:end_date,:pro_id,:users_id,:progress_task,:status_timetask)");
+            $stmttask = $db->prepare("INSERT INTO task_list(task_id,name_tasklist, description_task,status_task, strat_date_task,end_date_task,project_id,user_id,progress_task,status_timetask,status_task2) 
+            VALUES(:task_id,:taskname,:textarea,:status,:start_date,:end_date,:pro_id,:users_id,:progress_task,:status_timetask,:status_task2)");
             $stmttask->bindParam(":task_id", $nextId);
             $stmttask->bindParam(":taskname", $taskname);
             $stmttask->bindParam(":textarea", $textarea);
@@ -204,6 +205,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             $stmttask->bindParam(":users_id",$user );
             $stmttask->bindParam(":progress_task",$progress_task );
             $stmttask->bindParam(":status_timetask",$status_timetask);
+            $stmttask->bindParam(":status_task2",$status_task2);
             $stmttask->execute();   
             //$lastId = $db->lastInsertId(); 
             foreach ($files['name'] as $i => $file_name) {
@@ -433,7 +435,12 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $start_date = $_POST['start_date'];
         $end_date = $_POST['end_date'];
         $taskname =$_POST['taskname'];
-        $user=$_POST['user'];
+        if(isset($_POST['user'])){
+            $user=$_POST['user'];
+        }else{
+            $user =  $olduser;
+        }
+       
         $max_file_size = 20971520; 
         $textarea=trim($_POST['textarea']);
         $stat = 1 ;
@@ -745,10 +752,12 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         }
      
         $diff = array_diff($users_id, $user);
-        $diff2 = array_diff($usertask, $users_id);
-        if(!empty($diff2)){
-            $_SESSION['error'] = 'ไม่สามารถเเก้ไขสมาชิกได้เนื่องจากมีงานที่ต้องทำอยู่ในหัวข้องาน';
-            $url_return ="location:editproject_page.php?update_id=$proid";
+        if(isset($usertask)){
+            $diff2 = array_diff($usertask, $users_id);
+                if(!empty($diff2)){
+                    $_SESSION['error'] = 'ไม่สามารถเเก้ไขสมาชิกได้เนื่องจากมีงานที่ต้องทำอยู่ในหัวข้องาน';
+                    $url_return ="location:editproject_page.php?update_id=$proid";
+                }
         }
         /* print_r($diff2);
         exit; */
@@ -1234,7 +1243,8 @@ header("Access-Control-Allow-Headers: X-Requested-With");
     
     }
     else if($_POST['proc'] == 'adduser'){
-       
+
+        $shortname = $_POST['shortname'];
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
         $email = $_POST['email'];
@@ -1266,10 +1276,13 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         move_uploaded_file($file_tmp,$file_data.$newname);
         }
 
-         if (empty($firstname)) {
+        if (empty($shortname)) {
+            $_SESSION['error'] = 'กรุณาใสคำนำหน้า';
+            $url_return ="location:user_list.php";
+        } else if (empty($firstname)) {
             $_SESSION['error'] = 'กรุณากรอกชื่อ';
             $url_return ="location:user_list.php";
-          } else if (empty($lastname)) {
+        }else if (empty($lastname)) {
             $_SESSION['error'] = 'กรุณากรอกนามสกุล';
             $url_return ="location:user_list.php";
         } else if (empty($email)) {
@@ -1314,8 +1327,8 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                             $url_return ="location:user_list.php";
                         } else if (!isset($_SESSION['error'])) {
                             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-                            $stmt = $db->prepare("INSERT INTO user(firstname, lastname, email, password, role_id,avatar,status_user,tel,line_token,idcard,department_id) 
-                                                    VALUES(:firstname, :lastname, :email, :password, :role_id,:avatar,:status_user,:tel,:line_token,:idcard,:department_id)");
+                            $stmt = $db->prepare("INSERT INTO user(firstname, lastname, email, password, role_id,avatar,status_user,tel,line_token,idcard,department_id,shortname_id) 
+                                                    VALUES(:firstname, :lastname, :email, :password, :role_id,:avatar,:status_user,:tel,:line_token,:idcard,:department_id,:shortname_id)");
                             $stmt->bindParam(":firstname", $firstname);
                             $stmt->bindParam(":lastname", $lastname);
                             $stmt->bindParam(":email", $email);
@@ -1327,6 +1340,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                             $stmt->bindParam(":line_token",$tokenline);
                             $stmt->bindParam(":idcard",$idcard);
                             $stmt->bindParam(":department_id",$department);
+                            $stmt->bindParam(":shortname_id",$shortname);
                             $stmt->execute();
                             $_SESSION['success'] = "สมัครสมาชิกเรียบร้อยแล้ว! ";
                             echo "<script>
@@ -1349,7 +1363,9 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                     }
     }
     else if($_POST['proc'] == 'edituseradmin'){
+
         $userid = $_POST['userid'];
+        $shortname = $_POST['shortname'];
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
         $email = $_POST['email'];
@@ -1406,7 +1422,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             $url_return ="location:edituser_page.php?update_id=".$userid."";    
 
         }else if($file['name'] == "" AND !isset($_SESSION['error'])){
-            $update_stmt = $db->prepare('UPDATE user SET firstname = :firstname ,lastname = :lastname ,email =:email , role_id = :role_id,status_user = :status_user ,tel = :tel ,line_token = :line_token, idcard = :idcard ,department_id = :department WHERE user_id = :id');
+            $update_stmt = $db->prepare('UPDATE user SET firstname = :firstname ,lastname = :lastname ,email =:email , role_id = :role_id,status_user = :status_user ,tel = :tel ,line_token = :line_token, idcard = :idcard ,department_id = :department ,shortname_id = :shortname_id WHERE user_id = :id');
             $update_stmt->bindParam(':firstname', $firstname);
             $update_stmt->bindParam(":lastname", $lastname);
             $update_stmt->bindParam(":email", $email);
@@ -1417,6 +1433,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             $update_stmt->bindParam(":line_token", $tokenline);
             $update_stmt->bindParam(":idcard", $idcard);
             $update_stmt->bindParam(":department", $department);
+            $update_stmt->bindParam(":shortname_id", $shortname);
             $update_stmt->bindParam(':id', $userid);
             $update_stmt->execute();
 
@@ -1436,7 +1453,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             //$url_return ="location:edituser_page.php?update_id=".$userid."";    
 
         }else if($file['name'] != "" AND !isset($_SESSION['error'])){  
-            $update_stmt = $db->prepare('UPDATE user SET firstname = :firstname ,lastname = :lastname ,email =:email , role_id = :role_id ,avatar = :avatar, status_user = :status_user ,tel = :tel ,line_token = :line_token ,idcard = :idcard,department_id = :department  WHERE user_id = :id');
+            $update_stmt = $db->prepare('UPDATE user SET firstname = :firstname ,lastname = :lastname ,email =:email , role_id = :role_id ,avatar = :avatar, status_user = :status_user ,tel = :tel ,line_token = :line_token ,idcard = :idcard, department_id = :department ,shortname_id = :shortname_id WHERE user_id = :id');
             $update_stmt->bindParam(':firstname', $firstname);
             $update_stmt->bindParam(":lastname", $lastname);
             $update_stmt->bindParam(":email", $email);
@@ -1447,6 +1464,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             $update_stmt->bindParam(":line_token", $tokenline);
             $update_stmt->bindParam(":idcard", $idcard);
             $update_stmt->bindParam(":department", $department);
+            $update_stmt->bindParam(":shortname_id", $shortname);
             $update_stmt->bindParam(':id', $userid);
             $update_stmt->execute();
 
@@ -1476,6 +1494,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 
 
         $userid = $_POST['userid'];
+        $shortname = $_POST['shortname'];
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
         $email = $_POST['email'];
@@ -1524,7 +1543,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             $url_return ="location:edituser.php?user_id=".$userid."";    
 
         }else if($file['name'] == "" AND !isset($_SESSION['error'])){
-            $update_stmt = $db->prepare('UPDATE user SET firstname = :firstname ,lastname = :lastname ,email =:email , tel = :tel ,line_token = :line_token, idcard = :idcard  WHERE user_id = :id');
+            $update_stmt = $db->prepare('UPDATE user SET firstname = :firstname ,lastname = :lastname ,email =:email , tel = :tel ,line_token = :line_token, idcard = :idcard ,shortname_id = :shortname_id  WHERE user_id = :id');
             $update_stmt->bindParam(':firstname', $firstname);
             $update_stmt->bindParam(":lastname", $lastname);
             $update_stmt->bindParam(":email", $email);
@@ -1534,6 +1553,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             $update_stmt->bindParam(":tel", $phone);
             $update_stmt->bindParam(":line_token", $tokenline);
             $update_stmt->bindParam(":idcard", $idcard);
+            $update_stmt->bindParam(":shortname_id", $shortname);
             $update_stmt->bindParam(':id', $userid);
             $update_stmt->execute();
 
@@ -1553,7 +1573,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             //$url_return ="location:edituser_page.php?update_id=".$userid."";    
 
         }else if($file['name'] != "" AND !isset($_SESSION['error'])){  
-            $update_stmt = $db->prepare('UPDATE user SET firstname = :firstname ,lastname = :lastname ,email =:email ,avatar = :avatar, tel = :tel ,line_token = :line_token ,idcard = :idcard WHERE user_id = :id');
+            $update_stmt = $db->prepare('UPDATE user SET firstname = :firstname ,lastname = :lastname ,email =:email ,avatar = :avatar, tel = :tel ,line_token = :line_token ,idcard = :idcard ,shortname_id = :shortname_id  WHERE user_id = :id');
             $update_stmt->bindParam(':firstname', $firstname);
             $update_stmt->bindParam(":lastname", $lastname);
             $update_stmt->bindParam(":email", $email);
@@ -1563,6 +1583,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             $update_stmt->bindParam(":tel", $phone);
             $update_stmt->bindParam(":line_token", $tokenline);
             $update_stmt->bindParam(":idcard", $idcard);
+            $update_stmt->bindParam(":shortname_id", $shortname);
             $update_stmt->bindParam(':id', $userid);
             $update_stmt->execute();
 

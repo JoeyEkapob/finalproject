@@ -180,16 +180,14 @@ if($_POST['proc'] == 'report'){
             $comptask = $db->query("SELECT * FROM task_list where project_id =".$array['project_id']."  and status_task = 5");
             $comptask2 = $comptask->rowCount(); 
             
+
             $pdf->Cell(22,10,iconv('UTF-8','cp874',$array['project_id']),1,0,"C");
             $pdf->Cell(40,10,iconv('UTF-8','cp874',$array['name_project']),1,0,"c");
             $pdf->Cell(35,10,iconv('UTF-8','cp874',$array['name_jobtype']),1,0,"c");
-            $pdf->Cell(45, 10, iconv('UTF-8', 'cp874', thai_date_short(strtotime($array['start_date']))) . ' - ' . iconv('UTF-8', 'cp874', thai_date_short(strtotime($array['end_date']))), 1, 0, "C");
-        /*  $pdf->Cell(17,10,iconv('UTF-8','cp874',showstatprotext1($array['status_1'])). ' - '.iconv('UTF-8','cp874',showstatprotext1($array['status_1'])),1,0,"C"); */
-            $pdf->Cell(20,10,iconv('UTF-8','cp874',showstatprotext1($array['status_1']))/* .'('.iconv('UTF-8','cp874',showstatprotext2($array['status_2'])).')' */, 1, 0, "C");
-    /* 
-            $pdf->Cell(17,10,iconv('UTF-8','cp874',$array['progress_project'].' '.'%'),1,0,"C"); */
-        $pdf->Cell(30,10,iconv('UTF-8','cp874',$array['firstname'].' '.$array['lastname']),1,1,"c"); 
-        /*    $pdf->Cell(25,10,iconv('UTF-8','cp874','sdfsdfsdfsdfsdfsdfsdf'),1,1,"c"); */
+            $pdf->Cell(45, 10,iconv('UTF-8', 'cp874', thai_date_short(strtotime($array['start_date']))) . ' - ' . iconv('UTF-8', 'cp874', thai_date_short(strtotime($array['end_date']))),1,0, "C");
+            $pdf->Cell(20,10,iconv('UTF-8','cp874',showstatprotext1($array['status_1'])),1,0, "C");
+            $pdf->Cell(30,10,iconv('UTF-8','cp874',$array['firstname'].' '.$array['lastname']),1,1,"c"); 
+    
 
             } 
     /*  $pdf->Ln(); */
@@ -479,12 +477,12 @@ else if($_POST['proc']== 'reporttaskdetails'){
     if($sqldetailsuserrow > 0){
     while ($sqldetailsuser2 = $sqldetailsuser->fetch(PDO::FETCH_ASSOC)) {
 
-        $pdf->Cell(22,10,iconv('UTF-8','cp874',$i++),1,0,"C");
-        $pdf->Cell(50,10,iconv('UTF-8','cp874',$sqldetailsuser2['name_tasklist']),1,0,"c");
-        $pdf->Cell(45, 10, iconv('UTF-8', 'cp874',thai_date_and_time_short($sqldetailsuser2['date_detalis'])), 1, 0, "C");
-        $pdf->Cell(23,10,iconv('UTF-8','cp874',$sqldetailsuser2['progress_task'].' '.'%'),1,0,"C"); 
-        $pdf->Cell(27,10,iconv('UTF-8','cp874',showstatdetail($sqldetailsuser2['state_details'])) .iconv('UTF-8','cp874',showstatustimepdf($sqldetailsuser2['status_timedetails'])) , 1,0, "C"); 
-        $pdf->Cell(25,10,iconv('UTF-8','cp874',showtdetailtext($sqldetailsuser2['detail'])),1,1,"C"); 
+        $pdf->MultiCell(22,10,iconv('UTF-8','cp874',$i++),1,0,"C");
+        $pdf->MultiCell(50,10,iconv('UTF-8','cp874',$sqldetailsuser2['name_tasklist']),1,0,"c");
+        $pdf->MultiCell(45, 10, iconv('UTF-8', 'cp874',thai_date_and_time_short($sqldetailsuser2['date_detalis'])), 1, 0, "C");
+        $pdf->MultiCell(23,10,iconv('UTF-8','cp874',$sqldetailsuser2['progress_task'].' '.'%'),1,0,"C"); 
+        $pdf->MultiCell(27,10,iconv('UTF-8','cp874',showstatdetail($sqldetailsuser2['state_details'])) .iconv('UTF-8','cp874',showstatustimepdf($sqldetailsuser2['status_timedetails'])) , 1,0, "C"); 
+        $pdf->MultiCell(25,10,iconv('UTF-8','cp874',showtdetailtext($sqldetailsuser2['detail'])),1,1,"C"); 
        
     }
     }else{

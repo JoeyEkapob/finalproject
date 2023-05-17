@@ -40,8 +40,8 @@ if($_POST['proc'] == 'searchreport'){
     if(isset($_POST["role"])){
         $role = $_POST["role"];
     }
-/*     echo $department;
-exit; */
+    /*     echo $department;
+    exit; */
 
     $sql = "SELECT * FROM project as p 
     LEFT JOIN job_type as j ON p.id_jobtype = j.id_jobtype 
@@ -129,10 +129,19 @@ else if($_POST['proc'] == 'searchreportuser'){
     $startdate =  $_POST["startdate"];
     $enddate = $_POST["enddate"];
 
-
+    if(isset($_POST["department"])){
+        $department = $_POST["department"];
+    }
     $sql = "SELECT * FROM user as u
-    LEFT JOIN position as p ON p.role_id = u.role_id 
+    LEFT JOIN position as po ON po.role_id = u.role_id 
+    LEFT JOIN department as d ON d.department_id = u.department_id 
     WHERE 1=1 ";
+    if ($level > 2) {
+        $sql .= "AND $level <= po.level /* AND d.department_id = $department */ ";
+    } 
+    if(!empty($department)){
+        $sql .= "AND d.department_id = $department ";
+    }
     if (!empty($firstname)) {
         $sql .= "AND firstname LIKE '%$firstname%' ";
     }
@@ -340,15 +349,15 @@ else if($_POST['proc'] == 'closeproject'){
                 </div> 
                     <hr>';
                         $outp .= '<div class="col-md-12">';
-                        $sql2 = $db->query("SELECT manager_id FROM project WHERE manager_id = $user_id"); 
+                        $sql2 = $db->query("SELECT manager_id FROM project WHERE manager_id = $user_id   AND start_date >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) "); 
                         $nummannagerpro = $sql2->rowCount(); 
-                        $sql3 = $db->query("SELECT user_id FROM project_list WHERE user_id = $user_id");
+                        $sql3 = $db->query("SELECT user_id FROM project_list as pl left join project as p on pl.project_id = p.project_id WHERE user_id = $user_id AND start_date >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)" );
                         $numuserpro = $sql3->rowCount(); 
-                        $sql4 = $db->query("SELECT user_id FROM task_list WHERE user_id = $user_id ");
+                        $sql4 = $db->query("SELECT user_id FROM task_list WHERE user_id = $user_id AND strat_date_task >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) ");
                         $numusertask = $sql4->rowCount(); 
-                        $sql5 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_task != 5 AND progress_task != 100");
+                        $sql5 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_task != 5 AND progress_task != 100 AND strat_date_task >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)");
                         $numtaskonp = $sql5->rowCount(); 
-                        $sql6 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_timetask = 2 AND status_task != 5 AND progress_task != 100");
+                        $sql6 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_timetask = 2 AND status_task != 5 AND progress_task != 100 AND strat_date_task >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)");
                         $numtimede = $sql6->rowCount();
     $outp .= '                              <div class="containeruser">
                                         <div class="itemuser1">หัวข้องานที่สร้าง</div>

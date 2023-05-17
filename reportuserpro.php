@@ -19,11 +19,9 @@
     $enddate = $_GET['enddate'];
     }
 
-    $targetDir = "img/avatars/";
-    $stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","ส่งเรียบร้อยเเล้ว","รอการเเก้ไข","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
-    $stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
+
     
-    $select_project = $db->prepare("SELECT * FROM user as u left join position as p on u.role_id = p.role_id  WHERE user_id = :id");
+    $select_project = $db->prepare("SELECT * FROM user as u left join position as p on u.role_id = p.role_id  left join department as d on u.department_id = d.department_id WHERE user_id = :id");
     $select_project->bindParam(":id", $id);
     $select_project->execute();
     $row = $select_project->fetch(PDO::FETCH_ASSOC);
@@ -83,12 +81,14 @@
 <form action="reportpropdf.php" method="post" id="viewpro" class="form-horizontal" enctype="multipart/form-data" target="_black">
 <input type="hidden" id="proc" name="proc" value="">
 <input type="hidden" id="userid" name="userid" value="">
+<input type="hidden" id="startdate" name="startdate" value="">
+<input type="hidden" id="enddate" name="enddate" value="">
     <main class="content">
     <div>
         <a href="reportuser.php" class="back-button">&lt;</a>
     </div>
     <div class="d-flex flex-row-reverse" >
-        <button class="btn btn-flat  btn-danger" id="print" onclick="reportuserpro('<?php echo $id  ?>');"><i class="fa fa-print"></i> Print</button>
+        <button class="btn btn-flat  btn-danger" id="print" onclick="reportuserpro('<?php echo $id  ?>','<?php echo $startdate  ?>','<?php echo $enddate  ?>');"><i class="fa fa-print"></i> Print</button>
     </div>
         <div id ="Receipt" >
             <div class="col-12  d-flex" >
@@ -102,9 +102,9 @@
                             <div class="container-fluid">
                                     <div class="row">
                                         <div class="col-md-4 col-sm-4 d-flex flex-row-reverse"><b>ชื่อ-นามสกุล : </b></div>
-                                        <div class="col-md-2 col-sm-8 "><?php echo $firstname.' '.$lastname ?></div>
+                                        <div class="col-md-2 col-sm-8 "><?php echo showshortname($shortname_id).' '.$firstname.' '.$lastname ?></div>
                                         <div class="col-md-2 col-sm-4 d-flex justify-content-end"><b>ตำเเหน่ง : </b></div>
-                                        <div class="col-md-3 col-sm-8"><?php echo $position_name ?></div>
+                                        <div class="col-md-3 col-sm-8"><?php echo $position_name.' '.'( ฝ่าย'.$department_name.' )' ?></div>
                                     </div>
 
                                     <div class="row">
@@ -117,12 +117,13 @@
                                     <div class="row">
                                         <div class="col-md-4 col-sm-4 d-flex flex-row-reverse"><b>จำนวนงาน : </b></div>
                                         <div class="col-md-2 col-sm-8"><?php echo  $numusertask   ?></div>
-                                        <div class="col-md-2 col-sm-4 d-flex flex-row-reverse"><b>จำนวนครั้งที่ถูกสั่งเเก้ :</b></div>
-                                        <div class="col-md-3 col-sm-8"><?php echo $numdetails ?></div>
+                                        <div class="col-md-2 col-sm-4 d-flex flex-row-reverse"><b>งานที่ล่าช้า : </b></div>
+                                        <div class="col-md-3 col-sm-8"><?php echo $numdela ?></div>
+                                        
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-4 col-sm-4 d-flex flex-row-reverse"><b>งานที่ล่าช้า : </b></div>
-                                        <div class="col-md-2 col-sm-8 "><?php echo $numdela ?></div>
+                                        <div class="col-md-4 col-sm-4 d-flex flex-row-reverse"><b>จำนวนครั้งที่ถูกสั่งเเก้ :</b></div>
+                                        <div class="col-md-2 col-sm-8"><?php echo $numdetails ?></div>
                                         
                                     </div>
                                 </div>
@@ -254,11 +255,13 @@
     </body>
 </html>
 <script>
-    function reportuserpro(id){
+    function reportuserpro(id,startdate,enddate){
         $('#proc').val('reportuserpro');
         $('#userid').val(id);
+        $('#startdate').val(startdate);
+        $('#enddate').val(enddate);
         
-        console.log(userid);
+        console.log(startdate);
     }
 
 /* function printContent(el) {

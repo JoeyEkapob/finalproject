@@ -90,9 +90,9 @@
                                     <label for="control-label" style="font-size: 14px;">ตำเเหน่ง</label>
                                         <div class="input-group input-group-sm mb-2">
                                             <select name="role" id="role" class="form-select"  >
-                                            <option value="">กรุณาเลือกตำเเหน่ง</option>
+                                            <option value="">ทั้งหมด</option>
                                                     <?php
-                                                    $stmt = $db->query("SELECT * FROM position WHERE position_status = 1 ");
+                                                    $stmt = $db->query("SELECT * FROM position WHERE position_status = 1 AND role_id >= $level");
                                                     $stmt->execute();
                                                     $result = $stmt->fetchAll();
                                                     foreach($result as $row) {
@@ -103,8 +103,27 @@
                                         </div>
                                 </div>
                             </div>
+                            <?php if($level <= 2): ?>  
                             <div class="col-md-3"> 
-                            </div>                         
+                                           
+                                        <div class="mb-3">
+                                            <label for="" class="control-label" >ฝ่าย</label>
+                                            <div class="input-group input-group-sm mb-2">
+                                                <select name="department" id="department" class="form-select" >
+                                                    <?php
+                                                    $stmt = $db->query("SELECT * FROM department WHERE department_status = 1 ");
+                                                    $stmt->execute();
+                                                    $result = $stmt->fetchAll();
+                                                    foreach($result as $row) {
+                                                    ?>
+                                                <option value="<?= $row['department_id'];?>"><?= $row['department_name'];?></option>
+                                                    <?php } ?>
+                                                </select>
+                                                </div>
+                                        </div>
+                               
+                            </div>  
+                            <?php endif; ?>                       
                             <div class="col-lg-12 text-right justify-content-center d-flex">
                             <a class="btn btn-primary" onclick="searchreportuser('<?php echo 1 ?>')" >ค้นหา</a> 
                                 <a class="btn btn-secondary" href="" type="button" >ล้างค่า</a>
@@ -187,12 +206,13 @@ function searchreportuser(page){
     var startdate = $('#startdate').val();
     var enddate = $('#enddate').val();
     var role = $('#role').val();
+    var department = $('#department').val();
     var page = page;
     $.ajax({
         url:"proc2.php",
         method:"post",
         datatype: "json",
-        data:{proc:proc,firstname:firstname,lastname:lastname,startdate:startdate,enddate:enddate,role:role},
+        data:{proc:proc,firstname:firstname,lastname:lastname,startdate:startdate,enddate:enddate,role:role,department:department},
         success:function(response){
           /*   console.log(response) */
          var response = JSON.parse(response); 

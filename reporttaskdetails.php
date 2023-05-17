@@ -94,7 +94,17 @@
                                   
                                     <div class="row">
                                         <div class="col-md-3 col-sm-4 d-flex flex-row-reverse"><b>ผู้รับผิดชอบ :</b></div>
-                                        <div class="col-md-9 col-sm-8"><?php echo $firstname.' '.$lastname ?></div>
+                                        <div class="col-md-3 col-sm-8"><?php echo $firstname.' '.$lastname ?></div>
+                                        <div class="col-md-2 col-sm-4 d-flex flex-row-reverse"><b>สถานะงาน :</b></div>
+                                        <div class="col-md-3 col-sm-8">
+                                        <?php if($status_task2 == 1){
+                                                        echo showstattask2pdf($status_task2).' '.showstatustimepdf($status_timetask);
+                                                    }else{
+                                                        echo  showstattaskreport($status_task).' '.showstatustimepdf($status_timetask);
+                                                    }
+
+                                                  ?>
+                                        </div>
                                     </div>
                                 </div>
                            

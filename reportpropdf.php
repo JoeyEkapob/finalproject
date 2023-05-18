@@ -17,6 +17,7 @@
   
     $level = $nameuser['level'];
     $department =$nameuser['department_id'];
+    $role =$nameuser['role_id'];
 
 if($_POST['proc'] == 'report'){
 
@@ -34,7 +35,7 @@ if($_POST['proc'] == 'report'){
     if(isset($_POST["role"])){
         $role = $_POST["role"];
     }
-
+   /*  echo $role.' '.$department; */
     /*     $username = $db->query("SELECT CONCAT(FirstName, ' ', LastName) As fullName FROM user WHERE project_id =  ".$array['project_id']." "); */
     $where = '';
     if ($level > 2) {
@@ -83,7 +84,7 @@ if($_POST['proc'] == 'report'){
     LEFT JOIN department as d ON d.department_id  = u.department_id
     WHERE 1=1 ";
     if ($level > 2) {
-        $sql .= "AND $level <= po.level AND d.department_id = $department ";
+        $sql .= "AND $level <= po.level AND d.department_id = $department  ";
     } 
     if(!empty($department)){
         $sql .= "AND d.department_id = $department ";
@@ -161,7 +162,7 @@ if($_POST['proc'] == 'report'){
         $pdf->Cell(48,15,iconv('UTF-8','cp874','ฝ่าย : '.$namedepartment['department_name'] ),0,0,"C");
     }else{ 
         $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,0,"");
-        $pdf->Cell(48,15,iconv('UTF-8','cp874','ฝ่าย : - '),0,0,"C");
+        $pdf->Cell(48,15,iconv('UTF-8','cp874','ฝ่าย : ทั้งหมด '),0,0,"C");
     }
 
     if (!empty($role)) {
@@ -173,7 +174,7 @@ if($_POST['proc'] == 'report'){
         $pdf->Cell(48,15,iconv('UTF-8','cp874','ตำเเหน่ง : '.$nameposition['position_name']),0,0,"C");
         $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,1,"");  
     }else{ 
-        $pdf->Cell(48,15,iconv('UTF-8','cp874','ตำเเหน่ง : - '),0,0,"C");
+        $pdf->Cell(48,15,iconv('UTF-8','cp874','ตำเเหน่ง : ทั้งหมด '),0,0,"C");
         $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,1,"");  
     }
     if (!empty($job)) {
@@ -563,9 +564,13 @@ else if($_POST['proc']== 'reportuser'){
 
     $firstname = $_POST["firstname"];
     $lastname = $_POST["lastname"];
-    $role = $_POST["role"];
+
     $startdate =  $_POST["startdate"];
     $enddate = $_POST["enddate"];
+
+    if(isset($_POST["role"])){
+        $role = $_POST["role"];
+    }
 
     if(isset($_POST["department"])){
         $department = $_POST["department"];
@@ -575,7 +580,7 @@ else if($_POST['proc']== 'reportuser'){
     LEFT JOIN department as d ON d.department_id = u.department_id 
     WHERE 1=1 ";
    if ($level > 2) {
-    $sql .= "AND $level <= po.level /* AND d.department_id = $department */ ";
+    $sql .= "AND $level <= po.level  AND d.department_id = $department AND u.role_id = $role ";
     } 
     if(!empty($department)){
         $sql .= "AND d.department_id = $department ";
@@ -631,7 +636,7 @@ else if($_POST['proc']== 'reportuser'){
                 $pdf->Cell(50,15,iconv('UTF-8','cp874','ตำเเหน่ง : '. $nameposition['position_name'] ),0,0,"");
             }else{
                 $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,0,"");
-                $pdf->Cell(50,15,iconv('UTF-8','cp874','ตำเเหน่ง : - ' ),0,0,"");
+                $pdf->Cell(50,15,iconv('UTF-8','cp874','ตำเเหน่ง : ทั้งหมด ' ),0,0,"");
             }
            
         if (!empty($department)) {
@@ -642,7 +647,7 @@ else if($_POST['proc']== 'reportuser'){
             $pdf->Cell(50,15,iconv('UTF-8','cp874','ฝ่าย : '.$namedepartment['department_name'] ),0,0,"L");
             $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,1,"");
         }else{ 
-            $pdf->Cell(50,15,iconv('UTF-8','cp874','ฝ่าย : - '),0,0,"L");
+            $pdf->Cell(50,15,iconv('UTF-8','cp874','ฝ่าย : ทั้งหมด '),0,0,"L");
             $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,1,"");
         }
         $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,0,"");  

@@ -84,7 +84,7 @@
                         <div class="col-md-3">
                         </div>     
                                     
-                                      
+                        <?php if($level < $maxlevel): ?>  
                             <div class="col-md-3">
                                 <div class="mb-3">             
                                     <label for="control-label" style="font-size: 14px;">ตำเเหน่ง</label>
@@ -92,7 +92,7 @@
                                             <select name="role" id="role" class="form-select"  >
                                             <option value="">ทั้งหมด</option>
                                                     <?php
-                                                    $stmt = $db->query("SELECT * FROM position WHERE position_status = 1 AND role_id >= $level");
+                                                    $stmt = $db->query("SELECT * FROM position as p  WHERE position_status = 1 AND level > $level ");
                                                     $stmt->execute();
                                                     $result = $stmt->fetchAll();
                                                     foreach($result as $row) {
@@ -103,6 +103,7 @@
                                         </div>
                                 </div>
                             </div>
+                            <?php endif; ?>  
                             <?php if($level <= 2): ?>  
                             <div class="col-md-3"> 
                                            

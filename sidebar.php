@@ -2,26 +2,35 @@
 include "head.php";
 
 
-            if (isset($_SESSION['user_login'])) {
-                $user_id = $_SESSION['user_login'];
-             //echo $admin_id ;
-			 	$sql = "SELECT *,concat(firstname,' ',lastname) as name  FROM user AS u  natural JOIN position  WHERE u.user_id = $user_id ";
-				$stmt = $db->prepare($sql);
-                $stmt->execute();
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-				$imageURL = 'img/avatars/'.$row['avatar'];
-			}
+		if (isset($_SESSION['user_login'])) {
+			$user_id = $_SESSION['user_login'];
+
+			$sql = "SELECT *,concat(firstname,' ',lastname) as name FROM user AS u  natural JOIN position  WHERE u.user_id = $user_id ";
+			$stmt = $db->prepare($sql);
+			$stmt->execute();
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);
+			$imageURL = 'img/avatars/'.$row['avatar'];
+		}
 			$level = $row['level'];
-			$department_id = $row['department_id']
+			$department_id = $row['department_id'];
+			$role = $row['role_id'];
+
+			$sql2 = "SELECT MAX(level) as maxlevel , MIN(level) as minlevel FROM  position WHERE position_status = 1 ";
+			$stmt2 = $db->prepare($sql2);
+			$stmt2->execute();
+			$row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+			$maxlevel = $row2['maxlevel'];
+			$minlevel = $row2['minlevel'];
+
 ?>
 <div class="wrapper">
 		<nav id="sidebar" class="sidebar js-sidebar">
 			<div class="sidebar-content js-simplebar">
 				<a class="sidebar-brand" href="index.php">
-				<?php if($level ==  1): ?>
-				<span class="align-middle">Admin <?php echo $row['firstname'] ?></span>
+				<?php if($level ==  $minlevel): ?>
+				<span class="align-middle">Admin <?php /* echo $row['firstname']  */?></span>
 				<?php else: ?>
-					<span class="align-middle">user <?php echo $row['firstname'] ?></span>
+					<span class="align-middle">user <?php/*  echo $row['firstname']  */?></span>
 					<?php endif; ?>
 				</a>
 
@@ -37,7 +46,7 @@ include "head.php";
             </a>
 					</li>
 
-					<?php if($level != 5 ): ?>
+					<?php if($level != $maxlevel): ?>
 					<!-- <li class="sidebar-item">
 						<a class="sidebar-link" href="">
               				<i class="align-middle" data-feather="check-square"></i> 
@@ -75,7 +84,7 @@ include "head.php";
 							 รายการหัวข้องาน
 							</span>
 						</a>
-						<?php if($level != 5): ?>
+						<?php if($level != $maxlevel): ?>
 						<ul id="project_list" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
 							<li class="sidebar-item">
 								<a class="sidebar-link" href="project_list.php">
@@ -151,7 +160,7 @@ include "head.php";
 				</ul>
 			
 			</li>
-					<?php if($level != 5): ?>
+					<?php if($level != $maxlevel): ?>
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="checktask_list.php">
               <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">ตรวจงาน</span>
@@ -159,7 +168,7 @@ include "head.php";
 			<?php endif; ?>
 					</li>
 
-					<?php if($level == 1 ): ?>
+					<?php if($level == $minlevel ): ?>
 					<li class="sidebar-header">
 						ADMIN
 					</li>

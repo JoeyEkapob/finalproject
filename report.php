@@ -143,15 +143,15 @@
                                                 </div>
                                         </div>
                                     </div>    
-                                 
+                                    <?php endif; ?>
                                         <div class="col-md-3">
                                             <div class="mb-3">
 												<label for="" class="control-label" >ตำเเหน่ง</label>
                                                     <div class="input-group input-group-sm mb-2">
                                                         <select name="role" id="role" class="form-select" >
-                                                        <option value="0">ทั้งหมด</option>
+                                                        <option value="">ทั้งหมด</option>
                                                             <?php
-                                                            $stmt = $db->query("SELECT * FROM position WHERE position_status = 1 AND role_id >= $level");
+                                                            $stmt = $db->query("SELECT * FROM position as p  WHERE position_status = 1 AND level > $level/*  OR p.role_id = $role  */");
                                                             $stmt->execute();
                                                             $result = $stmt->fetchAll();
                                                             foreach($result as $row) {
@@ -162,7 +162,7 @@
                                                     </div>
 											</div>
                                         </div>
-                                        <?php endif; ?>
+                                    
                             <div class="col-md-3">
                             </div>                         
                             <div class="col-lg-12 text-right justify-content-center d-flex">

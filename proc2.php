@@ -18,6 +18,7 @@
   
     $level = $nameuser['level'];
     $department =$nameuser['department_id'];
+    $role =$nameuser['role_id'];
 
 if($_POST['proc'] == 'searchreport'){
 
@@ -40,8 +41,10 @@ if($_POST['proc'] == 'searchreport'){
     if(isset($_POST["role"])){
         $role = $_POST["role"];
     }
-    /*     echo $department;
+   
+    /*     echo $role;
     exit; */
+    
 
     $sql = "SELECT * FROM project as p 
     LEFT JOIN job_type as j ON p.id_jobtype = j.id_jobtype 
@@ -50,7 +53,7 @@ if($_POST['proc'] == 'searchreport'){
     LEFT JOIN department as d ON d.department_id  = u.department_id
     WHERE 1=1 ";
     if ($level > 2) {
-        $sql .= "AND $level <= po.level AND d.department_id = $department ";
+        $sql .= "AND $level <= po.level AND d.department_id = $department AND p.manager_id = $user_id ";
     } 
     if(!empty($department)){
         $sql .= "AND d.department_id = $department ";
@@ -125,10 +128,12 @@ else if($_POST['proc'] == 'searchreportuser'){
 
     $firstname = $_POST["firstname"];
     $lastname = $_POST["lastname"];
-    $role = $_POST["role"];
     $startdate =  $_POST["startdate"];
     $enddate = $_POST["enddate"];
 
+    if(isset($_POST["role"])){
+    $role = $_POST["role"];
+    }
     if(isset($_POST["department"])){
         $department = $_POST["department"];
     }
@@ -136,8 +141,8 @@ else if($_POST['proc'] == 'searchreportuser'){
     LEFT JOIN position as po ON po.role_id = u.role_id 
     LEFT JOIN department as d ON d.department_id = u.department_id 
     WHERE 1=1 ";
-    if ($level > 2) {
-        $sql .= "AND $level <= po.level /* AND d.department_id = $department */ ";
+     if ($level >= 2) {
+        $sql .= "AND $level < po.level  AND d.department_id = $department  AND p.manager_id = $user_id ";
     } 
     if(!empty($department)){
         $sql .= "AND d.department_id = $department ";
@@ -148,9 +153,9 @@ else if($_POST['proc'] == 'searchreportuser'){
     if (!empty($lastname)) {
         $sql .= "AND lastname LIKE '%$lastname%' ";
     }
-    if (!empty($role)) {
+     if (!empty($role)) {
         $sql .= "AND u.role_id = '$role' ";
-    }
+    } 
     $stmt = $db->query($sql);
     $stmt->execute();
     $numuser= $stmt->rowCount();

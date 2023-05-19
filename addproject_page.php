@@ -176,9 +176,9 @@ $(document).ready(function(){
     var items = [];
    console.log(items); 
       <?php
-      $where ="where  level >  $level ORDER by level asc  ";
+      $where ="where  level >  $level AND status_user2 = 1 AND status_user = 1 ORDER by level asc  ";
       if($level > 2){
-        $where = "where  level >  $level  and d.department_id =  $department_id    ORDER by level asc";
+        $where = "where  level >  $level  and d.department_id =  $department_id AND status_user2 = 1 AND status_user = 1   ORDER by level asc";
       }
       $employees = $db->query("SELECT *, concat(firstname,' ',lastname) as name From user as u natural join position as p  natural join department as d  $where");
       $employees->execute();

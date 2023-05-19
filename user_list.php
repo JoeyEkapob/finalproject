@@ -60,6 +60,7 @@
                                                     <th class="text-left">อีเมลล์</th>
                                                     <th class="text-center">ตำเเหน่ง</th>
                                                     <th class="text-center">ฝ่าย</th>
+                                                    <th class="text-center">สถานะ</th>
                                                     <th class="text-center">Action</th>
                                                 </tr>
                                         </thead>
@@ -68,7 +69,7 @@
                                             <?php
                                                 $i = 1;
                                                 //$type = array('',"Admin","คณบดี","รองคณบดีฝ่ายวิชาการ","ผู้ชวยรองรองคณบดีฝ่ายวิชาการ","หัวหน้าหน่วย","หัวสาขา","เจ้าหน้าที่");
-                                                $sql = "SELECT *,concat(firstname,' ',lastname) as name FROM user natural join position natural join department  order by concat(firstname,' ',lastname) asc ";
+                                                $sql = "SELECT *,concat(firstname,' ',lastname) as name FROM user natural join position natural join department WHERE level >= $level AND status_user2 = 1 order by concat(firstname,' ',lastname) asc ";
                                                 $qry = $db->query($sql);
                                                 $qry->execute();
                                                 
@@ -85,6 +86,7 @@
                                                 <td class="text-left" ><?php echo $row['email'] ?></td>
                                                 <td class="text-center" ><?php echo $row['position_name']?></td>
                                                 <td class="text-center"><?php echo $row['department_name']?></td>
+                                                <td class="text-center"><?php echo showstatuser($row['status_user'])?></td>
                                                 <td class="text-center">
 
                                                 <a  class="resetbtn" type="button"  data-user_id ="<?php echo $row['user_id']?>"> <h3> <i data-feather="key"></i> </h3> </a>
@@ -92,7 +94,7 @@
                                                 <a class="btn btn-bitbucket btn-sm viewuserdata"  title="ดูรายละเอียด" data-userid="<?php echo $row['user_id']?>" ><i data-feather="zoom-in"></i></a> 
                                                     <!--  <a class="btn btn-bitbucket btn-sm view_data"  id="<?php echo $row['user_id']?>" ><i data-feather="zoom-in"></i></a>        -->                                             
                                                     <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลสมาชิก" href="edituser_page.php?update_id=<?php echo $row['user_id']?>"><i  data-feather="edit"></i></a>
-                                                    <?php if($meproject == 0 OR $level == 1)  {?>
+                                                    <?php if($meproject == 0 )  {?>
                                                         <a class="btn btn-danger btn-sm deluserbtn" title="ลบข้อมูลสมาชิก" data-user_id ="<?php echo $row['user_id']?>"><i data-feather="trash-2"></i></a>
                                                     <?php   } else {?>
                                                         <a class="btn btn-danger btn-sm deluserbtn disabled" title="ลบข้อมูลสมาชิก" data-user_id ="<?php echo $row['user_id']?>"><i data-feather="trash-2"></i></a>
@@ -170,8 +172,8 @@ $(document).ready(function(){
                 icon: 'info',
                 //text: "It will be deleted permanently!",
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
                 confirmButtonText: 'ใช่ต้องการรีเซ็ตพาสเวิร์ด!',
                 cancelButtonText: 'กลับ',
                 showLoaderOnConfirm: true,
@@ -185,7 +187,7 @@ $(document).ready(function(){
                             })
                             .done(function() {
                                 Swal.fire({
-                                    title: 'success',
+                                    title: 'เรียบร้อย',
                                     text: 'รีเซ็ตพาสเวิร์ดเรียบร้อยเเล้ว!',
                                     icon: 'success',
                                 }).then(() => {
@@ -215,8 +217,8 @@ $(document).ready(function(){
                 icon: 'error',
                 //text: "It will be deleted permanently!",
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
                 confirmButtonText: 'ใช่ต้องการลบสมาชิก!',
                 cancelButtonText: 'กลับ',
                 showLoaderOnConfirm: true,
@@ -230,7 +232,7 @@ $(document).ready(function(){
                             })
                             .done(function() {
                                 Swal.fire({
-                                    title: 'success',
+                                    title: 'เรียบร้อย',
                                     text: 'ลบสมาชิกเรียบร้อยเเล้ว!',
                                     icon: 'success',
                                 }).then(() => {

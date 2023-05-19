@@ -36,12 +36,12 @@
                             <label for="" class="control-label">สมาชิกทีม</label>
                                 <select name="user" id="type" class="form-select">
                                 <?php
-                                    $stmtuser = $db->query("SELECT *, concat(firstname,' ',lastname) as name From project_list natural join user where project_id = $id");
+                                    $stmtuser = $db->query("SELECT *, concat(firstname,' ',lastname) as name From project_list natural join user where project_id = $id AND status_user = 1");
                                     $stmtuser->execute();
                                     $result = $stmtuser->fetchAll();
                                     foreach($result as $row) {
                                     ?>
-                                    <option value="<?php echo $row['user_id'] ?>"><?php echo $row['name'] ?></option>
+                                    <option value="<?php echo $row['user_id'] ?>"><?php echo showshortname($row['shortname_id']).' '.$row['name'] ?></option>
                                     <?php } ?>
                                 </select>  
                         </div>

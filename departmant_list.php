@@ -11,7 +11,7 @@
 <?php include "head.php"?>
 <body>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css" 
-<?php include "sidebar.php"?>
+<?php include "sidebar.php" ?>
 <?php include "funtion.php"?>
 <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
@@ -69,23 +69,23 @@
                                         $sql = "SELECT * FROM department  WHERE department_status = 1";
                                         $qry = $db->query($sql);
                                         $qry->execute();
-                                        while ($row = $qry->fetch(PDO::FETCH_ASSOC)){
-                                            //extract($row);
+                                        while ($departmentrow = $qry->fetch(PDO::FETCH_ASSOC)){
+                                         /*   print_r($row); */
                                     ?>
                                         <tr>
                                             <td class="text-center"><?php echo $i++ ?></td>
-                                            <td class="text-left"><?php echo $row['department_name'] ?></td>
-                                            <td class="text-center">                               
-                                               <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                       
-                                                <!-- <a href="edituser_page.php?update_id=<?php echo $row['department_id']?>" class="btn btn-warning btn-sm">2</a>   --> 
-                                                <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลประเภทงาน" href="editdepartment.php?update_id=<?php echo $row['department_id']?>"><i  data-feather="edit"></i></a>
-                                                <button class="btn btn-danger btn-sm deletedepartment-btn" title="ลบข้อมูลประเภทงาน" data-department_id="<?php echo $row['department_id']?>"><i data-feather="trash-2"></i></button>
+                                            <td class="text-left"><?php echo $departmentrow['department_name'] ?></td>
+                                            <td class="text-center">
+                                                
+                                            <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลประเภทงาน" href="editdepartment.php?update_id=<?php echo $departmentrow['department_id']?>"><i  data-feather="edit"></i></a>
+                                            <button class="btn btn-danger btn-sm deletedepartment-btn" title="ลบข้อมูลประเภทงาน" data-department_id="<?php echo $departmentrow['department_id']?>"><i data-feather="trash-2"></i></button> 
                                             </td>
                                         </tr>
                                     <?php } ?>
                                 </tbody>           
                             </table>
-                            <?php include 'addmodel.php'?>
+                            
+                            <?php   include 'addmodel.php'  ?>
                     </div>
                         
                   
@@ -105,14 +105,14 @@ function adddepartment(){
     console.log(proc)
 }
 
-    $(".deletedepartment-btn").click(function(e) {
+     $(".deletedepartment-btn").click(function(e) {
             var department_id = $(this).data('department_id');
             console.log(department_id);
             e.preventDefault();
             deleteConfirm(department_id);
-        })
+        }) 
 
-        function deleteConfirm(department_id) {
+       function deleteConfirm(department_id) {
            // console.log(id_jobtype);
             Swal.fire({
                 
@@ -120,8 +120,8 @@ function adddepartment(){
                 icon: 'error',
                 //text: "It will be deleted permanently!",
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
                 confirmButtonText: 'ใช่ต้องการยกเลิก!',
                 cancelButtonText: 'กลับ',
                 showLoaderOnConfirm: true,
@@ -154,6 +154,6 @@ function adddepartment(){
                     });
                 },
             });
-        }
+        } 
 </script>
 <?php include "footer.php"?>

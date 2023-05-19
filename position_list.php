@@ -81,7 +81,7 @@
                                                <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                       
                                                 <!-- <a href="edituser_page.php?update_id=<?php echo $row['role_id']?>" class="btn btn-warning btn-sm">2</a>   --> 
                                                 <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลประเภทงาน" href="editposition.php?update_id=<?php echo $row['role_id']?>"><i  data-feather="edit"></i></a>
-                                                <button class="btn btn-danger btn-sm deleteposition-btn" title="ลบข้อมูลประเภทงาน" data-role_id="<?php echo $row['role_id']?>"><i data-feather="trash-2"></i></button>
+                                                <button class="btn btn-danger btn-sm deleteposition-btn" title="ลบข้อมูลประเภทงาน" data-role_id="<?php echo $row['role_id']?>" data-level="<?php echo $row['level']?>" ><i data-feather="trash-2"></i></button>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -108,13 +108,14 @@ function addposition(){
 
     $(".deleteposition-btn").click(function(e) {
             var role_id = $(this).data('role_id');
-            console.log(role_id);
+            var level = $(this).data('level');
+            console.log(level);
             e.preventDefault();
-            deleteConfirm(role_id);
+            deleteConfirm(role_id,level);
         })
 
-        function deleteConfirm(role_id) {
-            console.log(role_id);
+        function deleteConfirm(role_id,level) {
+            console.log(level);
             Swal.fire({
                 
                 title: 'คุณต้องลบประเภทงานใช่หรือไม่',
@@ -135,11 +136,11 @@ function addposition(){
                             
                                 url: 'proc.php',
                                 type: 'post',
-                                data: 'proc=' + 'delposition' + '&role_id=' + role_id ,
+                                data: 'proc=' + 'delposition' + '&role_id=' + role_id + '&level=' + level,
                             })
                             .done(function() {
                                 Swal.fire({
-                                    title: 'success',
+                                    title: 'เรียบร้อย',
                                     text: 'ยกเลิกเรียบร้อยเเล้ว!',
                                     icon: 'success',
                                 }).then(() => {

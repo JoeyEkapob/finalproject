@@ -1761,12 +1761,12 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 
         $userid = $_POST['user_id'];
 
-        $datauser = $db->prepare("SELECT tel from user where user_id = :userid");
+        $datauser = $db->prepare("SELECT idcard from user where user_id = :userid");
         $datauser->bindParam(":userid", $userid);
         $datauser->execute();
         $datauserrow = $datauser->fetch(PDO::FETCH_ASSOC);
 
-        $password = $datauserrow['tel'];
+        $password = $datauserrow['idcard'];
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
         $updatauserdata = $db->prepare("UPDATE user SET password =:password where user_id = :userid");
         $updatauserdata->bindParam(":password", $passwordHash);
@@ -1780,16 +1780,18 @@ header("Access-Control-Allow-Headers: X-Requested-With");
     else if($_POST['proc'] == 'deluserbtn'){
 
         $user_id=$_POST['user_id'];
-
-        $select_stmt = $db->prepare('SELECT * FROM user WHERE user_id = :id');
+        $status_user2 = 0;
+        /* $select_stmt = $db->prepare('SELECT * FROM user WHERE user_id = :id');
         $select_stmt->bindParam(':id', $user_id);
         $select_stmt->execute();
         $row = $select_stmt->fetch(PDO::FETCH_ASSOC);
-        unlink("img/avatars/".$row['avatar']); 
+        unlink("img/avatars/".$row['avatar']);  */
 
         
-        $delete_stmt = $db->prepare('DELETE FROM user WHERE user_id = :id');
+        $delete_stmt = $db->prepare('UPDATE user SET status_user2 = :status_user2 , status_user = :status_user  WHERE user_id = :id ');
         $delete_stmt->bindParam(':id', $user_id);
+        $delete_stmt->bindParam(':status_user2', $status_user2);
+        $delete_stmt->bindParam(':status_user', $status_user2);
         $delete_stmt->execute();
         $_SESSION['success'] = "ลบสมาชิกเรียบร้อยเเล้ว";
         header("Location: user_list.php");
@@ -2113,26 +2115,51 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 
         $status = 2;
         $role_id=$_POST['role_id'];
+        $level=$_POST['level'];
+        $level2[]= '';
+        $roleid[]= '';
+      
 
-            if(isset($role_id)){
+        if(isset($role_id)){
             $delete_stmtjob = $db->prepare('UPDATE position SET position_status = :status WHERE role_id = :id');
             $delete_stmtjob->bindParam(':status', $status);
             $delete_stmtjob->bindParam(':id', $role_id);
             $delete_stmtjob->execute();
 
+            $sql =$db->query('SELECT level From position WHERE position_status = 1 ');
+            $sql->execute();
+            while($row =$sql->fetch(PDO::FETCH_ASSOC)){
+                $level2[] = $row['level'];
+            }
+
+           
+            $sql2 =$db->query("SELECT level From position WHERE level = $level  AND position_status = 1");
+            $sql2->execute();
+            $row2 =$sql2->fetch(PDO::FETCH_ASSOC);
+            if(!isset($row2['level'])){
+                $sql3 =$db->query("SELECT * From position WHERE level > $level  AND position_status = 1");
+                $sql3->execute();
+                while($row3 =$sql3->fetch(PDO::FETCH_ASSOC)){
+                    $roleid[] = $row3['role_id'];
+                }
+                print_r($roleid);
+                foreach($roleid as $i => $roleid2 ){
+                  
+                    $sql4 = $db->query("SELECT `level` FROM `position` WHERE `role_id` = '$roleid2'");
+                    $row4 = $sql4->fetch(PDO::FETCH_ASSOC);
+                    $levelrow = $row4['level'];
+                    $levelrow--;
+                    
+                    $updatelevel = $db->prepare('UPDATE position SET level = :levelrow  WHERE role_id = :id');
+                    $updatelevel->bindParam(':levelrow', $levelrow);
+                    $updatelevel->bindParam(':id', $roleid2);
+                    $updatelevel->execute();  
+                }
+            }
+
+            
            $_SESSION['success'] = "ลบชื่อตำเเหน่งเรียบร้อยแล้ว! ";
-            echo "<script>
-            $(document).ready(function() {
-                Swal.fire({
-                    title: 'ลบชื่อตำเเหน่งเรียบร้อยแล้ว!',
-                    icon: 'success',
-                    timer: 2000,
-                    showConfirmButton: true
-                }).then(() => {
-                    document.location.href = 'jobtype_list.php';
-                })
-            });
-        </script>"; 
+
         } else {
             $_SESSION['error'] = "มีบางอย่างผิดพลาด";
             header("location: jobtype_list.php");

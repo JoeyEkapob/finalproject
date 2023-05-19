@@ -19,10 +19,13 @@
             FROM project   natural JOIN project_list natural JOIN job_type natural JOIN user  WHERE project_id = :id");
             $select_stmt->bindParam(":id", $pro_id);
             $select_stmt->execute();
-            $row2 = $select_stmt->fetch(PDO::FETCH_ASSOC);
-
+            $selectprorow = $select_stmt->fetch(PDO::FETCH_ASSOC);
+       /*  print_r( $row2 );
+        exit; */
     }   
-      
+
+     
+        
 
 ?> 
 <!DOCTYPE html>
@@ -63,12 +66,13 @@
         <input type="hidden" id="proc" name="proc" value="">
         <input type="hidden" id="project_id" name="project_id" value="">
         <input type="hidden" id="file_item_project" name="file_item_project" value="">
-        
+     
                 <main class="content"> 
                 <div class="container-fluid p-0">
                 <a href="<?php echo $previousPage; ?>" class="back-button">&lt;</a> 
 					<h1 class="h3 mb-3">เเก้ไขโปรเจค</h1>
 				</div>
+    
                     <div class="row">
 						<div class="card">		
 							<div class="card-body">
@@ -76,7 +80,7 @@
                                     <div class="col-md-6">
 										<div class="mb-3">
 											<label for="" class="control-label">ชื่อโปรเจค</label>
-											<input type="text" name="proname" class="form-control"  value="<?php echo $row2['name_project']; ?>">
+											<input type="text" name="proname" class="form-control"  value="<?php echo $selectprorow['name_project']; ?>">
                                         
 										</div>
                                     </div>
@@ -85,7 +89,7 @@
                                     <div class="mb-3">
 											<label for="" class="control-label" >ประเภทงาน</label>
 												<select name="job" id="type" class="form-control"  >
-                                                <option value="<?php  echo $row2['id_jobtype']; ?>" ><?php  echo $row2['name_jobtype']; ?></option>
+                                                <option value="<?php  echo $selectprorow['id_jobtype']; ?>" ><?php  echo $selectprorow['name_jobtype']; ?></option>
 													<?php
 													$stmt = $db->query("SELECT * FROM job_type WHERE status = 1");
 													$stmt->execute();
@@ -102,13 +106,13 @@
                                     <div class="col-md-6">
 										<div class="mb-3">
 											<label for="" class="control-label">วันที่สั่ง</label>
-                                            <input type="date" class="form-control form-control" autocomplete="off" name="start_date" value="<?php echo $row2['start_date_pro']; ?>"  >
+                                            <input type="date" class="form-control form-control" autocomplete="off" name="start_date" value="<?php echo $selectprorow['start_date_pro']; ?>"  >
 										</div>
                                     </div>
                                     <div class="col-md-6">
 										<div class="mb-3">
 											<label for="" class="control-label">วันที่เสร็จ</label>
-                                            <input type="date" class="form-control form-control" autocomplete="off" name="end_date" value="<?php echo $row2['end_date_pro']; ?>"  >
+                                            <input type="date" class="form-control form-control" autocomplete="off" name="end_date" value="<?php echo $selectprorow['end_date_pro']; ?>"  >
 										</div>
                                     </div>						
 									
@@ -125,7 +129,7 @@
                                         <div class="mb-4">
 											<label for="" class="control-label">ความเร่งของงาน</label>
 												 <select  name="status2" class="form-select"  >
-                                                 <option value="<?php  echo $row2['status_2']; ?>" ><?php  showstatpro2($row2['status_2']) ?></option>	
+                                                 <option value="<?php  echo $selectprorow['status_2']; ?>" ><?php  showstatpro2($selectprorow['status_2']) ?></option>	
               	                                    <option value="1">งานปกติ</option>
                                                     <option value="2">งานด่วน</option>
                                                     <option value="3">งานด่วนมาก</option>
@@ -138,7 +142,7 @@
                                     <div class="col-md-6">   
                                         <div class="mb-4">
 											<!-- <label for="" class="control-label">สถานะงาน</label> -->
-                                             <?php if($row2['status_1'] == 1){ ?>
+                                             <?php if($selectprorow['status_1'] == 1){ ?>
 										<div class="form-check form-switch ">
 											<input class="form-check-input" type="checkbox" role="switch" id="status1" name="status1" onclick="closeproject('<?php echo $pro_id ?>')" checked>
 											<label class="form-check-label" for="flexSwitchCheckChecked">สถานะการหัวข้องาน</label>
@@ -149,18 +153,6 @@
 											<label class="form-check-label" for="flexSwitchCheckChecked">สถานะการหัวข้องาน</label>
 										</div>
 										<?php } ?>	 
-                                             <!-- <div class="mb-3">
-                                                    <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" role="switch" id="status1" name="status1"  checked>
-                                                        <label class="form-check-label" for="flexSwitchCheckChecked">สถานะงาน</label>
-                                                    </div>	
-                                                </div>	 --> 
-												<!-- <select  name="status1" class="form-select"  >
-                                                    <option value="<?php  echo $row2['status_1']; ?>" ><?php   showstatpro($row2['status_1']); ?></option>	
-              	                                    <option value="1">รอดำเนินการ</option>
-                                                    <option value="3" >ปิดโปรเจค</option>
-												</select>   -->
-                                           <?php// print_r ($result); ?>
 										</div>
                                     </div>                 
                                     
@@ -192,7 +184,7 @@
                                     
                                     <div class="justify-content-center">
                                             <label for="exampleFormControlTextarea1" class="form-label">รายละเอียด</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" name ="description" rows="7"><?php echo $row2['description'];?></textarea>
+                                            <textarea class="form-control" id="exampleFormControlTextarea1" name ="description" rows="7"><?php echo $selectprorow['description'];?></textarea>
                                         </div>
                                         <div class="mb-3">
                                         </div>
@@ -222,28 +214,31 @@ $(document).ready(function() {
     });
 });
 $(document).ready(function(){
+    /* if(isset(data)){
+    var data=[];
+    } */
     var data=[];
     var items = [];
-    
+    console.log(data); 
       <?php
-      $sql = $db->query("SELECT level,u.department_id FROM user as u  NATURAL JOIN position as p  WHERE user_id =  $row2[manager_id]" );
+      $sql = $db->query("SELECT level,u.department_id FROM user as u  NATURAL JOIN position as p  WHERE user_id =  $selectprorow[manager_id]" );
       $sql->execute();
       $sql2 = $sql->fetch(PDO::FETCH_ASSOC);
+      
       $department_id = $sql2['department_id'];
       $level2 = $sql2['level'];
 
-       $where ="where  level >  $level2 ORDER by level asc  ";
-      if($level2 > 2){
-        $where = "where  level >  $level2  and d.department_id =  $department_id    ORDER by level asc";
-      } 
+      $where ="where  level >  $level AND status_user2 = 1 AND status_user = 1 ORDER by level asc  ";
+      if($level > 2){
+        $where = "where  level >  $level  and d.department_id =  $department_id AND status_user2 = 1 AND status_user = 1   ORDER by level asc";
+      }
       $employees = $db->query("SELECT *, concat(firstname,' ',lastname) as name From user as u natural join position as p  natural join department as d $where");
       $employees->execute();
-      $result = $employees->fetchAll();
-      foreach($result as $row) {?>
-          items.push({ 
-        value: <?php echo $row['user_id'];?>,
-        text: '<?php echo $row['name'];?><?php echo " ( ";?><?php echo $row['position_name'].' '. $row['department_name']?><?php echo " ) ";?>',
-        html: '<button class="btn btn-primary btn-sm viewuserdata" data-userid="<?php echo $row['user_id']; ?>">ดูรายระเอียด</button>'
+        while($result = $employees->fetch(PDO::FETCH_ASSOC) ){?>
+        items.push({ 
+        value: <?php echo $result['user_id'];?>,
+        text: '<?php echo $result['name'];?><?php echo " ( ";?><?php echo $result['position_name'].' '. $result['department_name']?><?php echo " ) ";?>',
+        html: '<button class="btn btn-primary btn-sm viewuserdata" data-userid="<?php echo $result['user_id']; ?>">ดูรายระเอียด</button>'
 
     });
     <?php  } ?>
@@ -264,8 +259,8 @@ $(document).ready(function(){
         });
         $('#display_selected').click(function () {
             $('#user_id').val(select.check_multi_select('fetch_country'));
-          /*   alert(select.check_multi_select('fetch_country'))
-            console.log($('#user_id').val()); */
+          alert(select.check_multi_select('fetch_country'))
+            console.log($('#user_id').val());  
         });
     });
 
@@ -322,7 +317,7 @@ $(document).ready(function(){
                             })
                             .done(function() {
                                 Swal.fire({
-                                    title: 'success',
+                                    title: 'เรียบร้อย',
                                     text: 'ลบงานเรียบร้อยเเล้ว!',
                                     icon: 'success',
                                     confirmButtonText: 'ตกลง!',
@@ -359,12 +354,12 @@ $(document).ready(function(){
                         })
                         .done(function() {
                             Swal.fire({
-                                title: 'success',
+                                title: 'เรียบร้อย',
                                 text: 'ปิดหัวข้องานเเล้ว!',
                                 icon: 'success',
                                 confirmButtonText: 'ตกลง!',
                             }).then(() => {
-                                document.location.href = 'editproject_page.php?update_id='+ project_id;
+                                document.location.href = 'project_list.php';
                             })
                         })
                         .fail(function() {

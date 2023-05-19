@@ -77,7 +77,13 @@
                                        
         }
     }
- 
+    function showstatuser($statususer){
+        if ($statususer == '1') {
+            return "<span class='badge bg-success'> เปิด </span>";
+        }else if($statususer== '0'){
+            return "<span class='badge bg-secondary'> ปิด </span>";
+        }
+    }
     function showstattask($statustask){
         $stat1 = array("","รอดำเนินการ","ส่งเเล้ว","รอเเก้ไข","เลยเวลา","เสร็จสิ้น");
         if($statustask =='1'){
@@ -148,8 +154,12 @@
             return "ศ.ดร."; 
         }elseif($shortname =='10'){
             return "อาจารย์"; 
+        } elseif($shortname =='11'){
+            return "Mr."; 
+        }elseif($shortname =='12'){
+            return "Ms"; 
         }
-    }
+        }
 
 
     function ThDate($date2){

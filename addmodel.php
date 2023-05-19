@@ -97,15 +97,19 @@
                                         <label for="" class="control-label">ระดับ</label>
                                             <select select  name="level"  id="level" class="form-select"  >
                                             <?php
-                                                  $stmt = $db->query("SELECT DISTINCT level FROM position WHERE position_status = 1");
-                                                  $numrow = $stmt->rowCount();
-                                                  $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                                  foreach($results as $row) {
-                                              ?>
-                                                  <option value="<?= $row['level']; ?>"><?= $row['level']; ?></option>
-                                                  
+                                                  $stmt = $db->query("SELECT level
+                                                  FROM position
+                                                  WHERE position_status = 1
+                                                  GROUP BY level
+                                                  HAVING level = MAX(level)");
+                                                  $stmt->execute();
+                                                  while($results = $stmt->fetch(PDO::FETCH_ASSOC)){;
+                                                    $maxlevel  = $results['level']?>
+                                                    
+                                                  <option value="<?= $results['level']; ?>"><?= $results['level']; ?></option>
+                                      
                                               <?php } ?>
-                                              <option value="<?= $numrow +1 ?>"><?= $numrow +1 ?></option>
+                                          <option value="<?= $maxlevel ++ ?>"><?= $maxlevel++ ?></option> 
                                             </select>  
                                            
                                     </div>

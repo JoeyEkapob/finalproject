@@ -24,6 +24,8 @@
 														<option value="7">ผศ.ดร</option>
 														<option value="8">ศ.ดร</option>
 														<option value="10">อาจารย์</option>
+														<option value="11">Mr</option>
+														<option value="12">Ms</option>
 													</select>
 											</div>
 										</div>

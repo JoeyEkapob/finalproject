@@ -137,6 +137,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 											<label for="" class="control-label">ไลน์โทเค็น</label>
 											<input type="text" name="tokenline" class="form-control" placeholder="กรอกไลน์โทเค็นของคุณ" value ="<?php echo $line_token ?>">
 											<p class="small mb-0 mt-2"><b>Note:</b>หากต้องการเเจ้งได้รับการเเจ้งตื่อนผ่านไลน์อนุญาตโปรดกรอกไลน์โทเค็นของคุณ</p> 
+											<p class="small mb-0 mt-2"><b>วิธีเอาโทเค็นไลน์ :</b><a href="procedure.php" target="_blank">คลิกที่นี่</a></p> 
 										</div> 	
 									
 											<!--  <div class="mb-3">

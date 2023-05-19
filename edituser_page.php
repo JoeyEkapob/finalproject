@@ -7,8 +7,8 @@ session_start();
         $select_stmt = $db->prepare('SELECT * FROM user  AS u  natural JOIN position natural JOIN department   WHERE user_id = :id');
         $select_stmt->bindParam(":id", $id);
         $select_stmt->execute();
-        $row = $select_stmt->fetch(PDO::FETCH_ASSOC);
-        extract($row);
+        $selectuserrow = $select_stmt->fetch(PDO::FETCH_ASSOC);
+        /* extract($selectuserrow) */;
 		//echo $tel;
  
 }   
@@ -52,9 +52,9 @@ session_start();
 							<div class="card-body">
 								<div class="row">
 									<div class="text-center">
-										<?php if($avatar != ""){?>
+										<?php if($selectuserrow['avatar'] != ""){?>
 											
-											<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $avatar ?>"  id="img"  alt="Avatar" width="200"  height="200">
+											<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/<?php echo $selectuserrow['avatar'] ?>"  id="img"  alt="Avatar" width="200"  height="200">
 										<?php }else{ ?>
 											<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg"  id="img"  alt="Avatar" width="200"  height="200">
 										<?php } ?>
@@ -66,7 +66,7 @@ session_start();
 										<div class="form-group">
 											<label for="" class="control-label">รูปภาพ</label>	
 											<input type="hidden" id="" name="fileup" value="<?php echo $avatar; ?>">
-											<input type="file" name="file" class="form-control streched-link " accept="image/jpeg,image/png,image/jpg"  value="<?php echo $avatar;?>" onchange="Preview(this)">
+											<input type="file" name="file" class="form-control streched-link " accept="image/jpeg,image/png,image/jpg"  value="<?php echo $$selectuserrow['avatar'];?>" onchange="Preview(this)">
 											<p class="small mb-0 mt-2"><b>Note:</b>อนุญาตให้อัปโหลดเฉพาะไฟล์ JPG, JPEG, PNG </p> 
 										</div>
 									</div>
@@ -77,7 +77,7 @@ session_start();
 										<div class="mb-3">
 											<label for="" class="control-label" >คำนำหน้า</label>
 												<select name="shortname" id="shortname" class="form-select"  >
-													<option value="<?php echo $shortname_id ?>"><?php echo showshortname($shortname_id) ?></option>
+													<option value="<?php echo $selectuserrow['shortname_id'] ?>"><?php echo showshortname($selectuserrow['shortname_id']) ?></option>
 													<option value="1">นาย</option>
 													<option value="9">นาง</option>
 													<option value="2">นางสาว</option>
@@ -88,6 +88,8 @@ session_start();
 													<option value="7">ผศ.ดร</option>
 													<option value="8">ศ.ดร</option>
 													<option value="10">อาจารย์</option>
+													<option value="11">Mr</option>
+													<option value="12">Ms</option>
 												</select>
 										</div>
 									</div>
@@ -95,26 +97,26 @@ session_start();
 										<div class="mb-3">
 											<label for="" class="control-label">ชื่อ</label>
 											<input type="hidden" id="custId" name="id" value="<?php echo $id; ?>">
-											<input type="text" name="firstname" class="form-control form-control"  required  value="<?php echo $firstname; ?>">
+											<input type="text" name="firstname" class="form-control form-control"  required  value="<?php echo $selectuserrow['firstname']; ?>">
 										</div>
 									</div>
 									<div class="col-md-5">
 										<div class="mb-3">
 											<label for="" class="control-label">นามสกุล</label>
-											<input type="text" name="lastname" class="form-control form-control"  required value="<?php echo $lastname; ?>">
+											<input type="text" name="lastname" class="form-control form-control"  required value="<?php echo $selectuserrow['lastname']; ?>">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="mb-3">
 												<label class="control-label">อีเมล</label>
-												<input type="email" class="form-control form-control" name="email" required  value="<?php echo $email; ?>">
+												<input type="email" class="form-control form-control" name="email" required  value="<?php echo  $selectuserrow['email']; ?>">
 												<small id="#msg"></small>
 										</div>
 								
 										<div class="mb-3">
 											<label for="" class="control-label">ตำเเหน่ง</label>
 												<select name="role" id="role" class="form-select" value="">
-													<option value="<?php  echo $role_id; ?>" ><?php  echo $position_name; ?></option>
+													<option value="<?php  echo $selectuserrow['role_id']; ?>" ><?php  echo  $selectuserrow['position_name']; ?></option>
 													<?php
 													$stmt = $db->query("SELECT * FROM position WHERE position_status = 1");
 													$stmt->execute();
@@ -128,9 +130,9 @@ session_start();
 									
 										<div class="mb-3">
 											<label for="control-label">เลขบัตรประชาชน</label>
-											<input  class="form-control" type="tel" id="idcard" name="idcard" placeholder="กรอกหมายเลขบัตรประชาชนของคุณ" value="<?php echo $idcard; ?>">
+											<input  class="form-control" type="tel" id="idcard" name="idcard" placeholder="กรอกหมายเลขบัตรประชาชนของคุณ" value="<?php echo $selectuserrow['idcard']; ?>">
 										</div>
-										<?php if($status_user == 1){ ?>
+										<?php if($selectuserrow['status_user'] == 1){ ?>
 										<div class="form-check form-switch ">
 											<input class="form-check-input" type="checkbox" role="switch" id="switch" name="switch"  checked>
 											<label class="form-check-label" for="flexSwitchCheckChecked">สถานะการใช้งาน</label>
@@ -148,12 +150,13 @@ session_start();
 										
 										<div class="mb-3">
 											<label for="control-label">เบอร์โทรศัพท์</label>
-											<input  class="form-control" type="tel" id="phone" name="phone" placeholder="กรอกหมายเลขโทรศัพท์ของคุณ" value="<?php echo $tel; ?>">
+											<input  class="form-control" type="tel" id="phone" name="phone" placeholder="กรอกหมายเลขโทรศัพท์ของคุณ" value="<?php echo $selectuserrow['tel']; ?>">
 										</div>
+									
 										<div class="mb-3">
 											<label for="" class="control-label">ฝ่าย</label>
 												<select name="department" id="department" class="form-select" value="">
-													<option value="<?php  echo $department_id; ?>" ><?php  echo $department_name; ?></option>
+													<option value="<?php  echo $selectuserrow['department_id'] ?>" ><?php  echo  $selectuserrow['department_name']; ?></option>
 													<?php
 													$stmt = $db->query("SELECT * FROM department where department_status = 1");
 													$stmt->execute();
@@ -167,29 +170,11 @@ session_start();
 									
 										<div class="mb-3">
 											<label for="" class="control-label">ไลน์โทเค็น</label>
-											<input type="text" name="tokenline" class="form-control" placeholder="กรอกไลน์โทเค็นของคุณ" value = "<?php echo $line_token ?>">
+											<input type="text" name="tokenline" class="form-control" placeholder="กรอกไลน์โทเค็นของคุณ" value = "<?php echo $selectuserrow['line_token'] ?>">
 											<p class="small mb-0 mt-2"><b>Note:</b>หากต้องการเเจ้งได้รับการเเจ้งตื่อนผ่านไลน์อนุญาตโปรดกรอกไลน์โทเค็นของคุณ</p> 
+											<p class="small mb-0 mt-2"><b>วิธีเอาโทเค็นไลน์ :</b><a href="procedure.php" target="_blank">คลิกที่นี่</a></p> 
 										</div> 	
 								
-										
-									
-											<!--  <div class="mb-3">
-												<label class="control-label">Password</label>
-												<input type="password" class="form-control form-control" name="password" value="">	
-											</div>
-											<div class="mb-3">
-												<label class="label control-label">Confirm Password</label>
-												<input type="password" class="form-control form-control" name="c_password" value="">	
-											</div> -->
-									
-										<!-- <div class="mb-3">
-											<div class="form-group">
-												<label for="" class="control-label">รูปภาพ</label>	
-												<input type="hidden" id="" name="fileup" value="<?php echo $avatar; ?>">
-												<input type="file" name="file" class="form-control streched-link" accept="image/gif, image/jpeg, image/png"  value="<?php echo $avatar;?>">
-												<p class="small mb-0 mt-2"><b>Note:</b> Only JPG, JPEG, PNG & GIF files are allowed to upload</p> 
-											</div>
-										</div>  -->
 										</div>
 										<div class="mb-4">
 										</div>

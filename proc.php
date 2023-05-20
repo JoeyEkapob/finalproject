@@ -2116,7 +2116,6 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $status = 2;
         $role_id=$_POST['role_id'];
         $level=$_POST['level'];
-        $level2[]= '';
         $roleid[]= '';
       
 
@@ -2126,11 +2125,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             $delete_stmtjob->bindParam(':id', $role_id);
             $delete_stmtjob->execute();
 
-            $sql =$db->query('SELECT level From position WHERE position_status = 1 ');
-            $sql->execute();
-            while($row =$sql->fetch(PDO::FETCH_ASSOC)){
-                $level2[] = $row['level'];
-            }
+         
 
            
             $sql2 =$db->query("SELECT level From position WHERE level = $level  AND position_status = 1");
@@ -2142,7 +2137,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                 while($row3 =$sql3->fetch(PDO::FETCH_ASSOC)){
                     $roleid[] = $row3['role_id'];
                 }
-                print_r($roleid);
+             /*    print_r($roleid); */
                 foreach($roleid as $i => $roleid2 ){
                   
                     $sql4 = $db->query("SELECT `level` FROM `position` WHERE `role_id` = '$roleid2'");

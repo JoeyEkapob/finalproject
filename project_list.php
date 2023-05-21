@@ -100,14 +100,14 @@
                                             <tr>
                                                 <td class="id-col"><?php echo $i++ ?></td>
                                                 <td class="name-col">
-                                                    <p><b><?php echo $row["name_project"]?></b>
+                                                    <p><b><?php echo mb_substr($row['name_project'],0,30);?></b>
                                                     <?php showstatpro2($row['status_2']);?></p>
                                                     <p class="truncate"><?php echo mb_substr($row['description'],0,20).'...';  ?></p>
                                                 </td>
 
                                                 <td class="progress-col">
                                                     <div class="progress">
-                                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:<?php echo number_format($row['progress_project'],2) ?>%" ><?php  echo number_format($row['progress_project'],2) ?></div>
+                                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:<?php echo $row['progress_project'] ?>%"><?php  echo  $row['progress_project']   ?>%</div>
                                                     </div>
                                                 </td>
 

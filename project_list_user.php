@@ -33,7 +33,7 @@
                         unset($_SESSION['success']);
                     ?>
                 </div>
-            <?php } ?>
+            <?php } ?> 
 
 <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
     <main class="content">
@@ -92,7 +92,7 @@
                                         <tr>
                                         <td class="id-col"><?php echo $i++ ?></td>
                                                 <td>
-                                                    <p><b><?php echo $row["name_project"]?></b>
+                                                    <p><b><?php echo mb_substr($row['name_project'],0,30);?></b>
                                                     <?php showstatpro2($row['status_2'])?>
                                                 </p>
                                                     <p class="truncate"><?php echo mb_substr($row['description'],0,20).'...';  ?></p>

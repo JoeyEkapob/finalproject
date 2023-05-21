@@ -65,7 +65,7 @@
     <input type="hidden" id="details" name="details" value="">
    
     <main class="content">
-    <a href="project_list.php" class="back-button">&lt;</a> 
+    <a href="<?php echo $previousPage ?>" class="back-button">&lt;</a> 
                     <div class="col-12  d-flex">
                          <div class="card flex-fill">  
                              <div class="card-header">
@@ -161,12 +161,12 @@
                                                             $updateproject = $db->prepare('UPDATE project  SET  progress_project = :progress_project WHERE project_id = :project_id');
                                                             $updateproject->bindParam(":progress_project",$totalprogress2);
                                                             $updateproject->bindParam(":project_id",$id);
-                                                            $updateproject->execute(); 
+                                                            $updateproject->execute();
                                                              ?> 
                                                         <br>
                                                             <div class="col-md-3">
                                                                 <div class="progress ">
-                                                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:<?php echo  $totalprogress2 ?>%"><?php  echo $totalprogress2  ?>%</div>
+                                                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:<?php echo  $progress_project ?>%"><?php  echo $progress_project  ?>%</div>
                                                                 </div>
                                                             </div>
                                                     

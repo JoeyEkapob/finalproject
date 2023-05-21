@@ -10,7 +10,7 @@
     $project_id = $_GET['project_id'];
     $user_id = $_SESSION['user_login'];
 
-    $proandtasksql = $db->query("SELECT * FROM project NATURAL JOIN  task_list where project_id = $project_id");
+    $proandtasksql = $db->query("SELECT * FROM project NATURAL JOIN  task_list where project_id = $project_id AND task_id =  $task_id");
     $sqlrow = $proandtasksql->fetch(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
@@ -158,7 +158,7 @@
                                     <button type="button" class="btn btn-bitbucket btn-sm view_data" id="<?php echo $sqldetailsmanager2['details_id'] ?>" data-send="<?php echo $sqldetailsmanager2['usersenddetails'] ?>" data-status="<?php echo $sqldetailsmanager2['send_status'] ?>"><i data-feather="zoom-in"></i></button>
                                      <?php 
                                
-                                   if($manager_id  == $user_id || $level <= 2 AND $maxdetails_id == $details_id AND $sqlrow['status_1'] != 3 AND $sqlrow['status_task'] !=5  AND $sqlrow['status_task2'] !=1   ){?>
+                                   if($manager_id  == $user_id || $level <= 2 AND $maxdetails_id == $details_id  AND $sqlrow['status_1'] != 3  AND $sqlrow['status_task'] !=5   AND $sqlrow['status_task2'] !=1    ){?>
                                     <a class=" btn btn-warning btn-sm " href="editdetails.php?details_id=<?php echo $sqldetailsmanager2['details_id'] ?>&task_id=<?php echo $task_id ?>&project_id=<?php echo  $project_id ?>"><i data-feather="edit"></i></a>
                                         <?php }else{
                                     echo '<a class=" btn btn-warning btn-sm disabled" href="editdetails.php?details_id='.$sqldetailsmanager2['details_id'].'&task_id='.$task_id.'&project_id='.$project_id.'"><i data-feather="edit"></i></a>';

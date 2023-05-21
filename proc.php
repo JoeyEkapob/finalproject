@@ -17,13 +17,15 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 
     if($_POST['proc'] == 'editdetails'){
    
-         $details_id = $_POST['details_id'];
+        $details_id = $_POST['details_id'];
         $sql = "SELECT * FROM details natural join file_item_details  where details_id = $details_id";
         $qry = $db->query($sql);
         $qry->execute();
         while($row = $qry->fetch(PDO::FETCH_ASSOC)){;
         echo json_encode($row);
         } 
+      /*   echo json_encode($row);
+        exit; */
         $code ="ED";
         $details_id = $_POST['details_id'];
         $task_id = $_POST['task_id'];
@@ -62,6 +64,30 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $updetatask->bindParam(":progress_task",$progress);
         $updetatask->bindParam(":task_id",$task_id);
         $updetatask->execute(); 
+
+        $progressproject = array();
+
+        $sqlprogressproject = "SELECT * FROM project NATURAL JOIN task_list WHERE project_id = $project_id AND status_task2 != 1";
+        $qryprogressproject = $db->query($sqlprogressproject);
+        $qryprogressproject->execute();
+        while ($progressprojectrow = $qryprogressproject->fetch(PDO::FETCH_ASSOC)) {  
+            //array_push($progressproject, $progressprojectrow['progress_task']);
+            $progressproject[] = $progressprojectrow['progress_task'];
+        }
+        //print_r($progressproject);
+        $sumprogress =  array_sum($progressproject);
+        $numprogress = sizeof($progressproject);
+        $totalprogress2 = 0;
+        if($numprogress != 0 ){
+            $totalprogress = $sumprogress/$numprogress;
+            $totalprogress2=number_format($totalprogress,2);   
+       }
+        //echo $totalprogress2;
+        
+        $updateproject = $db->prepare('UPDATE project  SET  progress_project = :progress_project WHERE project_id = :project_id');
+        $updateproject->bindParam(":progress_project",$totalprogress2);
+        $updateproject->bindParam(":project_id",$project_id);
+        $updateproject->execute();
 
         $_SESSION['success'] = "เเก้ไขรายละเอียดงานเเก้เรียบร้อยเเล้ว!";
         $url_return = "location:details_page.php?task_id=".$task_id."&project_id=".$project_id."";
@@ -243,6 +269,32 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                     });
                 })
             </script>";
+
+            $progressproject = array();
+
+            $sqlprogressproject = "SELECT * FROM project NATURAL JOIN task_list WHERE project_id = $pro_id AND status_task2 != 1";
+            $qryprogressproject = $db->query($sqlprogressproject);
+            $qryprogressproject->execute();
+            while ($progressprojectrow = $qryprogressproject->fetch(PDO::FETCH_ASSOC)) {  
+                //array_push($progressproject, $progressprojectrow['progress_task']);
+                $progressproject[] = $progressprojectrow['progress_task'];
+            }
+            //print_r($progressproject);
+            $sumprogress =  array_sum($progressproject);
+            $numprogress = sizeof($progressproject);
+            $totalprogress2 = 0;
+            if($numprogress != 0 ){
+                $totalprogress = $sumprogress/$numprogress;
+                $totalprogress2=number_format($totalprogress,2);   
+           }
+            //echo $totalprogress2;
+            
+            $updateproject = $db->prepare('UPDATE project  SET  progress_project = :progress_project WHERE project_id = :project_id');
+            $updateproject->bindParam(":progress_project",$totalprogress2);
+            $updateproject->bindParam(":project_id",$pro_id);
+            $updateproject->execute();
+
+
             $url_return = "refresh:2;view_project.php?view_id=".$pro_id;
 
         }
@@ -1106,6 +1158,30 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $updatestatdetails->bindParam(":details_id", $details_id);
         $updatestatdetails->execute(); 
 
+        $progressproject = array();
+
+        $sqlprogressproject = "SELECT * FROM project NATURAL JOIN task_list WHERE project_id = $project_id AND status_task2 != 1";
+        $qryprogressproject = $db->query($sqlprogressproject);
+        $qryprogressproject->execute();
+        while ($progressprojectrow = $qryprogressproject->fetch(PDO::FETCH_ASSOC)) {  
+            //array_push($progressproject, $progressprojectrow['progress_task']);
+            $progressproject[] = $progressprojectrow['progress_task'];
+        }
+        //print_r($progressproject);
+        $sumprogress =  array_sum($progressproject);
+        $numprogress = sizeof($progressproject);
+        $totalprogress2 = 0;
+        if($numprogress != 0 ){
+            $totalprogress = $sumprogress/$numprogress;
+            $totalprogress2=number_format($totalprogress,2);   
+        }
+        //echo $totalprogress2;
+        
+        $updateproject = $db->prepare('UPDATE project  SET  progress_project = :progress_project WHERE project_id = :project_id');
+        $updateproject->bindParam(":progress_project",$totalprogress2);
+        $updateproject->bindParam(":project_id",$project_id);
+        $updateproject->execute();        
+        
         $_SESSION['success'] = "ตรวจงานเรียบร้อยแล้ว!!! ";
         //$url_return ="location:checktask_list.php";
      
@@ -1221,18 +1297,41 @@ header("Access-Control-Allow-Headers: X-Requested-With");
       
             $_SESSION['success'] = "ส่งงานกลับเเก้ไขเรียบร้อยแล้ว!!! ";
             echo "<script>
-            $(document).ready(function() {
-                Swal.fire({
-                    title: 'ส่งงานกลับเเก้ไขเรียบร้อยแล้ว!',
-                    icon: 'success',
-                    timer: 2000,
-                    showConfirmButton: true
-                }).then(() => {
-                    document.location.href = 'checktask_list.php';
-                })
-            });
-        </script>";
+                    $(document).ready(function() {
+                        Swal.fire({
+                            title: 'ส่งงานกลับเเก้ไขเรียบร้อยแล้ว!',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: true
+                        }).then(() => {
+                            document.location.href = 'checktask_list.php';
+                        })
+                    });
+                </script>";
 
+            $progressproject = array();
+
+            $sqlprogressproject = "SELECT * FROM project NATURAL JOIN task_list WHERE project_id = $project_id AND status_task2 != 1";
+            $qryprogressproject = $db->query($sqlprogressproject);
+            $qryprogressproject->execute();
+            while ($progressprojectrow = $qryprogressproject->fetch(PDO::FETCH_ASSOC)) {  
+                //array_push($progressproject, $progressprojectrow['progress_task']);
+                $progressproject[] = $progressprojectrow['progress_task'];
+            }
+            //print_r($progressproject);
+            $sumprogress =  array_sum($progressproject);
+            $numprogress = sizeof($progressproject);
+            $totalprogress2 = 0;
+            if($numprogress != 0 ){
+                $totalprogress = $sumprogress/$numprogress;
+                $totalprogress2=number_format($totalprogress,2);   
+            }
+            //echo $totalprogress2;
+            
+            $updateproject = $db->prepare('UPDATE project  SET  progress_project = :progress_project WHERE project_id = :project_id');
+            $updateproject->bindParam(":progress_project",$totalprogress2);
+            $updateproject->bindParam(":project_id",$project_id);
+            $updateproject->execute();        
        
             //$url_return ="location:checktask_list.php";
             }else {

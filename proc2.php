@@ -290,7 +290,7 @@ else if($_POST['proc'] == 'closeproject'){
  else if($_POST['proc'] == 'viewdatauser'){
 
     $user_id = $_POST['userid'];
-
+	$where = "";
     $outp = '';
     $sql = "SELECT  * FROM user as u 
     left join position as p on u.role_id = p.role_id  
@@ -353,12 +353,26 @@ else if($_POST['proc'] == 'closeproject'){
                             
                 </div> 
                     <hr>';
+                    
                         $outp .= '<div class="col-md-12">';
-                        $sql2 = $db->query("SELECT manager_id FROM project WHERE manager_id = $user_id   AND start_date >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) "); 
+
+                         if($level >= 2){
+                            $where = "  and  manager_id = $user_id ";
+                         } 
+                        $sql2 = $db->query("SELECT project_id  FROM project  where  start_date >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)  $where  "); 
                         $nummannagerpro = $sql2->rowCount(); 
-                        $sql3 = $db->query("SELECT user_id FROM project_list as pl left join project as p on pl.project_id = p.project_id WHERE user_id = $user_id AND start_date >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)" );
+                        //$sql3 = $db->query("SELECT user_id FROM project_list as pl left join project as p on pl.project_id = p.project_id WHERE user_id = $user_id AND start_date >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)" );
+                        if($level >= 2){
+                            $where = "   and user_id  = $user_id ";
+                         }
+                        $sql3 = $db->query("SELECT pl.project_id FROM project_list as pl  left join  project as p on pl.project_id = p.project_id WHERE  status_1 !=3  $where   AND start_date >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) ");
                         $numuserpro = $sql3->rowCount(); 
-                        $sql4 = $db->query("SELECT user_id FROM task_list WHERE user_id = $user_id AND strat_date_task >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) ");
+                        //$sql4 = $db->query("SELECT user_id FROM task_list WHERE user_id = $user_id AND strat_date_task >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) ");
+                       
+                        if($level >= 2){
+                            $where = "   and user_id = $user_id    ";
+                        }
+                        $sql4 = $db->query("SELECT task_id  FROM task_list as t left join project as p on t.project_id = p.project_id WHERE  status_1 !=3 AND  progress_task != 100 AND status_task != 5 AND status_task2 != 1 $where ");
                         $numusertask = $sql4->rowCount(); 
                         $sql5 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_task != 5 AND progress_task != 100 AND strat_date_task >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)");
                         $numtaskonp = $sql5->rowCount(); 

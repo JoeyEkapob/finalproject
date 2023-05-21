@@ -35,7 +35,7 @@
         <main class="content">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title mb-0">รายงาน</h5>
+                        <h5 class="card-title mb-0">รายงานสมาชิก</h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -225,7 +225,7 @@ function searchreportuser(page){
             if(response.result.length == 0){
                     html += `
                         <tr>
-                            <td colspan='9' style='text-align:center'>ไม่พอข้อมูล</td>
+                            <td colspan='9' style='text-align:center'>ไม่พบข้อมูล</td>
                         </tr>
                     `;
                     $("#test").html(html)

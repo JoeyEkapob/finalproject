@@ -295,7 +295,7 @@ else if($_POST['proc']== 'reportpro'){
     include 'test.php';
 
      $pdf = new PDF_MC_Table(); 
-    $title = "หัวข้องาน";
+    $title = "รายงานหัวข้องาน";
     $pdf->SetTitle($title,true); // ให้แสดง title ไทย
     $pdf->AliasNbPages();
     $pdf->AddPage();
@@ -609,7 +609,7 @@ else if($_POST['proc']== 'reportuser'){
         $pdf->AddFont('THSarabun','','THSarabun.php');
         $pdf->SetFont('THSarabunb','B',16); 
         $pdf->Image('pic/LOGORMUTK.png', 86, 2, 40);
-        $pdf->Cell(193,70,iconv('UTF-8','cp874','รายงานสมาขิก'),0,0,"C");
+        $pdf->Cell(193,70,iconv('UTF-8','cp874','รายงานสมาชิก'),0,0,"C");
     
         $pdf->Ln(35);
         $pdf->SetFont('THSarabunb','B',14); 

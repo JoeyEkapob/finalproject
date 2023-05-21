@@ -97,28 +97,32 @@
 							<div class="w-100">
 								<div class="row">
 									<?php if ($level != 5): ?>
+								
 										<div class="col-sm-3">
-											<div class="card">
-												<div class="card-body">
-													<div class="row">
-														<div class="col mt-0">
-															<h5 class="card-title">งานที่ต้องตรวจ</h5>
-														</div>
+											<a href="checktask_list.php">
+												<div class="card">
+													<div class="card-body">
+														<div class="row">
+															<div class="col mt-0">
+																<h5 class="card-title">งานที่ต้องตรวจ</h5>
+															</div>
 
-														<div class="col-auto">
-															<div class="stat text-primary">
-																<i class="align-middle" data-feather="clipboard"></i>
+															<div class="col-auto">
+																<div class="stat text-primary">
+																	<i class="align-middle" data-feather="clipboard"></i>
+																</div>
 															</div>
 														</div>
-													</div>
-													<h1 class="mt-1 mb-3"><?php echo $stmtdetails; ?></h1>
-													<div class="mb-0">
-														<span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
-														<span class="text-muted">งานที่ต้องตรวจทั้งหมด</span>
+														<h1 class="mt-1 mb-3"><?php echo $stmtdetails; ?></h1>
+														<div class="mb-0">
+															<span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
+															<span class="text-muted">งานที่ต้องตรวจทั้งหมด</span>
+														</div>
 													</div>
 												</div>
-											</div>
+											</a>
 										</div>
+								
 									<?php endif ?>
 									<?php if ($level > 2): ?>
 										<div class="col-sm-3">

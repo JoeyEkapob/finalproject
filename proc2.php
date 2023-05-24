@@ -8,6 +8,13 @@
  $url_return = "";
  $user_id=$_SESSION['user_login'];
 
+    $levelsql = "SELECT MAX(level) as maxlevel , MIN(level) as minlevel FROM  position WHERE position_status = 1 ";
+    $stmt2 = $db->prepare($levelsql);
+    $stmt2->execute();
+    $levelsqlrow = $stmt2->fetch(PDO::FETCH_ASSOC);
+    $maxlevel = $levelsqlrow['maxlevel'];
+    $minlevel = $levelsqlrow['minlevel'];
+
     $nameuser ="SELECT concat(firstname,' ',lastname) as name , u.role_id ,u.user_id  ,p.role_id , p.level ,d.department_id From user as u 
     left join position as p on u.role_id = p.role_id 
     left join department as d on d.department_id = u.department_id 
@@ -17,15 +24,14 @@
     $nameuser = $nameuser->fetch(PDO::FETCH_ASSOC);
   
     $level = $nameuser['level'];
+  /*   echo $level. ' '. $maxlevel; */
     $department =$nameuser['department_id'];
     $role =$nameuser['role_id'];
+    $roleuser =$nameuser['role_id'];
 
 if($_POST['proc'] == 'searchreport'){
 
     $item_arr['result'] = array();
-
-   
-
 
     $nameproject = $_POST["nameproject"];
     $job = $_POST["job"];
@@ -34,7 +40,9 @@ if($_POST['proc'] == 'searchreport'){
     $status1 = $_POST["status1"];
     $status2 = $_POST["status2"];
    /*  $role = $_POST["role"]; */
-
+    $jobtype = $_POST["jobtype"];
+  /*   echo  $jobtype;
+    exit;  */
     if(isset($_POST["department"])){
         $department = $_POST["department"];
     }
@@ -44,43 +52,98 @@ if($_POST['proc'] == 'searchreport'){
    
     /*     echo $role;
     exit; */
-    
+    /* AND p.manager_id = $user_id */ 
+    if($jobtype == 1){
+        $sql = "SELECT * FROM project as p 
+        LEFT JOIN job_type as j ON p.id_jobtype = j.id_jobtype 
+        LEFT JOIN user as u ON p.manager_id = u.user_id
+        LEFT JOIN position as po ON po.role_id  = u.role_id
+        LEFT JOIN department as d ON d.department_id  = u.department_id
+        WHERE 1=1 ";
+        if ($level > 2) {
+            $sql .= "AND $level <= po.level AND d.department_id = $department "; 
+        } 
+        if(!empty($department)){
+            $sql .= "AND d.department_id = $department ";
+        }
+        if(!empty($role)){
+            $sql .= "AND po.role_id = $role ";
+        }
+        
+        if (!empty($nameproject)) {
+            $sql .= "AND name_project LIKE '%$nameproject%' ";
+        }
+        if (!empty($job)) {
+            $sql .= "AND p.id_jobtype = '$job' ";
+        }
+        if (!empty($start_date)) {
+            $sql .= "AND start_date >= '$start_date' ";
+        }
+        if (!empty($end_date)) {
+            $sql .= "AND end_date <= '$end_date' ";
+        }
+        if (!empty($status1)) {
+            $sql .= "AND status_1 = '$status1' ";
+        }
+        if (!empty($status2)) {
+            $sql .= "AND status_2 = '$status2' ";
+        }
 
-    $sql = "SELECT * FROM project as p 
-    LEFT JOIN job_type as j ON p.id_jobtype = j.id_jobtype 
-    LEFT JOIN user as u ON p.manager_id = u.user_id
-    LEFT JOIN position as po ON po.role_id  = u.role_id
-    LEFT JOIN department as d ON d.department_id  = u.department_id
-    WHERE 1=1 ";
-    if ($level > 2) {
-        $sql .= "AND $level <= po.level AND d.department_id = $department AND p.manager_id = $user_id ";
-    } 
-    if(!empty($department)){
-        $sql .= "AND d.department_id = $department ";
+    }elseif($jobtype == 2){
+        /* SELECT pl.* ,p.* ,j.* ,u.*,po.*,d.* ,u2.firstname as firstname2  ,u2.lastname as lastname2 ,u2.shortname_id as name  FROM project_list as pl
+        LEFT JOIN project as p ON pl.project_id = p.project_id 
+        LEFT JOIN job_type as j ON p.id_jobtype = j.id_jobtype 
+        LEFT JOIN user as u ON pl.user_id = u.user_id
+        LEFT JOIN user as u2 ON p.manager_id = u.user_id
+        LEFT JOIN position as po ON po.role_id  = u.role_id
+        LEFT JOIN department as d ON d.department_id  = u.department_id
+        WHERE 1=1  */
+   
+        $sql = "SELECT DISTINCT pl.project_id, pl.user_id, p.project_id, p.name_project, p.description, p.status_1, p.create_project, p.start_date, p.end_date, p.manager_id, p.status_2, p.id_jobtype, p.progress_project, j.id_jobtype, j.name_jobtype, j.status, u.user_id, u.role_id, u.department_id, u2.firstname, u2.lastname, u2.shortname_id, po.role_id, po.position_name, po.level, po.position_status, d.department_id, d.department_name, d.department_status
+        FROM project_list AS pl
+        LEFT JOIN project AS p ON pl.project_id = p.project_id 
+        LEFT JOIN job_type AS j ON p.id_jobtype = j.id_jobtype 
+        LEFT JOIN user AS u ON pl.user_id = u.user_id
+        LEFT JOIN user AS u2 ON p.manager_id = u2.user_id
+        LEFT JOIN position AS po ON po.role_id = u.role_id
+        LEFT JOIN department AS d ON d.department_id = u.department_id
+        where 1=1 ";
+        if ($level > 2) {
+            $sql .= "AND $level <= po.level AND d.department_id = $department   ";
+        } 
+        if(!empty($department)){
+            $sql .= "AND d.department_id = $department ";
+        }
+        if(!empty($role)){
+            $sql .= "AND po.role_id = $role ";
+        }
+        if (!empty($nameproject)) {
+            $sql .= "AND name_project LIKE '%$nameproject%' ";
+        }
+        if (!empty($job)) {
+            $sql .= "AND p.id_jobtype = '$job' ";
+        }
+        if (!empty($start_date)) {
+            $sql .= "AND start_date >= '$start_date' ";
+        }
+        if (!empty($end_date)) {
+            $sql .= "AND end_date <= '$end_date' ";
+        }
+        if (!empty($status1)) {
+            $sql .= "AND status_1 = '$status1' ";
+        }
+        if (!empty($status2)) {
+            $sql .= "AND status_2 = '$status2' ";
+        }
+            $sql .=" GROUP BY pl.project_id, pl.user_id, p.project_id, p.name_project, p.description, p.status_1, p.create_project, p.start_date, p.end_date, p.manager_id, p.status_2, p.id_jobtype, p.progress_project, j.id_jobtype, j.name_jobtype, j.status, u.user_id, u.role_id, u.department_id, u2.firstname, u2.lastname, u2.shortname_id, po.role_id, po.position_name, po.level, po.position_status, d.department_id, d.department_name, d.department_status ORDER BY pl.project_id ASC; ";
+        
     }
-    if(!empty($role)){
-        $sql .= "AND po.role_id = $role ";
-    }
-    if (!empty($nameproject)) {
-        $sql .= "AND name_project LIKE '%$nameproject%' ";
-    }
-    if (!empty($job)) {
-        $sql .= "AND p.id_jobtype = '$job' ";
-    }
-    if (!empty($start_date)) {
-        $sql .= "AND start_date >= '$start_date' ";
-    }
-    if (!empty($end_date)) {
-        $sql .= "AND end_date <= '$end_date' ";
-    }
-    if (!empty($status1)) {
-        $sql .= "AND status_1 = '$status1' ";
-    }
-    if (!empty($status2)) {
-        $sql .= "AND status_2 = '$status2' ";
-    }
+    /* if($role = $roleuser){
+        $sql .= "AND p.manager_id = $user_id ";
 
-
+    } */
+ /*  print_r($sql);
+        exit;   */ 
     // ส่ง query ไปยังฐานข้อมูล
     $stmt = $db->query($sql);
     $stmt->execute();
@@ -90,6 +153,7 @@ if($_POST['proc'] == 'searchreport'){
        /*  print_r($row);
         exit; */
         extract($row);
+      /*   echo $manager_id; */
         $sql2 = $db->query("SELECT * FROM task_list WHERE project_id =  $project_id ");
         $comptask = $db->query("SELECT * FROM task_list where project_id = $project_id  and status_task = 5");
         $comptask2 = $comptask->rowCount(); 
@@ -141,21 +205,27 @@ else if($_POST['proc'] == 'searchreportuser'){
     LEFT JOIN position as po ON po.role_id = u.role_id 
     LEFT JOIN department as d ON d.department_id = u.department_id 
     WHERE 1=1 ";
-     if ($level >= 2) {
-        $sql .= "AND $level < po.level  AND d.department_id = $department  AND p.manager_id = $user_id ";
+     if ($level > 2) {
+        $sql .= "AND  $level <= po.level  AND d.department_id = $department ";
+        //$sql .= "AND u.user_id = $user_id  OR $level < po.level  AND d.department_id = $department ";
     } 
+    if($level == $maxlevel){
+        $sql .= " AND u.user_id = $user_id ";
+    }
     if(!empty($department)){
-        $sql .= "AND d.department_id = $department ";
+        $sql .= " AND d.department_id = $department ";
     }
     if (!empty($firstname)) {
-        $sql .= "AND firstname LIKE '%$firstname%' ";
+        $sql .= " AND firstname LIKE '%$firstname%' ";
     }
     if (!empty($lastname)) {
-        $sql .= "AND lastname LIKE '%$lastname%' ";
+        $sql .= " AND lastname LIKE '%$lastname%' ";
     }
      if (!empty($role)) {
-        $sql .= "AND u.role_id = '$role' ";
+        $sql .= " AND u.role_id = '$role' ";
     } 
+ /*  print_r($sql);
+   exit; */
     $stmt = $db->query($sql);
     $stmt->execute();
     $numuser= $stmt->rowCount();
@@ -300,7 +370,7 @@ else if($_POST['proc'] == 'closeproject'){
     $qry->execute();
     while($row = $qry->fetch(PDO::FETCH_ASSOC)){ 
 
-        $outp .= ' <div class="card">		
+       /*  $outp .= ' <div class="card">		
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12">
@@ -372,8 +442,9 @@ else if($_POST['proc'] == 'closeproject'){
                         if($level >= 2){
                             $where = "   and user_id = $user_id    ";
                         }
-                        $sql4 = $db->query("SELECT task_id  FROM task_list as t left join project as p on t.project_id = p.project_id WHERE  status_1 !=3 AND  progress_task != 100 AND status_task != 5 AND status_task2 != 1 $where ");
+                        $sql4 = $db->query("SELECT task_id  FROM task_list as t left join project as p on t.project_id = p.project_id WHERE  1=1 $where ");
                         $numusertask = $sql4->rowCount(); 
+
                         $sql5 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_task != 5 AND progress_task != 100 AND strat_date_task >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)");
                         $numtaskonp = $sql5->rowCount(); 
                         $sql6 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_timetask = 2 AND status_task != 5 AND progress_task != 100 AND strat_date_task >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)");
@@ -394,6 +465,139 @@ else if($_POST['proc'] == 'closeproject'){
                                     </div>
                             </div> 
                         </div>
+                    </div>
+                </div> '; */
+                if($level >= 2){
+                    $where = "  and  manager_id = $user_id ";
+                 } 
+                $sql2 = $db->query("SELECT project_id  FROM project  where  start_date >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)  $where  "); 
+                $nummannagerpro = $sql2->rowCount(); 
+                //$sql3 = $db->query("SELECT user_id FROM project_list as pl left join project as p on pl.project_id = p.project_id WHERE user_id = $user_id AND start_date >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)" );
+                if($level >= 2){
+                    $where = "   and user_id  = $user_id ";
+                 }
+                $sql3 = $db->query("SELECT pl.project_id FROM project_list as pl  left join  project as p on pl.project_id = p.project_id WHERE  status_1 !=3  $where   AND start_date >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) ");
+                $numuserpro = $sql3->rowCount(); 
+                //$sql4 = $db->query("SELECT user_id FROM task_list WHERE user_id = $user_id AND strat_date_task >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) ");
+               
+                if($level >= 2){
+                    $where = "   and user_id = $user_id    ";
+                }
+                $sql4 = $db->query("SELECT task_id  FROM task_list as t left join project as p on t.project_id = p.project_id WHERE  1=1 $where ");
+                $numusertask = $sql4->rowCount(); 
+
+                $sql5 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_task != 5 AND progress_task != 100 AND strat_date_task >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)");
+                $numtaskonp = $sql5->rowCount(); 
+                $sql6 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_timetask = 2 AND status_task != 5 AND progress_task != 100 AND strat_date_task >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)");
+                $numtimede = $sql6->rowCount();
+    $outp .= '<div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row d-flex justify-content-around text-center">
+                                <div class="col-md box_amount">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="display-2">'.$numtimede.'</p>
+                                        </div>
+                                    </div>
+                                    <div class="row py-3">
+                                        <div class="col">งานที่ล่าช้า</div>
+                                    </div>
+                                </div>
+                                <div class="col-md box_amount">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="display-2">'.$numtaskonp.'</p>
+                                        </div>
+                                    </div>
+                                    <div class="row py-3">
+                                        <div class="col">งานที่ยังไม่เสร็จ</div>
+                                    </div>
+                                </div>
+                                <div class="col-md box_amount">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="display-2">'.$numusertask.'</p>
+                                        </div>
+                                    </div>
+                                    <div class="row py-3">
+                                        <div class="col">งานทั้งหมด</div>
+                                    </div>
+                                </div>
+                                <div class="col-md box_amount">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="display-2">'.$numuserpro.'</p>
+                                        </div>
+                                    </div>
+                                    <div class="row py-3">
+                                        <div class="col">หัวข้องานที่ถูกสั่ง</div>
+                                    </div>
+                                </div>
+                                <div class="col-md box_amount">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="display-2">'.$nummannagerpro.'</p>
+                                        </div>
+                                    </div>
+                                    <div class="row py-3">
+                                        <div class="col">หัวข้องานที่สร้าง</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-4 py-4 px-4">';
+                                if ($row['avatar'] != "") {
+                                    $outp .= '<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/' . $row['avatar'] . '" alt="Avatar" width="200" height="200">';
+                                } else {
+                                    $outp .= '<img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="200" height="200">';
+                                }
+                                $outp .= ' </div>
+                                <div class="col-sm py-3 px-3 d-flex align-items-center">
+                                        <h1 class="text-uppercase fs-1 fw-bold"> ' .showshortname($row['shortname_id']) .' '. $row['firstname'] . ' ' . $row['lastname'] . ' </h1>
+                                </div>
+                            </div>
+                                 
+                            
+                        <!-- ข้อมูลผู้ใช้งาน -->
+                        <div class="container py-1">
+                            <div class="row">
+                                <div class="col-sm my-3">
+                                    <div>ตำแหน่ง :   ' . $row['position_name'] . '</div>
+                                </div>
+                                <div class="col-sm my-3">
+                                    <div>ฝ่าย :  ' . $row['department_name'] . '</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm my-3">
+                                    <div>อีเมล : '. $row['email'] . '</div>
+                                </div>
+                                <div class="col-sm my-3">
+                                    <div>เบอร์โทร :   '.$row['tel'] .'</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm my-3">
+                                    <div>เลขบัตรประชาชน :   '. $row['idcard'] .'</div>
+                                </div>
+                                <div class="col-sm my-3">
+                                    <div>สถานะ :';
+                                     if ($row['status_user'] == 1) {
+                                        $outp .= 'เปิดใช้งาน';
+                                    } else {
+                                        $outp .= 'ปิดใช้งาน';
+                                    }
+                                 $outp .=' </div>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                        <!-- ปุ่ม -->
+                        
+
+
                     </div>
                 </div> ';
     }

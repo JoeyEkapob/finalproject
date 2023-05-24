@@ -104,12 +104,12 @@
                                                   HAVING level = MAX(level)");
                                                   $stmt->execute();
                                                   while($results = $stmt->fetch(PDO::FETCH_ASSOC)){;
-                                                    $maxlevel  = $results['level']?>
-                                                    
+                                                    $maxlevel  = $results['level'];
+                                                    $maxlevel++;?>
                                                   <option value="<?= $results['level']; ?>"><?= $results['level']; ?></option>
                                       
                                               <?php } ?>
-                                          <option value="<?= $maxlevel ++ ?>"><?= $maxlevel++ ?></option> 
+                                          <option value="<?= $maxlevel ?>"><?= $maxlevel ?></option> 
                                             </select>  
                                            
                                     </div>

@@ -13,10 +13,9 @@
 ?> 
 <!DOCTYPE html>
 <html lang="en">
+<?php include "head.php"?>
     <body>
-        <?php include 'head.php'?>
         <?php include "sidebar.php"?>
-        <?php include "funtion.php"?>
         <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
                     <?php 

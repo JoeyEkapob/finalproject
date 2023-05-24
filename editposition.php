@@ -22,8 +22,6 @@ session_start();
 <body>
 
 <?php include "sidebar.php"?>
-
-<?php include "funtion.php"?>
 <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
                     <?php 
@@ -76,7 +74,7 @@ session_start();
                                                   <option value="<?= $results['level']; ?>"><?= $results['level']; ?></option>
                                       
                                               <?php } ?>
-                                          <option value="<?= $maxlevel ++ ?>"><?= $maxlevel++ ?></option> 
+                                          <option value="<?= $maxlevel ?>"><?= $maxlevel ?></option> 
                                                  </select>
                                         </div>
                                     </div>

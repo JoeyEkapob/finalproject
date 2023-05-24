@@ -1,0 +1,16 @@
+.box_amount{
+    background: hsla(0, 23%, 97%, 0.8);
+    border-radius: 10px;
+    margin: 5px;
+    color: #1fabc6;
+    font-weight: bold;
+    box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+
+}
+
+.box_amount:hover{
+    background: #1fabc6;
+    color: white;
+    font-size: 100%; 
+    transform: scale(1.1);
+}

@@ -12,7 +12,6 @@
 <body>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css" 
 <?php include "sidebar.php" ?>
-<?php include "funtion.php"?>
 <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
                     <?php 
@@ -77,8 +76,8 @@
                                             <td class="text-left"><?php echo $departmentrow['department_name'] ?></td>
                                             <td class="text-center">
                                                 
-                                            <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลประเภทงาน" href="editdepartment.php?update_id=<?php echo $departmentrow['department_id']?>"><i  data-feather="edit"></i></a>
-                                            <button class="btn btn-danger btn-sm deletedepartment-btn" title="ลบข้อมูลประเภทงาน" data-department_id="<?php echo $departmentrow['department_id']?>"><i data-feather="trash-2"></i></button> 
+                                            <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลฝ่าย" href="editdepartment.php?update_id=<?php echo $departmentrow['department_id']?>"><i  data-feather="edit"></i></a>
+                                            <button class="btn btn-danger btn-sm deletedepartment-btn" title="ลบข้อมูลฝ่าย" data-department_id="<?php echo $departmentrow['department_id']?>"><i data-feather="trash-2"></i></button> 
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -122,7 +121,7 @@ function adddepartment(){
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
-                confirmButtonText: 'ใช่ต้องการยกเลิก!',
+                confirmButtonText: 'ยกเลิก!',
                 cancelButtonText: 'กลับ',
                 showLoaderOnConfirm: true,
                
@@ -138,7 +137,7 @@ function adddepartment(){
                             })
                             .done(function() {
                                 Swal.fire({
-                                    title: 'success',
+                                    title: 'เรียบร้อย',
                                     text: 'ยกเลิกเรียบร้อยเเล้ว!',
                                     icon: 'success',
                                 }).then(() => {

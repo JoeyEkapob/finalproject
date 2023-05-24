@@ -72,6 +72,10 @@
             return "ศ.ดร."; 
         }else if(shortname =='10'){
             return "อาจารย์"; 
+        }else if(shortname =='11'){
+            return "Mr."; 
+        }else if(shortname =='12'){
+            return "Ms"; 
         }
     }
 

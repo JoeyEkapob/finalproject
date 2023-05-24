@@ -30,10 +30,9 @@
 ?> 
 <!DOCTYPE html>
 <html lang="en">
-     
+<?php include "head.php"?>
     <body>
         <?php include "sidebar.php"?>
-        <?php include "funtion.php" ?>
         <style>
             .placeholder {
                 display: inline-block;
@@ -69,7 +68,7 @@
      
                 <main class="content"> 
                 <div class="container-fluid p-0">
-                <a href="<?php echo $previousPage; ?>" class="back-button">&lt;</a> 
+                <a href="project_list.php" class="back-button">&lt;</a> 
 					<h1 class="h3 mb-3">เเก้ไขโปรเจค</h1>
 				</div>
     
@@ -259,8 +258,8 @@ $(document).ready(function(){
         });
         $('#display_selected').click(function () {
             $('#user_id').val(select.check_multi_select('fetch_country'));
-          alert(select.check_multi_select('fetch_country'))
-            console.log($('#user_id').val());  
+         /*  alert(select.check_multi_select('fetch_country'))
+            console.log($('#user_id').val()); */  
         });
     });
 
@@ -272,7 +271,7 @@ $(document).ready(function(){
     var sendstatus=$(this).data("status"); */
     console.log(userid);
     $.ajax({
-        url:"proc.php",
+        url:"proc2.php",
         method:"post",
         data:{proc:proc,userid:userid},
         success:function(data){

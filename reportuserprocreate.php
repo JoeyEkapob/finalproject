@@ -33,7 +33,12 @@
     $sql4 = "SELECT user_id FROM task_list where user_id = '$user_id' ";
     $sql5 = "SELECT * FROM details as d  left join task_list as t ON d.task_id = t.task_id  where user_id = '$user_id'  AND send_status ='2'";
     $sql6 = "SELECT * FROM task_list  where user_id = '$user_id ' AND status_timetask = '2'";  
-    $stmttasklist = "SELECT * FROM project_list  NATURAL JOIN project  NATURAL JOIN job_type   NATURAL JOIN user  WHERE user_id = $id ";
+    $stmttasklist = "SELECT * FROM project as p 
+    LEFT JOIN job_type as j ON p.id_jobtype = j.id_jobtype 
+    LEFT JOIN user as u ON p.manager_id = u.user_id
+    LEFT JOIN position as po ON po.role_id  = u.role_id
+    LEFT JOIN department as d ON d.department_id  = u.department_id
+    WHERE manager_id =  '$user_id' ";
     
     if (!empty($startdate)) {
         $sql2 .= "AND start_date >= '$startdate' ";
@@ -87,7 +92,7 @@
         <a href="reportuser.php" class="back-button">&lt;</a>
     </div>
     <div class="d-flex flex-row-reverse" >
-        <button class="btn btn-flat  btn-danger" id="print" onclick="reportuserpro('<?php echo $id  ?>','<?php echo $startdate  ?>','<?php echo $enddate  ?>');"><i class="fa fa-print"></i> Print</button>
+        <button class="btn btn-flat  btn-danger" id="print" onclick="reportuserprocreate('<?php echo $id  ?>','<?php echo $startdate  ?>','<?php echo $enddate  ?>');"><i class="fa fa-print"></i> Print</button>
     </div>
         <div id ="Receipt" >
             <div class="col-12  d-flex" >
@@ -139,7 +144,7 @@
                             <div class="card-header">
                              
                                 <div class="d-flex justify-content-start">
-                                    <h5 class="card-title mb-0">รายการหัวข้องานที่ได้รับมอบหมาย</h5>
+                                    <h5 class="card-title mb-0">รายการหัวข้องานที่สร้าง</h5>
                                 </div>
                                
                                 <div class="row">
@@ -201,6 +206,8 @@
 
                                             $stmttasklist = $db->query($stmttasklist);
                                             $stmttasklist->execute();  
+                                            $stmttasklistrow =  $stmttasklist->rowCount();
+                                            if($stmttasklistrow > 0 ){
                                             while ($row2 = $stmttasklist->fetch(PDO::FETCH_ASSOC)){
                                                  $project_id = $row2['project_id'];
                                                  $sql2 = $db->query("SELECT * FROM task_list WHERE project_id =  $project_id ");
@@ -234,12 +241,18 @@
                                             <?php echo $row2['firstname'].' '.$row2['lastname']; ?>
                                             </td>
                                             <td class="action-col" id='action'>
-                                           <a class='btn btn-bitbucket btn-sm tooltiptext' title="ดูรายละเอียดหัวข้องาน" href='reportpro.php?projectid=<?php echo  $row2['project_id']?>&userid=<?php echo $id ?>&startdate=<?php echo  $startdate ?>&enddate=<?php echo $enddate ?>'>รายละเอียด</a>
+                                           <a class='btn btn-bitbucket btn-sm tooltiptext' title="ดูรายละเอียดหัวข้องาน"  href='reportpro.php?projectid=<?php echo  $row2['project_id']?>&userid=<?php echo $id ?>&startdate=<?php echo  $startdate ?>&enddate=<?php echo $enddate ?>'><i class="bi bi-search"></i></a>
                                             </td>
                                          
                                         </tr>
                                     
                                     <?php  } ?>
+                                    <?php  }else{ ?>
+                                        <tr>
+                                            <td colspan='9' style='text-align:center'>ไม่พบข้อมูล</td>
+                                        </tr>
+                                        <?php  } ?>
+
                                 </tbody>
                         </table>
          
@@ -256,8 +269,8 @@
     </body>
 </html>
 <script>
-    function reportuserpro(id,startdate,enddate){
-        $('#proc').val('reportuserpro');
+    function reportuserprocreate(id,startdate,enddate){
+        $('#proc').val('reportuserprocreate');
         $('#userid').val(id);
         $('#startdate').val(startdate);
         $('#enddate').val(enddate);

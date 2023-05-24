@@ -650,33 +650,44 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $qry2->execute();
         $row2 = $qry2->fetch(PDO::FETCH_ASSOC);
         
-
+       /*  echo strtotime($start_date);
+        echo '<br>';
+        echo strtotime($end_date); */
         
-        
-        if (empty($proname)) {
-            $_SESSION['error'] = 'กรุณากรอกชื่อหัวข้องาน';
-            $url_return ="location:addproject_page.php";
-            //header("location:addproject_page.php");
-        }else  if ($row2 ) {
-            $_SESSION['error'] = 'หัวข้องานซั้ำกรุณากรอกชื่อหัวข้องานใหม่';
-            $url_return ="location:addproject_page.php";
-       } else if (empty($start_date)) {
-          $_SESSION['error'] ='กรุณากรอกวันที่เริ่ม';
-          $url_return ="location:addproject_page.php";
-       }else if (empty($end_date)) {
-          $_SESSION['error'] = 'กรุณากรอกวันที่สิ้นสุด';
-          $url_return ="location:addproject_page.php";
-       }else if (empty($users_id1)) {
-          $_SESSION['error'] = 'กรุณากรอกชื่อสมาชิก';
-          $url_return ="location:addproject_page.php";
-       }else if(isset($files['size'])){
+   
+   if (empty($proname)) {
+        $_SESSION['error'] = 'กรุณากรอกชื่อหัวข้องาน';
+        $url_return ="location:addproject_page.php";
+        //header("location:addproject_page.php");
+    }else  if ($row2 ) {
+        $_SESSION['error'] = 'หัวข้องานซั้ำกรุณากรอกชื่อหัวข้องานใหม่';
+        $url_return ="location:addproject_page.php";
+    } else if (empty($start_date)) {
+        $_SESSION['error'] ='กรุณากรอกวันที่เริ่ม';
+        $url_return ="location:addproject_page.php";
+    }else if (empty($end_date)) {
+        $_SESSION['error'] = 'กรุณากรอกวันที่สิ้นสุด';
+        $url_return ="location:addproject_page.php";
+    }else if (empty($users_id1)) {
+        $_SESSION['error'] = 'กรุณากรอกชื่อสมาชิก';
+        $url_return ="location:addproject_page.php";
+       
+    }else   if(strtotime($start_date) >= strtotime($end_date)){
+        $_SESSION['error'] = 'วันที่สั่งเลยวันที่สิ้นสุด';
+        $url_return ="location:addproject_page.php";
+     
+    }else if(strtotime($end_date) <= strtotime($start_date)){
+        $_SESSION['error'] = 'วันที่สิ้นสุดเลยวันที่เริ่ม';
+        $url_return ="location:addproject_page.php";
+      
+    }else if(isset($files['size'])){
             foreach ($files['size'] as $i => $file_size) {
                 if ($file_size >  $max_file_size) {
                 $_SESSION['error'] = 'ไฟล์มีขนาดเกิน 20 MB';
                 header("location:addproject_page.php");
                 }
             }
-       }else{
+    }else{
             foreach($users_id as $i => $userid ){
            
                 $datauser = $db->prepare("SELECT line_token FROM user WHERE user_id = :userid");
@@ -763,6 +774,9 @@ header("Access-Control-Allow-Headers: X-Requested-With");
  
         $proid=$_POST['project_id'];
         // $status1 = 1;
+        
+       
+     
         $proname = $_POST['proname'];
         $start_date = $_POST['start_date'];
         $end_date = $_POST['end_date'];
@@ -775,6 +789,23 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         /* $status1 =$_POST['status1'];  */
         $files = $_FILES['files'];
         $max_file_size = 20971520; 
+
+        $sql3 = "SELECT start_date,end_date FROM project WHERE project_id = $proid";
+        $qry = $db->query($sql3);
+        $row3 = $qry->fetch(PDO::FETCH_ASSOC);
+       /*  echo $row3['start_date'];
+        echo $row3['end_date']; */
+
+        if(strtotime($start_date) >= strtotime($row3['end_date'])){
+            $_SESSION['error'] = 'วันที่สั่งเลยวันที่สิ้นสุด';
+            $url_return ="location:editproject_page.php?update_id=$proid";
+         
+        }
+        if(strtotime($end_date) <= strtotime($row3['start_date'])){
+            $_SESSION['error'] = 'วันที่สิ้นสุดเลยวันที่เริ่ม';
+            $url_return ="location:editproject_page.php?update_id=$proid";
+         
+        }
 
         if (empty($users_id1)) {
             $_SESSION['error'] = 'กรุณากรอกชื่อสมาชิก';
@@ -1355,6 +1386,8 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $tokenline = $_POST['tokenline'];
         $phone = $_POST['phone'];
         $department = $_POST['department'];
+        $status_user2 = 1;
+        
         $idcard = trim($_POST['idcard']);
         if($switch == "on"){
             $switch = 1;
@@ -1426,8 +1459,8 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                             $url_return ="location:user_list.php";
                         } else if (!isset($_SESSION['error'])) {
                             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-                            $stmt = $db->prepare("INSERT INTO user(firstname, lastname, email, password, role_id,avatar,status_user,tel,line_token,idcard,department_id,shortname_id) 
-                                                    VALUES(:firstname, :lastname, :email, :password, :role_id,:avatar,:status_user,:tel,:line_token,:idcard,:department_id,:shortname_id)");
+                            $stmt = $db->prepare("INSERT INTO user(firstname, lastname, email, password, role_id,avatar,status_user,tel,line_token,idcard,department_id,shortname_id,status_user2) 
+                                                    VALUES(:firstname, :lastname, :email, :password, :role_id,:avatar,:status_user,:tel,:line_token,:idcard,:department_id,:shortname_id,:status_user2)");
                             $stmt->bindParam(":firstname", $firstname);
                             $stmt->bindParam(":lastname", $lastname);
                             $stmt->bindParam(":email", $email);
@@ -1440,6 +1473,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                             $stmt->bindParam(":idcard",$idcard);
                             $stmt->bindParam(":department_id",$department);
                             $stmt->bindParam(":shortname_id",$shortname);
+                            $stmt->bindParam(":status_user2",$status_user2);
                             $stmt->execute();
                             $_SESSION['success'] = "สมัครสมาชิกเรียบร้อยแล้ว! ";
                             echo "<script>
@@ -1949,15 +1983,16 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $id_jobtype = $_POST['id_jobtype'];
         $status = 1;
  
-        $sql = "SELECT * FROM job_type WHERE name_jobtype = '$namejob' AND id_jobtype !=  '$id_jobtype ' ";
+        $sql = "SELECT * FROM job_type WHERE  name_jobtype = '$namejob'  AND  id_jobtype !=  '$id_jobtype ' AND status = 1  ";
         $sql = $db->query($sql);
         $sql->execute();
         $row = $sql->fetch(PDO::FETCH_ASSOC);
-   
+       print_r($row);
+      /*  exit; */  
         if (empty($namejob)) {
             $_SESSION['error'] = 'กรุณากรอกชื่อประเภทงาน';
-            $url_return ="location: editjobtype_page.php?update_id=$id_jobtype";
-        }else if (!$row){
+            $url_return ="location editjobtype_page.php?update_id=$id_jobtype";
+        }else if ($row){
             $_SESSION['error'] = 'กรุณากรอกชื่อประเภทงานใหม่เนื่องจากมีชื่อซ้ำเเล้ว';
             $url_return ="location: editjobtype_page.php?update_id=$id_jobtype";
         }else if (!isset($_SESSION['error'])) {
@@ -2196,7 +2231,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
           echo "<script>
             $(document).ready(function() {
                 Swal.fire({
-                    title: 'เเก้ไขชื่อตำเเหน่งเรียบร้อย!',
+                    title: 'เเก้ไขตำเเหน่งเรียบร้อย!',
                     icon: 'success',
                     timer: 2000,
                     showConfirmButton: true

@@ -15,7 +15,6 @@
 <body>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css" 
 <?php include "sidebar.php"?>
-<?php include "funtion.php"?>
 <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
                     <?php 
@@ -122,17 +121,17 @@
                                                 </td>
                                                 <td class="action-col">                   
                                                 <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                      
-                                                    <a class="btn btn-bitbucket btn-sm" href="view_project.php?view_id=<?php echo $row['project_id']?>"><i data-feather="zoom-in"></i></a>
+                                                    <a class="btn btn-bitbucket btn-sm"  title="ดูรายละเอียดหัวข้องาน" href="view_project.php?view_id=<?php echo $row['project_id']?>"><i data-feather="zoom-in"></i></a>
                                                 
-                                                    <a class="btn btn-warning btn-sm" href="editproject_page.php?update_id=<?php echo $row['project_id']?>"><i data-feather="edit"></i></a>
+                                                    <a class="btn btn-warning btn-sm"  title="เเก้ไขหัวข้องาน" href="editproject_page.php?update_id=<?php echo $row['project_id']?>"><i data-feather="edit"></i></a>
                                                    
 
                                                     <?php 
                                                         if ($numtask == 0 || $row['status_1'] == 4) {
-                                                        echo '<button class="btn btn-danger btn-sm delete-btn"  data-project_id="'.$row['project_id'].'"><i data-feather="trash-2"></i></button>';
+                                                        echo '<button class="btn btn-danger btn-sm delete-btn"  title="ลบหัวข้องาน" data-project_id="'.$row['project_id'].'"><i data-feather="trash-2"></i></button>';
 
                                                         } else {
-                                                        echo '<button class="btn btn-danger btn-sm disabled" onclick="deleteproject(\''. $row['project_id'] .'\')"><i data-feather="trash-2"></i></button>';
+                                                        echo '<button class="btn btn-danger btn-sm disabled"   title="ลบหัวข้องาน" onclick="deleteproject(\''. $row['project_id'] .'\')"><i data-feather="trash-2"></i></button>';
                                                         }
                                                         ?>
                                                 </td>

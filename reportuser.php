@@ -92,7 +92,7 @@
                                             <select name="role" id="role" class="form-select"  >
                                             <option value="">ทั้งหมด</option>
                                                     <?php
-                                                    $stmt = $db->query("SELECT * FROM position as p  WHERE position_status = 1 AND level > $level ");
+                                                    $stmt = $db->query("SELECT * FROM position as p  WHERE position_status = 1 AND level >= $level ");
                                                     $stmt->execute();
                                                     $result = $stmt->fetchAll();
                                                     foreach($result as $row) {
@@ -242,7 +242,9 @@ function searchreportuser(page){
                             <td class="mannager-col" > ${response.result[i].numusertask}</td>
                             <td class="success-col">${response.result[i].numdela}</td>
                             <td class="mannager-col" > ${response.result[i].numdetails}</td>
-                            <td class="action-col"  id='action' ><a class='btn btn-bitbucket btn-sm' href='reportuserpro.php?userid=${response.result[i].user_id}&startdate=${startdate}&enddate=${enddate}'>รายละเอียด</a></td>
+                            <td class="action-col"  id='action' ><a class='btn btn-bitbucket btn-sm' title="ดูรายละเอียดงานที่มอบหมาย" href='reportuserpro.php?userid=${response.result[i].user_id}&startdate=${startdate}&enddate=${enddate}'><i class="bi bi-search"></i></a>
+                            <a class='btn btn-danger btn-sm'  title="ดูรายละเอียดงานที่สี่งไป"  href='reportuserprocreate.php?userid=${response.result[i].user_id}&startdate=${startdate}&enddate=${enddate}'><i class="bi bi-search"></i></a>
+                            </td>
                         </tr>
                         `;
                         }

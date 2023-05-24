@@ -36,7 +36,7 @@
 
 <body>
 <?php include "sidebar.php"?>
-<?php include "funtion.php"?>
+
 
 
 <?php if(isset($_SESSION['error'])) { ?>
@@ -305,10 +305,10 @@
                                             <td class="action-col">
                                 		                                  
                                             <?php  if ($row2['user_id'] == $us   || $level <= 2   || $manager_id == $us ) { ?>
-                                            <a class="btn btn-google btn-sm" href="details_page.php?task_id=<?php echo $row2['task_id']?>&project_id=<?php echo $row2['project_id']?>"><i data-feather="message-square"></i></a>   
+                                            <a class="btn btn-google btn-sm" title="ดูรายละเอียดการส่งงาน" href="details_page.php?task_id=<?php echo $row2['task_id']?>&project_id=<?php echo $row2['project_id']?>"><i data-feather="message-square"></i></a>   
                                             <!-- <a class="btn btn-google btn-sm" data-bs-toggle="modal" data-bs-target="#viewdetailsmodal<?php echo $row2['details_id']?>"><i data-feather="message-square"></i></a> -->
                                                 <?php } ?>
-                                            <a class="btn btn-bitbucket btn-sm" data-bs-toggle="modal" data-bs-target="#viewtaskmodal<?php echo $row2['task_id']?>"><i data-feather="zoom-in"></i></a>
+                                            <a class="btn btn-bitbucket btn-sm"  title="ดูรายละเอียดงาน"data-bs-toggle="modal" data-bs-target="#viewtaskmodal<?php echo $row2['task_id']?>"><i data-feather="zoom-in"></i></a>
 
                                             <?php
                                             /* $member = array();
@@ -322,11 +322,11 @@
                                                      
                                                 // if (in_array($us,$member) || ( $level <= 2 || $manager_id == $us ) AND $row2['status_task'] != 3 AND $row2['progress_task'] != 100  ) {
                                                 if ($row2['user_id'] == $us   || $level <= 2   || $manager_id == $us   AND $row2['status_task'] != 5 AND $row2['progress_task'] != 100  AND $status_1 != 3 AND $row2['status_task'] != 2 AND $row2['status_task2'] != 1 ) {
-                                                    echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' .   $row2['project_id'] .'&user_id='. $us .'&statustimetask='. $row2['status_timetask'].'" class="btn btn-success btn-sm"><i data-feather="share"></i></a>';  
+                                                    echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' .   $row2['project_id'] .'&user_id='. $us .'&statustimetask='. $row2['status_timetask'].'" class="btn btn-success btn-sm" title="ส่งงาน"><i data-feather="share"></i></a>';  
                                                 }
                                              
                                                 else if($row2['user_id'] == $us   || $level <= 2   || $manager_id == $us   AND $row2['progress_task'] != 100 AND $row2['status_task'] = 2  AND $status_1 != 3 AND $row2['status_task2'] != 1){
-                                                    echo '<button class="btn btn-danger btn-sm deletedetals-btn"  data-project_id="'.$row2['project_id'].'"  data-task_id="'.$row2['task_id'].'"  data-details_id="'.$stmt2['details_id'].'"><i data-feather="x"></i></button> '; 
+                                                    echo '<button class="btn btn-danger btn-sm deletedetals-btn" title="ยกเลิกงาน" data-project_id="'.$row2['project_id'].'"  data-task_id="'.$row2['task_id'].'"  data-details_id="'.$stmt2['details_id'].'" ><i data-feather="x"></i></button> '; 
                                                     //echo $row2['project_id'];
                                                     
                                                 } 
@@ -334,10 +334,10 @@
                                                     // echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' . $row2['project_id'] . '" class="btn btn-success btn-sm disabled"><i data-feather="share"></i></a>'; 
                                                     echo ' ';
                                                 if($manager_id == $us || $level <= 2 AND $status_1 != 3 AND $row2['progress_task'] != 100 AND $row2['status_task'] != 5 ) {
-                                                    echo '<a class="btn btn-warning btn-sm" href="edittask_page.php?updatetask_id='.$row2['task_id'].'&project_id='.$row2['project_id'].'"><i data-feather="edit"></i></a>';
+                                                    echo '<a class="btn btn-warning btn-sm" title="เเก้ไขงาน" href="edittask_page.php?updatetask_id='.$row2['task_id'].'&project_id='.$row2['project_id'].'"><i data-feather="edit"></i></a>';
                                                     echo ' ';
                                                 }if($numsenddetails == 0 AND $manager_id == $us || $level <= 2 AND $status_1 != 3 AND $row2['status_task2'] != 1){
-                                                    echo '<button class="btn btn-danger btn-sm delete-btn" data-project_id="'.$row2['project_id'].'" data-task_id="'.$row2['task_id'].'"><i data-feather="trash-2"></i></button>';
+                                                    echo '<button class="btn btn-danger btn-sm delete-btn" title="ลบงาน" data-project_id="'.$row2['project_id'].'" data-task_id="'.$row2['task_id'].'"><i data-feather="trash-2"></i></button>';
                                                 }   
                                                 ?>
                                                 <?php if ($manager_id == $us || $level <= 2) {?>
@@ -418,9 +418,9 @@
                 icon: 'error',
                 //text: "It will be deleted permanently!",
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'ใช่ต้องการลบ!',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'ลบ!',
                 cancelButtonText: 'กลับ',
                 showLoaderOnConfirm: true,
                
@@ -433,7 +433,7 @@
                             })
                             .done(function() {
                                 Swal.fire({
-                                    title: 'success',
+                                    title: 'เรียบร้อย',
                                     text: 'ลบงานเรียบร้อยเเล้ว!',
                                     icon: 'success',
                                     confirmButtonText: 'ตกลง!',
@@ -498,9 +498,9 @@
                 icon: 'error',
                 //text: "It will be deleted permanently!",
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'ใช่ต้องการยกเลิก!',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'ยกเลิก!',
                 cancelButtonText: 'กลับ',
                 showLoaderOnConfirm: true,
                
@@ -516,7 +516,7 @@
                             })
                             .done(function() {
                                 Swal.fire({
-                                    title: 'success',
+                                    title: 'เรียบร้อย',
                                     text: 'ยกเลิกเรียบร้อยเเล้ว!',
                                     icon: 'success',
                                     confirmButtonText: 'ตกลง!',

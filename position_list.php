@@ -12,7 +12,7 @@
 <body>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css" 
 <?php include "sidebar.php"?>
-<?php include "funtion.php"?>
+
 <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
                     <?php 
@@ -80,8 +80,8 @@
                                             <td class="text-center">                               
                                                <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                       
                                                 <!-- <a href="edituser_page.php?update_id=<?php echo $row['role_id']?>" class="btn btn-warning btn-sm">2</a>   --> 
-                                                <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลประเภทงาน" href="editposition.php?update_id=<?php echo $row['role_id']?>"><i  data-feather="edit"></i></a>
-                                                <button class="btn btn-danger btn-sm deleteposition-btn" title="ลบข้อมูลประเภทงาน" data-role_id="<?php echo $row['role_id']?>" data-level="<?php echo $row['level']?>" ><i data-feather="trash-2"></i></button>
+                                                <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลตำเเหน่ง" href="editposition.php?update_id=<?php echo $row['role_id']?>"><i  data-feather="edit"></i></a>
+                                                <button class="btn btn-danger btn-sm deleteposition-btn" title="ลบข้อมูลตำเเหน่ง" data-role_id="<?php echo $row['role_id']?>" data-level="<?php echo $row['level']?>" ><i data-feather="trash-2"></i></button>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -122,9 +122,9 @@ function addposition(){
                 icon: 'error',
                 //text: "It will be deleted permanently!",
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'ใช่ต้องการยกเลิก!',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'ยกเลิก!',
                 cancelButtonText: 'กลับ',
                 showLoaderOnConfirm: true,
                

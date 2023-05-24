@@ -127,7 +127,7 @@
                                 </div> 
                                 <?php if($level <= 2): ?>
                                     <div class="col-md-3">
-                                        <div class="mb-3">
+                                        <div class="mb-2">
                                             <label for="" class="control-label" >ฝ่าย</label>
                                             <div class="input-group input-group-sm mb-2">
                                                 <select name="department" id="department" class="form-select" >
@@ -145,13 +145,13 @@
                                     </div>    
                                     <?php endif; ?>
                                         <div class="col-md-3">
-                                            <div class="mb-3">
+                                            <div class="mb-2">
 												<label for="" class="control-label" >ตำเเหน่ง</label>
                                                     <div class="input-group input-group-sm mb-2">
                                                         <select name="role" id="role" class="form-select" >
                                                         <option value="">ทั้งหมด</option>
                                                             <?php
-                                                            $stmt = $db->query("SELECT * FROM position as p  WHERE position_status = 1 AND level > $level/*  OR p.role_id = $role  */");
+                                                            $stmt = $db->query("SELECT * FROM position as p  WHERE position_status = 1 AND level >= $level/*  OR p.role_id = $role  */");
                                                             $stmt->execute();
                                                             $result = $stmt->fetchAll();
                                                             foreach($result as $row) {
@@ -162,9 +162,26 @@
                                                     </div>
 											</div>
                                         </div>
-                                    
+                            <?php if($level <= 2): ?>
                             <div class="col-md-3">
-                            </div>                         
+                            </div>    
+                     
+                            <div class="col-md-3">
+                            </div>    
+                            <?php endif; ?>              
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="" class="control-label" >ประเภท</label>
+                                        <div class="input-group input-group-sm mb-2">
+                                            <select name="jobtype" id="jobtype" class="form-select" >
+                                                <option value="1">หัวข้องานที่มอบหมาย</option>
+                                                <option value="2">หัวข้องานที่ต้องทำ</option>
+                                            </select>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                            </div> 
                             <div class="col-lg-12 text-right justify-content-center d-flex">
                                 <a class="btn btn-primary" onclick="searchreport('<?php echo 1 ?>')" >ค้นหา</a> 
                                 <a class="btn btn-secondary" href="report.php" type="button" >ล้างค่า</a>
@@ -245,6 +262,7 @@
     var status2 = $('#status2').val();
     var department = $('#department').val();
     var role = $('#role').val();
+    var jobtype = $('#jobtype').val();
     var page = page;
     
   /*   console.log(page) */
@@ -252,7 +270,7 @@
         url:"proc2.php",
         method:"post",
         datatype: "json",
-        data:{proc:proc,nameproject:nameproject,job:job,startdate:startdate,enddate:enddate,status1:status1,status2:status2,department:department,role:role},
+        data:{proc:proc,nameproject:nameproject,job:job,startdate:startdate,enddate:enddate,status1:status1,status2:status2,department:department,role:role,jobtype:jobtype},
         success:function(response){
             console.log(response)
             var response = JSON.parse(response);
@@ -277,8 +295,8 @@
                             <td>${response.result[i].name_jobtype}</td>
                             <td class="numtask-col">${thai_date_short(response.result[i].start_date)} - ${thai_date_short(response.result[i]['end_date'])}</td>
                             <td class="comptask-col">${showstatprotext1(response.result[i].status_1)} (${showstatprotext2(response.result[i].status_2)})</td>
-                            <td class="mannager-col">${response.result[i].firstname + ' ' + response.result[i].lastname}</td>
-                            <td class="action-col" id='action'><a class='btn btn-bitbucket btn-sm' href='reportpro.php?projectid=${response.result[i].project_id}'>รายละเอียด</a></td>
+                            <td class="mannager-col">${showshortname(response.result[i].shortname_id) + ' ' + response.result[i].firstname + ' ' + response.result[i].lastname}</td>
+                            <td class="action-col" id='action'><a class='btn btn-bitbucket btn-sm' title="ดูรายละเอียด" href='reportpro.php?projectid=${response.result[i].project_id}'><i class="bi bi-search"></i></a></td>
                             </tr>
                         `;
                         }

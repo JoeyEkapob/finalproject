@@ -30,7 +30,9 @@ session_start();
 ?> 
 <!DOCTYPE html>
 <html lang="en">
+<?php include 'head.php'?> 
     <form action="proc.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+
     <body>
     <?php include "sidebar.php"?>
     <?php if(isset($_SESSION['error'])) { ?>

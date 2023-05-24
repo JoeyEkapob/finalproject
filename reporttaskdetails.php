@@ -43,7 +43,7 @@
 
 <body>
 <?php include "sidebar.php"?>
-<?php include "funtion.php"?>
+
 <form action="reportpropdf.php" method="post" id="viewpro" class="form-horizontal" enctype="multipart/form-data" target="_blank">
 
     <main class="content">

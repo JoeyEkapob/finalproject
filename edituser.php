@@ -29,7 +29,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 <?php include 'head.php'?> 
 <body>
 <?php include "sidebar.php"?>
-<?php include "funtion.php"?>
+
 <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
                     <?php 
@@ -95,6 +95,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 													<option value="7">ผศ.ดร</option>
 													<option value="8">ศ.ดร</option>
 													<option value="10">อาจารย์</option>
+													<option value="11">Mr</option>
+													<option value="12">Ms</option>
 												</select>
 										</div>
 									</div>

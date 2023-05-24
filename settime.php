@@ -25,7 +25,7 @@ $formatted_time = date('Y-m-d H:i:s', $current_time);
         $update_stmt->execute();
 
        $sToken = $row2['line_token'];
-       $sMessage = "การถึงวันสิ้นสุดงานของท่านเเล้วเเล้ว \n";
+       $sMessage = "ใกล้ถึงวันที่สิ้นสุดการส่งงานของท่านแล้ว \n";
        $sMessage .= "ชื่อห้วงาน : ".$row2['name_project']." \n";
        $sMessage .= "ชื่องาน : ".$row2['name_tasklist']." \n";
        $sMessage .= "วันที่สิ้นสุด : ".thai_date_and_time_short($row2['end_date_task'])." \n";

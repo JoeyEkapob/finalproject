@@ -16,7 +16,7 @@
 <body>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css"  
 <?php include "sidebar.php"?>
-<?php include "funtion.php"?>
+
 
 <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
@@ -110,7 +110,7 @@
                                             </td>
                                             <td class="action-col">               
                                                <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                       
-                                                 <a class="btn btn-bitbucket btn-sm" href="view_project.php?view_id=<?php echo $row['project_id']?>"><i data-feather="zoom-in"></i></a>
+                                                 <a class="btn btn-bitbucket btn-sm" title="ดูรายละเอียด"  href="view_project.php?view_id=<?php echo $row['project_id']?>"><i data-feather="zoom-in"></i></a>
                                                 <!-- <a href="editproject.php?update_id=<?php echo $row['project_id']?>" class="btn btn-warning btn-sm">2</a>
                                                 <a href="deleteproject.php?delete_id=<?php echo $row['project_id']?>" class="btn btn-danger btn-sm" >trash</a> -->
                                                 

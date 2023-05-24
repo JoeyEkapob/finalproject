@@ -49,7 +49,7 @@ exit; */
 
 <body>
 <?php include "sidebar.php"?>
-<?php include "funtion.php"?>
+
 <form action="reportpropdf.php" method="post" id="viewpro" class="form-horizontal" enctype="multipart/form-data" target="_blank">
 
     <main class="content">
@@ -218,7 +218,7 @@ exit; */
                                                   ?>
                                             </td>
                                             <td class="action-col" id='action'>
-                                                <a class='btn btn-bitbucket btn-sm' href='reporttaskdetails.php?taskid=<?php echo $row2['task_id']?>&projectid=<?php echo $id ?>'>รายละเอียด</a>
+                                                <a class='btn btn-bitbucket btn-sm' title="ดูรายละเอียด" href='reporttaskdetails.php?taskid=<?php echo $row2['task_id']?>&projectid=<?php echo $id ?>'><i class="bi bi-search"></i></a>
                                             </td>
                                          
                                         </tr>

@@ -13,11 +13,14 @@
 	
 	<link rel="stylesheet" href="css/multi_select.css"> 
 	<link rel="stylesheet" href="css/csstablesiza.css"> 
+    <link rel="stylesheet" href="css/login.css">
+	<link rel="stylesheet" href="css/modal_Profile.css">
 
 	<!-- Bootstrap 5.2  -->
 	 <!-- <link rel="stylesheet" type="text/css" href="https://getbootstrap.com/docs/5.2/dist/css/bootstrap.min.css" /> -->
 	 <!-- Bootstrap 5.3  -->
 	 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> 
+	 
 	<!-- fonts -->
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 <!-- 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css"> -->

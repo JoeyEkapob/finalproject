@@ -14,7 +14,6 @@
 <body>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css" 
 <?php include "sidebar.php"?>
-<?php include "funtion.php"?>
 <?php if(isset($_SESSION['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
                     <?php 
@@ -114,7 +113,7 @@
                                                <!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                      
                                                 <a class="btn btn-bitbucket btn-sm" title="ดูรายละเอียดงาน" data-bs-toggle="modal" data-bs-target="#viewdetailsmodal<?php echo $row['details_id']?>"><i data-feather="zoom-in"></i></a>
                                                 <button class="btn btn-success btn-sm checktasksuccess" title="เช็คว่างงานเสร็จสิ้นเรียบร้อย" data-details_id="<?php echo $row['details_id'] ?>" data-task_id="<?php echo $row['task_id'] ?>" data-project_id="<?php echo $row['project_id'] ?>"> <i data-feather="check-square"></i></button>
-                                                <a class="btn btn-warning btn-sm" href="checktaskedit.php?details_id=<?php echo $row['details_id'] ?>&task_id=<?php echo $row['task_id'] ?>&project_id=<?php echo $row['project_id'] ?>&statustimetask=<?php  echo $row['status_timedetails']  ?>"> <i data-feather="check-square"></i></a>
+                                                <a class="btn btn-warning btn-sm" title="ส่งงานกลับเเก้ไข" href="checktaskedit.php?details_id=<?php echo $row['details_id'] ?>&task_id=<?php echo $row['task_id'] ?>&project_id=<?php echo $row['project_id'] ?>&statustimetask=<?php  echo $row['status_timedetails']  ?>"> <i data-feather="check-square"></i></a>
                                                 <!-- <a class="btn btn-warning btn-sm" href=""><i data-feather="share"></i></a> -->
                                   
                                             </td>

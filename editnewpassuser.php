@@ -21,7 +21,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 <body>
 <?php include "sidebar.php"?>
-<?php include "funtion.php"?>
 
 	<main class="content">
     <a href="<?php echo $previousPage; ?>" class="back-button">&lt;</a> 

@@ -5,7 +5,6 @@
          $_SESSION['error'] = '<center>กรุณาล็อกอิน</center>'; 
         header('location:sign-in.php');
     }
- 	include "funtion.php";
 	include "sidebar.php";
 
 	$user_id=$_SESSION['user_login'];
@@ -20,7 +19,7 @@
 	 if($level >= 2){
 		$where = "   and user_id  = $user_id ";
 	 }
-	$stmtprojectnumuser = "SELECT COUNT(pl.project_id) as num1 FROM project_list as pl  left join  project as p on pl.project_id = p.project_id WHERE  status_1 !=3  $where";
+	$stmtprojectnumuser = "SELECT COUNT(pl.project_id) as num1 FROM project_list as pl  left join  project as p on pl.project_id = p.project_id WHERE 1=1  $where";
 	$stmtprojectnumuser = $db->prepare($stmtprojectnumuser);
 	$stmtprojectnumuser ->execute();
 	$stmtprojectnumuser = $stmtprojectnumuser->fetchColumn();
@@ -42,24 +41,28 @@
 	$stmttasknum ->execute();
 	$stmttasknum = $stmttasknum->fetchColumn(); 
 
-	if($level >= 2){
-		$where = "  and user_id = $user_id  ";
-	 }
+	$sql4 = $db->query("SELECT task_id  FROM task_list as t left join project as p on t.project_id = p.project_id WHERE  1=1 $where ");
+    $numusertask = $sql4->rowCount();  	
+
+	$sql5 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_task != 5 AND progress_task != 100 $where  ");
+	$numtaskonpro = $sql5->rowCount(); 
 
 	$stmttaskpnum = "SELECT COUNT(task_id) FROM task_list as t left join project as p on t.project_id = p.project_id  where p.status_1 !=3 AND t.progress_task != 100 AND t.status_task != 5 AND status_timetask = 2  AND status_task2 != 1 $where ";
 	$stmttaskpnum = $db->prepare($stmttaskpnum);
 	$stmttaskpnum ->execute();
  	$stmttaskpnum = $stmttaskpnum->fetchColumn(); 
 
+	 $sql6 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_timetask = 2 AND status_task != 5 AND progress_task != 100  $where ");
+	 $numtimede = $sql6->rowCount();
 
-	if($level >= 2){
+	 if($level >= 2){
 		$where = "and  p.manager_id = $user_id "; 
 	} 
 	
 	$stmtdetails = "SELECT COUNT(details_id)  FROM details as d left join project as p on p.project_id = d.project_id WHERE state_details = 'Y' $where ";
 	$stmtdetails = $db->prepare($stmtdetails);
 	$stmtdetails ->execute();
-	$stmtdetails = $stmtdetails->fetchColumn();
+	$stmtdetails = $stmtdetails->fetchColumn(); 
 /* 
 	print_r($stmtdetails); */
 	//extract($row);
@@ -96,7 +99,7 @@
 						<div class="col-xxl-12 col-xxl- d-flex">
 							<div class="w-100">
 								<div class="row">
-									<?php if ($level != 5): ?>
+									<?php if ($level != $maxlevel): ?>
 								
 										<div class="col-sm-3">
 											<a href="checktask_list.php">
@@ -125,6 +128,28 @@
 								
 									<?php endif ?>
 									<?php if ($level > 2): ?>
+									<div class="col-sm-3">
+											<div class="card">
+												<div class="card-body">
+													<div class="row">
+														<div class="col mt-0">
+															<h5 class="card-title">งานล่าช้า</h5>
+														</div>
+
+														<div class="col-auto">
+															<div class="stat text-primary">
+																<i class="align-middle" data-feather="list"></i>
+															</div>
+														</div>
+													</div>
+													<h1 class="mt-1 mb-3"><?php echo $stmttaskpnum  ?></h1>
+													<div class="mb-0">
+														<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
+														<span class="text-muted">งานทั้งหมดที่ล่าช้า</span>
+													</div>
+												</div>
+											</div>
+										</div>
 										<div class="col-sm-3">
 												<div class="card">
 													<div class="card-body">
@@ -139,7 +164,7 @@
 																</div>
 															</div>
 														</div>
-														<h1 class="mt-1 mb-3"><?php echo $stmttaskpnum ?></h1>
+														<h1 class="mt-1 mb-3"><?php echo $numtaskonpro ?></h1>
 														<div class="mb-0">
 															<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
 															<span class="text-muted">งานค้างทั้งหมด</span>
@@ -147,6 +172,7 @@
 													</div>
 												</div>
 											</div>
+											
 											<?php endif ?>
 											<div class="col-sm-3">
 												<div class="card">
@@ -162,7 +188,7 @@
 																</div>
 															</div>
 														</div>
-														<h1 class="mt-1 mb-3"><?php echo $stmttasknum ?></h1>
+														<h1 class="mt-1 mb-3"><?php echo $numusertask ?></h1>
 														<div class="mb-0">
 															<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
 															<span class="text-muted">งานทั้งหมด</span>
@@ -194,6 +220,7 @@
 											</div>
 										</div>
 										<?php endif ?>
+										<?php if ($level != $maxlevel): ?>
 										<div class="col-sm-3">
 											<div class="card">
 												<div class="card-body">
@@ -216,6 +243,7 @@
 												</div>
 											</div>
 										</div>
+										<?php endif ?>
 										<?php if ($level <= 2): ?>
 										<div class="col-sm-3">
 											<div class="card">
@@ -376,7 +404,7 @@
 													</td>
 													<td class="action-col">                   
 													<!--  <a class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">1</a>    -->                       
-														<a class="btn btn-bitbucket btn-sm" href="view_project.php?view_id=<?php echo $stmtshowprojectrow['project_id']?>"><i data-feather="zoom-in"></i></a>
+														<a class="btn btn-bitbucket btn-sm" title="ดูรายละเอียดงาน" href="view_project.php?view_id=<?php echo $stmtshowprojectrow['project_id']?>"><i data-feather="zoom-in"></i></a>
 														<!-- <a href="editproject.php?update_id=<?php echo $stmtshowprojectrow['project_id']?>" class="btn btn-warning btn-sm">2</a>
 														<a href="deleteproject.php?delete_id=<?php echo $stmtshowprojectrow['project_id']?>" class="btn btn-danger btn-sm" >trash</a> -->
 														

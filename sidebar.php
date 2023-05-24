@@ -1,6 +1,6 @@
 <?php 
 include "head.php";
-
+include "funtion.php";
 
 		if (isset($_SESSION['user_login'])) {
 			$user_id = $_SESSION['user_login'];
@@ -22,6 +22,7 @@ include "head.php";
 			$maxlevel = $row2['maxlevel'];
 			$minlevel = $row2['minlevel'];
 
+		/* 	 echo $minlevel .' '.$maxlevel ;  */
 ?>
 <div class="wrapper">
 		<nav id="sidebar" class="sidebar js-sidebar">
@@ -343,7 +344,7 @@ include "head.php";
 							<?php if($row['avatar'] !=""){?>
                 				<img src="img/avatars/<?php echo $row['avatar'] ?>" class="avatar rounded-circle rounded me-1" alt="" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
 							<?php }else{?>
-								<img src="img/avatars/09.jpg" class="avatar rounded-circle rounded me-1" alt="" > <span class="text-dark"> <?php echo $row['firstname'] . ' ' . $row['lastname'] ?></span>
+								<img src="img/avatars/09.jpg" class="avatar rounded-circle rounded me-1" alt="" > <span class="text-dark"> <?php echo  showshortname($row['shortname_id']) . ' ' . $row['firstname'] . ' ' . $row['lastname'] ?></span>
  							<?php }?>
               				</a>
 							<div class="dropdown-menu dropdown-menu-end">
@@ -388,7 +389,7 @@ $(".logoutuser").click(function() {
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: 'ใช่ต้องการออกจากระบบ!',
+        confirmButtonText: 'ออกจากระบบ!',
         cancelButtonText: 'กลับ',
         showLoaderOnConfirm: true,
         preConfirm: function() {

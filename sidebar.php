@@ -1,7 +1,7 @@
 <?php 
 include "head.php";
 include "funtion.php";
-
+  
 		if (isset($_SESSION['user_login'])) {
 			$user_id = $_SESSION['user_login'];
 
@@ -12,23 +12,27 @@ include "funtion.php";
 			$imageURL = 'img/avatars/'.$row['avatar'];
 		}
 			$level = $row['level'];
+		/* 	echo $level; */
 			$department_id = $row['department_id'];
 			$role = $row['role_id'];
+			/* echo $role ; */  
 			$where ='';
+			
 			if($level > 2){
-				$where  = 'AND d.department_status = 1 AND u.status_user =1 AND u.status_user2 = 1 AND d.department_id = 1 ';
+				$where  = "where d.department_id = 0 AND d.department_id =  ".$department_id." AND status_user2 = 1 AND status_user = 1 ";
 			}
 
 			$sql2 = "SELECT MAX(level) as maxlevel , MIN(level) as minlevel FROM user as u 
 			left join position as p ON u.role_id = p.role_id 
-			left join department as d on u.department_id = d.department_id  WHERE position_status = 1 $where ";
+			left join department as d on u.department_id = d.department_id   $where ";
 			$stmt2 = $db->prepare($sql2);
 			$stmt2->execute();
 			$row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
 			$maxlevel = $row2['maxlevel'];
 			$minlevel = $row2['minlevel'];
 
-		/* 	 echo $minlevel .' '.$maxlevel ;  */
+		 	/*  echo $maxlevel ; */  
+			
 ?>
 <div class="wrapper">
 		<nav id="sidebar" class="sidebar js-sidebar">

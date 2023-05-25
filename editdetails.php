@@ -142,7 +142,7 @@ session_start();
                                     <hr>
                                     <div class="col-lg-12 text-right justify-content-center d-flex">
                                         <button class="btn btn-primary " name ="editdetails" onclick="editdetailss('<?php echo $taskid ?>','<?php echo $project_id ?>','<?php echo $details_id ?>');">เเก้ไข</button>
-                                        <a href="details_page.php?task_id=<?php echo $taskid ?>&project_id=<?php echo $project_id ?>" class="btn btn-secondary" type="button">กลับ</a>
+                                        &nbsp; <a href="details_page.php?task_id=<?php echo $taskid ?>&project_id=<?php echo $project_id ?>" class="btn btn-secondary" type="button">กลับ</a>
                                     </div>
 
                                     </div>

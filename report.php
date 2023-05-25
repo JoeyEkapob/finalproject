@@ -151,7 +151,13 @@
                                                         <select name="role" id="role" class="form-select" >
                                                         <option value="">ทั้งหมด</option>
                                                             <?php
+                                                            /* if($level <= 2){
+                                                                $where = 'AND d.department_status = 1 AND u.status_user =1 AND u.status_user2 = 1 AND d.department_id = 1 ,p.position_name AND p.level >= $level  GROUP BY u.role_id';
+                                                            } */
                                                             $stmt = $db->query("SELECT * FROM position as p  WHERE position_status = 1 AND level >= $level/*  OR p.role_id = $role  */");
+                                                            /* $stmt = $db->query("SELECT u.role_id,p.position_name FROM user as u 
+                                                            left join position as p ON u.role_id = p.role_id 
+                                                            left join department as d on u.department_id = d.department_id WHERE position_status = 1  AND level > $level  GROUP BY u.role_id"); */
                                                             $stmt->execute();
                                                             $result = $stmt->fetchAll();
                                                             foreach($result as $row) {
@@ -183,7 +189,7 @@
                             <div class="col-md-3">
                             </div> 
                             <div class="col-lg-12 text-right justify-content-center d-flex">
-                                <a class="btn btn-primary" onclick="searchreport('<?php echo 1 ?>')" >ค้นหา</a> 
+                                <a class="btn btn-primary" onclick="searchreport('<?php echo 1 ?>')" >ค้นหา</a> &nbsp;
                                 <a class="btn btn-secondary" href="report.php" type="button" >ล้างค่า</a>
                                
             
@@ -199,6 +205,9 @@
                                 <table class='table m-0 table-bordered' >
                                     <thead>
                                         <tr>
+                                            <th class="id-col">
+                                                ลำดับ
+                                            </th>
                                             <th class="id-col">
                                                 รหัสหัวข้องาน
                                             </th>
@@ -278,6 +287,7 @@
             var rowsPerPage = 10; // กำหนดจำนวนแถวต่อหน้า
             var totalRows = response.result.length;
             var totalPages = Math.ceil(totalRows / rowsPerPage); // คำนวณหาจำนวนหน้าทั้งหมด
+            var  num = 1;
           /*   console.log(response) */
             if(response.result.length == 0){
                     html += `
@@ -290,6 +300,7 @@
                         for (var i = (page - 1) * 10; i < response.result.length && i < page * 10; i++) {
                         html += `
                             <tr>
+                            <td class="id-col">${num++}</td>
                             <td class="id-col">${response.result[i].project_id}</td>
                             <td>${response.result[i].name_project}</td>
                             <td>${response.result[i].name_jobtype}</td>

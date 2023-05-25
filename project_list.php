@@ -45,7 +45,7 @@
             
                         
                         <div class="d-flex justify-content-end">
-                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="addproject_page.php"><i class="fa fa-plus"></i>  + เพิ่มโปรเจค</a>
+                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="addproject_page.php"><i class="fa fa-plus"></i>  + เพิ่มหัวข้องาน</a>
                             
                         </div>
                  
@@ -59,14 +59,14 @@
                           
                     <div class="card flex-fill">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">รายการโปรเจค</h5>
+                            <h5 class="card-title mb-0">รายการหัวข้องาน</h5>
                         </div>
                             <div class="table-responsive-xl">
                                 <table class="table table-hover" id="example">
                                     <thead>
                                         <tr>
                                             <th class="id-col text-center">ลำดับ</th>
-                                            <th class="name-col">ชื่อโปรเจค</th>
+                                            <th class="name-col">ชื่อหัวข้องาน</th>
                                             <th class="progress-col text-center">ความคืบหน้า</th>
                                             <th class="start-col text-center">วันที่เริ่ม</th>
                                             <th class="end-col text-center ">วันที่สิ้นสุด</th>

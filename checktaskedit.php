@@ -143,7 +143,7 @@ session_start();
                       
                         <div class="col-lg-12 text-right justify-content-center d-flex">
                             <button class="btn btn-primary " name ="edittask" onclick="send_edittask('<?php echo $taskid ?>','<?php echo $project_id?>','<?php echo $details_id?>','<?php echo $status_timedetails?>');">งานเเก้ไข</button>
-                            <a href="checktask_list.php" class="btn btn-secondary" type="button">กลับ</a>
+                            &nbsp;<a href="checktask_list.php" class="btn btn-secondary" type="button">กลับ</a>
                         </div>
                     </div>
 								</div>

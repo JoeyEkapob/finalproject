@@ -14,8 +14,14 @@ include "funtion.php";
 			$level = $row['level'];
 			$department_id = $row['department_id'];
 			$role = $row['role_id'];
+			$where ='';
+			if($level > 2){
+				$where  = 'AND d.department_status = 1 AND u.status_user =1 AND u.status_user2 = 1 AND d.department_id = 1 ';
+			}
 
-			$sql2 = "SELECT MAX(level) as maxlevel , MIN(level) as minlevel FROM  position WHERE position_status = 1 ";
+			$sql2 = "SELECT MAX(level) as maxlevel , MIN(level) as minlevel FROM user as u 
+			left join position as p ON u.role_id = p.role_id 
+			left join department as d on u.department_id = d.department_id  WHERE position_status = 1 $where ";
 			$stmt2 = $db->prepare($sql2);
 			$stmt2->execute();
 			$row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
@@ -28,7 +34,7 @@ include "funtion.php";
 		<nav id="sidebar" class="sidebar js-sidebar">
 			<div class="sidebar-content js-simplebar">
 				<a class="sidebar-brand" href="index.php">
-				<?php if($level ==  $minlevel): ?>
+				<?php if($level <= 2): ?>
 				<span class="align-middle">Admin <?php /* echo $row['firstname']  */?></span>
 				<?php else: ?>
 					<span class="align-middle">user <?php/*  echo $row['firstname']  */?></span>
@@ -169,7 +175,7 @@ include "funtion.php";
 			<?php endif; ?>
 					</li>
 
-					<?php if($level == $minlevel ): ?>
+					<?php if(($level <= 2) ): ?>
 					<li class="sidebar-header">
 						ADMIN
 					</li>

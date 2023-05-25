@@ -198,73 +198,79 @@
 											</div>
 										<?php if ($level > 2): ?>
 										<div class="col-sm-3">
-											<div class="card">
-												<div class="card-body">
-													<div class="row">
-														<div class="col mt-0">
-															<h5 class="card-title">หัวข้องานที่ได้รับ</h5>
-														</div>
+											<a href="project_list_user.php">
+												<div class="card">
+													<div class="card-body">
+														<div class="row">
+															<div class="col mt-0">
+																<h5 class="card-title">หัวข้องานที่ได้รับ</h5>
+															</div>
 
-														<div class="col-auto">
-															<div class="stat text-primary">
-																<i class="align-middle" data-feather="layers"></i>
+															<div class="col-auto">
+																<div class="stat text-primary">
+																	<i class="align-middle" data-feather="layers"></i>
+																</div>
 															</div>
 														</div>
-													</div>
-													<h1 class="mt-1 mb-3"><?php echo $stmtprojectnumuser ?></h1>
-													<div class="mb-0">
-														<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
-														<span class="text-muted">หัวข้องานที่ได้รับมอบหมายทั้งหมด</span>
+														<h1 class="mt-1 mb-3"><?php echo $stmtprojectnumuser ?></h1>
+														<div class="mb-0">
+															<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
+															<span class="text-muted">หัวข้องานที่ได้รับมอบหมายทั้งหมด</span>
+														</div>
 													</div>
 												</div>
-											</div>
+											</a>
 										</div>
 										<?php endif ?>
 										<?php if ($level != $maxlevel): ?>
 										<div class="col-sm-3">
-											<div class="card">
-												<div class="card-body">
-													<div class="row">
-														<div class="col mt-0">
-															<h5 class="card-title">หัวข้องานที่สร้าง</h5>
-														</div>
+											<a href="project_list.php">
+												<div class="card">
+													<div class="card-body">
+														<div class="row">
+															<div class="col mt-0">
+																<h5 class="card-title">หัวข้องานที่สร้าง</h5>
+															</div>
 
-														<div class="col-auto">
-															<div class="stat text-primary">
-																<i class="align-middle" data-feather="layers"></i>
+															<div class="col-auto">
+																<div class="stat text-primary">
+																	<i class="align-middle" data-feather="layers"></i>
+																</div>
 															</div>
 														</div>
-													</div>
-													<h1 class="mt-1 mb-3"><?php echo $stmtprojectnummanager ?></h1>
-													<div class="mb-0">
-														<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
-														<span class="text-muted">หัวข้องานที่สร้างทั้งหมด</span>
+														<h1 class="mt-1 mb-3"><?php echo $stmtprojectnummanager ?></h1>
+														<div class="mb-0">
+															<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
+															<span class="text-muted">หัวข้องานที่สร้างทั้งหมด</span>
+														</div>
 													</div>
 												</div>
-											</div>
+											</a>
 										</div>
 										<?php endif ?>
 										<?php if ($level <= 2): ?>
 										<div class="col-sm-3">
-											<div class="card">
-												<div class="card-body">
-													<div class="row">
-														<div class="col mt-0">
-															<h5 class="card-title">สมาชิก</h5>
-														</div>
-	
-														<div class="col-auto">
-															<div class="stat text-primary">
-																<i class="align-middle" data-feather="users"></i>
+											<a href="user_list.php">
+												<div class="card">
+													<div class="card-body">
+														<div class="row">
+															<div class="col mt-0">
+																<h5 class="card-title">สมาชิก</h5>
+															</div>
+		
+															<div class="col-auto">
+																<div class="stat text-primary">
+																	<i class="align-middle" data-feather="users"></i>
+																</div>
 															</div>
 														</div>
+													<h1 class="mt-1 mb-3"><?php echo $stmtusernum ?></h1>
+													<div class="mb-0">
+														<span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i></span>
+														<span class="text-muted">สมาชิกทั้งหมด</span>
 													</div>
-												<h1 class="mt-1 mb-3"><?php echo $stmtusernum ?></h1>
-												<div class="mb-0">
-													<span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i></span>
-													<span class="text-muted">สมาชิกทั้งหมด</span>
 												</div>
-											</div>
+											</a>
 										</div>
 										<?php endif; ?>
 									</div>
@@ -372,7 +378,7 @@
 										<thead>
 											<tr>
 												<th class="id-col">ลำดับ</th>
-												<th class="name-col">ชื่อโปรเจค</th>
+												<th class="name-col">ชื่อหัวข้องาน</th>
 												<th class="progress-col" >ความคืบหน้า</th>
 												<th class="start-col">วันที่เริ่ม</th>
 												<th class="end-col">วันที่สิ้นสุด</th>

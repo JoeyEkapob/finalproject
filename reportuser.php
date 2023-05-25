@@ -127,7 +127,7 @@
                             <?php endif; ?>                       
                             <div class="col-lg-12 text-right justify-content-center d-flex">
                             <a class="btn btn-primary" onclick="searchreportuser('<?php echo 1 ?>')" >ค้นหา</a> 
-                                <a class="btn btn-secondary" href="" type="button" >ล้างค่า</a>
+                            &nbsp;  <a class="btn btn-secondary" href="" type="button" >ล้างค่า</a>
                             </div>
                             <div class="mb-3">
                             </div>   

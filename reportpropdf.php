@@ -268,6 +268,10 @@ if($_POST['proc'] == 'report'){
     }
     
 
+    /*     $x1 = 48;
+    $x1 = 48;
+    $x1 = 48;
+    $x1 = 48; */
 
     if (!empty($job)) {
         $namejobtype = "SELECT * FROM job_type WHERE id_jobtype = $job";
@@ -303,8 +307,7 @@ if($_POST['proc'] == 'report'){
         $pdf->Cell(48,15,iconv('UTF-8','cp874',' ประเภท : หัวข้องานทีต้องทำ '),0,1,"C");
     }
        
-    $pdf->Ln();
-
+   
     $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,0,"");
     $pdf->Cell(48,15,iconv('UTF-8','cp874','จำนวนหัวข้องาน : '.$stmtrow ),0,0,"C");
     $pdf->Cell(48,15,iconv('UTF-8','cp874','จำนวนงานทั้งหมด : '.$numtask2),0,0,"C");
@@ -878,7 +881,15 @@ else if($_POST['proc']== 'reportuserpro'){
     $sql4 = "SELECT user_id FROM task_list where user_id = '$user_id' ";
     $sql5 = "SELECT * FROM details as d  left join task_list as t ON d.task_id = t.task_id  where user_id = '$user_id'  AND send_status ='2'";
     $sql6 = "SELECT * FROM task_list  where user_id = '$user_id ' AND status_timetask = '2'";  
-    $stmttasklist = "SELECT * FROM project_list  NATURAL JOIN project  NATURAL JOIN job_type   NATURAL JOIN user  WHERE user_id = $id ";
+    $stmttasklist = "SELECT DISTINCT pl.project_id, pl.user_id, p.project_id, p.name_project, p.description, p.status_1, p.create_project, p.start_date, p.end_date, p.manager_id, p.status_2, p.id_jobtype, p.progress_project, j.id_jobtype, j.name_jobtype, j.status, u.user_id, u.role_id, u.department_id, u2.firstname, u2.lastname, u2.shortname_id, po.role_id, po.position_name, po.level, po.position_status, d.department_id, d.department_name, d.department_status
+    FROM project_list AS pl
+    LEFT JOIN project AS p ON pl.project_id = p.project_id 
+    LEFT JOIN job_type AS j ON p.id_jobtype = j.id_jobtype 
+    LEFT JOIN user AS u ON pl.user_id = u.user_id
+    LEFT JOIN user AS u2 ON p.manager_id = u2.user_id
+    LEFT JOIN position AS po ON po.role_id = u.role_id
+    LEFT JOIN department AS d ON d.department_id = u.department_id
+    where pl.user_id = $id ";
     
     if (!empty($startdate)) {
         $sql2 .= "AND start_date >= '$startdate' ";
@@ -954,8 +965,8 @@ else if($_POST['proc']== 'reportuserpro'){
 
 
     
-    $pdf->SetFont('THSarabunb','B',16); 
-    $pdf->Cell(193,8,iconv('UTF-8','cp874','รายการหัวข้องาน'),0,0,"C");
+    $pdf->SetFont('THSarabunb','B',14); 
+    $pdf->Cell(193,8,iconv('UTF-8','cp874','รายการหัวข้องานที่ได้รับมอบหมาย    '),0,0,"C");
     $pdf->Ln(10);
     $pdf->setDrawColor(100,100,100); 
     $pdf->SetFont('THSarabunb','B',14); 

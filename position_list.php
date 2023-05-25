@@ -118,7 +118,7 @@ function addposition(){
             console.log(level);
             Swal.fire({
                 
-                title: 'คุณต้องลบประเภทงานใช่หรือไม่',
+                title: 'คุณต้องยกเลิกตำเเหน่งใช่หรือไม่',
                 icon: 'error',
                 //text: "It will be deleted permanently!",
                 showCancelButton: true,

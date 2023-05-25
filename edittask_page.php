@@ -144,7 +144,7 @@ session_start();
                                         <hr>
                                         <div class="col-lg-12 text-right justify-content-center d-flex">
                                             <button class="btn btn-primary " name ="edittask" onclick="edit_task('<?php echo $taskid ?>','<?php echo $project_id?>','<?php echo $stmttaskrrow['status_timetask'] ?>');">เเก้ไข</button>
-                                            <a href="view_project.php?view_id=<?php echo $project_id?>" class="btn btn-secondary" type="button"  >กลับ</a>
+                                            &nbsp; <a href="view_project.php?view_id=<?php echo $project_id?>" class="btn btn-secondary" type="button"  >กลับ</a>
                                         </div>
                                     </div>
                                                 </div>

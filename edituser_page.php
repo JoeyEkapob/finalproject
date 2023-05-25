@@ -42,9 +42,11 @@ session_start();
 		<input type= hidden id="userid" name="userid" value="">
 		
 		<main class="content">
-				<div class="container-fluid p-0">
-					<h1 class="h3 mb-3">เเก้ไขสมาชิก</h1>
-				</div>
+			<div class="container-fluid p-0">
+                <a href="user_list.php" class="back-button">&lt;</a> 
+                <h1 class="h3 mb-3">เเก้ไขสมาชิก</h1>
+            </div>
+				
 				
 					<div class="row">
 						<div class="card">		
@@ -179,7 +181,7 @@ session_start();
 										</div>
 										<hr>
 										<div class="col-lg-12 text-right justify-content-center d-flex">
-											<button class="btn btn-primary" name="btn_up"  onclick="edituser('<?php echo $id ?>')" >เเก้ไข</button>
+											<button class="btn btn-primary" name="btn_up"  onclick="edituser('<?php echo $id ?>')" >เเก้ไข</button>  &nbsp;
 											<a class="btn btn-secondary" type="button" href="user_list.php" >กลับ</a>
 										</div>
 									</div>

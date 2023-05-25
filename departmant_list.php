@@ -115,7 +115,7 @@ function adddepartment(){
            // console.log(id_jobtype);
             Swal.fire({
                 
-                title: 'คุณต้องลบประเภทงานใช่หรือไม่',
+                title: 'คุณต้องยกเลิกฝ่ายใช่หรือไม่',
                 icon: 'error',
                 //text: "It will be deleted permanently!",
                 showCancelButton: true,

@@ -33,7 +33,15 @@
     $sql4 = "SELECT user_id FROM task_list where user_id = '$user_id' ";
     $sql5 = "SELECT * FROM details as d  left join task_list as t ON d.task_id = t.task_id  where user_id = '$user_id'  AND send_status ='2'";
     $sql6 = "SELECT * FROM task_list  where user_id = '$user_id ' AND status_timetask = '2'";  
-    $stmttasklist = "SELECT * FROM project_list  NATURAL JOIN project  NATURAL JOIN job_type   NATURAL JOIN user  WHERE user_id = $id ";
+    $stmttasklist = "SELECT DISTINCT pl.project_id, pl.user_id, p.project_id, p.name_project, p.description, p.status_1, p.create_project, p.start_date, p.end_date, p.manager_id, p.status_2, p.id_jobtype, p.progress_project, j.id_jobtype, j.name_jobtype, j.status, u.user_id, u.role_id, u.department_id, u2.firstname, u2.lastname, u2.shortname_id, po.role_id, po.position_name, po.level, po.position_status, d.department_id, d.department_name, d.department_status
+    FROM project_list AS pl
+    LEFT JOIN project AS p ON pl.project_id = p.project_id 
+    LEFT JOIN job_type AS j ON p.id_jobtype = j.id_jobtype 
+    LEFT JOIN user AS u ON pl.user_id = u.user_id
+    LEFT JOIN user AS u2 ON p.manager_id = u2.user_id
+    LEFT JOIN position AS po ON po.role_id = u.role_id
+    LEFT JOIN department AS d ON d.department_id = u.department_id
+    WHERE pl.user_id = $id ";
     
     if (!empty($startdate)) {
         $sql2 .= "AND start_date >= '$startdate' ";
@@ -231,10 +239,10 @@
 
 
                                             <td class="mannager-col">
-                                            <?php echo $row2['firstname'].' '.$row2['lastname']; ?>
+                                            <?php echo showshortname($row2['shortname_id']).' '. $row2['firstname'].' '.$row2['lastname']; ?>
                                             </td>
                                             <td class="action-col" id='action'>
-                                           <a class='btn btn-bitbucket btn-sm tooltiptext' title="ดูรายละเอียดหัวข้องาน" href='reportpro.php?projectid=<?php echo  $row2['project_id']?>&userid=<?php echo $id ?>&startdate=<?php echo  $startdate ?>&enddate=<?php echo $enddate ?>'>รายละเอียด</a>
+                                           <a class='btn btn-bitbucket btn-sm tooltiptext' title="ดูรายละเอียดหัวข้องาน" href='reportpro.php?projectid=<?php echo  $row2['project_id']?>&userid=<?php echo $id ?>&startdate=<?php echo  $startdate ?>&enddate=<?php echo $enddate ?>'><i class="bi bi-search"></i></a>
                                             </td>
                                          
                                         </tr>

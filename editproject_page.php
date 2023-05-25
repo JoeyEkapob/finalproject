@@ -69,7 +69,7 @@
                 <main class="content"> 
                 <div class="container-fluid p-0">
                 <a href="project_list.php" class="back-button">&lt;</a> 
-					<h1 class="h3 mb-3">เเก้ไขโปรเจค</h1>
+					<h1 class="h3 mb-3">เเก้ไขหัวข้องาน</h1>
 				</div>
     
                     <div class="row">
@@ -78,7 +78,7 @@
 								<div class="row">
                                     <div class="col-md-6">
 										<div class="mb-3">
-											<label for="" class="control-label">ชื่อโปรเจค</label>
+											<label for="" class="control-label">ชื่อหัวข้องาน</label>
 											<input type="text" name="proname" class="form-control"  value="<?php echo $selectprorow['name_project']; ?>">
                                         
 										</div>
@@ -189,7 +189,8 @@
                                         </div>
                                         <hr>
 										    <div class="col-lg-12 text-right justify-content-center d-flex">
-                                                <button class="btn btn-primary" id="display_selected"  onclick="editpro('<?php echo $pro_id ?>');" >เเก้ไข</button>
+                                                <button class="btn btn-primary" id="display_selected"  onclick="editpro('<?php echo $pro_id ?>');" >เเก้ไข</button>&nbsp;
+                                  
                                                 <a class="btn btn-secondary" href="project_list.php" type="button" >กลับ</a>
 										    </div>
 

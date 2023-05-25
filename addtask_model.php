@@ -67,7 +67,7 @@
                         <hr>
                         <div class="col-lg-12 text-right justify-content-center d-flex">
                             <button class="btn btn-primary " name ="addtask_btn" id="addtask_btn1" onclick="add_task();" >เพิ่มงาน</button>
-
+                            &nbsp;
                             <button class="btn btn-secondary" type="button"  data-bs-dismiss="modal" aria-label="Close">กลับ</button>
                         </div>
                     </div>

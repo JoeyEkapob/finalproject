@@ -87,15 +87,15 @@
     function showstattask($statustask){
         $stat1 = array("","รอดำเนินการ","ส่งเเล้ว","รอเเก้ไข","เลยเวลา","เสร็จสิ้น");
         if($statustask =='1'){
-            echo "<span class='badge bg-primary'>".$stat1[$statustask]."</span>";
+            return "<span class='badge bg-primary'>".$stat1[$statustask]."</span>";
         }elseif($statustask =='2'){
-            echo "<span class='badge bg-success'>".$stat1[$statustask]."</span>";
+            return "<span class='badge bg-success'>".$stat1[$statustask]."</span>";
         }elseif($statustask =='3'){
-            echo "<span class='badge bg-warning'>".$stat1[$statustask]."</span>";
+            return "<span class='badge bg-warning'>".$stat1[$statustask]."</span>";
         }elseif($statustask =='4'){
-            echo "<span class='badge bg-warning'>".$stat1[$statustask]."</span>";
+            return "<span class='badge bg-warning'>".$stat1[$statustask]."</span>";
         }elseif($statustask =='5'){
-            echo "<span class='badge bg-danger'>".$stat1[$statustask]."</span>";
+            return "<span class='badge bg-danger'>".$stat1[$statustask]."</span>";
         } 
     }
 

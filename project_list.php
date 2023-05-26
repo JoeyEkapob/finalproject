@@ -37,7 +37,7 @@
     <input type="hidden" id="task_id" name="task_id" value="">
     <input type="hidden" id="project_id" name="project_id" value="">
     <main class="content">
-    <?php if($level != 5 ): ?>
+    <?php if($level != $maxlevel ): ?>
         <div class="col-lg-12">
             <div class="card card-outline card-success">
                 <div class="container-fluid p-0">

@@ -37,7 +37,7 @@
 
 <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
     <main class="content">
-    <?php if($level != 5 ): ?>
+    <?php if($level != $maxlevel ): ?>
         <div class="col-lg-12">
             <div class="card card-outline card-success">
                 <div class="container-fluid p-0">

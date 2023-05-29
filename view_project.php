@@ -15,9 +15,6 @@
     $date = date ("Y-m-d H:i");
     $us=$_SESSION['user_login'];
     $id = $_GET['view_id'];
-    $targetDir = "img/avatars/";
-    $stat1 = array("","รอดำเนินการ","กำลังดำเนินการ","ส่งเรียบร้อยเเล้ว","รอการเเก้ไข","เลยระยะเวลาที่กำหนด","ดำเนินการเสร็จสิ้น");
-    $stat2 = array("","งานปกติ","งานด่วน","งานด่วนมาก");
     
     $select_project = $db->prepare("SELECT * FROM project  natural JOIN job_type  WHERE project_id = :id");
     $select_project->bindParam(":id", $id);
@@ -308,7 +305,7 @@
                                             <a class="btn btn-google btn-sm" title="ดูรายละเอียดการส่งงาน" href="details_page.php?task_id=<?php echo $row2['task_id']?>&project_id=<?php echo $row2['project_id']?>"><i data-feather="message-square"></i></a>   
                                             <!-- <a class="btn btn-google btn-sm" data-bs-toggle="modal" data-bs-target="#viewdetailsmodal<?php echo $row2['details_id']?>"><i data-feather="message-square"></i></a> -->
                                                 <?php } ?>
-                                            <a class="btn btn-bitbucket btn-sm"  title="ดูรายละเอียดงาน"data-bs-toggle="modal" data-bs-target="#viewtaskmodal<?php echo $row2['task_id']?>"><i data-feather="zoom-in"></i></a>
+                                            <a class="btn btn-bitbucket btn-sm viewdatatask"  title="ดูรายละเอียดงาน" data-task_id="<?php echo $row2['task_id']?>"  data-project_id="<?php echo $id ?>"><i data-feather="zoom-in"></i></a>
 
                                             <?php
                                             /* $member = array();
@@ -351,7 +348,7 @@
 
                                             </td>
                                         </tr>
-                                        <?php include "viewtask_modal.php";?>
+                                        
                                     <?php  } ?>
                                 </tbody>
                             <?php include "addtask_model.php"?>
@@ -387,6 +384,26 @@
 
             $('#datauser').html(data);
             $('#datausermodal').modal('show'); 
+        }
+    })
+  });
+});
+$(document).ready(function(){
+  $('.viewdatatask').click(function(){
+    var proc = 'viewdatatask';
+    var task_id=$(this).data("task_id");
+    var project_id=$(this).data("project_id");
+    //var sendstatus=$(this).data("status"); 
+    console.log(project_id);
+    $.ajax({
+        url:"proc2.php",
+        method:"post",
+        data:{proc:proc,task_id:task_id,project_id:project_id},
+        success:function(data){
+           // console.log(data);
+
+            $('#datatask').html(data);
+            $('#viewtaskmodal').modal('show'); 
         }
     })
   });
@@ -535,11 +552,13 @@
             });
         }
 
+        
+
    /*  function deldetails(viewpro){
         document.getElementById('addtask_btn1').style.display="none";
         document.getElementById('addtask_btn2').style.display="block";
     } */
-  
+    
         
     
     

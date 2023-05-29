@@ -242,8 +242,8 @@ function searchreportuser(page){
                             <td class="mannager-col" > ${response.result[i].numusertask}</td>
                             <td class="success-col">${response.result[i].numdela}</td>
                             <td class="mannager-col" > ${response.result[i].numdetails}</td>
-                            <td class="action-col"  id='action' ><a class='btn btn-bitbucket btn-sm' title="ดูรายละเอียดงานที่มอบหมาย" href='reportuserpro.php?userid=${response.result[i].user_id}&startdate=${startdate}&enddate=${enddate}'><i class="bi bi-search"></i></a>
-                            <a class='btn btn-danger btn-sm'  title="ดูรายละเอียดงานที่สี่งไป"  href='reportuserprocreate.php?userid=${response.result[i].user_id}&startdate=${startdate}&enddate=${enddate}'><i class="bi bi-search"></i></a>
+                            <td class="action-col"  id='action' ><a class='btn btn-bitbucket btn-sm' title="งานที่มอบหมาย" href='reportuserpro.php?userid=${response.result[i].user_id}&startdate=${startdate}&enddate=${enddate}'><i class="bi bi-search"></i></a>
+                            <a class='btn btn-danger btn-sm'  title="งานที่ได้รับมอบหมาย"  href='reportuserprocreate.php?userid=${response.result[i].user_id}&startdate=${startdate}&enddate=${enddate}'><i class="bi bi-search"></i></a>
                             </td>
                         </tr>
                         `;

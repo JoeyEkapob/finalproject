@@ -815,4 +815,129 @@ else if($_POST['proc'] == 'closetask'){
         header("location: edittask_page.php?updatetask_id=$taskid&project_id=$project_id");
     } 
 }
+else if($_POST['proc'] == 'viewdatatask'){
+
+   
+    $taskid = $_POST['task_id'];
+    $projectid = $_POST['project_id'];
+
+    $select_project = $db->prepare("SELECT * FROM project  natural JOIN job_type  WHERE project_id = :id");
+    $select_project->bindParam(":id",$projectid);
+    $select_project->execute();
+    $row = $select_project->fetch(PDO::FETCH_ASSOC);
+    extract($row);
+  
+    $manager = $db->query("SELECT *,concat(firstname,' ',lastname) as name FROM user where user_id = $manager_id");
+    $manager = $manager->fetch(PDO::FETCH_ASSOC);
+
+    $stmttasklist = "SELECT *
+    FROM task_list 
+    NATURAL JOIN user 
+    WHERE project_id = $projectid";
+    $stmttasklist = $db->query($stmttasklist);
+    $stmttasklist->execute();  
+    while ($row2 = $stmttasklist->fetch(PDO::FETCH_ASSOC)){
+
+    $outp = '';
+
+     $outp .=' <div class="col-12  d-flex">
+                         <div class="card flex-fill">  
+                             <div class="card-header">
+                                 <div class="row">
+                                    <div class="col-md-6">
+                                   
+                                                <dl>
+                                                    <dt><b class="border-bottom border-primary">ชื่องาน </b> <b>'. showstatustime($row2['status_timetask']) .'</b></dt>
+                                                    <dd>'. $row2['name_tasklist'] .'  </dd>
+
+                                                    <dt><b class="border-bottom border-primary">คำอธิบาย</b></dt>
+                                                    <dd>'. trim($row2['description_task'])  .'</dd>
+
+                                                 <dt><b class="border-bottom border-primary mb-3">ความคืบหน้า</b></dt>
+                                                    <dd>
+                                                        <div class="mb-3">     
+                                                        </div>
+                                                            <div class="progress" style="height: 20px;width:200px;" >
+                                                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:'.$row2['progress_task'] .' %" >'. $row2['progress_task'] .'</div>
+                                                            </div>
+                                                       
+                                                    </dd> 
+
+
+                                                </dl>
+                                                <dl>
+                                                        <dt>
+                                                            <b class="border-bottom border-primary">ผู้สร้างงาน</b>
+                                                        </dt>
+                                                        <dd> 
+                                                            <div class="d-flex align-items-center mt-1">';
+                                                           if($manager['avatar'] !=""){
+                                                        $outp .=' <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/'.$manager['avatar'].'" alt="Avatar" width="35"  height="35">
+                                                                <b>'. showshortname($manager['shortname_id']).' '.$manager['name'] .' </b>';
+                                                                 }else{
+                                                        $outp .=' <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
+                                                                <b>'.showshortname($manager['shortname_id']).' '.$manager['name'] .' </b>';
+                                                               }
+
+                                                    $outp .=' </div>
+                                                    </dd>
+                                                </dl> 
+                                        </div>
+
+                                            <div class="col-md-6">
+                                                <dl>
+                                                    <dt><b class="border-bottom border-primary">วันที่เริ่มเเละเวลาเริ่ม</b></dt>
+                                                    <dd>'. thai_date_and_time($row2['strat_date_task']) .'</dd>
+                                                </dl>
+                                                <dl>
+                                                    <dt><b class="border-bottom border-primary">วันสิ้นสุดเเละเวลาสิ้นสุด</b></dt>
+                                                    <dd>'. thai_date_and_time($row2['end_date_task']) .'</dd>
+                                                </dl>
+                                                <dl>
+                                                   <dt><b class="border-bottom border-primary">สถานะ</b></dt>
+                                                        <dd>'. showstattask($row2['status_task']) .'</dd>
+                                                </dl>
+                                                
+                                                <dl>
+                                                    <dt><b class="border-bottom border-primary">สมาชิก</b></dt>
+                                                    <dd>';
+                                                    if($row2['avatar'] !=""){
+                                                        $outp .='  <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/'. $row2['avatar'].'" alt="Avatar" width="35"  height="35">
+                                                        <b>'.showshortname($row2['shortname_id']).' '.$row2['firstname']." ".$row2['lastname'] .'</b>';
+                                                    }else{
+                                                        $outp .=' <img class="rounded-circle rounded me-2 mb-2" src="img/avatars/09.jpg" alt="Avatar" width="35"  height="35">
+                                                        <b>'. showshortname($row2['shortname_id']).' '.$row2['firstname']." ".$row2['lastname'] .'</b>';
+                                                     }
+                                                   
+                                            
+                                                     $outp .=' </dd>
+                                                </dl> 
+                                            </div>
+                                            
+                                            <div class="col-md-12">
+                                            <dt><b class="border-bottom border-primary">ไฟล์เเนบ</b></dt>';
+                                           
+                                               // $task_id=$row2['task_id'];
+                                                    $sql = "SELECT * FROM project NATURAL JOIN file_item_task WHERE task_id = $taskid";
+                                                    $qry = $db->query($sql);
+                                                    $qry->execute();
+                                                    while ($row2 = $qry->fetch(PDO::FETCH_ASSOC)) {  
+                                 $outp .='      <div class="row">
+                                                    <div class="col-sm">
+                                                        
+                                                    <a href="img/file/file_task/'. $row2['newname_filetask'] .' " download="'. $row2['filename_task'] .'">'. $row2['filename_task'].'</a> 
+                                                    
+                                                    </div>
+                                                </div>';
+                                            } 
+                             $outp .='  </div>
+                                </div>
+                            </div>
+                        </div>
+            </div> 	'; 
+        }
+        echo $outp;
+        exit;
+}
+
     ?>

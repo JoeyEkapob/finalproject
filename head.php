@@ -13,7 +13,7 @@
 	
 	<link rel="stylesheet" href="css/multi_select.css"> 
 	<link rel="stylesheet" href="css/csstablesiza.css"> 
-    <link rel="stylesheet" href="css/login.css">
+  <!--   <link rel="stylesheet" href="css/login.css"> -->
 	<link rel="stylesheet" href="css/modal_Profile.css">
 
 	<!-- Bootstrap 5.2  -->

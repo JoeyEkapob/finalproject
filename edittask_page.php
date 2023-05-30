@@ -13,11 +13,17 @@ session_start();
         $stmttask->execute();
         $stmttaskrrow = $stmttask->fetch(PDO::FETCH_ASSOC);
     }   
-
+if (isset($_SERVER['HTTP_REFERER'])) {
+    $previousPage = $_SERVER['HTTP_REFERER'];
+    } else {
+    $previousPage = "#";
+    }
+    
     $stmt = $db->query("SELECT * FROM details WHERE task_id =  $taskid ORDER BY details_id DESC ");
     $stmt->execute();
     $stmt2 = $stmt->fetch(PDO::FETCH_ASSOC);
     $numsenddetails = $stmt->rowCount();
+    
 ?> 
 <!DOCTYPE html>
 <html lang="en">
@@ -47,6 +53,7 @@ session_start();
     <input type="hidden" id="status_timetask" name="status_timetask" value="">
     <input type="hidden" id="file_item_task" name="file_item_task" value="">
 		<main class="content">
+        <a href="<?php echo $previousPage ?>" class="back-button">&lt;</a> 
 				<div class="container-fluid p-0">
 					<h1 class="h3 mb-3">เเก้ไขงาน</h1>
 				</div>
@@ -74,6 +81,8 @@ session_start();
                                     </div>
                                     <div class="col-md-12">
                                         <div class="mb-3">
+                                        <span class="small mb-0 mt-2" style="color:red;">*</span> 
+
                                             <label for="" class="control-label">ชื่องาน</label>
                                             <input type="text" name="taskname" class="form-control" value="<?php echo $stmttaskrrow['name_tasklist']?>">
                                         
@@ -82,6 +91,8 @@ session_start();
                                     </div>
                                     <div class="col-md-12">
                                         <div class="mb-3">
+                                        <span class="small mb-0 mt-2" style="color:red;">*</span> 
+
                                             <label for="" class="control-label">วันที่สั่ง</label>
                                             <input type="datetime-local" class="form-control" autocomplete="off" name="start_date" min="<?php echo $stmttaskrrow['strat_date_task'] ?>" value="<?php echo $stmttaskrrow['strat_date_task']?>" >
                                         
@@ -89,6 +100,8 @@ session_start();
                                     </div>
                                     <div class="col-md-12">
                                         <div class="mb-3">
+                                        <span class="small mb-0 mt-2" style="color:red;">*</span> 
+
                                             <label for="" class="control-label">วันที่สิ้นสุด</label>
                                             <input type="datetime-local" class="form-control"  autocomplete="off" name="end_date" value="<?php echo $stmttaskrrow['end_date_task']?>" >
                                         
@@ -97,6 +110,8 @@ session_start();
                                 <?php if($numsenddetails == 0){ ?>
                                     <div class="col-md-12">						
                                     <div class="mb-3">
+                                    <span class="small mb-0 mt-2" style="color:red;">*</span> 
+
                                             <label for="" class="control-label">สมาชิกทีม</label>
                                                 <select name="user" id="type" class="form-select">
                                                 <option value="<?php echo $stmttaskrrow['user_id'] ?>"><?php echo $stmttaskrrow['name'] ?></option>

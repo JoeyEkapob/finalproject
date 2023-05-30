@@ -44,7 +44,7 @@
 	$sql4 = $db->query("SELECT task_id  FROM task_list as t left join project as p on t.project_id = p.project_id WHERE  1=1 $where ");
     $numusertask = $sql4->rowCount();  	
 
-	$sql5 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_task != 5 AND progress_task != 100 $where  ");
+	$sql5 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_task != 5 AND progress_task != 100 AND status_task2 != 1  $where  ");
 	$numtaskonpro = $sql5->rowCount(); 
 
 	$stmttaskpnum = "SELECT COUNT(task_id) FROM task_list as t left join project as p on t.project_id = p.project_id  where p.status_1 !=3 AND t.progress_task != 100 AND t.status_task != 5 AND status_timetask = 2  AND status_task2 != 1 $where ";
@@ -129,6 +129,7 @@
 									<?php endif ?>
 									<?php if ($level > 2): ?>
 									<div class="col-sm-3">
+										<a href="task_list.php?statustask=3">
 											<div class="card">
 												<div class="card-body">
 													<div class="row">
@@ -149,8 +150,10 @@
 													</div>
 												</div>
 											</div>
+											</a>
 										</div>
 										<div class="col-sm-3">
+											<a href="task_list.php?statustask=2">
 												<div class="card">
 													<div class="card-body">
 														<div class="row">
@@ -171,30 +174,33 @@
 														</div>
 													</div>
 												</div>
-											</div>
+											</a>
+										</div>
 											
 											<?php endif ?>
 											<div class="col-sm-3">
-												<div class="card">
-													<div class="card-body">
-														<div class="row">
-															<div class="col mt-0">
-																<h5 class="card-title">งาน</h5>
-															</div>
+												<a href="task_list.php?statustask=1">
+													<div class="card">
+														<div class="card-body">
+															<div class="row">
+																<div class="col mt-0">
+																	<h5 class="card-title">งาน</h5>
+																</div>
 
-															<div class="col-auto">
-																<div class="stat text-primary">
-																	<i class="align-middle" data-feather="list"></i>
+																<div class="col-auto">
+																	<div class="stat text-primary">
+																		<i class="align-middle" data-feather="list"></i>
+																	</div>
 																</div>
 															</div>
-														</div>
-														<h1 class="mt-1 mb-3"><?php echo $numusertask ?></h1>
-														<div class="mb-0">
-															<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
-															<span class="text-muted">งานทั้งหมด</span>
+															<h1 class="mt-1 mb-3"><?php echo $numusertask ?></h1>
+															<div class="mb-0">
+																<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>  </span>
+																<span class="text-muted">งานทั้งหมด</span>
+															</div>
 														</div>
 													</div>
-												</div>
+												</a>
 											</div>
 										<?php if ($level > 2): ?>
 										<div class="col-sm-3">

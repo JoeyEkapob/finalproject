@@ -52,35 +52,39 @@
 								<div class="row">
                                     <div class="col-md-6">
 										<div class="mb-3">
+                                            <span class="small mb-0 mt-2" style="color:red;">*</span> 
 											<label for="" class="control-label">หัวข้องาน</label>
 											<input type="text" name="proname" id="proname" class="form-control"  >
 										</div>
                                     </div>
                                  
                                     <div class="col-md-6">
-                                    <div class="mb-3">
-											<label for="" class="control-label" >ประเภทงาน</label>
-												<select name="job" id="type" class="form-select"  >
-													<?php
-													$stmt = $db->query("SELECT * FROM job_type WHERE status = 1");
-													$stmt->execute();
-													$result = $stmt->fetchAll();
-													foreach($result as $row) {
-													?>
-												 <option value="<?= $row['id_jobtype'];?>"><?= $row['name_jobtype'];?></option>
-                									<?php } ?>
-												</select>
-										</div> 		
+                                        <div class="mb-3">
+                                            <span class="small mb-0 mt-2" style="color:red;">*</span> 
+                                                <label for="" class="control-label" >ประเภทงาน</label>
+                                                    <select name="job" id="type" class="form-select"  >
+                                                        <?php
+                                                        $stmt = $db->query("SELECT * FROM job_type WHERE status = 1");
+                                                        $stmt->execute();
+                                                        $result = $stmt->fetchAll();
+                                                        foreach($result as $row) {
+                                                        ?>
+                                                    <option value="<?= $row['id_jobtype'];?>"><?= $row['name_jobtype'];?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                            </div> 		
                                     </div>
                                  
                                     <div class="col-md-6">
 										<div class="mb-3">
+                                            <span class="small mb-0 mt-2" style="color:red;">*</span> 
 											<label for="" class="control-label">วันที่สั่ง</label>
                                             <input type="date" class="form-control " autocomplete="off" name="start_date" id="start_date"  min="<?php echo date('Y-m-d'); ?>" value="<?php echo $date ?>"  >
 										</div>
                                     </div>
                                     <div class="col-md-6">
 										<div class="mb-3">
+                                        <span class="small mb-0 mt-2" style="color:red;">*</span> 
 											<label for="" class="control-label">วันที่เสร็จ</label>
                                             <input type="date" class="form-control " autocomplete="off" name="end_date" id="end_date" value=""  >
 										</div>
@@ -89,6 +93,7 @@
                                     
                                     <div class="col-md-6">
 										<div class="mb-4">
+                                        <span class="small mb-0 mt-2" style="color:red;">*</span> 
 											<label for="" class="control-label">ผู้รับมอบหมาย</label>
                                             <input type="text" class="form-control" name="users_id"  id="user_id" data-access_multi_select="true" placeholder="กรุณาใส่สมาชิก">
                                             
@@ -98,6 +103,7 @@
 
                                     <div class="col-md-6">   
                                         <div class="mb-4">
+                                        <span class="small mb-0 mt-2" style="color:red;">*</span> 
 											<label for="" class="control-labe">สถานะงาน</label>
 												 <select  name="status2"  id="status2" class="form-select"  >
                                                  

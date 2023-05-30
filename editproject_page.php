@@ -78,6 +78,8 @@
 								<div class="row">
                                     <div class="col-md-6">
 										<div class="mb-3">
+                                        <span class="small mb-0 mt-2" style="color:red;">*</span> 
+
 											<label for="" class="control-label">ชื่อหัวข้องาน</label>
 											<input type="text" name="proname" class="form-control"  value="<?php echo $selectprorow['name_project']; ?>">
                                         
@@ -86,6 +88,8 @@
                                  
                                     <div class="col-md-6">
                                     <div class="mb-3">
+                                    <span class="small mb-0 mt-2" style="color:red;">*</span> 
+
 											<label for="" class="control-label" >ประเภทงาน</label>
 												<select name="job" id="type" class="form-control"  >
                                                 <option value="<?php  echo $selectprorow['id_jobtype']; ?>" ><?php  echo $selectprorow['name_jobtype']; ?></option>
@@ -104,12 +108,16 @@
                                 
                                     <div class="col-md-6">
 										<div class="mb-3">
+                                        <span class="small mb-0 mt-2" style="color:red;">*</span> 
+
 											<label for="" class="control-label">วันที่สั่ง</label>
                                             <input type="date" class="form-control form-control" autocomplete="off" name="start_date" value="<?php echo $selectprorow['start_date_pro']; ?>"  >
 										</div>
                                     </div>
                                     <div class="col-md-6">
 										<div class="mb-3">
+                                        <span class="small mb-0 mt-2" style="color:red;">*</span> 
+
 											<label for="" class="control-label">วันที่เสร็จ</label>
                                             <input type="date" class="form-control form-control" autocomplete="off" name="end_date" value="<?php echo $selectprorow['end_date_pro']; ?>"  >
 										</div>
@@ -117,6 +125,8 @@
 									
                                     <div class="col-md-6">
 										<div class="mb-4">
+                                        <span class="small mb-0 mt-2" style="color:red;">*</span> 
+
 											<label for="" class="control-label">สมาชิกทีมโครงการ</label>
                                             <input type="text" class="form-control" name="users_id" id="user_id"  data-access_multi_select="true"  placeholder="กรุณาใส่สมาชิก">
                                                 
@@ -126,6 +136,8 @@
 
                                     <div class="col-md-6">   
                                         <div class="mb-4">
+                                        <span class="small mb-0 mt-2" style="color:red;">*</span> 
+
 											<label for="" class="control-label">ความเร่งของงาน</label>
 												 <select  name="status2" class="form-select"  >
                                                  <option value="<?php  echo $selectprorow['status_2']; ?>" ><?php  showstatpro2($selectprorow['status_2']) ?></option>	

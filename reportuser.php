@@ -84,7 +84,7 @@
                         <div class="col-md-3">
                         </div>     
                                     
-                        <?php if($level < $maxlevel): ?>  
+                        <?php if($level <= $maxlevel): ?>  
                             <div class="col-md-3">
                                 <div class="mb-3">             
                                     <label for="control-label" style="font-size: 14px;">ตำเเหน่ง</label>
@@ -92,7 +92,7 @@
                                             <select name="role" id="role" class="form-select"  >
                                             <option value="">ทั้งหมด</option>
                                                     <?php
-                                                    $stmt = $db->query("SELECT * FROM position as p  WHERE position_status = 1 AND level >= $level ");
+                                                    $stmt = $db->query("SELECT * FROM position as p  WHERE position_status = 1 AND level > $level OR role_id = $role ");
                                                     $stmt->execute();
                                                     $result = $stmt->fetchAll();
                                                     foreach($result as $row) {
@@ -103,16 +103,20 @@
                                         </div>
                                 </div>
                             </div>
-                            <?php endif; ?>  
-                            <?php if($level <= 2): ?>  
+                            
                             <div class="col-md-3"> 
                                            
                                         <div class="mb-3">
                                             <label for="" class="control-label" >ฝ่าย</label>
                                             <div class="input-group input-group-sm mb-2">
                                                 <select name="department" id="department" class="form-select" >
+                                                <option value="">ทั้งหมด</option>
+
                                                     <?php
-                                                    $stmt = $db->query("SELECT * FROM department WHERE department_status = 1 ");
+                                                    if($level > 2){
+                                                        $where = " AND department_id = $department_id  ";
+                                                    }
+                                                    $stmt = $db->query("SELECT * FROM department WHERE department_status = 1 AND department_id != 0  $where   ");
                                                     $stmt->execute();
                                                     $result = $stmt->fetchAll();
                                                     foreach($result as $row) {

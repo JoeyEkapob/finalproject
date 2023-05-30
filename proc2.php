@@ -43,12 +43,12 @@ if($_POST['proc'] == 'searchreport'){
     $jobtype = $_POST["jobtype"];
   /*   echo  $jobtype;
     exit;  */
-    if(isset($_POST["department"])){
-        $department = $_POST["department"];
-    }
-    if(isset($_POST["role"])){
-        $role = $_POST["role"];
-    }
+        if(!empty($_POST["role"])){
+        $role2 = $_POST["role"];
+        }
+        if(!empty($_POST["department"])){
+            $department2 = $_POST["department"];
+        }
    
     /*     echo $role;
     exit; */
@@ -61,13 +61,13 @@ if($_POST['proc'] == 'searchreport'){
         LEFT JOIN department as d ON d.department_id  = u.department_id
         WHERE 1=1 ";
         if ($level > 2) {
-            $sql .= "AND $level <= po.level AND d.department_id = $department "; 
+            $sql .= "AND ( d.department_id = $department OR  d.department_id = 0 ) AND ($level < po.level OR u.user_id = $user_id ) "; 
         } 
-        if(!empty($department)){
-            $sql .= "AND d.department_id = $department ";
+        if(!empty($department2)){
+            $sql .= "AND d.department_id = $department2 ";
         }
-        if(!empty($role)){
-            $sql .= "AND po.role_id = $role ";
+        if(!empty($role2)){
+            $sql .= "AND po.role_id = $role2 ";
         }
         
         if (!empty($nameproject)) {
@@ -87,7 +87,7 @@ if($_POST['proc'] == 'searchreport'){
         }
         if (!empty($status2)) {
             $sql .= "AND status_2 = '$status2' ";
-        }
+        } 
 
     }elseif($jobtype == 2){
         /* SELECT pl.* ,p.* ,j.* ,u.*,po.*,d.* ,u2.firstname as firstname2  ,u2.lastname as lastname2 ,u2.shortname_id as name  FROM project_list as pl
@@ -109,13 +109,13 @@ if($_POST['proc'] == 'searchreport'){
         LEFT JOIN department AS d ON d.department_id = u.department_id
         where 1=1 ";
         if ($level > 2) {
-            $sql .= "AND $level <= po.level AND d.department_id = $department   ";
+            $sql .= "AND ( d.department_id = $department OR  d.department_id = 0 ) AND ($level < po.level OR u.user_id = $user_id ) "; 
         } 
-        if(!empty($department)){
-            $sql .= "AND d.department_id = $department ";
+        if(!empty($department2)){
+            $sql .= "AND d.department_id = $department2 ";
         }
-        if(!empty($role)){
-            $sql .= "AND po.role_id = $role ";
+        if(!empty($role2)){
+            $sql .= "AND po.role_id = $role2 ";
         }
         if (!empty($nameproject)) {
             $sql .= "AND name_project LIKE '%$nameproject%' ";
@@ -195,37 +195,35 @@ else if($_POST['proc'] == 'searchreportuser'){
     $startdate =  $_POST["startdate"];
     $enddate = $_POST["enddate"];
 
-    if(isset($_POST["role"])){
-    $role = $_POST["role"];
+    if(!empty($_POST["role"])){
+    $role2 = $_POST["role"];
     }
-    if(isset($_POST["department"])){
-        $department = $_POST["department"];
+    if(!empty($_POST["department"])){
+        $department2 = $_POST["department"];
     }
     $sql = "SELECT * FROM user as u
     LEFT JOIN position as po ON po.role_id = u.role_id 
     LEFT JOIN department as d ON d.department_id = u.department_id 
     WHERE 1=1 ";
      if ($level > 2) {
-        $sql .= "AND  $level <= po.level  AND d.department_id = $department ";
+        $sql .= " AND ( d.department_id = $department OR  d.department_id = 0 ) AND ($level < po.level OR u.user_id = $user_id )  ";
         //$sql .= "AND u.user_id = $user_id  OR $level < po.level  AND d.department_id = $department ";
     } 
-    if($level == $maxlevel){
-        $sql .= " AND u.user_id = $user_id ";
+
+   if(!empty($department2)){
+        $sql .= " AND d.department_id = $department2 ";
     }
-    if(!empty($department)){
-        $sql .= " AND d.department_id = $department ";
-    }
-    if (!empty($firstname)) {
+     if (!empty($firstname)) {
         $sql .= " AND firstname LIKE '%$firstname%' ";
     }
     if (!empty($lastname)) {
         $sql .= " AND lastname LIKE '%$lastname%' ";
-    }
-     if (!empty($role)) {
-        $sql .= " AND u.role_id = '$role' ";
     } 
- /*  print_r($sql);
-   exit; */
+     if (!empty($role2)) {
+        $sql .= " AND u.role_id = '$role2' ";
+    }  
+    /*    print_r($sql);
+   exit;  */ 
     $stmt = $db->query($sql);
     $stmt->execute();
     $numuser= $stmt->rowCount();
@@ -328,7 +326,7 @@ else if($_POST['proc'] == 'closeproject'){
         $_SESSION['error'] = "มีบางอย่างผิดพลาด";
         header("location: editproject_page.php?update_id=$project_id");
     } 
-}
+    }
  else if($_POST['proc'] == 'openproject'){ 
 
     

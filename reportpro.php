@@ -159,6 +159,7 @@ exit; */
                                     <thead>
                                         <tr>
                                             <th class="id-col">ลำดับที่</th>
+                                            <th class="id-col">รหัสงาน</th>
                                             <th class="namepro-col">ชื่องาน</th>
     
                                             <th class=" namepro-col">วันที่เรื่ม - วันที่สิ้นสุด</th>
@@ -188,6 +189,9 @@ exit; */
                                                 $numchkdetails = $stmt2->rowCount();
                                                     ?>
                                         <tr>
+                                            <td class="id-col">
+                                            <?php echo $i++ ?>
+                                            </td>
                                             <td class="id-col">
                                             <?php echo $row2['task_id']  ?>
                                             </td>

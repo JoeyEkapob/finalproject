@@ -9,7 +9,10 @@
                 <div class="modal-body">
                     <div class="col-md-12">
                         <div class="mb-3">
+                            
                             <input type="hidden" name="pro_id" value =<?php echo $id ?> >
+                            <span class="small mb-0 mt-2" style="color:red;">*</span> 
+
                             <label for="" class="control-label">ชื่องาน</label>
                             <input type="text" name="taskname" class="form-control">
                           
@@ -18,6 +21,7 @@
                    
                     <div class="col-md-12">
                         <div class="mb-3">
+                        <span class="small mb-0 mt-2" style="color:red;">*</span> 
                             <label for="" class="control-label">วันที่สั่ง</label>
                             <input type="datetime-local" class="form-control " autocomplete="off" name="start_date" min="<?php echo $date ?>" value="<?php echo $date ?>">
                     
@@ -26,6 +30,8 @@
 
                     <div class="col-md-12">
                         <div class="mb-3">
+                        <span class="small mb-0 mt-2" style="color:red;">*</span> 
+
                             <label for="" class="control-label">วันที่เสร็จ</label>
                             <input type="datetime-local" class="form-control " autocomplete="off" name="end_date" value="" >
                         
@@ -33,6 +39,8 @@
                     </div>
                     <div class="col-md-12">						
                     <div class="mb-3">
+                    <span class="small mb-0 mt-2" style="color:red;">*</span> 
+
                             <label for="" class="control-label">สมาชิกทีม</label>
                                 <select name="user" id="type" class="form-select">
                                 <?php

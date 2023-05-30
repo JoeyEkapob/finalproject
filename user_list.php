@@ -36,6 +36,7 @@
         <input type=hidden id="user_id" name="user_id" value="">
 
         <main class="content">
+        <?php if($level == 1)  {?>
             <div class="col-lg-12">
                 <div class="card card-outline card-success">
                     <div class="container-fluid p-0">
@@ -47,6 +48,7 @@
                     </div>
                 </div>
             </div>
+            <?php } ?>
                                 <div class="card ">
                                     <div class="card-header">
                                         <h5 class="card-title mb-0">สมาชิก</h5>
@@ -68,7 +70,7 @@
                                             <?php
                                                 $i = 1;
                                                 //$type = array('',"Admin","คณบดี","รองคณบดีฝ่ายวิชาการ","ผู้ชวยรองรองคณบดีฝ่ายวิชาการ","หัวหน้าหน่วย","หัวสาขา","เจ้าหน้าที่");
-                                                $sql = "SELECT *,concat(firstname,' ',lastname) as name FROM user natural join position natural join department WHERE level >= $level AND status_user2 = 1 order by concat(firstname,' ',lastname) asc ";
+                                                $sql = "SELECT *,concat(firstname,' ',lastname) as name FROM user natural join position natural join department WHERE level >= $level AND status_user2 = 1 order by user_id asc ";
                                                 $qry = $db->query($sql);
                                                 $qry->execute();
                                                 
@@ -88,14 +90,20 @@
                                                 <td class="text-center"><?php echo showstatuser($row['status_user'])?></td>
                                                 <td class="text-center">
 
+                                                <?php if($level == 1)  {?>
                                                 <a  class="resetbtn" title="รีเซ็ตรหัสผ่าน" type="button"  data-user_id ="<?php echo $row['user_id']?>"> <h3> <i data-feather="key"></i> </h3> </a>
-                                
+                                                <?php } ?>
                                                 <a class="btn btn-bitbucket btn-sm viewuserdata"  title="ดูรายละเอียด" data-userid="<?php echo $row['user_id']?>" ><i data-feather="zoom-in"></i></a> 
                                                     <!--  <a class="btn btn-bitbucket btn-sm view_data"  id="<?php echo $row['user_id']?>" ><i data-feather="zoom-in"></i></a>        -->                                             
-                                                    <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลสมาชิก" href="edituser_page.php?update_id=<?php echo $row['user_id']?>"><i  data-feather="edit"></i></a>
-                                                    <?php if($meproject == 0 )  {?>
+                                                   
+                                                    <?php if($level == 1)  {?>
+                                                   
+                                                 <a class="btn btn-warning btn-sm" title="เเก้ไขข้อมูลสมาชิก" href="edituser_page.php?update_id=<?php echo $row['user_id']?>"><i  data-feather="edit"></i></a>
+                                                 <?php } ?>
+                                                   
+                                                    <?php if($meproject == 0 AND $level == 1)  {?>
                                                         <a class="btn btn-danger btn-sm deluserbtn" title="ลบข้อมูลสมาชิก" data-user_id ="<?php echo $row['user_id']?>"><i data-feather="trash-2"></i></a>
-                                                    <?php   } else {?>
+                                                    <?php   } else if ( $level == 1 ){?>
                                                         <a class="btn btn-danger btn-sm deluserbtn disabled" title="ลบข้อมูลสมาชิก" data-user_id ="<?php echo $row['user_id']?>"><i data-feather="trash-2"></i></a>
                                                         <?php } ?>
                                                 </td>

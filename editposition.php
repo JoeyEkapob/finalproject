@@ -43,7 +43,7 @@ session_start();
 		<main class="content">
                 <div class="container-fluid p-0">
                     <a href="position_list.php" class="back-button">&lt;</a> 
-                    <h1 class="h3 mb-3">เเก้ไขชื่อฝ่ายงาน</h1>
+                    <h1 class="h3 mb-3">เเก้ไขตำเเหน่ง</h1>
                 </div>
            
 					<div class="row">

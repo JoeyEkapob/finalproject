@@ -6,6 +6,11 @@
         header('location:sign-in.php');
         
     }
+    if (isset($_SERVER['HTTP_REFERER'])) {
+        $previousPage = $_SERVER['HTTP_REFERER'];
+      } else {
+        $previousPage = "#";
+      }
     $task_id = $_GET['task_id'];
     $project_id = $_GET['project_id'];
     $user_id = $_SESSION['user_login'];
@@ -55,7 +60,8 @@
             </div>
         </div> -->
         <?php endif; ?>
-        <a href="view_project.php?view_id=<?php echo $project_id; ?>" class="back-button">&lt;</a> 
+        <a href="<?php echo $previousPage ?>" class="back-button">&lt;</a> 
+
             <div class="row">
                 <div class="col-12 col-lg-6">        
                     <div class="card flex-fill">

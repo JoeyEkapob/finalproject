@@ -8,7 +8,7 @@
     }
 
     $us=$_SESSION['user_login'];
-
+    $status = $_GET['statustask'];
     
 ?>
 <!DOCTYPE html>
@@ -38,7 +38,7 @@
 <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
     <main class="content">
     <?php if($level != 5 ): ?>
-         <div class="col-lg-12">
+     <!--     <div class="col-lg-12">
             <div class="card card-outline card-success">
                 <div class="container-fluid p-0">
                     <div class="card-header">
@@ -52,7 +52,7 @@
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>  -->
         <?php endif; ?>
         <div class="row">
                     <div class="col-lg-12 ">
@@ -79,12 +79,23 @@
                                 <tbody>
                                 <?php
                                             $i = 1;
-                                            
+                                            $where ='';
+                                            if($level > 2){
+                                            $where = " AND t.user_id  = $us";
+                                            }
+                                            if($status == 1){
+                                               $where .="";
+                                            }else if($status == 2){
+                                                $where .= " AND p.status_1 != 3 AND p.progress_project  != 100 AND t.status_task != 5 AND t.status_task2 != 1 AND t.progress_task != 100 ";
+                                            }else if($status == 3){
+                                                $where .= " AND p.status_1 != 3 AND p.progress_project  != 100 AND t.status_task != 5 AND t.status_task2 != 1 AND t.progress_task != 100 AND t.status_timetask = 2 ";
+                                                    
+                                            }
                                             $stmttasklist = "SELECT *
                                             FROM task_list as t 
                                             left join user as u ON t.user_id = u.user_id 
                                             left join project as p ON t.project_id = p.project_id 
-                                            WHERE t.user_id  = $us";
+                                            WHERE 1=1 $where ";
                                             $stmttasklist = $db->query($stmttasklist);
                                             $stmttasklist->execute();  
                                             while ($row2 = $stmttasklist->fetch(PDO::FETCH_ASSOC)){
@@ -138,7 +149,7 @@
 
                                             <td class="action-col">
                                 		                                  
-                                            <?php  if ($row2['user_id'] == $us   || $level <= 2   || $manager_id == $us ) { ?>
+                                            <?php  if ($row2['user_id'] == $us   || $level <= 2   || $row2['manager_id'] == $us ) { ?>
                                             <a class="btn btn-google btn-sm" title="ดูรายละเอียดการส่งงาน" href="details_page.php?task_id=<?php echo $row2['task_id']?>&project_id=<?php echo $row2['project_id']?>"><i data-feather="message-square"></i></a>   
                                             <!-- <a class="btn btn-google btn-sm" data-bs-toggle="modal" data-bs-target="#viewdetailsmodal<?php echo $row2['details_id']?>"><i data-feather="message-square"></i></a> -->
                                                 <?php } ?>
@@ -155,7 +166,7 @@
                                                     /*  print_r ($member) ; */
                                                      
                                                 // if (in_array($us,$member) || ( $level <= 2 || $manager_id == $us ) AND $row2['status_task'] != 3 AND $row2['progress_task'] != 100  ) {
-                                                if ($row2['user_id'] == $us   || $level <= 2   || $manager_id == $us   AND $row2['status_task'] != 5 AND $row2['progress_task'] != 100  AND $row2['status_1'] != 3 AND $row2['status_task'] != 2 AND $row2['status_task2'] != 1 ) {
+                                                if ($row2['user_id'] == $us   || $level <= 2   || $row2['manager_id'] == $us   AND $row2['status_task'] != 5 AND $row2['progress_task'] != 100  AND $row2['status_1'] != 3 AND $row2['status_task'] != 2 AND $row2['status_task2'] != 1 ) {
                                                     echo '<a href="send_task.php?task_id=' . $row2['task_id'] . '&project_id=' .   $row2['project_id'] .'&user_id='. $us .'&statustimetask='. $row2['status_timetask'].'" class="btn btn-success btn-sm" title="ส่งงาน"><i data-feather="share"></i></a>';  
                                                 }
                                              
@@ -171,7 +182,7 @@
                                                     echo '<a class="btn btn-warning btn-sm" title="เเก้ไขงาน" href="edittask_page.php?updatetask_id='.$row2['task_id'].'&project_id='.$row2['project_id'].'"><i data-feather="edit"></i></a>';
                                                     echo ' ';
                                                 }if($numsenddetails == 0 AND $row2['manager_id'] == $us || $level <= 2 AND$row2['status_1'] != 3 AND $row2['status_task2'] != 1){
-                                                    echo '<button class="btn btn-danger btn-sm delete-btn" title="ลบงาน" data-project_id="'.$row2['project_id'].'" data-task_id="'.$row2['task_id'].'"><i data-feather="trash-2"></i></button>';
+                                                    echo '<button class="btn btn-danger btn-sm delete-btn" title="ลบงาน" data-project_id="'.$row2['project_id'].'" data-task_id="'.$row2['task_id'].'" data-status="'.$status.'"><i data-feather="trash-2"></i></button>';
                                                 }   
                                                 ?>
                                                 <?php if ($row2['manager_id']== $us || $level <= 2) {?>
@@ -185,7 +196,7 @@
 
                                             </td>
                                         </tr>
-                                        <?php include "viewtask_modal.php";?>
+                                    
                                     <?php  } ?>
                                 </tbody>
                             
@@ -215,7 +226,7 @@ $(document).ready(function(){
   $('.viewdatatask').click(function(){
     var proc = 'viewdatatask';
     var task_id=$(this).data("task_id");
-    var project_id=$(this).data("project_id");
+    var status=$(this).data("status");
     //var sendstatus=$(this).data("status"); 
     console.log(project_id);
     $.ajax({
@@ -231,5 +242,55 @@ $(document).ready(function(){
     })
   });
 });
+$(".delete-btn").click(function(e) {
+            var project_id = $(this).data('project_id');
+            var task_id  = $(this).data('task_id');
+            var task_id  = $(this).data('task_id');
+           // console.log('dfgdfgdfgdf');
+
+            e.preventDefault();
+            deletetaskConfirm(project_id,task_id);
+        })
+
+        function deletetaskConfirm(project_id,task_id) {
+            Swal.fire({
+                title: 'คุณต้องการลบงานใช่หรือไม่',
+                icon: 'error',
+                //text: "It will be deleted permanently!",
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'ลบ!',
+                cancelButtonText: 'กลับ',
+                showLoaderOnConfirm: true,
+               
+                preConfirm: function() {
+                    return new Promise(function(resolve) {
+                        $.ajax({
+                                url: 'proc.php',
+                                type: 'post',
+                                data: 'proc=' + 'deltask' + '&project_id=' + project_id + '&task_id=' + task_id ,
+                            })
+                            .done(function() {
+                                Swal.fire({
+                                    title: 'เรียบร้อย',
+                                    text: 'ลบงานเรียบร้อยเเล้ว!',
+                                    icon: 'success',
+                                    confirmButtonText: 'ตกลง!',
+
+                                }).then(() => {
+                                    document.location.href = 'task_list.php?statustask='+ status;
+                                    
+                                    
+                                })
+                            })
+                            .fail(function() {
+                                Swal.fire('Oops...', 'Something went wrong with ajax !', 'error')
+                                window.location.reload();
+                            });
+                    });
+                },
+            });
+        }
 </script>
 <?php include "footer.php"?>

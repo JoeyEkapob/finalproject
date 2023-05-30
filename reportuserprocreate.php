@@ -171,6 +171,9 @@
                                     <thead>
                                     <tr>
                                             <th class="id-col">
+                                                ลำดับที่
+                                            </th>
+                                            <th class="id-col">
                                                 รหัสหัวข้องาน
                                             </th>
                                             <th  class="namepro-col" >
@@ -216,6 +219,9 @@
                                                  $comptask2 = $comptask->rowCount(); 
                                                     ?>
                                         <tr>
+                                            <td class="id-col">
+                                            <?php echo $i++ ?>
+                                            </td>
                                             <td class="id-col">
                                             <?php echo $row2['project_id']; ?>
                                             </td>

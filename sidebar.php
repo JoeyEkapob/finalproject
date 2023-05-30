@@ -19,7 +19,7 @@ include "funtion.php";
 			$where ='';
 			
 			if($level > 2){
-				$where  = "where d.department_id = 0 AND d.department_id =  ".$department_id." AND status_user2 = 1 AND status_user = 1 ";
+				$where  = "where (d.department_id = 0 OR d.department_id =  ".$department_id.") AND status_user2 = 1 AND status_user = 1 ";
 			}
 
 			$sql2 = "SELECT MAX(level) as maxlevel , MIN(level) as minlevel FROM user as u 
@@ -30,17 +30,20 @@ include "funtion.php";
 			$row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
 			$maxlevel = $row2['maxlevel'];
 			$minlevel = $row2['minlevel'];
-
-		 	/*  echo $maxlevel ; */  
+/* 
+		 	  echo $level .' ' .$maxlevel ;    */
 			
 ?>
 <div class="wrapper">
 		<nav id="sidebar" class="sidebar js-sidebar">
 			<div class="sidebar-content js-simplebar">
 				<a class="sidebar-brand" href="index.php">
-				<?php if($level <= 2): ?>
+				<?php if($level == 1): ?>
+					
 				<span class="align-middle">Admin <?php /* echo $row['firstname']  */?></span>
-				<?php else: ?>
+				<?php endif; ?>
+
+				<?php if($level > 1): ?>
 					<span class="align-middle">user <?php/*  echo $row['firstname']  */?></span>
 					<?php endif; ?>
 				</a>
@@ -58,35 +61,11 @@ include "funtion.php";
 					</li>
 
 					<?php if($level != $maxlevel): ?>
-					<!-- <li class="sidebar-item">
-						<a class="sidebar-link" href="">
-              				<i class="align-middle" data-feather="check-square"></i> 
-			  			<span class="align-middle">+เพิ่มโปรเจค</span>
-            			</a>
-						
-					</li> -->
-					<li class="sidebar-item">
-						<a data-bs-target="#maps" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
-							<i class="align-middle" data-feather="layers"></i> 
-							 <span class="align-middle">
-								เพิ่มหัวข้องาน
-							</span>
-						</a>
-						<ul id="maps" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
-							<li class="sidebar-item">
-								<a class="sidebar-link" href="addproject_page.php">
-								&nbsp;&nbsp;&nbsp;--> หัวข้องาน
-								</a>
-							</li>
-						</ul>
-						<!-- ul id="maps" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
-							<li class="sidebar-item">
-								<a class="sidebar-link" href="addtask_page.php">
-								&nbsp;&nbsp;&nbsp; 
-								</a>
-							</li>
-						</ul> -->
-					</li>
+						<li class="sidebar-item">
+						<a class="sidebar-link" href="addproject_page.php">
+              <i class="align-middle" data-feather="layers"></i> <span class="align-middle">เพิ่มหัวข้องาน</span>
+            </a>
+
 					<?php endif; ?>
 					<li class="sidebar-item">
 						<a data-bs-target="#project_list" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
@@ -112,40 +91,7 @@ include "funtion.php";
 							</li>
 						</ul>
 					</li>
-					<!-- <li class="sidebar-item">
-						<a class="sidebar-link" href="project_list.php">
-              <i class="align-middle" data-feather="list"></i> <span class="align-middle">รายการโปรเจค</span>
-            </a>
-					</li> -->
-					<!-- <li class="sidebar-item">
-						<a data-bs-target="#task_list" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
-							<i class="align-middle" data-feather="list"></i> 
-							 <span class="align-middle">
-							 รายการงาน
-							</span>
-						</a>
-						<?php if($level != 5): ?>
-						<ul id="task_list" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
-							<li class="sidebar-item">
-								<a class="sidebar-link" href="task_list.php">
-								&nbsp;&nbsp;&nbsp; หัวงานที่สร้าง 
-								</a>
-							</li>
-						</ul>
-						<?php endif; ?>
-						<ul id="task_list" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
-							<li class="sidebar-item">
-								<a class="sidebar-link" href="task_list_user.php">
-								&nbsp;&nbsp;&nbsp; หัวงานที่ถูกมอบหมาย
-								</a>
-							</li>
-						</ul>
-					</li> -->
-					<!-- <li class="sidebar-item">
-						<a class="sidebar-link" href="task_list.php">
-              <i class="align-middle" data-feather="list"></i> <span class="align-middle">รายการงาน</span>
-            </a>
-					</li> -->
+				
 			<li class="sidebar-item">
 				<a data-bs-target="#report" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
 					<i class="align-middle" data-feather="clipboard"></i> 
@@ -179,7 +125,7 @@ include "funtion.php";
 			<?php endif; ?>
 					</li>
 
-					<?php if(($level <= 2) ): ?>
+					<?php if(($level == 1) ): ?>
 					<li class="sidebar-header">
 						ADMIN
 					</li>
@@ -195,13 +141,8 @@ include "funtion.php";
 							<a class="sidebar-link"  href="jobtype_list.php">
 				<i class="align-middle" data-feather="layers"></i> <span class="align-middle">ประเภทงาน</span>
 							</a>
-						<!-- <ul id="่jobtype" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
-							<li class="sidebar-item">
-								<a class="sidebar-link" href="addjobtype.php">
-								&nbsp;&nbsp;&nbsp; เพิ่มประเภทงาน 
-								</a>
-							</li>
-						</ul> -->
+					<?php endif; ?>
+					<?php if($level == 1): ?>
 						<li class="sidebar-item">
 							<a class="sidebar-link"  href="departmant_list.php">
 				<i class="align-middle" data-feather="layers"></i> <span class="align-middle">รายการฝ่าย</span>
@@ -211,15 +152,11 @@ include "funtion.php";
 							<a class="sidebar-link"  href="position_list.php">
 				<i class="align-middle" data-feather="layers"></i> <span class="align-middle">รายการตำเเหน่ง</span>
 							</a>
+					<?php endif; ?>
 
-						<ul id="่jobtype" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
-							<li class="sidebar-item">
-								<a class="sidebar-link" href="jobtype_list.php">
-								&nbsp;&nbsp;&nbsp;--> รายการประเภทงาน
-								</a>
-							</li>
-						</ul>
-					</li>
+					<?php if($level <=2): ?>
+
+						
 
 					<li class="sidebar-item">
 						<a data-bs-target="#user" data-bs-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
@@ -228,13 +165,7 @@ include "funtion.php";
 								สมาชิก
 							</span>
 						</a>
-						<!-- <ul id="user" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
-							<li class="sidebar-item">
-								<a class="sidebar-link" href="sign-up.php">
-								&nbsp;&nbsp;&nbsp; เพิ่มสมาชิก
-								</a>
-							</li>
-						</ul> -->
+					
 						<ul id="user" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
 							<li class="sidebar-item">
 								<a class="sidebar-link" href="user_list.php">
@@ -244,27 +175,11 @@ include "funtion.php";
 						</ul>
 					</li>
 					
-					<!-- <li class="sidebar-item">
-						<a class="sidebar-link" href="sign-up.php">
-              <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">+เพิ่มสมาชิก</span>
-            </a>
-					</li> -->
+				
 					
 					<?php endif; ?>
 						
-					<?php if($level == 1 AND 2): ?>
-						 <!-- <li class="sidebar-item ">
-						<a class="sidebar-link" href="addjobtype.php">
-              <i class="align-middle" data-feather="layers"></i> <span class="align-middle">+เพิ่มประเภทงาน</span>
-            </a>
-					</li> 
-				 <li class="sidebar-item ">
-						<a class="sidebar-link" href="user_list.php">
-              <i class="align-middle" data-feather="users"></i> <span class="align-middle">สมาชิก</span>
-            </a>
-					</li> -->
-					
-					<?php endif; ?>
+				
 				</ul>
 
 			</div>
@@ -278,77 +193,7 @@ include "funtion.php";
 
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav navbar-align">
-						<!-- <li class="nav-item dropdown">
-							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
-								<div class="position-relative">
-									<i class="align-middle" data-feather="bell"></i>
-									<span class="indicator">4</span>
-								</div>
-							</a>
-							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
-								<div class="dropdown-menu-header">
-									4 New Notifications
-								</div>
-								<div class="list-group">
-									<a href="#" class="list-group-item">
-										<div class="row g-0 align-items-center">
-											<div class="col-2">
-												<i class="text-danger" data-feather="alert-circle"></i>
-											</div>
-											<div class="col-10">
-												<div class="text-dark">Update completed</div>
-												<div class="text-muted small mt-1">Restart server 12 to complete the update.</div>
-												<div class="text-muted small mt-1">30m ago</div>
-											</div>
-										</div>
-									</a>
-									<a href="#" class="list-group-item">
-										<div class="row g-0 align-items-center">
-											<div class="col-2">
-												<i class="text-warning" data-feather="bell"></i>
-											</div>
-											<div class="col-10">
-												<div class="text-dark">Lorem ipsum</div>
-												<div class="text-muted small mt-1">Aliquam ex eros, imperdiet vulputate hendrerit et.</div>
-												<div class="text-muted small mt-1">2h ago</div>
-											</div>
-										</div>
-									</a>
-									<a href="#" class="list-group-item">
-										<div class="row g-0 align-items-center">
-											<div class="col-2">
-												<i class="text-primary" data-feather="home"></i>
-											</div>
-											<div class="col-10">
-												<div class="text-dark">Login from 192.186.1.8</div>
-												<div class="text-muted small mt-1">5h ago</div>
-											</div>
-										</div>
-									</a>
-									<a href="#" class="list-group-item">
-										<div class="row g-0 align-items-center">
-											<div class="col-2">
-												<i class="text-success" data-feather="user-plus"></i>
-											</div>
-											<div class="col-10">
-												<div class="text-dark">New connection</div>
-												<div class="text-muted small mt-1">Christina accepted your request.</div>
-												<div class="text-muted small mt-1">14h ago</div>
-											</div>
-										</div>
-									</a>
-								</div>
-								<div class="dropdown-menu-footer">
-									<a href="#" class="text-muted">Show all notifications</a>
-								</div>
-							</div>
-						</li> -->
-
-					<!-- 	 <li class="nav-item dropdown">
-							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
-                <i class="align-middle" data-feather="settings"></i>
-              </a>  
-			  </li> -->
+					
 					
 							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
 							<?php if($row['avatar'] !=""){?>

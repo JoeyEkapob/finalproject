@@ -38,24 +38,24 @@ if($_POST['proc'] == 'report'){
    /*  $role = $_POST["role"]; */
    $jobtype = $_POST["jobtype"];
 
-    if(isset($_POST["department"])){
-        $department = $_POST["department"];
+   if(!empty($_POST["role"])){
+    $role2 = $_POST["role"];
     }
-    if(isset($_POST["role"])){
-        $role = $_POST["role"];
+    if(!empty($_POST["department"])){
+        $department2 = $_POST["department"];
     }
    /*  echo $role.' '.$department; */
     /*     $username = $db->query("SELECT CONCAT(FirstName, ' ', LastName) As fullName FROM user WHERE project_id =  ".$array['project_id']." "); */
     $where = '';
     if($jobtype == 1){
     if ($level > 2) {
-        $where .= "AND $level <= po.level AND d.department_id = $department ";
+        $where .= "AND ( d.department_id = $department OR  d.department_id = 0 ) AND ($level < po.level OR u.user_id = $us ) "; 
     } 
-    if(!empty($department)){
-        $where .= "AND d.department_id = $department ";
+    if(!empty($department2)){
+        $where .= "AND d.department_id = $department2 ";
     }
-    if(!empty($role)){
-        $where .= "AND po.role_id = $role ";
+    if(!empty($role2)){
+        $where .= "AND po.role_id = $role2 ";
     }
     if (!empty($nameproject)) {
         $where .= "AND name_project LIKE '%$nameproject%' ";
@@ -85,13 +85,13 @@ if($_POST['proc'] == 'report'){
         WHERE 1=1 $where  ");
     }else if($jobtype == 2){
         if ($level > 2) {
-            $where .= "AND $level <= po.level AND d.department_id = $department   ";
+            $where .= "AND ( d.department_id = $department OR  d.department_id = 0 ) AND ($level < po.level OR u.user_id = $us ) "; 
         } 
-        if(!empty($department)){
-            $where .= "AND d.department_id = $department ";
+        if(!empty($department2)){
+            $where .= "AND d.department_id = $department2 ";
         }
-        if(!empty($role)){
-            $where .= "AND po.role_id = $role ";
+        if(!empty($role2)){
+            $where .= "AND po.role_id = $role2 ";
         }
         if (!empty($nameproject)) {
             $where .= "AND name_project LIKE '%$nameproject%' ";
@@ -135,13 +135,13 @@ if($_POST['proc'] == 'report'){
         LEFT JOIN department as d ON d.department_id  = u.department_id
         WHERE 1=1 ";
         if ($level > 2) {
-            $sql .= "AND $level <= po.level AND d.department_id = $department  ";
+            $sql .= "AND ( d.department_id = $department OR  d.department_id = 0 ) AND ($level < po.level OR u.user_id = $us ) "; 
         } 
-        if(!empty($department)){
-            $sql .= "AND d.department_id = $department ";
+        if(!empty($department2)){
+            $sql .= "AND d.department_id = $department2 ";
         }
-        if(!empty($role)){
-            $sql .= "AND po.role_id = $role ";
+        if(!empty($role2)){
+            $sql .= "AND po.role_id = $role2 ";
         }
         if (!empty($nameproject)) {
             $sql .= "AND name_project LIKE '%$nameproject%' ";
@@ -172,13 +172,13 @@ if($_POST['proc'] == 'report'){
         LEFT JOIN department AS d ON d.department_id = u.department_id
         where 1=1 ";
         if ($level > 2) {
-            $sql .= "AND $level <= po.level AND d.department_id = $department   ";
+            $sql .= "AND ( d.department_id = $department OR  d.department_id = 0 ) AND ($level < po.level OR u.user_id = $us ) "; 
         } 
-        if(!empty($department)){
-            $sql .= "AND d.department_id = $department ";
+        if(!empty($department2)){
+            $sql .= "AND d.department_id = $department2 ";
         }
-        if(!empty($role)){
-            $sql .= "AND po.role_id = $role ";
+        if(!empty($role2)){
+            $sql .= "AND po.role_id = $role2 ";
         }
         if (!empty($nameproject)) {
             $sql .= "AND name_project LIKE '%$nameproject%' ";
@@ -213,6 +213,7 @@ if($_POST['proc'] == 'report'){
     include 'test.php';
 
     // Instanciation of inherited class
+    
     $pdf = new PDF_MC_Table(); 
     $title = "รายงานหัวข้องาน";
     $pdf->SetTitle($title,true); // ให้แสดง title ไทย
@@ -222,37 +223,52 @@ if($_POST['proc'] == 'report'){
     $pdf->AddFont('THSarabun','','THSarabun.php');
     $pdf->SetFont('THSarabunb','B',16); 
     $pdf->Image('pic/LOGORMUTK.png', 86, 2, 40);
-    $pdf->Cell(193,70,iconv('UTF-8','cp874',$title),0,0,"C");
+    $pdf->Ln(35);
+    $pdf->Cell(193,15,iconv('UTF-8','cp874',$title),0,0,"C");
     
     
-    $pdf->Ln(35); 
+    $pdf->Ln(20); 
     if (!empty($start_date)) {
         $pdf->SetFont('THSarabunb','B',14); 
-        $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,0,"");
-        $pdf->Cell(24,15,iconv('UTF-8','cp874','ตั้งเเต่วันที่ :' ),0,0,"R");
-        $pdf->Cell(24,15,iconv('UTF-8','cp874',thai_date_short(strtotime($start_date)) ),0,0,"");
+
+        $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
+        $pdf->Cell(30,10,iconv('UTF-8','cp874','วันที่เริ่ม :' ),0,0,"R");
+        $pdf->Cell(50,10,iconv('UTF-8','cp874',thai_date_short(strtotime($start_date)) ),0,0,"");
+        $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
     }else{ 
-        $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,0,"");
-        $pdf->Cell(48,15,iconv('UTF-8','cp874','ตั้งเเต่วันที่ : - '),0,0,"C");
+        
+        $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
+        $pdf->Cell(30,10,iconv('UTF-8','cp874','วันที่เริ่ม :'),0,0,"R");
+        $pdf->Cell(50,10,iconv('UTF-8','cp874',' - '),0,0,"");
+        $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
     }
 
     if (!empty($end_date)) {
-        $pdf->Cell(48,15,iconv('UTF-8','cp874','จนถึงวันที่ : '.thai_date_short(strtotime($end_date))),0,0,"C");
-        $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,1,"");  
+        $pdf->Cell(30,10,iconv('UTF-8','cp874','วันที่สิ้นสุด :' ),0,0,"R");
+        $pdf->Cell(50,10,iconv('UTF-8','cp874',thai_date_short(strtotime($end_date))),0,0,"");  
+        $pdf->Ln();
+       
     }else{ 
-        $pdf->Cell(48,15,iconv('UTF-8','cp874','จนถึงวันที่ : - '),0,0,"C");
-        $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,1,"");  
+        $pdf->Cell(30,10,iconv('UTF-8','cp874','วันที่สิ้นสุด :' ),0,0,"R");
+        $pdf->Cell(50,10,iconv('UTF-8','cp874',' - '),0,0,"");
+        $pdf->Ln(); 
     }
     if (!empty($department)) {
         $namedepartment = "SELECT * FROM department WHERE department_id = $department";
         $namedepartment = $db->query($namedepartment);
         $namedepartment->execute();
         $namedepartment = $namedepartment->fetch(PDO::FETCH_ASSOC);
-        $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,0,"");
-        $pdf->Cell(48,15,iconv('UTF-8','cp874','ฝ่าย : '.$namedepartment['department_name'] ),0,0,"C");
+
+        $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
+        $pdf->Cell(30,10,iconv('UTF-8','cp874','ฝ่าย :' ),0,0,"R");
+        $pdf->Cell(50,10,iconv('UTF-8','cp874',$namedepartment['department_name'] ),0,0,"");
+        $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,1,"");
     }else{ 
-        $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,0,"");
-        $pdf->Cell(48,15,iconv('UTF-8','cp874','ฝ่าย : ทั้งหมด '),0,0,"C");
+        
+        $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
+        $pdf->Cell(30,10,iconv('UTF-8','cp874','ฝ่าย :' ),0,0,"R");
+        $pdf->Cell(50,10,iconv('UTF-8','cp874',' ทั้งหมด '),0,0,"");
+        $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,1,"");
     }
 
     if (!empty($role)) {
@@ -260,11 +276,13 @@ if($_POST['proc'] == 'report'){
         $nameposition = $db->query($nameposition);
         $nameposition->execute();
         $nameposition = $nameposition->fetch(PDO::FETCH_ASSOC);
-        $pdf->Cell(48,15,iconv('UTF-8','cp874','ตำเเหน่ง : '.$nameposition['position_name']),0,0,"C");
-        $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,1,"");  
+        $pdf->Cell(30,10,iconv('UTF-8','cp874','ตำแหน่ง :' ),0,0,"R");
+        $pdf->Cell(50,10,iconv('UTF-8','cp874',$nameposition['position_name']),0,0,""); 
+        $pdf->Ln();  
     }else{ 
-        $pdf->Cell(48,15,iconv('UTF-8','cp874','ตำเเหน่ง : ทั้งหมด '),0,0,"C");
-        $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,1,"");  
+        $pdf->Cell(30,10,iconv('UTF-8','cp874','ตำแหน่ง :' ),0,0,"R");
+        $pdf->Cell(50,10,iconv('UTF-8','cp874',' ทั้งหมด '),0,0,"");
+        $pdf->Ln();   
     }
     
 
@@ -278,42 +296,60 @@ if($_POST['proc'] == 'report'){
         $namejobtype = $db->query($namejobtype);
         $namejobtype->execute();
         $namejobtype = $namejobtype->fetch(PDO::FETCH_ASSOC);
-        $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,0,"");
-        $pdf->Cell(48,15,iconv('UTF-8','cp874','ประเภทงาน : '.$namejobtype['name_jobtype'] ),0,0,"C");
+        
+        $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
+        $pdf->Cell(30,10,iconv('UTF-8','cp874','ประเภทงาน :' ),0,0,"R");
+        $pdf->Cell(50,10,iconv('UTF-8','cp874',$namejobtype['name_jobtype'] ),0,0,"");
+        $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,1,"");
     }else{ 
-        $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,0,"");
-        $pdf->Cell(48,15,iconv('UTF-8','cp874','ประเภทงาน : - '),0,0,"C");
+        
+        $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
+        $pdf->Cell(30,10,iconv('UTF-8','cp874','ประเภทงาน :' ),0,0,"R");
+        $pdf->Cell(50,10,iconv('UTF-8','cp874',' - '),0,0,"");
+        $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,1,"");
     }
 
     if (!empty($status1)) {
-        $pdf->Cell(48,15,iconv('UTF-8','cp874','สถานะงาน : '.showstatprotext1($status1)),0,0,"C");
-        $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,1,"");  
+        $pdf->Cell(30,10,iconv('UTF-8','cp874','สถานะงาน :' ),0,0,"R");
+        $pdf->Cell(80,10,iconv('UTF-8','cp874',showstatprotext1($status1)),0,0,"");    
+        $pdf->Ln(); 
     }else{ 
-        $pdf->Cell(48,15,iconv('UTF-8','cp874','สถานะงาน : - '),0,0,"C");
-        $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,1,"");  
+        $pdf->Cell(30,10,iconv('UTF-8','cp874','สถานะงาน :' ),0,0,"R");
+        $pdf->Cell(50,10,iconv('UTF-8','cp874',' - '),0,0,"");
+        $pdf->Ln();    
     }
     if (!empty($status2)) {
-        $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,0,"");
-        $pdf->Cell(48,15,iconv('UTF-8','cp874','การเร่งของงาน : '.showstatprotext2($status2) ),0,1,"C");
+        
+        $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
+        $pdf->Cell(30,10,iconv('UTF-8','cp874','ความสำคัญ :' ),0,0,"R");
+        $pdf->Cell(50,10,iconv('UTF-8','cp874',showstatprotext2($status2) ),0,0,1,"");
+        $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,1,"");
     }else{ 
-        $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,0,"");
-        $pdf->Cell(48,15,iconv('UTF-8','cp874','การเร่งของงาน : - '),0,0,"C");
+       
+        $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
+        $pdf->Cell(30,10,iconv('UTF-8','cp874','ความสำคัญ :' ),0,0,"R");
+        $pdf->Cell(50,10,iconv('UTF-8','cp874','-'),0,0,"");
+        $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,1,"");
     }
 
     if ($jobtype == 1) {
-        $pdf->Cell(48,15,iconv('UTF-8','cp874',' ประเภท : หัวข้องานที่มอบหมาย'),0,1,"C");
+        $pdf->Cell(30,10,iconv('UTF-8','cp874','ประเภท :' ),0,0,"R");
+        $pdf->Cell(50,10,iconv('UTF-8','cp874',' หัวข้องานที่มอบหมาย'),0,1,"");
     }  
     if ($jobtype == 2) {
-        $pdf->Cell(48,15,iconv('UTF-8','cp874',' ประเภท : หัวข้องานทีต้องทำ '),0,1,"C");
+        $pdf->Cell(30,10,iconv('UTF-8','cp874','ประเภท :' ),0,0,"R");
+        $pdf->Cell(50,10,iconv('UTF-8','cp874',' หัวข้องานทีต้องทำ '),0,1,"");
     }
        
-   
-    $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,0,"");
-    $pdf->Cell(48,15,iconv('UTF-8','cp874','จำนวนหัวข้องาน : '.$stmtrow ),0,0,"C");
-    $pdf->Cell(48,15,iconv('UTF-8','cp874','จำนวนงานทั้งหมด : '.$numtask2),0,0,"C");
-    $pdf->Cell(49,8,iconv('UTF-8','cp874',''),0,1,"");  
-    $pdf->Ln();
-
+    $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
+    $pdf->Cell(30,10,iconv('UTF-8','cp874','จำนวนหัวข้องาน :' ),0,0,"R");
+    $pdf->Cell(50,10,iconv('UTF-8','cp874',$stmtrow ),0,0,"");
+    $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,1,"");
+    $pdf->Cell(30,10,iconv('UTF-8','cp874','จำนวนงานทั้งหมด :' ),0,0,"R");
+    $pdf->Cell(50,10,iconv('UTF-8','cp874',$numtask2),0,0,""); 
+    
+    
+    $pdf->Ln(20);
     $pdf->setDrawColor(100,100,100); 
     $pdf->SetFont('THSarabunb','B',14); 
     $pdf->Cell(22,8,iconv('UTF-8','cp874','รหัสหัวข้องาน'),1,0,"C");
@@ -407,9 +443,10 @@ else if($_POST['proc']== 'reportpro'){
     $pdf->AddFont('THSarabun','','THSarabun.php');
     $pdf->SetFont('THSarabunb','B',16); 
     $pdf->Image('pic/LOGORMUTK.png', 86, 2, 40);
-    $pdf->Cell(193,70,iconv('UTF-8','cp874',$title),0,0,"C");
+    $pdf->Ln(35);
+    $pdf->Cell(193,15,iconv('UTF-8','cp874',$title),0,0,"C");
     $pdf->SetFont('THSarabunb','B',14); 
-    $pdf->Ln(40);
+    $pdf->Ln(20);
     $pdf->Cell(30,8,iconv('UTF-8','cp874','รหัสหัวข้องาน :'),0,0,"R");
     $pdf->Cell(65,8,iconv('UTF-8','cp874',$project_id),0,0,"L");
     $pdf->Cell(30,8,iconv('UTF-8','cp874','ชื่อโปรเจค :'),0,0,"R");
@@ -450,28 +487,29 @@ else if($_POST['proc']== 'reportpro'){
     
     $pdf->Cell(193,8,iconv('UTF-8','cp874','รายการงาน'),0,0,"C");
     $pdf->SetFont('THSarabunb','B',14); 
-    $pdf->Ln();
+    $pdf->Ln(15);
     $pdf->Cell(30,8,iconv('UTF-8','cp874','จำนวนงาน :'),0,0,"R");
-    $pdf->Cell(65,8,iconv('UTF-8','cp874', $numtask),0,0,"L");
+    $pdf->Cell(20,8,iconv('UTF-8','cp874', $numtask),0,0,"L");
+    $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
     $pdf->Cell(30,8,iconv('UTF-8','cp874','จำนวนงานที่ล่าช้า :'),0,0,"R");
-    $pdf->Cell(65,8,iconv('UTF-8','cp874',$numchktime ),0,1,"L");
-    $pdf->Cell(30,8,iconv('UTF-8','cp874',''),0,0,"R");
-    $pdf->Cell(65,8,iconv('UTF-8','cp874', ''),0,0,"L");
+    $pdf->Cell(20,8,iconv('UTF-8','cp874',$numchktime ),0,0,"L");
+    $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
     $pdf->Cell(30,8,iconv('UTF-8','cp874','จำนวนงานที่ยกเลิก :'),0,0,"R");
-    $pdf->Cell(65,8,iconv('UTF-8','cp874',$numtaskerror ),0,0,"L");
-    $pdf->Ln();
+    $pdf->Cell(20,8,iconv('UTF-8','cp874',$numtaskerror ),0,0,"L");
+    $pdf->Ln(20);
     $pdf->setDrawColor(100,100,100); 
     $pdf->SetFont('THSarabunb','B',14); 
+    $pdf->Cell(11,8,iconv('UTF-8','cp874','ลำดับที่'),1,0,"C");
     $pdf->Cell(22,8,iconv('UTF-8','cp874','รหัสหัวข้องาน'),1,0,"C");
-    $pdf->Cell(40,8,iconv('UTF-8','cp874','ชื่องาน'),1,0,"C");
+    $pdf->Cell(35,8,iconv('UTF-8','cp874','ชื่องาน'),1,0,"C");
     $pdf->Cell(45,8,iconv('UTF-8','cp874','วันที่เรื่ม - วันที่สิ้นสุด'),1,0,"C");
     $pdf->Cell(20,8,iconv('UTF-8','cp874','ความสำเร็จ'),1,0,"C");
-    $pdf->Cell(35,8,iconv('UTF-8','cp874','มอบหมาย'),1,0,"C");
+    $pdf->Cell(30,8,iconv('UTF-8','cp874','มอบหมาย'),1,0,"C");
     $pdf->Cell(30,8,iconv('UTF-8','cp874','สถานะ'),1,0,"C");
     $pdf->Ln();
 
-    $pdf ->SetWidths(Array(22,40,45,20,35,30)); 
-    $pdf ->SetAligns(Array('C','','C','C','','C')); 
+    $pdf ->SetWidths(Array(11,22,35,45,20,30,30)); 
+    $pdf ->SetAligns(Array('C','C','','C','C','','C')); 
     $pdf->SetLineHeight(8);
     
     $status ='';
@@ -482,6 +520,7 @@ else if($_POST['proc']== 'reportpro'){
     $stmttasklist = $db->query($stmttasklist);
     $stmttasklist->execute();  
     $pdf->SetFont('THSarabun','',14); 
+    $i = 1;
     $stmttasklistrow = $stmttasklist->rowCount();  
         if($stmttasklistrow > 0){
             while($stmttasklistrow2 = $stmttasklist->fetch(PDO::FETCH_ASSOC)){
@@ -504,6 +543,7 @@ else if($_POST['proc']== 'reportpro'){
             }
        /*      echo $stmttasklistrow2['status_task2']; */
             $pdf->Row(Array(
+                iconv('UTF-8','cp874',$i++),
                 iconv('UTF-8','cp874',$stmttasklistrow2['task_id']),
                 iconv('UTF-8','cp874',$stmttasklistrow2['name_tasklist']),
                 iconv('UTF-8','cp874',thai_date_short(strtotime($stmttasklistrow2['strat_date_task']))) . ' - ' . iconv('UTF-8', 'cp874', thai_date_short(strtotime($stmttasklistrow2['end_date_task']))),
@@ -569,9 +609,10 @@ else if($_POST['proc']== 'reporttaskdetails'){
     $pdf->AddFont('THSarabun','','THSarabun.php');
     $pdf->SetFont('THSarabunb','B',16); 
     $pdf->Image('pic/LOGORMUTK.png', 86, 2, 40);
-    $pdf->Cell(193,70,iconv('UTF-8','cp874',$title),0,0,"C");
+    $pdf->Ln(35);
+    $pdf->Cell(193,15,iconv('UTF-8','cp874',$title),0,0,"C");
 
-    $pdf->Ln(40);
+    $pdf->Ln(20);
     $pdf->SetFont('THSarabunb','B',14); 
 
     $pdf->Cell(30,8,iconv('UTF-8','cp874','รหัสงาน :'),0,0,"R");
@@ -602,13 +643,15 @@ else if($_POST['proc']== 'reporttaskdetails'){
     $pdf->Ln();
 
     $pdf->Cell(30,8,iconv('UTF-8','cp874','ส่งทั้งหมด :'),0,0,"R");
-    $pdf->Cell(65,8,iconv('UTF-8','cp874', $numsenddetails),0,0,"L");
+    $pdf->Cell(15,8,iconv('UTF-8','cp874', $numsenddetails),0,0,"L");
+    $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
     $pdf->Cell(30,8,iconv('UTF-8','cp874','เเก้ไขทั้งหมด :'),0,0,"R");
-    $pdf->Cell(65,8,iconv('UTF-8','cp874',$numchkdetails ),0,1,"L");
+    $pdf->Cell(15,8,iconv('UTF-8','cp874',$numchkdetails ),0,0,"L");
+    $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
     $pdf->Cell(30,8,iconv('UTF-8','cp874','ส่ง (ล่าช้า) :'),0,0,"R");
-    $pdf->Cell(65,8,iconv('UTF-8','cp874', $chktimesend),0,0,"L");
+    $pdf->Cell(15,8,iconv('UTF-8','cp874', $chktimesend),0,0,"L");
 
-    $pdf->Ln();
+    $pdf->Ln(20);
     $pdf->setDrawColor(100,100,100); 
     $pdf->SetFont('THSarabunb','B',14); 
     $pdf->Cell(22,8,iconv('UTF-8','cp874','ครั้งที่'),1,0,"C");
@@ -672,36 +715,34 @@ else if($_POST['proc']== 'reportuser'){
     $startdate =  $_POST["startdate"];
     $enddate = $_POST["enddate"];
 
-    if(isset($_POST["role"])){
-        $role = $_POST["role"];
-    }
-
-    if(isset($_POST["department"])){
-        $department = $_POST["department"];
+   
+    if(!empty($_POST["role"])){
+        $role2 = $_POST["role"];
+        }
+    if(!empty($_POST["department"])){
+        $department2 = $_POST["department"];
     }
     $sql = "SELECT * FROM user as u
     LEFT JOIN position as po ON po.role_id = u.role_id 
     LEFT JOIN department as d ON d.department_id = u.department_id 
     WHERE 1=1 ";
-   if ($level > 2) {
-    $sql .= "AND  $level <= po.level  AND d.department_id = $department ";
-   // $sql .= "AND u.user_id = $us  OR $level < po.level  AND d.department_id = $department ";
+    if ($level > 2) {
+        $sql .= " AND ( d.department_id = $department OR  d.department_id = 0 ) AND ($level < po.level OR u.user_id = $us )  ";
+        //$sql .= "AND u.user_id = $user_id  OR $level < po.level  AND d.department_id = $department ";
     } 
-    if($level == $maxlevel){
-        $sql .= " AND u.user_id = $us ";
+
+   if(!empty($department2)){
+        $sql .= " AND d.department_id = $department2 ";
     }
-    if(!empty($department)){
-        $sql .= "AND d.department_id = $department ";
-    }
-    if (!empty($firstname)) {
-        $sql .= "AND firstname LIKE '%$firstname%' ";
+     if (!empty($firstname)) {
+        $sql .= " AND firstname LIKE '%$firstname%' ";
     }
     if (!empty($lastname)) {
-        $sql .= "AND lastname LIKE '%$lastname%' ";
-    }
-    if (!empty($role)) {
-        $sql .= "AND u.role_id = '$role' ";
-    }
+        $sql .= " AND lastname LIKE '%$lastname%' ";
+    } 
+     if (!empty($role2)) {
+        $sql .= " AND u.role_id = '$role2' ";
+    }  
  /*       print_r($sql);
    exit;  */
     $stmt = $db->query($sql);
@@ -711,7 +752,7 @@ else if($_POST['proc']== 'reportuser'){
     include 'test.php';
         // Instanciation of inherited class
         $pdf = new PDF_MC_Table(); 
-        $title = "รายงาน";
+        $title = "รายงานสมาชิก";
         $pdf->SetTitle($title,true); // ให้แสดง title ไทย
         $pdf->AliasNbPages();
         $pdf->AddPage();
@@ -719,50 +760,77 @@ else if($_POST['proc']== 'reportuser'){
         $pdf->AddFont('THSarabun','','THSarabun.php');
         $pdf->SetFont('THSarabunb','B',16); 
         $pdf->Image('pic/LOGORMUTK.png', 86, 2, 40);
-        $pdf->Cell(193,70,iconv('UTF-8','cp874','รายงานสมาชิก'),0,0,"C");
-    
         $pdf->Ln(35);
+        $pdf->Cell(193,15,iconv('UTF-8','cp874',$title),0,0,"C");
+    
+        $pdf->Ln(20);
         $pdf->SetFont('THSarabunb','B',14); 
         if (!empty($startdate)) {
-        $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,0,"");
-        $pdf->Cell(50,15,iconv('UTF-8','cp874','ตั้งเเต่วันที่ : '. thai_date_short(strtotime($startdate)) ),0,0,"");
+
+            $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
+            $pdf->Cell(30,10,iconv('UTF-8','cp874','วันที่เริ่ม : '),0,0,"R");
+            $pdf->Cell(50,10,iconv('UTF-8','cp874',thai_date_short(strtotime($startdate)) ),0,0,"");
+            $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
+
         }else{
-            $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,0,"");
-            $pdf->Cell(50,15,iconv('UTF-8','cp874','ตั้งเเต่วันที่ : - ' ),0,0,"");
+
+            $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
+            $pdf->Cell(30,10,iconv('UTF-8','cp874','วันที่เริ่ม : '),0,0,"R");
+            $pdf->Cell(50,10,iconv('UTF-8','cp874','-' ),0,0,"");
+            $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
+
         }
         if (!empty($enddate)) {
-            $pdf->Cell(50,15,iconv('UTF-8','cp874','จนถึงวันที่ : '. thai_date_short(strtotime($enddate)) ),0,0,"L");
-            $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,1,"");  
+
+            $pdf->Cell(30,10,iconv('UTF-8','cp874','วันสิ้นสุด : '),0,0,"R");
+            $pdf->Cell(50,10,iconv('UTF-8','cp874',thai_date_short(strtotime($enddate)) ),0,0,"");
+            $pdf->Ln();
+
         }else{
-            $pdf->Cell(50,15,iconv('UTF-8','cp874','จนถึงวันที่ : - '),0,0,"L");
-            $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,1,"");  
+
+            $pdf->Cell(30,10,iconv('UTF-8','cp874','วันสิ้นสุด : '),0,0,"R");
+            $pdf->Cell(50,10,iconv('UTF-8','cp874',' - '),0,0,"");
+            $pdf->Ln();
+
         }
-        if (!empty($role)) {
+        if (!empty($role2)) {
                 $nameposition = "SELECT * FROM position WHERE role_id = $role";
                 $nameposition = $db->query($nameposition);
                 $nameposition->execute();
                 $nameposition = $nameposition->fetch(PDO::FETCH_ASSOC);
-                $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,0,"");
-                $pdf->Cell(50,15,iconv('UTF-8','cp874','ตำเเหน่ง : '. $nameposition['position_name'] ),0,0,"");
+                $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
+                $pdf->Cell(30,10,iconv('UTF-8','cp874','ตำเเหน่ง :'),0,0,"R");
+                $pdf->Cell(50,10,iconv('UTF-8','cp874',$nameposition['position_name'] ),0,0,"");
+                $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
+
             }else{
-                $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,0,"");
-                $pdf->Cell(50,15,iconv('UTF-8','cp874','ตำเเหน่ง : ทั้งหมด ' ),0,0,"");
+                $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
+                $pdf->Cell(30,10,iconv('UTF-8','cp874','ตำเเหน่ง :'),0,0,"R");
+                $pdf->Cell(50,10,iconv('UTF-8','cp874','ทั้งหมด ' ),0,0,"");
+                $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
             }
            
-        if (!empty($department)) {
+        if (!empty($department2)) {
             $namedepartment = "SELECT * FROM department WHERE department_id = $department";
             $namedepartment = $db->query($namedepartment);
             $namedepartment->execute();
             $namedepartment = $namedepartment->fetch(PDO::FETCH_ASSOC);
-            $pdf->Cell(50,15,iconv('UTF-8','cp874','ฝ่าย : '.$namedepartment['department_name'] ),0,0,"L");
-            $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,1,"");
-        }else{ 
-            $pdf->Cell(50,15,iconv('UTF-8','cp874','ฝ่าย : ทั้งหมด '),0,0,"L");
-            $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,1,"");
+            
+            $pdf->Cell(30,10,iconv('UTF-8','cp874','ฝ่าย :'),0,0,"R");
+            $pdf->Cell(50,10,iconv('UTF-8','cp874',$namedepartment['department_name'] ),0,0,"");
+            $pdf->Ln();
+
+        }else{
+            
+            $pdf->Cell(30,10,iconv('UTF-8','cp874','ฝ่าย :'),0,0,"R");
+            $pdf->Cell(50,10,iconv('UTF-8','cp874','ทั้งหมด '),0,0,"");
+            $pdf->Ln();
         }
-        $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,0,"");  
-        $pdf->Cell(50,15,iconv('UTF-8','cp874','จำนวนสมาชิก : '. $numuser .' คน  ' ),0,0,"L");
-        $pdf->Cell(50,8,iconv('UTF-8','cp874',''),0,1,"");  
+
+        $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
+        $pdf->Cell(30,10,iconv('UTF-8','cp874','จำนวนสมาชิก : '),0,0,"R"); 
+        $pdf->Cell(50,10,iconv('UTF-8','cp874',$numuser .' คน  ' ),0,0,"L");
+        $pdf->Ln(); 
 
      /*    $pdf->Cell(70,8,iconv('UTF-8','cp874','จำนวนสมาชิก :'),0,0,"R");
         $pdf->Cell(65,8,iconv('UTF-8','cp874',$numuser),0,0,"L");  */
@@ -932,21 +1000,26 @@ else if($_POST['proc']== 'reportuserpro'){
     $pdf->AddFont('THSarabun','','THSarabun.php');
     $pdf->SetFont('THSarabunb','B',16); 
     $pdf->Image('pic/LOGORMUTK.png', 86, 2, 40);
-    $pdf->Cell(193,70,iconv('UTF-8','cp874','รายงานสมาขิก'),0,0,"C");
+    $pdf->Ln(35);
+    $pdf->Cell(193,15,iconv('UTF-8','cp874','รายงานสมาชิก'),0,0,"C");
     $pdf->SetFont('THSarabunb','B',14);
-    $pdf->Ln(40);
+    $pdf->Ln(25);
+    $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
     $pdf->Cell(30,8,iconv('UTF-8','cp874','ชื่อ-นามสกุล :'),0,0,"R");
     $pdf->Cell(65,8,iconv('UTF-8','cp874',$firstname.' '.$lastname),0,0,"L");
     $pdf->Cell(30,8,iconv('UTF-8','cp874','ตำเเหน่ง :'),0,0,"R");
     $pdf->Cell(65,8,iconv('UTF-8','cp874', $position_name),0,1,"L");
+    $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
     $pdf->Cell(30,8,iconv('UTF-8','cp874','หัวข้องานที่สร้าง :'),0,0,"R");
     $pdf->Cell(65,8,iconv('UTF-8','cp874', $nummannagerpro),0,0,"L");
     $pdf->Cell(30,8,iconv('UTF-8','cp874','หัวข้องานที่ถูกสั่ง :'),0,0,"R");
     $pdf->Cell(65,8,iconv('UTF-8','cp874',$numuserpro),0,1,"L");
+    $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
     $pdf->Cell(30,8,iconv('UTF-8','cp874','จำนวนงาน :'),0,0,"R");
     $pdf->Cell(65,8,iconv('UTF-8','cp874',$numusertask ),0,0,"L");
     $pdf->Cell(30,8,iconv('UTF-8','cp874','จำนวนครั้งที่ถูกสั่งเเก้ :'),0,0,"R");
     $pdf->Cell(65,8,iconv('UTF-8','cp874',$numdetails),0,1,"L");
+    $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
     if(!isset($startdate)){
     $pdf->Cell(30,8,iconv('UTF-8','cp874','วันที่เริ่ม :'),0,0,"R");
     $pdf->Cell(65,8,iconv('UTF-8','cp874',thai_date_fullmonth(strtotime($startdate))),0,0,"L");
@@ -964,10 +1037,10 @@ else if($_POST['proc']== 'reportuserpro'){
    
 
 
-    
-    $pdf->SetFont('THSarabunb','B',14); 
-    $pdf->Cell(193,8,iconv('UTF-8','cp874','รายการหัวข้องานที่ได้รับมอบหมาย    '),0,0,"C");
     $pdf->Ln(10);
+    $pdf->SetFont('THSarabunb','B',14); 
+    $pdf->Cell(193,8,iconv('UTF-8','cp874',' รายการหัวข้องานที่ได้รับมอบหมาย '),0,0,"C");
+    $pdf->Ln(20);
     $pdf->setDrawColor(100,100,100); 
     $pdf->SetFont('THSarabunb','B',14); 
     $pdf->Cell(22,8,iconv('UTF-8','cp874','รหัสหัวข้องาน'),1,0,"C");
@@ -1105,21 +1178,26 @@ else if($_POST['proc']== 'reportuserprocreate'){
     $pdf->AddFont('THSarabun','','THSarabun.php');
     $pdf->SetFont('THSarabunb','B',16); 
     $pdf->Image('pic/LOGORMUTK.png', 86, 2, 40);
-    $pdf->Cell(193,70,iconv('UTF-8','cp874','รายงานสมาขิก'),0,0,"C");
+    $pdf->Ln(35);
+    $pdf->Cell(193,15,iconv('UTF-8','cp874','รายงานสมาชิก'),0,0,"C");
     $pdf->SetFont('THSarabunb','B',14);
-    $pdf->Ln(40);
+    $pdf->Ln();
+    $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
     $pdf->Cell(30,8,iconv('UTF-8','cp874','ชื่อ-นามสกุล :'),0,0,"R");
     $pdf->Cell(65,8,iconv('UTF-8','cp874',$firstname.' '.$lastname),0,0,"L");
     $pdf->Cell(30,8,iconv('UTF-8','cp874','ตำเเหน่ง :'),0,0,"R");
     $pdf->Cell(65,8,iconv('UTF-8','cp874', $position_name),0,1,"L");
+    $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
     $pdf->Cell(30,8,iconv('UTF-8','cp874','หัวข้องานที่สร้าง :'),0,0,"R");
     $pdf->Cell(65,8,iconv('UTF-8','cp874', $nummannagerpro),0,0,"L");
     $pdf->Cell(30,8,iconv('UTF-8','cp874','หัวข้องานที่ถูกสั่ง :'),0,0,"R");
     $pdf->Cell(65,8,iconv('UTF-8','cp874',$numuserpro),0,1,"L");
+    $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
     $pdf->Cell(30,8,iconv('UTF-8','cp874','จำนวนงาน :'),0,0,"R");
     $pdf->Cell(65,8,iconv('UTF-8','cp874',$numusertask ),0,0,"L");
     $pdf->Cell(30,8,iconv('UTF-8','cp874','จำนวนครั้งที่ถูกสั่งเเก้ :'),0,0,"R");
     $pdf->Cell(65,8,iconv('UTF-8','cp874',$numdetails),0,1,"L");
+    $pdf->Cell(15,10,iconv('UTF-8','cp874',''),0,0,0,"");
     if(!isset($startdate)){
     $pdf->Cell(30,8,iconv('UTF-8','cp874','วันที่เริ่ม :'),0,0,"R");
     $pdf->Cell(65,8,iconv('UTF-8','cp874',thai_date_fullmonth(strtotime($startdate))),0,0,"L");
@@ -1137,23 +1215,24 @@ else if($_POST['proc']== 'reportuserprocreate'){
    
 
 
-    
+    $pdf->Ln(10);
     $pdf->SetFont('THSarabunb','B',16); 
     $pdf->Cell(193,8,iconv('UTF-8','cp874','รายการหัวข้องาน'),0,0,"C");
-    $pdf->Ln(10);
+    $pdf->Ln(20);
     $pdf->setDrawColor(100,100,100); 
     $pdf->SetFont('THSarabunb','B',14); 
+    $pdf->Cell(11,8,iconv('UTF-8','cp874','ลำดับที่'),1,0,"C");
     $pdf->Cell(22,8,iconv('UTF-8','cp874','รหัสหัวข้องาน'),1,0,"C");
-    $pdf->Cell(38,8,iconv('UTF-8','cp874','ชื่อหัวงาน'),1,0,"C");
+    $pdf->Cell(33,8,iconv('UTF-8','cp874','ชื่อหัวงาน'),1,0,"C");
     $pdf->Cell(44,8,iconv('UTF-8','cp874','วันที่เรื่ม - วันที่สิ้นสุด'),1,0,"C");
     $pdf->Cell(18,8,iconv('UTF-8','cp874','ความสำเร็จ'),1,0,"C");
-    $pdf->Cell(37,8,iconv('UTF-8','cp874','สถานะ'),1,0,"C"); 
-    $pdf->Cell(33,8,iconv('UTF-8','cp874','มอบหมาย'),1,0,"C");
+    $pdf->Cell(33,8,iconv('UTF-8','cp874','สถานะ'),1,0,"C"); 
+    $pdf->Cell(30,8,iconv('UTF-8','cp874','มอบหมาย'),1,0,"C");
   /*   $pdf->Cell(25,8,iconv('UTF-8','cp874','สถานะ'),1,0,"C"); */
     $pdf->Ln();
 
-    $pdf ->SetWidths(Array(22,38,44,18,37,33)); 
-    $pdf ->SetAligns(Array('C','','C','C','C','')); 
+    $pdf ->SetWidths(Array(11,22,33,44,18,33,30)); 
+    $pdf ->SetAligns(Array('C','C','','C','C','C','')); 
     $pdf->SetLineHeight(8);
     
     $i = 1;
@@ -1180,11 +1259,12 @@ else if($_POST['proc']== 'reportuserprocreate'){
         $pdf->Cell(35,10,iconv('UTF-8','cp874',$stmttasklistrow2['firstname'].' '.$stmttasklistrow2['lastname']),1,0,"c");  */
       /*   $pdf->Cell(25,10,iconv('UTF-8','cp874',showstattaskreport($stmttasklistrow2['status_task'])) .iconv('UTF-8','cp874',showstatustimepdf($stmttasklistrow2['status_timetask'])) , 1, 1, "C"); */  
       $pdf->Row(Array(
+            iconv('UTF-8','cp874',$i++), 
             iconv('UTF-8','cp874',$row2['project_id']),
             iconv('UTF-8','cp874',$row2['name_project']),
             iconv('UTF-8','cp874',thai_date_short(strtotime($row2['start_date']))) . ' - ' . iconv('UTF-8', 'cp874', thai_date_short(strtotime($row2['end_date']))),
             iconv('UTF-8','cp874',$row2['progress_project'].' '.'%'),
-            iconv('UTF-8','cp874',showstatprotext1($row2['status_1'])) .iconv('UTF-8','cp874',' ('.showstatprotext2($row2['status_2']).' )'),
+            iconv('UTF-8','cp874',showstatprotext1($row2['status_1'])) .iconv('UTF-8','cp874',' ('.showstatprotext2($row2['status_2']).')'),
             iconv('UTF-8','cp874',showshortname($row2['shortname_id'])).' '. iconv('UTF-8','cp874',($row2['firstname'])).' '. iconv('UTF-8','cp874',($row2['lastname'])),
         ));
      

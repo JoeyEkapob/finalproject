@@ -16,7 +16,11 @@ session_start();
         $stmttask->execute();
         $stmttaskrrow = $stmttask->fetch(PDO::FETCH_ASSOC);
     }   
-
+    if (isset($_SERVER['HTTP_REFERER'])) {
+        $previousPage = $_SERVER['HTTP_REFERER'];
+      } else {
+        $previousPage = "#";
+      }
 ?> 
 <!DOCTYPE html>
 <html lang="en">
@@ -52,7 +56,8 @@ session_start();
     <input type="hidden" id="status_timetask" name="status_timetask" value=" ">
   
 		<main class="content">
-            <a href="view_project.php?view_id=<?php echo $project_id; ?>" class="back-button">&lt;</a> 
+         <a href="<?php echo $previousPage ?>" class="back-button">&lt;</a> 
+
 				<div class="container-fluid p-0">
                     
 					<h1 class="h3 mb-3">ส่งงาน</h1>
@@ -129,7 +134,7 @@ session_start();
                         <hr>
                         <div class="col-lg-12 text-right justify-content-center d-flex">
                             <button class="btn btn-primary " name ="edittask" onclick="send_task('<?php echo $taskid ?>','<?php echo $project_id?>','<?php echo $stmttaskrrow['progress_task'] ?>','<?php echo $user_id ?>','<?php echo $status_timetask ?>');">ส่งงาน</button>
-                            <a href="view_project.php?view_id=<?php echo $project_id?>" class="btn btn-secondary" type="button"  >กลับ</a>
+                            &nbsp;<a href="view_project.php?view_id=<?php echo $project_id?>" class="btn btn-secondary" type="button"  >กลับ</a>
                         </div>
                     </div>
 								</div>
@@ -161,6 +166,6 @@ session_start();
         $('#senddate').val('<?php echo $date?>');
         
     }
-   
+
 </script>
 <?php include "footer.php"?>

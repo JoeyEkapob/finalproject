@@ -655,39 +655,39 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         echo strtotime($end_date); */
         
    
-   if (empty($proname)) {
+        if (empty($proname)) {
         $_SESSION['error'] = 'กรุณากรอกชื่อหัวข้องาน';
         $url_return ="location:addproject_page.php";
         //header("location:addproject_page.php");
-    }else  if ($row2 ) {
-        $_SESSION['error'] = 'หัวข้องานซั้ำกรุณากรอกชื่อหัวข้องานใหม่';
-        $url_return ="location:addproject_page.php";
-    } else if (empty($start_date)) {
-        $_SESSION['error'] ='กรุณากรอกวันที่เริ่ม';
-        $url_return ="location:addproject_page.php";
-    }else if (empty($end_date)) {
-        $_SESSION['error'] = 'กรุณากรอกวันที่สิ้นสุด';
-        $url_return ="location:addproject_page.php";
-    }else if (empty($users_id1)) {
-        $_SESSION['error'] = 'กรุณากรอกชื่อสมาชิก';
-        $url_return ="location:addproject_page.php";
-       
-    }else   if(strtotime($start_date) >= strtotime($end_date)){
-        $_SESSION['error'] = 'วันที่สั่งเลยวันที่สิ้นสุด';
-        $url_return ="location:addproject_page.php";
-     
-    }else if(strtotime($end_date) <= strtotime($start_date)){
-        $_SESSION['error'] = 'วันที่สิ้นสุดเลยวันที่เริ่ม';
-        $url_return ="location:addproject_page.php";
-      
-    }else if(isset($files['size'])){
-            foreach ($files['size'] as $i => $file_size) {
-                if ($file_size >  $max_file_size) {
-                $_SESSION['error'] = 'ไฟล์มีขนาดเกิน 20 MB';
-                header("location:addproject_page.php");
+        }else  if ($row2 ) {
+            $_SESSION['error'] = 'หัวข้องานซั้ำกรุณากรอกชื่อหัวข้องานใหม่';
+            $url_return ="location:addproject_page.php";
+        } else if (empty($start_dateกรุณากรอกวันที่เริ่ม)) {
+            $_SESSION['error'] ='';
+            $url_return ="location:addproject_page.php";
+        }else if (empty($end_date)) {
+            $_SESSION['error'] = 'กรุณากรอกวันที่สิ้นสุด';
+            $url_return ="location:addproject_page.php";
+        }else if (empty($users_id1)) {
+            $_SESSION['error'] = 'กรุณากรอกชื่อสมาชิก';
+            $url_return ="location:addproject_page.php";
+        
+        }else   if(strtotime($start_date) >= strtotime($end_date)){
+            $_SESSION['error'] = 'วันที่สั่งเลยวันที่สิ้นสุด';
+            $url_return ="location:addproject_page.php";
+        
+        }else if(strtotime($end_date) <= strtotime($start_date)){
+            $_SESSION['error'] = 'วันที่สิ้นสุดเลยวันที่เริ่ม';
+            $url_return ="location:addproject_page.php";
+        
+        }else if(isset($files['size'])){
+                foreach ($files['size'] as $i => $file_size) {
+                    if ($file_size >  $max_file_size) {
+                    $_SESSION['error'] = 'ไฟล์มีขนาดเกิน 20 MB';
+                    header("location:addproject_page.php");
+                    }
                 }
-            }
-    }else{
+        }else{
             foreach($users_id as $i => $userid ){
            
                 $datauser = $db->prepare("SELECT line_token FROM user WHERE user_id = :userid");

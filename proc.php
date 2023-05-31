@@ -659,13 +659,13 @@ header("Access-Control-Allow-Headers: X-Requested-With");
         $_SESSION['error'] = 'กรุณากรอกชื่อหัวข้องาน';
         $url_return ="location:addproject_page.php";
         //header("location:addproject_page.php");
-        }else  if ($row2 ) {
+       }else   if ($row2 ) {
             $_SESSION['error'] = 'หัวข้องานซั้ำกรุณากรอกชื่อหัวข้องานใหม่';
             $url_return ="location:addproject_page.php";
-        } else if (empty($start_dateกรุณากรอกวันที่เริ่ม)) {
-            $_SESSION['error'] ='';
+       } else if (empty($start_date)) {
+            $_SESSION['error'] ='กรุณากรอกวันที่เริ่ม';
             $url_return ="location:addproject_page.php";
-        }else if (empty($end_date)) {
+         }else if (empty($end_date)) {
             $_SESSION['error'] = 'กรุณากรอกวันที่สิ้นสุด';
             $url_return ="location:addproject_page.php";
         }else if (empty($users_id1)) {
@@ -680,7 +680,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             $_SESSION['error'] = 'วันที่สิ้นสุดเลยวันที่เริ่ม';
             $url_return ="location:addproject_page.php";
         
-        }else if(isset($files['size'])){
+        }else  if(isset($files['size'])){
                 foreach ($files['size'] as $i => $file_size) {
                     if ($file_size >  $max_file_size) {
                     $_SESSION['error'] = 'ไฟล์มีขนาดเกิน 20 MB';
@@ -767,7 +767,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
     
         }
        
-        
+    
          
     }      
     else if($_POST['proc'] == 'editpro'){

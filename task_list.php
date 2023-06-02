@@ -37,23 +37,6 @@
 
 <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
     <main class="content">
-    <?php if($level != 5 ): ?>
-     <!--     <div class="col-lg-12">
-            <div class="card card-outline card-success">
-                <div class="container-fluid p-0">
-                    <div class="card-header">
-            
-                        
-                        <div class="d-flex justify-content-end">
-                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="addproject_page.php"><i class="fa fa-plus"></i>  + เพิ่มหัวข้องาน</a>
-                            
-                        </div>
-                 
-                    </div>
-                </div>
-            </div>
-        </div>  -->
-        <?php endif; ?>
         <div class="row">
                     <div class="col-lg-12 ">
                         <div class="card flex-fill">
@@ -64,18 +47,18 @@
                             </div> 
                             <div class="table-responsive-xl">
                             <table class="table table-hover my-0"  id="example" >
-                                <thead>
-                                    <tr>
-                                        <th class="id-col">ลำดับที่</th>
-                                        <th class="name-col">ชื่องาน</th>
-                                        <th class="start-col">วันที่เริ่ม</th>
-                                        <th class="end-col">วันที่สิ้นสุด</th>
-                                        <th class="progress-col">ความคืบหน้า</th>
-                                        <th class="assign-col">มอบหมาย</th>
-                                        <th class="status-col">สถานะ</th>
-                                        <th class="action-col">Action</th>
-                                    </tr>
-                                </thead>
+                                    <thead>
+                                        <tr>
+                                            <th class="id-col text-center">ลำดับที่</th>
+                                            <th class="name-col text-center">ชื่องาน</th>
+                                            <th class="start-col text-center">วันที่เริ่ม</th>
+                                            <th class="end-col text-center">วันที่สิ้นสุด</th>
+                                            <th class="progress-col text-center">ความคืบหน้า</th>
+                                            <th class="assign-col text-center">มอบหมาย</th>
+                                            <th class="status-col text-center ">สถานะ</th>
+                                            <th class="action-col text-center">Action</th>
+                                        </tr>
+                                    </thead>
                                 <tbody>
                                 <?php
                                             $i = 1;
@@ -84,7 +67,7 @@
                                             $where = " AND t.user_id  = $us";
                                             }
                                             if($status == 1){
-                                               $where .="";
+                                               $where .=" ";
                                             }else if($status == 2){
                                                 $where .= " AND p.status_1 != 3 AND p.progress_project  != 100 AND t.status_task != 5 AND t.status_task2 != 1 AND t.progress_task != 100 ";
                                             }else if($status == 3){
@@ -226,7 +209,7 @@ $(document).ready(function(){
   $('.viewdatatask').click(function(){
     var proc = 'viewdatatask';
     var task_id=$(this).data("task_id");
-    var status=$(this).data("status");
+    var project_id=$(this).data("project_id");
     //var sendstatus=$(this).data("status"); 
     console.log(project_id);
     $.ajax({

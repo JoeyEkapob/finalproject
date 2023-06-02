@@ -181,7 +181,7 @@ $(document).ready(function(){
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
-                confirmButtonText: 'ใช่ต้องการรีเซ็ตพาสเวิร์ด!',
+                confirmButtonText: 'ใช่',
                 cancelButtonText: 'กลับ',
                 showLoaderOnConfirm: true,
                
@@ -226,7 +226,7 @@ $(document).ready(function(){
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
-                confirmButtonText: 'ใช่ต้องการลบสมาชิก!',
+                confirmButtonText: 'ใช่',
                 cancelButtonText: 'กลับ',
                 showLoaderOnConfirm: true,
                

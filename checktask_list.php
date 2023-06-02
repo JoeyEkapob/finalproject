@@ -160,9 +160,9 @@ $(".checktasksuccess").click(function(e) {
                 icon: 'info',
                 //text: "It will be deleted permanently!",
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'ใช่งานเสร็จเเล้ว!',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'ใช่',
                 cancelButtonText: 'กลับ',
                 showLoaderOnConfirm: true,
                
@@ -178,7 +178,7 @@ $(".checktasksuccess").click(function(e) {
                             })
                             .done(function() {
                                 Swal.fire({
-                                    title: 'success',
+                                    title: 'เรียบร้อย',
                                     text: 'ตรวจงานเสร็จเรียบร้อย!',
                                     icon: 'success',
                                 }).then(() => {

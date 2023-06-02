@@ -121,7 +121,7 @@ function adddepartment(){
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
-                confirmButtonText: 'ยกเลิก!',
+                confirmButtonText: 'ยกเลิก',
                 cancelButtonText: 'กลับ',
                 showLoaderOnConfirm: true,
                

@@ -43,7 +43,7 @@
                 <div class="container-fluid p-0">
 					<h1 class="h3 mb-3">หัวข้องาน</h1>
                          <div class="d-flex flex-row-reverse bd-highligh">
-                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary" data-bs-toggle="modal" data-bs-target="#addModal1" ><i class="fa fa-plus"></i> + เพิ่มประเภทงาน</a>
+                            <a class="btn btn-block btn-sm btn-default btn-flat border-primary" data-bs-toggle="modal" data-bs-target="#addjobtype" ><i class="fa fa-plus"></i> + เพิ่มประเภทงาน</a>
                         </div>
 				</div>
                     <div class="row">
@@ -64,7 +64,11 @@
                                                 <label for="" class="control-label" >ประเภทงาน</label>
                                                     <select name="job" id="type" class="form-select"  >
                                                         <?php
-                                                        $stmt = $db->query("SELECT * FROM job_type WHERE status = 1");
+                                                        $where="";
+                                                        if($level > 2){
+                                                            $where=" AND (u.department_id = $department_id OR  u.department_id = 0 )";
+                                                        }
+                                                        $stmt = $db->query("SELECT * FROM job_type as j left join user as u ON j.user_id = u.user_id  WHERE status = 1  $where");
                                                         $stmt->execute();
                                                         $result = $stmt->fetchAll();
                                                         foreach($result as $row) {
@@ -146,7 +150,7 @@
 											<a href="project_list.php" class="btn btn-secondary"  type="button" >กลับ</a>
 										</div>
                                       
-                                        <?php include 'addjobtype_model.php';
+                                        <?php include 'addmodel.php';
                                       /*   echo  $level */;?>
                                     </div>
                                 </div> 	

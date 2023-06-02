@@ -64,8 +64,14 @@
                                 <tbody>
                                     <?php
                                         $i = 1;
-                                        
-                                        $sql = "SELECT * FROM job_type  WHERE status = 1";
+                                        $where ='';
+                                        if($level > 2){
+                                            $where=" AND ( u.department_id = $department_id OR  u.department_id = 0 ) AND ($level < p.level OR u.user_id = $user_id ) ";
+                                        }
+                                        $sql = "SELECT * FROM job_type as j 
+                                        left join user as u On j.user_id = u.user_id  
+                                        left join position as p On u.role_id = p.role_id  
+                                        WHERE status = 1  $where ";
                                         $qry = $db->query($sql);
                                         $qry->execute();
                                         while ($row = $qry->fetch(PDO::FETCH_ASSOC)){
@@ -124,8 +130,8 @@ function addjob(){
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
-                confirmButtonText: 'ยกเลิก!',
-                cancelButtonText: 'กลับ',
+                confirmButtonText: 'ใช่',
+                cancelButtonText: 'ไม่',
                 showLoaderOnConfirm: true,
                
                 preConfirm: function() {

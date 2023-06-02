@@ -104,7 +104,7 @@ session_start();
 
                                     <div class="col-md-6">						
                                         <div class="mb-3">
-                                        
+                                            <span class="small mb-0 mt-2" style="color:red;">*</span> 
                                             <label for="" class="control-label">ความคืบหน้า</label>
                                             <select class="form-select" aria-label="Default select example" name ="progress">
                                                 <option value="0">กรุณากรอกความคืบหน้า</option>
@@ -142,7 +142,7 @@ session_start();
                         <hr>
                       
                         <div class="col-lg-12 text-right justify-content-center d-flex">
-                            <button class="btn btn-primary " name ="edittask" onclick="send_edittask('<?php echo $taskid ?>','<?php echo $project_id?>','<?php echo $details_id?>','<?php echo $status_timedetails?>');">งานเเก้ไข</button>
+                            <button class="btn btn-primary " name ="edittask" onclick="send_edittask('<?php echo $taskid ?>','<?php echo $project_id?>','<?php echo $details_id?>','<?php echo $status_timedetails?>');">เเก้ไขงาน</button>
                             &nbsp;<a href="checktask_list.php" class="btn btn-secondary" type="button">กลับ</a>
                         </div>
                     </div>

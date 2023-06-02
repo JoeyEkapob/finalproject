@@ -40,17 +40,17 @@ include "funtion.php";
 				<a class="sidebar-brand" href="index.php">
 				<?php if($level == 1): ?>
 					
-				<span class="align-middle">Admin <?php /* echo $row['firstname']  */?></span>
+				<span class="align-middle">ADMIN <?php /* echo $row['firstname']  */?></span>
 				<?php endif; ?>
 
 				<?php if($level > 1): ?>
-					<span class="align-middle">user <?php/*  echo $row['firstname']  */?></span>
+					<span class="align-middle">USER <?php/*  echo $row['firstname']  */?></span>
 					<?php endif; ?>
 				</a>
 
 				<ul class="sidebar-nav">
 					<li class="sidebar-header">
-						Pages
+						หน้า
 					</li>
 				
 				
@@ -129,13 +129,13 @@ include "funtion.php";
 					<li class="sidebar-header">
 						ADMIN
 					</li>
-					<?php elseif($level == 2): ?>
+					<?php elseif($level  != $maxlevel): ?>
 					<li class="sidebar-header">
 						USER
 					</li> 
 					<?php endif; ?>
 					
-					<?php if($level <=2): ?>
+					<?php if($level  != $maxlevel): ?>
 
 						<li class="sidebar-item">
 							<a class="sidebar-link"  href="jobtype_list.php">

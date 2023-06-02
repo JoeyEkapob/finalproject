@@ -20,7 +20,7 @@
                                 </div>
                                 <hr>
                                 <div class="col-lg-12 text-right justify-content-center d-flex">
-                                    <button class="btn btn-primary"  onclick="adddepartment()">เพิ่มฝ่าย</button>
+                                    <button class="btn btn-primary"  onclick="adddepartment()">เพิ่มฝ่าย</button>&nbsp;
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">กลับ</button>
                                       
                                 </div>
@@ -58,7 +58,7 @@
                                 </div>
                                 <hr>
                                 <div class="col-lg-12 text-right justify-content-center d-flex">
-                                <button class="btn btn-primary"  onclick="addjob()">เพิ่มประเภท</button>
+                                <button class="btn btn-primary"  onclick="addjob()">เพิ่มประเภท</button>&nbsp;
                                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">กลับ</button>
                                     
                                 </div>
@@ -116,7 +116,7 @@
                                 </div>
                                 <hr>
                                 <div class="col-lg-12 text-right justify-content-center d-flex">
-                                <button class="btn btn-primary"  onclick="addposition()">เพิ่มตำเเหน่ง</button>
+                                <button class="btn btn-primary"  onclick="addposition()">เพิ่มตำเเหน่ง</button>&nbsp;
                                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">กลับ</button>
                                     
                                 </div>

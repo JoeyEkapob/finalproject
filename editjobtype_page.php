@@ -8,8 +8,8 @@ session_start();
         $select_stmt->bindParam(":id", $id_jobtype);
 
         $select_stmt->execute();
-        $row = $select_stmt->fetch(PDO::FETCH_ASSOC);
-        extract($row);
+        $roweditjob = $select_stmt->fetch(PDO::FETCH_ASSOC);
+      
 
 }   
 
@@ -38,6 +38,7 @@ session_start();
             <?php } ?>
 <input type="hidden" id="proc" name="proc" value="">
 <input type="hidden" id="id_jobtype" name="id_jobtype" value="">
+<input type="hidden" id="userid" name="userid" value="">
 		<main class="content">
 				<div class="container-fluid p-0">
 					<h1 class="h3 mb-3">เเก้ไขชื่อประเภทงาน</h1>
@@ -48,14 +49,15 @@ session_start();
 								<div class="row">
 									<div class="col-md-6">
 										<div class="mb-3">
+                                    
 											<label for="" class="control-label">ชื่อประเภทงาน</label>
 											
-											<input type="text" name="namejob" class="form-control form-control"  required  value="<?php echo $name_jobtype; ?>">
+											<input type="text" name="namejob" class="form-control form-control"  required  value="<?php echo  $roweditjob['name_jobtype'] ?>">
 										</div>
                                     </div>
 										<hr>
 										<div class="col-lg-12 text-right justify-content-center d-flex">
-											<button class="btn btn-primary" name="btn_up"  onclick="editjob('<?php echo $id_jobtype ?>')" >เเก้ไข</button>
+											<button class="btn btn-primary" name="btn_up"  onclick="editjob('<?php echo  $roweditjob['id_jobtype'] ?>','<?php echo $roweditjob['user_id']  ?>')" >เเก้ไข</button>
 											<a class="btn btn-secondary" type="button" href="jobtype_list.php" >กลับ</a>
 										</div>
 									</div>
@@ -70,9 +72,10 @@ session_start();
 </html>
 <script>
 
-function editjob(id_jobtype){
+function editjob(id_jobtype,user_id){
     $('#proc').val('editjob');
     $('#id_jobtype').val(id_jobtype);
+    $('#userid').val(user_id);
 }
 
 </script>

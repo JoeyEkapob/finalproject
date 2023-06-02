@@ -10,36 +10,28 @@
 	$user_id=$_SESSION['user_login'];
 	/* echo $user_id; */
 	$where ="";
-	$stmtusernum = "SELECT COUNT(user_id) as num FROM user  ";
-	$stmtusernum = $db->prepare($stmtusernum);
-	$stmtusernum ->execute();
-	$stmtusernum = $stmtusernum->fetchColumn();
+	$sql = $db->query("SELECT user_id  FROM user  ");
+	$stmtusernum = $sql->fetchColumn();
 /* 	echo $stmtusernum ; */
 
 	 if($level >= 2){
 		$where = "   and user_id  = $user_id ";
 	 }
-	$stmtprojectnumuser = "SELECT COUNT(pl.project_id) as num1 FROM project_list as pl  left join  project as p on pl.project_id = p.project_id WHERE 1=1  $where";
-	$stmtprojectnumuser = $db->prepare($stmtprojectnumuser);
-	$stmtprojectnumuser ->execute();
-	$stmtprojectnumuser = $stmtprojectnumuser->fetchColumn();
+	$sql2 = $db->query("SELECT pl.project_id FROM project_list as pl  left join  project as p on pl.project_id = p.project_id WHERE 1=1  $where");
+	$stmtprojectnumuser = $sql2 ->rowCount();
 
 	if($level >= 2){
 		$where = "   where manager_id = $user_id ";
 	 }
-	$stmtprojectnummanager = "SELECT COUNT(project_id) as num1 FROM project   $where";
-	$stmtprojectnummanager = $db->prepare($stmtprojectnummanager);
-	$stmtprojectnummanager ->execute();
-	$stmtprojectnummanager = $stmtprojectnummanager->fetchColumn();
+	$sql1 = $db->query("SELECT project_id as num1 FROM project   $where");
+	$stmtprojectnummanager = $sql1->rowCount();
 
-
+	/*  echo $user_id ; */
 	if($level >= 2){
 		$where = "   and user_id = $user_id    ";
 	 }
-	$stmttasknum = "SELECT COUNT(task_id) as num2 FROM task_list as t left join project as p on t.project_id = p.project_id WHERE  status_1 !=3 AND  progress_task != 100 AND status_task != 5 AND status_task2 != 1 $where ";
-	$stmttasknum = $db->prepare($stmttasknum);
-	$stmttasknum ->execute();
-	$stmttasknum = $stmttasknum->fetchColumn(); 
+	$sql3 = $db->query("SELECT task_id FROM task_list as t left join project as p on t.project_id = p.project_id WHERE  status_1 !=3 AND  progress_task != 100 AND status_task != 5 AND status_task2 != 1 $where ");
+	$stmttasknum = $sql3 ->rowCount(); 
 
 	$sql4 = $db->query("SELECT task_id  FROM task_list as t left join project as p on t.project_id = p.project_id WHERE  1=1 $where ");
     $numusertask = $sql4->rowCount();  	
@@ -47,10 +39,8 @@
 	$sql5 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_task != 5 AND progress_task != 100 AND status_task2 != 1  $where  ");
 	$numtaskonpro = $sql5->rowCount(); 
 
-	$stmttaskpnum = "SELECT COUNT(task_id) FROM task_list as t left join project as p on t.project_id = p.project_id  where p.status_1 !=3 AND t.progress_task != 100 AND t.status_task != 5 AND status_timetask = 2  AND status_task2 != 1 $where ";
-	$stmttaskpnum = $db->prepare($stmttaskpnum);
-	$stmttaskpnum ->execute();
- 	$stmttaskpnum = $stmttaskpnum->fetchColumn(); 
+	$sql7 = $db->query("SELECT task_id FROM task_list as t left join project as p on t.project_id = p.project_id  where p.status_1 !=3 AND t.progress_task != 100 AND t.status_task != 5 AND status_timetask = 2  AND status_task2 != 1 $where  ");
+ 	$stmttaskpnum = $sql7->rowCount(); 
 
 	 $sql6 = $db->query("SELECT * FROM task_list WHERE user_id = $user_id AND status_timetask = 2 AND status_task != 5 AND progress_task != 100  $where ");
 	 $numtimede = $sql6->rowCount();
@@ -59,10 +49,8 @@
 		$where = "and  p.manager_id = $user_id "; 
 	} 
 	
-	$stmtdetails = "SELECT COUNT(details_id)  FROM details as d left join project as p on p.project_id = d.project_id WHERE state_details = 'Y' $where ";
-	$stmtdetails = $db->prepare($stmtdetails);
-	$stmtdetails ->execute();
-	$stmtdetails = $stmtdetails->fetchColumn(); 
+	$sql8 = $db->query("SELECT details_id  FROM details as d left join project as p on p.project_id = d.project_id WHERE state_details = 'Y' $where " );
+	$stmtdetails = 	$sql8 ->rowCount(); 
 /* 
 	print_r($stmtdetails); */
 	//extract($row);

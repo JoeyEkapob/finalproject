@@ -94,6 +94,7 @@ session_start();
 
                                     <div class="col-md-6">						
                                         <div class="mb-3">
+                                            <span class="small mb-0 mt-2" style="color:red;">*</span> 
                                         
                                             <label for="" class="control-label">ความคืบหน้า</label>
                                             <select class="form-select" aria-label="Default select example" name ="progress">

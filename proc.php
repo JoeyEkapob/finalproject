@@ -1948,10 +1948,11 @@ header("Access-Control-Allow-Headers: X-Requested-With");
             $_SESSION['error'] = 'กรุณากรอกชื่อประเภทงานวซ้ำกรุณากรอกใหม่';
             $url_return ="location: jobtype_list.php";
         }else if (!isset($_SESSION['error'])) {
-            $stmtjob = $db->prepare("INSERT INTO job_type(name_jobtype,status) 
-                                VALUES(:namejob, :status)");
+            $stmtjob = $db->prepare("INSERT INTO job_type(name_jobtype,status,user_id) 
+                                VALUES(:namejob, :status,:user_id)");
             $stmtjob->bindParam(":namejob", $namejob);
             $stmtjob->bindParam(":status", $status);
+            $stmtjob->bindParam(":user_id", $user_id);
             $stmtjob->execute();
 
       /*   if (isset($idjob)) {
@@ -1981,6 +1982,8 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 
         $namejob = $_POST['namejob'];
         $id_jobtype = $_POST['id_jobtype'];
+        $userid = $_POST['userid'];
+
         $status = 1;
  
         $sql = "SELECT * FROM job_type WHERE  name_jobtype = '$namejob'  AND  id_jobtype !=  '$id_jobtype ' AND status = 1  ";

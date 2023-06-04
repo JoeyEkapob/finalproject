@@ -75,7 +75,7 @@ session_start();
                                                   <option value="<?= $results['level']; ?>"><?= $results['level']; ?></option>
                                       
                                               <?php } ?>
-                                          <option value="<?= $maxlevel ?>"><?= $maxlevel ?></option> 
+                                          <option value="<?= $maxlevel++ ?>"><?= $maxlevel++ ?></option> 
                                                  </select>
                                         </div>
                                     </div>

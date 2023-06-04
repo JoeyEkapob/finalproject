@@ -387,7 +387,7 @@
 
 													<td class="id-col"><?php echo $i++ ?></td>
 													<td class="name-col">
-														<p><b><?php echo $stmtshowprojectrow["name_project"]?></b>
+														<p><b><?php echo mb_substr($stmtshowprojectrow['name_project'],0,30);?></b>
 														<?php showstatpro2($stmtshowprojectrow['status_2']) ?></p>
 														<p class="truncate"><?php echo mb_substr($stmtshowprojectrow['description'],0,20).'...';  ?></p>
 													</td>

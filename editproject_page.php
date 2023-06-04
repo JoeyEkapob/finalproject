@@ -8,20 +8,20 @@
     if (isset($_SERVER['HTTP_REFERER'])) {
         $previousPage = $_SERVER['HTTP_REFERER'];
       } else {
-        $previousPage = "#";
+        $previousPage = "project_list.php";
       }
 
     if (isset($_GET['update_id'])){
             $pro_id = $_REQUEST['update_id'];
-            $select_stmt = $db->prepare("SELECT * ,concat(firstname,' ',lastname) as name ,
+            $select_stmt = $db->prepare("SELECT * ,
             DATE_FORMAT(start_date,'%Y-%m-%d') AS start_date_pro,
             DATE_FORMAT(end_date,'%Y-%m-%d') AS end_date_pro
-            FROM project   natural JOIN project_list natural JOIN job_type natural JOIN user  WHERE project_id = :id");
+            FROM project as p left join job_type as j on p.id_jobtype = j.id_jobtype   WHERE project_id = :id");
             $select_stmt->bindParam(":id", $pro_id);
             $select_stmt->execute();
             $selectprorow = $select_stmt->fetch(PDO::FETCH_ASSOC);
-       /*  print_r( $row2 );
-        exit; */
+        /* print_r( $selectprorow );
+        exit;  */
     }   
 
      
@@ -91,17 +91,21 @@
                                     <span class="small mb-0 mt-2" style="color:red;">*</span> 
 
 											<label for="" class="control-label" >ประเภทงาน</label>
-												<select name="job" id="type" class="form-control"  >
-                                                <option value="<?php  echo $selectprorow['id_jobtype']; ?>" ><?php  echo $selectprorow['name_jobtype']; ?></option>
-													<?php
-													$stmt = $db->query("SELECT * FROM job_type WHERE status = 1");
-													$stmt->execute();
-													$result = $stmt->fetchAll();
-													foreach($result as $row) {
-													?>
-												 <option value="<?= $row['id_jobtype'];?>"><?= $row['name_jobtype'];?></option>
-                									<?php } ?>
-												</select>
+												<select name="job" id="type" class="form-select"  >
+                                                    <option value="<?php  echo $selectprorow['id_jobtype']; ?>" ><?php  echo $selectprorow['name_jobtype']; ?></option>
+                                                    <?php
+                                                        $where="";
+                                                        if($level > 2){
+                                                            $where=" AND (u.department_id = $department_id OR  u.department_id = 0 )";
+                                                        }
+                                                        $stmt = $db->query("SELECT * FROM job_type as j left join user as u ON j.user_id = u.user_id  WHERE status = 1  $where");
+                                                        $stmt->execute();
+                                                        $result = $stmt->fetchAll();
+                                                        foreach($result as $row) {
+                                                        ?>
+                                                    <option value="<?= $row['id_jobtype'];?>"><?= $row['name_jobtype'];?></option>
+                                                        <?php } ?>
+                                                    </select>
 										</div> 		
                                     </div>
                                     

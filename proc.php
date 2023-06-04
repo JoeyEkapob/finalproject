@@ -684,11 +684,12 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                 foreach ($files['size'] as $i => $file_size) {
                     if ($file_size >  $max_file_size) {
                     $_SESSION['error'] = 'ไฟล์มีขนาดเกิน 20 MB';
-                    header("location:addproject_page.php");
+                    $url_return ="location:addproject_page.php";
                     }
                 }
-        }else{
-            foreach($users_id as $i => $userid ){
+        } else{
+            /* echo 1; */
+           /* foreach($users_id as $i => $userid ){
            
                 $datauser = $db->prepare("SELECT line_token FROM user WHERE user_id = :userid");
                 $datauser->bindParam(":userid",$userid);
@@ -703,11 +704,31 @@ header("Access-Control-Allow-Headers: X-Requested-With");
                 $sMessage .= "วันที่สิ้นสุด : " . ThDate($end_date) . " \n";
                 $sMessage .= "คนที่สั่งงาน : " . $stmtuserrow['FullName'] . " \n";
                // $sMessage .= "โทเคนนิ : " . $sToken . " \n";
-
+                echo 1;
                 sentNotify($sToken , $sMessage);
-           }   
+           }   */ 
        }  
+      /*  echo 2;
+       exit; */
        if(!isset($_SESSION['error'])) {
+            foreach($users_id as $i => $userid ){
+           
+            $datauser = $db->prepare("SELECT line_token FROM user WHERE user_id = :userid");
+            $datauser->bindParam(":userid",$userid);
+            $datauser ->execute();
+            $datauserrow = $datauser->fetch(PDO::FETCH_ASSOC);
+
+            $sToken = $datauserrow['line_token'];
+            $sMessage = "มีการเพื่มโปรเจค \n";
+            $sMessage .= "ชื่อห้วงาน : " . $proname . " \n";
+            $sMessage .= "ประเภทงาน : " . $stmtjobtyperow['name_jobtype'] . " \n";
+            $sMessage .= "วันที่สั่ง : " . ThDate($start_date) . " \n";
+            $sMessage .= "วันที่สิ้นสุด : " . ThDate($end_date) . " \n";
+            $sMessage .= "คนที่สั่งงาน : " . $stmtuserrow['FullName'] . " \n";
+           // $sMessage .= "โทเคนนิ : " . $sToken . " \n";
+            
+            sentNotify($sToken , $sMessage);  
+            }  
            $inserstmtpro = $db->prepare("INSERT INTO project(project_id,name_project, description, status_1,start_date, end_date, manager_id,status_2,id_jobtype,progress_project) 
                                               VALUES(:project_id,:proname,:description,:status,:start_date,:end_date,:manager_id,:status_2,:id_job,:progress_project)");
            $inserstmtpro->bindParam(":project_id",$nextId);

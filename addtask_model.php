@@ -41,7 +41,7 @@
                     <div class="mb-3">
                     <span class="small mb-0 mt-2" style="color:red;">*</span> 
 
-                            <label for="" class="control-label">สมาชิกทีม</label>
+                            <label for="" class="control-label">คนรับมอบหมายงาน</label>
                                 <select name="user" id="type" class="form-select">
                                 <?php
                                     $stmtuser = $db->query("SELECT *, concat(firstname,' ',lastname) as name From project_list natural join user where project_id = $id AND status_user = 1");

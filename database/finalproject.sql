@@ -31,7 +31,7 @@ CREATE TABLE `department` (
   `department_id` int NOT NULL,
   `department_name` varchar(255) NOT NULL,
   `department_status` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `department`
@@ -61,7 +61,7 @@ CREATE TABLE `details` (
   `send_status` int NOT NULL,
   `status_timedetails` int NOT NULL,
   `detail` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `details`
@@ -86,7 +86,7 @@ CREATE TABLE `file_item_details` (
   `filename_details` varchar(200) NOT NULL,
   `details_id` int NOT NULL,
   `newname_filedetails` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `file_item_details`
@@ -106,7 +106,7 @@ CREATE TABLE `file_item_project` (
   `project_id` int NOT NULL,
   `filename` varchar(255) NOT NULL,
   `newname_filepro` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `file_item_project`
@@ -132,7 +132,7 @@ CREATE TABLE `file_item_task` (
   `filename_task` varchar(255) NOT NULL,
   `project_id` int NOT NULL,
   `newname_filetask` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `file_item_task`
@@ -154,7 +154,7 @@ CREATE TABLE `job_type` (
   `name_jobtype` varchar(200) NOT NULL,
   `status` tinyint NOT NULL,
   `user_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `job_type`
@@ -183,7 +183,7 @@ CREATE TABLE `position` (
   `position_name` varchar(200) NOT NULL,
   `level` int NOT NULL,
   `position_status` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `position`
@@ -218,7 +218,7 @@ CREATE TABLE `project` (
   `status_2` int NOT NULL,
   `id_jobtype` int NOT NULL,
   `progress_project` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `project`
@@ -241,7 +241,7 @@ INSERT INTO `project` (`project_id`, `name_project`, `description`, `status_1`, 
 CREATE TABLE `project_list` (
   `project_id` int NOT NULL,
   `user_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `project_list`
@@ -278,7 +278,7 @@ CREATE TABLE `task_list` (
   `progress_task` float NOT NULL,
   `status_timetask` int NOT NULL,
   `status_task2` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `task_list`
@@ -312,7 +312,7 @@ CREATE TABLE `user` (
   `email` varchar(200) NOT NULL,
   `password` varchar(255) NOT NULL,
   `role_id` int DEFAULT NULL,
-  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `status_user` int NOT NULL,
   `tel` varchar(255) NOT NULL,
@@ -321,7 +321,7 @@ CREATE TABLE `user` (
   `department_id` int NOT NULL,
   `shortname_id` int NOT NULL,
   `status_user2` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`

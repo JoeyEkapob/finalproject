@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jul 04, 2023 at 06:43 PM
--- Server version: 8.0.33-0ubuntu0.20.04.2
--- PHP Version: 8.1.18
+-- Host: 127.0.0.1
+-- Generation Time: Jul 25, 2023 at 03:31 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,10 +28,10 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `department` (
-  `department_id` int NOT NULL,
+  `department_id` int(11) NOT NULL,
   `department_name` varchar(255) NOT NULL,
-  `department_status` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `department_status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `department`
@@ -50,18 +50,18 @@ INSERT INTO `department` (`department_id`, `department_name`, `department_status
 --
 
 CREATE TABLE `details` (
-  `details_id` int NOT NULL,
-  `project_id` int NOT NULL,
-  `task_id` int NOT NULL,
+  `details_id` int(11) NOT NULL,
+  `project_id` int(11) NOT NULL,
+  `task_id` int(11) NOT NULL,
   `comment` varchar(255) NOT NULL,
   `date_detalis` datetime DEFAULT NULL,
   `state_details` char(1) NOT NULL,
   `progress_details` float NOT NULL,
-  `usersenddetails` int NOT NULL,
-  `send_status` int NOT NULL,
-  `status_timedetails` int NOT NULL,
-  `detail` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `usersenddetails` int(11) NOT NULL,
+  `send_status` int(11) NOT NULL,
+  `status_timedetails` int(11) NOT NULL,
+  `detail` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `details`
@@ -80,13 +80,13 @@ INSERT INTO `details` (`details_id`, `project_id`, `task_id`, `comment`, `date_d
 --
 
 CREATE TABLE `file_item_details` (
-  `file_details_id` int NOT NULL,
-  `project_id` int NOT NULL,
-  `task_id` int NOT NULL,
+  `file_details_id` int(11) NOT NULL,
+  `project_id` int(11) NOT NULL,
+  `task_id` int(11) NOT NULL,
   `filename_details` varchar(200) NOT NULL,
-  `details_id` int NOT NULL,
+  `details_id` int(11) NOT NULL,
   `newname_filedetails` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `file_item_details`
@@ -102,11 +102,11 @@ INSERT INTO `file_item_details` (`file_details_id`, `project_id`, `task_id`, `fi
 --
 
 CREATE TABLE `file_item_project` (
-  `file_item_project` int NOT NULL,
-  `project_id` int NOT NULL,
+  `file_item_project` int(11) NOT NULL,
+  `project_id` int(11) NOT NULL,
   `filename` varchar(255) NOT NULL,
   `newname_filepro` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `file_item_project`
@@ -127,12 +127,12 @@ INSERT INTO `file_item_project` (`file_item_project`, `project_id`, `filename`, 
 --
 
 CREATE TABLE `file_item_task` (
-  `file_item_task` int NOT NULL,
-  `task_id` int NOT NULL,
+  `file_item_task` int(11) NOT NULL,
+  `task_id` int(11) NOT NULL,
   `filename_task` varchar(255) NOT NULL,
-  `project_id` int NOT NULL,
+  `project_id` int(11) NOT NULL,
   `newname_filetask` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `file_item_task`
@@ -150,11 +150,11 @@ INSERT INTO `file_item_task` (`file_item_task`, `task_id`, `filename_task`, `pro
 --
 
 CREATE TABLE `job_type` (
-  `id_jobtype` int NOT NULL,
+  `id_jobtype` int(11) NOT NULL,
   `name_jobtype` varchar(200) NOT NULL,
-  `status` tinyint NOT NULL,
-  `user_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `status` tinyint(4) NOT NULL,
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `job_type`
@@ -179,11 +179,11 @@ INSERT INTO `job_type` (`id_jobtype`, `name_jobtype`, `status`, `user_id`) VALUE
 --
 
 CREATE TABLE `position` (
-  `role_id` int NOT NULL,
+  `role_id` int(11) NOT NULL,
   `position_name` varchar(200) NOT NULL,
-  `level` int NOT NULL,
-  `position_status` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `level` int(11) NOT NULL,
+  `position_status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `position`
@@ -207,18 +207,18 @@ INSERT INTO `position` (`role_id`, `position_name`, `level`, `position_status`) 
 --
 
 CREATE TABLE `project` (
-  `project_id` int NOT NULL,
+  `project_id` int(11) NOT NULL,
   `name_project` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `status_1` tinyint NOT NULL,
-  `create_project` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `status_1` tinyint(4) NOT NULL,
+  `create_project` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `start_date` datetime NOT NULL,
   `end_date` datetime NOT NULL,
-  `manager_id` int NOT NULL,
-  `status_2` int NOT NULL,
-  `id_jobtype` int NOT NULL,
+  `manager_id` int(11) NOT NULL,
+  `status_2` int(11) NOT NULL,
+  `id_jobtype` int(11) NOT NULL,
   `progress_project` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `project`
@@ -239,9 +239,9 @@ INSERT INTO `project` (`project_id`, `name_project`, `description`, `status_1`, 
 --
 
 CREATE TABLE `project_list` (
-  `project_id` int NOT NULL,
-  `user_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `project_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `project_list`
@@ -267,18 +267,18 @@ INSERT INTO `project_list` (`project_id`, `user_id`) VALUES
 --
 
 CREATE TABLE `task_list` (
-  `task_id` int NOT NULL,
+  `task_id` int(11) NOT NULL,
   `name_tasklist` varchar(255) NOT NULL,
   `description_task` varchar(200) NOT NULL,
-  `status_task` tinyint NOT NULL,
+  `status_task` tinyint(4) NOT NULL,
   `strat_date_task` datetime NOT NULL,
   `end_date_task` datetime NOT NULL,
-  `project_id` int NOT NULL,
-  `user_id` int NOT NULL,
+  `project_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `progress_task` float NOT NULL,
-  `status_timetask` int NOT NULL,
-  `status_task2` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `status_timetask` int(11) NOT NULL,
+  `status_task2` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `task_list`
@@ -306,22 +306,22 @@ INSERT INTO `task_list` (`task_id`, `name_tasklist`, `description_task`, `status
 --
 
 CREATE TABLE `user` (
-  `user_id` int NOT NULL,
+  `user_id` int(11) NOT NULL,
   `firstname` varchar(200) NOT NULL,
   `lastname` varchar(200) NOT NULL,
   `email` varchar(200) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `role_id` int DEFAULT NULL,
-  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `status_user` int NOT NULL,
+  `role_id` int(11) DEFAULT NULL,
+  `avatar` varchar(255) DEFAULT NULL,
+  `date_created` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `status_user` int(11) NOT NULL,
   `tel` varchar(255) NOT NULL,
   `line_token` varchar(255) NOT NULL,
   `idcard` varchar(13) NOT NULL,
-  `department_id` int NOT NULL,
-  `shortname_id` int NOT NULL,
-  `status_user2` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `department_id` int(11) NOT NULL,
+  `shortname_id` int(11) NOT NULL,
+  `status_user2` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
@@ -438,55 +438,55 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `department`
 --
 ALTER TABLE `department`
-  MODIFY `department_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `department_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `details`
 --
 ALTER TABLE `details`
-  MODIFY `details_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=444;
+  MODIFY `details_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=444;
 
 --
 -- AUTO_INCREMENT for table `file_item_details`
 --
 ALTER TABLE `file_item_details`
-  MODIFY `file_details_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=255;
+  MODIFY `file_details_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=255;
 
 --
 -- AUTO_INCREMENT for table `file_item_project`
 --
 ALTER TABLE `file_item_project`
-  MODIFY `file_item_project` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=716;
+  MODIFY `file_item_project` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=716;
 
 --
 -- AUTO_INCREMENT for table `file_item_task`
 --
 ALTER TABLE `file_item_task`
-  MODIFY `file_item_task` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=256;
+  MODIFY `file_item_task` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=256;
 
 --
 -- AUTO_INCREMENT for table `job_type`
 --
 ALTER TABLE `job_type`
-  MODIFY `id_jobtype` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id_jobtype` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `position`
 --
 ALTER TABLE `position`
-  MODIFY `role_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `task_list`
 --
 ALTER TABLE `task_list`
-  MODIFY `task_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66020;
+  MODIFY `task_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66020;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
 
 --
 -- Constraints for dumped tables
